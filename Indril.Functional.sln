@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indril.Functional", "Indril.Functional\Indril.Functional.csproj", "{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5DB53405-7A54-4CA2-954F-7287D4B29F12}
+	EndGlobalSection
+EndGlobal
