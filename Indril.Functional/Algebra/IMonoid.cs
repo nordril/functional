@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Indril.Functional.Algebra
@@ -30,6 +31,16 @@ namespace Indril.Functional.Algebra
         /// </summary>
         /// <typeparam name="T">The monoid type.</typeparam>
         /// <param name="xs">The list of elements to sum.</param>
-        public static T Msum<T>(this IEnumerable<T> xs) where T : IMonoid<T>, new() => xs.Aggregate(new T().Neutral, (x, y) => x.Op(y));
+        public static T Msum<T>(this IEnumerable<T> xs) where T : IMonoid<T>, new() 
+            => xs.Aggregate(new T().Neutral, (x, y) => x.Op(y));
+
+        /// <summary>
+        /// Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
+        /// </summary>
+        /// <typeparam name="T">The monoid type.</typeparam>
+        /// <param name="xs">The list of elements to sum.</param>
+        /// <param name="empty">The neutral element.</param>
+        public static T Msum<T>(this IEnumerable<T> xs, Func<T> empty) where T : IMonoid<T>
+            => xs.Aggregate(empty(), (x, y) => x.Op(y));
     }
 }

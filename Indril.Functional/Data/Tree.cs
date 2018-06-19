@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Indril.Functional.Algebra;
+using Indril.Functional.CategoryTheory;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Indril.Functional.Data
 {
@@ -8,7 +13,7 @@ namespace Indril.Functional.Data
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
     [SuppressMessage("Microsoft.Design","CA1724", Justification="That's what they're called.")]
-    public class Tree<T>
+    public class Tree<T> : IFunctor<T>, IFoldable<T>
     {
         /// <summary>
         /// The node's key.
@@ -84,6 +89,79 @@ namespace Indril.Functional.Data
             };
             return ret;
         }
+
+        /// <summary>
+        /// Traverses the tree in a certain order and yields the nodes.
+        /// </summary>
+        /// <param name="traversal">The type of the traversal.</param>
+        /// <returns>The nodes of the tree, and whether each node is a leaf.</returns>
+        public IEnumerable<(T, bool)> Traverse(TreeTraversal traversal)
+        {
+            IEnumerable<(T, bool)> trav(Tree<T> tree)
+            {
+                if (traversal == TreeTraversal.PreOrder)
+                    yield return (tree.Key, tree.IsLeaf);
+
+                foreach (var subResult in tree.Children.Select(trav))
+                    foreach (var node in subResult)
+                        yield return node;
+
+                if (traversal == TreeTraversal.PostOrder)
+                    yield return (tree.Key, tree.IsLeaf);
+            };
+
+            foreach (var n in trav(this))
+                yield return n;
+        }
+
+        /// <inheritdoc />
+        public IFunctor<TResult> Map<TResult>(Func<T, TResult> f)
+        {
+            if (IsLeaf)
+                return Tree.MakeLeaf(f(Key));
+            else
+                return Tree.MakeInner(f(Key), Children.Select(c => (Tree<TResult>)c.Map(f)).ToList());
+        }
+
+        /// <inheritdoc />
+        public TMonoid FoldMap<TMonoid>(Func<TMonoid> empty, Func<T, TMonoid> f) where TMonoid : IMonoid<TMonoid>
+        {
+            if (IsLeaf)
+                return f(Key);
+            else
+                return f(Key).Op(Children.Select(c => c.FoldMap(empty, f)).Msum(empty));
+        }
+
+        /// <inheritdoc />
+        public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator)
+        {
+            if (IsLeaf || Children.Count == 0)
+                return f(Key, accumulator);
+            else if (Children.Count == 1)
+                return f(Key, Children[0].Foldr(f, accumulator));
+            else
+            {
+                var revChildren = Children.Reverse();
+                var head = revChildren.First();
+                var tail = revChildren.Skip(1);
+
+                return f(Key, ListFoldr((child, childAcc) => child.Foldr(f, childAcc), accumulator, Children));
+            }
+        }
+
+        private static TB ListFoldr<TA, TB>(Func<TA,TB,TB> f, TB acc, IEnumerable<TA> xs)
+        {
+            if (!xs.Any())
+                return acc;
+            else
+                return f(xs.First(), ListFoldr(f, acc, xs.Skip(1)));
+        }
+
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator() => Traverse(TreeTraversal.PreOrder).Select(x => x.Item1).GetEnumerator();
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     /// <summary>
@@ -106,5 +184,20 @@ namespace Indril.Functional.Data
         /// <typeparam name="T">The type of the keys.</typeparam>
         /// <param name="key">The key of the node.</param>
         public static Tree<T> MakeLeaf<T>(T key) => Tree<T>.MakeLeaf(key);
+    }
+
+    /// <summary>
+    /// A type of tree traversal.
+    /// </summary>
+    public enum TreeTraversal
+    {
+        /// <summary>
+        /// First the node, then its children.
+        /// </summary>
+        PreOrder,
+        /// <summary>
+        /// First the children, then the node.
+        /// </summary>
+        PostOrder
     }
 }

@@ -15,8 +15,9 @@ namespace Indril.Functional.CategoryTheory
         /// using the monoid's <see cref="IMagma{T}.Op(T)"/> operation.
         /// </summary>
         /// <typeparam name="TMonoid">The monoid to which to mape the elements.</typeparam>
+        /// <param name="empty">The neutral element of the monoid.</param>
         /// <param name="f">The function that maps an element to a monoid.</param>
-        TMonoid FoldMap<TMonoid>(Func<TSource, TMonoid> f) where TMonoid : IMonoid<TMonoid>;
+        TMonoid FoldMap<TMonoid>(Func<TMonoid> empty, Func<TSource, TMonoid> f) where TMonoid : IMonoid<TMonoid>;
 
         /// <summary>
         /// Right-associative fold of the data structure.
