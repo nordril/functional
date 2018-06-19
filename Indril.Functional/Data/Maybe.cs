@@ -1,4 +1,5 @@
 ﻿using Indril.Functional.CategoryTheory;
+using Indril.TypeToolkit;
 using System;
 using System.Collections.Generic;
 
