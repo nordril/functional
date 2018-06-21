@@ -13,7 +13,7 @@ namespace Indril.Functional.Data
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
     [SuppressMessage("Microsoft.Design","CA1724", Justification="That's what they're called.")]
-    public class Tree<T> : IFunctor<T>, IFoldable<T>
+    public class Tree<T> : IFunctor<T>, IFoldable<T>, IEquatable<Tree<T>>
     {
         /// <summary>
         /// The node's key.
@@ -29,6 +29,11 @@ namespace Indril.Functional.Data
         /// (an example being a directory without files in it).
         /// </summary>
         public bool IsLeaf { get; private set; }
+
+        /// <summary>
+        /// Whether the node is an inner node. This is the opposite of <see cref="IsLeaf"/>.
+        /// </summary>
+        public bool IsInner => !IsLeaf;
 
         private Tree()
         {
@@ -47,10 +52,10 @@ namespace Indril.Functional.Data
         /// Sets the type of the node to an inner node and optionally gives it children.
         /// </summary>
         /// <param name="children">The children of the node.</param>
-        public void SetToInner(IList<Tree<T>> children = null)
+        public void SetToInner(IEnumerable<Tree<T>> children = null)
         {
-            IsLeaf = true;
-            Children = children ?? new List<Tree<T>>();
+            IsLeaf = false;
+            Children = children == null ? new List<Tree<T>>() : new List<Tree<T>>(children);
         }
 
         /// <summary>
@@ -65,13 +70,13 @@ namespace Indril.Functional.Data
         /// </summary>
         /// <param name="key">The key of the node.</param>
         /// <param name="children">The children of the node.</param>
-        public static Tree<T> MakeInner(T key, IList<Tree<T>> children = null)
+        public static Tree<T> MakeInner(T key, IEnumerable<Tree<T>> children = null)
         {
             var ret = new Tree<T>()
             {
                 IsLeaf = false,
                 Key = key,
-                Children = children ?? new List<Tree<T>>()
+                Children = children == null ? new List<Tree<T>>() : new List<Tree<T>>(children)
             };
             return ret;
         }
@@ -102,9 +107,10 @@ namespace Indril.Functional.Data
                 if (traversal == TreeTraversal.PreOrder)
                     yield return (tree.Key, tree.IsLeaf);
 
-                foreach (var subResult in tree.Children.Select(trav))
-                    foreach (var node in subResult)
-                        yield return node;
+                if (tree.IsInner)
+                    foreach (var subResult in tree.Children.Select(trav))
+                        foreach (var node in subResult)
+                            yield return node;
 
                 if (traversal == TreeTraversal.PostOrder)
                     yield return (tree.Key, tree.IsLeaf);
@@ -122,14 +128,14 @@ namespace Indril.Functional.Data
             else
                 return Tree.MakeInner(f(Key), Children.Select(c => (Tree<TResult>)c.Map(f)).ToList());
         }
-
+        
         /// <inheritdoc />
-        public TMonoid FoldMap<TMonoid>(Func<TMonoid> empty, Func<T, TMonoid> f) where TMonoid : IMonoid<TMonoid>
+        public TResult FoldMap<TResult>(Monoid<TResult> monoid, Func<T, TResult> f)
         {
             if (IsLeaf)
                 return f(Key);
             else
-                return f(Key).Op(Children.Select(c => c.FoldMap(empty, f)).Msum(empty));
+                return monoid.Op(f(Key), Children.Select(c => c.FoldMap(monoid, f)).Msum(monoid));
         }
 
         /// <inheritdoc />
@@ -162,6 +168,29 @@ namespace Indril.Functional.Data
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Compares two trees structurally. Two trees are structurally equal if:
+        /// <br />
+        /// <list type="number">
+        ///     <item><see cref="IsLeaf"/> has the same value for both,</item>,
+        ///     <item>The keys are equal according to <see cref="object.Equals(object)"/>.</item>
+        ///     <item><see cref="Children"/>, if <see cref="IsInner"/> is true, are of the same number and are pairwise equal according to <see cref="Equals(Tree{T})"/>.</item>
+        /// </list>
+        /// </summary>
+        /// <param name="other">The other tree.</param>
+        public bool Equals(Tree<T> other)
+        {
+            if (other == null || IsLeaf != other.IsLeaf || !Key.Equals(other.Key))
+                return false;
+
+            if (IsLeaf)
+                return true;
+            else if (Children.Count != other.Children.Count)
+                return false;
+            else
+                return Children.Zip(other.Children, (x, y) => x.Equals(y)).All(x => x);
+        }
     }
 
     /// <summary>
@@ -176,7 +205,7 @@ namespace Indril.Functional.Data
         /// <typeparam name="T">The type of the keys.</typeparam>
         /// <param name="key">The key of the node.</param>
         /// <param name="children">The children of the node.</param>
-        public static Tree<T> MakeInner<T>(T key, IList<Tree<T>> children = null) => Tree<T>.MakeInner(key, children);
+        public static Tree<T> MakeInner<T>(T key, IEnumerable<Tree<T>> children = null) => Tree<T>.MakeInner(key, children);
 
         /// <summary>
         /// Creates a leaf.

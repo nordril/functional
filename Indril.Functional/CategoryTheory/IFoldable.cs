@@ -14,10 +14,9 @@ namespace Indril.Functional.CategoryTheory
         /// Maps each element of the structure to a monoid and then combines the elements
         /// using the monoid's <see cref="IMagma{T}.Op(T)"/> operation.
         /// </summary>
-        /// <typeparam name="TMonoid">The monoid to which to mape the elements.</typeparam>
-        /// <param name="empty">The neutral element of the monoid.</param>
+        /// <param name="monoid">The monoid dictionary that should be used.</param>
         /// <param name="f">The function that maps an element to a monoid.</param>
-        TMonoid FoldMap<TMonoid>(Func<TMonoid> empty, Func<TSource, TMonoid> f) where TMonoid : IMonoid<TMonoid>;
+        T FoldMap<T>(Monoid<T> monoid, Func<TSource, T> f);
 
         /// <summary>
         /// Right-associative fold of the data structure.
@@ -34,6 +33,18 @@ namespace Indril.Functional.CategoryTheory
     /// </summary>
     public static class FoldableExtensions
     {
+        /// <summary>
+        /// Maps each element of the structure to a monoid and then combines the elements
+        /// using the monoid's <see cref="IMagma{T}.Op(T)"/> operation.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements contained in <paramref name="foldable"/>.</typeparam>
+        /// <typeparam name="TMonoid">The monoid to which to mape the elements.</typeparam>
+        /// <param name="foldable">The object to fold.</param>
+        /// <param name="empty">The neutral element of the monoid.</param>
+        /// <param name="f">The function that maps an element to a monoid.</param>
+        public static TMonoid FoldMap<TSource, TMonoid>(this IFoldable<TSource> foldable, Func<TMonoid> empty, Func<TSource, TMonoid> f) where TMonoid : IMonoid<TMonoid>
+        => foldable.FoldMap(new Monoid<TMonoid>(empty(), (x, y) => x.Op(y)), f);
+
         //TODO : FoldableExtensions (foldl, sequence, length, etc.)
     }
 }
