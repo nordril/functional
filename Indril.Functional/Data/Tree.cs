@@ -20,9 +20,9 @@ namespace Indril.Functional.Data
         /// </summary>
         public T Key { get; set; }
         /// <summary>
-        /// The list of the node's children.
+        /// The list of the node's children, if the node is an inner node.
         /// </summary>
-        public IList<Tree<T>> Children { get; set; }
+        public Maybe<IFuncList<Tree<T>>> Children { get; set; }
 
         /// <summary>
         /// Whether the node is a leaf. A leaf can have no children, though a node without children is not necessarily a leaf
@@ -45,7 +45,7 @@ namespace Indril.Functional.Data
         public void SetToLeaf()
         {
             IsLeaf = true;
-            Children = null;
+            Children = Maybe.Nothing<IFuncList<Tree<T>>>();
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Indril.Functional.Data
         public void SetToInner(IEnumerable<Tree<T>> children = null)
         {
             IsLeaf = false;
-            Children = children == null ? new List<Tree<T>>() : new List<Tree<T>>(children);
+            Children = Maybe.Just<IFuncList<Tree<T>>>(new FuncList<Tree<T>>(children));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Indril.Functional.Data
             {
                 IsLeaf = false,
                 Key = key,
-                Children = children == null ? new List<Tree<T>>() : new List<Tree<T>>(children)
+                Children = Maybe.Just<IFuncList<Tree<T>>>(new FuncList<Tree<T>>(children))
             };
             return ret;
         }
@@ -108,7 +108,7 @@ namespace Indril.Functional.Data
                     yield return (tree.Key, tree.IsLeaf);
 
                 if (tree.IsInner)
-                    foreach (var subResult in tree.Children.Select(trav))
+                    foreach (var subResult in tree.Children.Value().Select(trav))
                         foreach (var node in subResult)
                             yield return node;
 
@@ -126,7 +126,7 @@ namespace Indril.Functional.Data
             if (IsLeaf)
                 return Tree.MakeLeaf(f(Key));
             else
-                return Tree.MakeInner(f(Key), Children.Select(c => (Tree<TResult>)c.Map(f)).ToList());
+                return Tree.MakeInner(f(Key), Children.Value().Select(c => (Tree<TResult>)c.Map(f)).ToList());
         }
         
         /// <inheritdoc />
@@ -135,23 +135,23 @@ namespace Indril.Functional.Data
             if (IsLeaf)
                 return f(Key);
             else
-                return monoid.Op(f(Key), Children.Select(c => c.FoldMap(monoid, f)).Msum(monoid));
+                return monoid.Op(f(Key), Children.Value().Select(c => c.FoldMap(monoid, f)).Msum(monoid));
         }
 
         /// <inheritdoc />
         public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator)
         {
-            if (IsLeaf || Children.Count == 0)
+            if (IsLeaf || Children.Value().Count == 0)
                 return f(Key, accumulator);
-            else if (Children.Count == 1)
-                return f(Key, Children[0].Foldr(f, accumulator));
+            else if (Children.Value().Count == 1)
+                return f(Key, Children.Value()[0].Foldr(f, accumulator));
             else
             {
-                var revChildren = Children.Reverse();
+                var revChildren = Children.Value().Reverse();
                 var head = revChildren.First();
                 var tail = revChildren.Skip(1);
 
-                return f(Key, ListFoldr((child, childAcc) => child.Foldr(f, childAcc), accumulator, Children));
+                return f(Key, Children.Value().Foldr((child, childAcc) => child.Foldr(f, childAcc), accumulator));
             }
         }
 
@@ -186,10 +186,10 @@ namespace Indril.Functional.Data
 
             if (IsLeaf)
                 return true;
-            else if (Children.Count != other.Children.Count)
+            else if (Children.Value().Count != other.Children.Value().Count)
                 return false;
             else
-                return Children.Zip(other.Children, (x, y) => x.Equals(y)).All(x => x);
+                return Children.Value().Zip(other.Children.Value(), (x, y) => x.Equals(y)).All(x => x);
         }
     }
 

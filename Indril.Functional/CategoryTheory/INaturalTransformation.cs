@@ -1,4 +1,5 @@
 ﻿using Indril.Functional.Data;
+using System;
 
 namespace Indril.Functional.CategoryTheory
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace Indril.Functional.Tests
+namespace Indril.Functional.Tests.Data
 {
     public class TreeTests
     {
@@ -187,11 +187,11 @@ namespace Indril.Functional.Tests
         public static void CreateInner()
         {
             var ret = Tree.MakeInner(6, new[] { Tree.MakeLeaf(4), Tree.MakeLeaf(9) });
-            var leftChild = ret.Children[0];
-            var rightChild = ret.Children[1];
+            var leftChild = ret.Children.Value()[0];
+            var rightChild = ret.Children.Value()[1];
 
             Assert.True(ret.IsInner);
-            Assert.Equal(2, ret.Children.Count);
+            Assert.Equal(2, ret.Children.Value().Count);
             Assert.Equal(4, leftChild.Key);
             Assert.Equal(9, rightChild.Key);
             Assert.True(leftChild.IsLeaf);
@@ -207,9 +207,9 @@ namespace Indril.Functional.Tests
 
             Assert.Equal(6, parent.Key);
             Assert.True(parent.IsInner);
-            Assert.Equal(1, parent.Children.Count);
-            Assert.True(parent.Children[0].IsLeaf);
-            Assert.Equal(10, parent.Children[0].Key);
+            Assert.Equal(1, parent.Children.Value().Count);
+            Assert.True(parent.Children.Value()[0].IsLeaf);
+            Assert.Equal(10, parent.Children.Value()[0].Key);
         }
 
         [Fact]
@@ -240,10 +240,10 @@ namespace Indril.Functional.Tests
             Assert.True(inner.IsInner);
             Assert.Equal(7, leaf.Key);
             Assert.Equal(8, inner.Key);
-            Assert.Equal(2, leaf.Children.Count);
-            Assert.Equal(3, inner.Children.Count);
-            Assert.Equal(new[] { 3, 9 }, leaf.Children.Select(x => x.Key));
-            Assert.Equal(new[] { 1, 3, 15 }, inner.Children.Select(x => x.Key));
+            Assert.Equal(2, leaf.Children.Value().Count);
+            Assert.Equal(3, inner.Children.Value().Count);
+            Assert.Equal(new[] { 3, 9 }, leaf.Children.Value().Select(x => x.Key));
+            Assert.Equal(new[] { 1, 3, 15 }, inner.Children.Value().Select(x => x.Key));
         }
 
         [Theory]

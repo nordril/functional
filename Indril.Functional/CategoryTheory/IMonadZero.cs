@@ -13,6 +13,6 @@
         ///     X.Bind(X.MZero) == X.MZero (left zero)
         /// </code>
         /// </summary>
-        IMonadZero<T> Mzero { get; }
+        IMonadZero<T> Mzero();
     }
 }

@@ -62,11 +62,26 @@ namespace Indril.Functional.Data
         public T ValueOr(T alternative) => hasValue ? value : alternative;
 
         /// <summary>
+        /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, the function <paramref name="f"/> is applied to <see cref="Value"/> and returned, otherwise <paramref name="alternative"/> is returned.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="f">The function to apply to the value, if present.</param>
+        /// <param name="alternative">The value to return if the maybe has no value.</param>
+        public TResult ValueOr<TResult>(Func<T, TResult> f, TResult alternative) => hasValue ? f(value) : alternative;
+
+        /// <summary>
         /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, <see cref="Value"/>
         /// is returned, otherwise, <paramref name="alternative"/> is returned. This version allows lazy evaluation of <paramref name="alternative"/>.
         /// </summary>
         /// <param name="alternative">The value to return if the maybe has no value. Wrapped in a lambda to permit lazy evaluation.</param>
         public T ValueOrLazy(Func<T> alternative) => hasValue ? value : alternative();
+
+        /// <summary>
+        /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, the function <paramref name="f"/> is applied to <see cref="Value"/> and returned, otherwise, <paramref name="alternative"/> is returned. This version allows lazy evaluation of <paramref name="alternative"/>.
+        /// </summary>
+        /// <param name="f">The function to apply to the value, if present.</param>
+        /// <param name="alternative">The value to return if the maybe has no value. Wrapped in a lambda to permit lazy evaluation.</param>
+        public TResult ValueOrLazy<TResult>(Func<T, TResult> f, Func<TResult> alternative) => hasValue ? f(value) : alternative();
 
         /// <summary>
         /// A safe way to get a maybe's value. The return value is <see cref="HasValue"/>. If <see cref="HasValue"/> is true, <paramref name="result"/> will be set to <see cref="Value"/>, otherwise, it will be set to <paramref name="alternative"/>.
@@ -109,16 +124,6 @@ namespace Indril.Functional.Data
         }
 
         /// <summary>
-        /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true,
-        /// the function <paramref name="f"/> is applied to <see cref="Value"/>
-        /// is returned, otherwise <paramref name="alternative"/> is returned.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="f">The function to apply to the value, if present.</param>
-        /// <param name="alternative">The value to return if the maybe has no value.</param>
-        public TResult ValueOr<TResult>(Func<T, TResult> f, TResult alternative) => hasValue ? f(value) : alternative;
-
-        /// <summary>
         /// Returns a new maybe containing new value.
         /// </summary>
         public static Maybe<T> Nothing() => new Maybe<T>(false, default(T));
@@ -131,7 +136,7 @@ namespace Indril.Functional.Data
 
         #region IMonadPlus implementation
         /// <inheritdoc />
-        public IMonadZero<T> Mzero => Maybe<T>.Nothing();
+        public IMonadZero<T> Mzero() => Nothing();
 
         /// <inheritdoc />
         public IMonadPlus<T> Mplus(IMonadPlus<T> that)
