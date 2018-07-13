@@ -18,7 +18,7 @@ namespace Indril.Functional.Data
         /// The state-function which takes an initial state and produces
         /// both a new state and a result.
         /// </summary>
-        private Func<TState, (TValue, TState)> runState;
+        private readonly Func<TState, (TValue, TState)> runState;
 
         /// <summary>
         /// Creates a new state from a function that takes an initial state
@@ -31,12 +31,10 @@ namespace Indril.Functional.Data
         }
 
         /// <summary>
-        /// Runs the state function with an initial state and returns the result, plus the
-        /// actual result.
+        /// Runs the state function with an initial state and returns the result, plus the actual result.
         /// </summary>
-        /// <param name="initialState"></param>
-        /// <returns></returns>
-        public (TValue, TState) Run(TState initialState) => runState(initialState);
+        /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        public (TValue result, TState finalState) Run(TState initialState) => runState(initialState);
 
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TValue, TResult>> f)
@@ -97,5 +95,19 @@ namespace Indril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="f">The function to apply to the state.</param>
         public static State<TState, Unit> Modify<TState>(Func<TState, TState> f) => new State<TState, Unit>(s => (new Unit(), f(s)));
+
+        /// <summary>
+        /// Runs the state function with an initial state and returns the result, discarding the final state.
+        /// </summary>
+        /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        public static TResult RunForResult<TState, TResult>(this State<TState, TResult> s, TState initialState)
+            => s.Run(initialState).result;
+
+        /// <summary>
+        /// Runs the state function with an initial state and returns the final state, discarding the result.
+        /// </summary>
+        /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        public static TState RunForState<TState, TResult>(this State<TState, TResult> s, TState initialState)
+            => s.Run(initialState).finalState;
     }
 }
