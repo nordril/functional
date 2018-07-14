@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Indril.Functional.Function;
+using System;
 
 namespace Indril.Functional.CategoryTheory
 {
@@ -57,5 +58,52 @@ namespace Indril.Functional.CategoryTheory
         /// <param name="x">The value to wrap.</param>
         public static TResult Pure<TSource, TResult>(this TSource x)
             where TResult : IApplicative<TSource>, new() => (TResult)(new TResult().Pure(x));
+
+        /// <summary>
+        /// Lifts a binary function to take two applicative arguments.
+        /// </summary>
+        /// <example>
+        /// <code>
+        ///     var x = Maybe.Just(5);
+        ///     var y = Maybe.Nothing&lt;int&gt;();
+        ///     Func&lt;int,int,int&gt; f = (x,y) => x + y;
+        ///     
+        ///     //f takes integer arguments, but we can apply it to two maybe-arguments,
+        ///     //with automatic unpacking and packing of the results, via liftA*.
+        ///     var result = f.LiftA2()(x, y);
+        /// </code>
+        /// </example>
+        /// <typeparam name="T1">The type of the first argument.</typeparam>
+        /// <typeparam name="T2">The type of the second argument.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="f">The function to lift.</param>
+        public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<TResult>>
+            LiftA<T1, T2, TResult>(this Func<T1, T2, TResult> f)
+        => (x, y) => (x.Map(f.Curry()) as IApplicative<Func<T2, TResult>>).ApF(y);
+
+        /// <summary>
+        /// Lifts a ternary function to take three applicative arguments. See <see cref="LiftA{T1, T2, TResult}(Func{T1, T2, TResult})"/>
+        /// </summary>
+        /// <typeparam name="T1">The type of the first argument.</typeparam>
+        /// <typeparam name="T2">The type of the second argument.</typeparam>
+        /// <typeparam name="T3">The type of the second argument.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="f">The function to lift.</param>
+        public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<T3>, IApplicative<TResult>>
+            LiftA<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> f)
+        => (x, y, z) => (x.Map(f.Curry3()) as IApplicative<Func<T2, Func<T3, TResult>>>).ApF(y).ApF(z);
+
+        /// <summary>
+        /// Lifts a quaternary function to take three applicative arguments. See <see cref="LiftA{T1, T2, TResult}(Func{T1, T2, TResult})"/>
+        /// </summary>
+        /// <typeparam name="T1">The type of the first argument.</typeparam>
+        /// <typeparam name="T2">The type of the second argument.</typeparam>
+        /// <typeparam name="T3">The type of the second argument.</typeparam>
+        /// <typeparam name="T4">The type of the second argument.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="f">The function to lift.</param>
+        public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<T3>, IApplicative<T4>, IApplicative<TResult>>
+            LiftA<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, TResult> f)
+        => (x, y, z, u) => (x.Map(f.Curry3()) as IApplicative<Func<T2, Func<T3, Func<T4, TResult>>>>).ApF(y).ApF(z).ApF(u);
     }
 }
