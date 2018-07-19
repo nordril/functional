@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A functor that is contravariant in one type argument (meaning it needs values of that type)

@@ -1,4 +1,4 @@
-﻿using Indril.Functional.CategoryTheory;
+﻿using Indril.Functional.Category;
 using System;
 
 namespace Indril.Functional.Data
@@ -99,6 +99,7 @@ namespace Indril.Functional.Data
         /// <summary>
         /// Runs the state function with an initial state and returns the result, discarding the final state.
         /// </summary>
+        /// <param name="s">The state to run.</param>
         /// <param name="initialState">The initial state (the starting point of the computation).</param>
         public static TResult RunForResult<TState, TResult>(this State<TState, TResult> s, TState initialState)
             => s.Run(initialState).result;
@@ -106,6 +107,7 @@ namespace Indril.Functional.Data
         /// <summary>
         /// Runs the state function with an initial state and returns the final state, discarding the result.
         /// </summary>
+        /// <param name="s">The state to run.</param>
         /// <param name="initialState">The initial state (the starting point of the computation).</param>
         public static TState RunForState<TState, TResult>(this State<TState, TResult> s, TState initialState)
             => s.Run(initialState).finalState;

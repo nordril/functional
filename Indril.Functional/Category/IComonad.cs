@@ -1,7 +1,7 @@
 ﻿using Indril.Functional.Function;
 using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A comonad, which is the categorical dual of a <see cref="IMonad{TSource}"/>.

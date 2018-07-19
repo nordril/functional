@@ -1,4 +1,4 @@
-﻿namespace Indril.Functional.CategoryTheory
+﻿namespace Indril.Functional.Category
 {
     /// <summary>
     /// A phantom-functor which is both a functor and a contravariant functor.

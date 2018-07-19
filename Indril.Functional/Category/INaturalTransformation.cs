@@ -1,7 +1,7 @@
 ﻿using Indril.Functional.Data;
 using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A natural transformation which transforms one functor into another.

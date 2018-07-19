@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A bifunctor that contains both <typeparamref name="TLeft"/> values and <typeparamref name="TRight"/> values.

@@ -1,7 +1,7 @@
 ﻿using Indril.Functional.Data;
 using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/>.

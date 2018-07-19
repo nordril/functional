@@ -1,6 +1,6 @@
 ﻿using Indril.Functional.Data;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// An evaluator which can run an evaluation on a value of type <typeparamref name="TSource"/> and return a result

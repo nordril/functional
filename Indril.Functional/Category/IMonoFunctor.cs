@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// Monofunctors. Monofunctors are like functors (see <see cref="IFunctor{TSource}"/>), but

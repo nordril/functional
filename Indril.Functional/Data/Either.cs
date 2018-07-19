@@ -1,4 +1,4 @@
-﻿using Indril.Functional.CategoryTheory;
+﻿using Indril.Functional.Category;
 using Indril.TypeToolkit;
 using System;
 

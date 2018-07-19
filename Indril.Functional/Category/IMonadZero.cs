@@ -1,4 +1,4 @@
-﻿namespace Indril.Functional.CategoryTheory
+﻿namespace Indril.Functional.Category
 {
     /// <summary>
     /// A monad with a zero, which corresponds to the zero of an algebraic ring,

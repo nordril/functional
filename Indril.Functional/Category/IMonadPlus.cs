@@ -1,4 +1,4 @@
-﻿namespace Indril.Functional.CategoryTheory
+﻿namespace Indril.Functional.Category
 {
     /// <summary>
     /// Monads that support choice (see <see cref="IMonadPlus{T}.Mplus(IMonadPlus{T})"/>) in addition to failure (see <see cref="IMonadZero{T}.Mzero"/>).

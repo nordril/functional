@@ -1,4 +1,4 @@
-﻿using Indril.Functional.CategoryTheory;
+﻿using Indril.Functional.Category;
 using Indril.TypeToolkit;
 using System;
 using System.Collections.Generic;
@@ -11,27 +11,26 @@ namespace Indril.Functional.Data
     /// </summary>
     public struct Maybe<T> : IMonadPlus<T>, IEquatable<Maybe<T>>
     {
-        private bool hasValue;
         private T value;
 
         /// <summary>
         /// Returns the value, if it exists. Otherwise, a <see cref="PatternMatchException"/> is thrown.
         /// </summary>
-        public T Value() => hasValue ? value : throw new PatternMatchException(nameof(Value), nameof(Maybe<object>), nameof(IsNothing));
+        public T Value() => HasValue ? value : throw new PatternMatchException(nameof(Value), nameof(Maybe<object>), nameof(IsNothing));
 
         /// <summary>
         /// Returns true iff the maybe has a value.
         /// </summary>
-        public bool HasValue => hasValue;
+        public bool HasValue { get; private set; }
 
         /// <summary>
         /// Returns true iff the maybe does not have a value.
         /// </summary>
-        public bool IsNothing => !hasValue;
+        public bool IsNothing => !HasValue;
 
         private Maybe(bool hasValue, T value)
         {
-            this.hasValue = hasValue;
+            this.HasValue = hasValue;
             this.value = value;
         }
 
@@ -40,7 +39,7 @@ namespace Indril.Functional.Data
         /// </summary>
         public void ClearValue()
         {
-            hasValue = false;
+            HasValue = false;
             value = default(T);
         }
 
@@ -50,7 +49,7 @@ namespace Indril.Functional.Data
         /// <param name="value">The value to set.</param>
         public void SetValue(T value)
         {
-            hasValue = true;
+            HasValue = true;
             this.value = value;
         }
 
@@ -59,7 +58,7 @@ namespace Indril.Functional.Data
         /// is returned, otherwise, <paramref name="alternative"/> is returned.
         /// </summary>
         /// <param name="alternative">The value to return if the maybe has no value.</param>
-        public T ValueOr(T alternative) => hasValue ? value : alternative;
+        public T ValueOr(T alternative) => HasValue ? value : alternative;
 
         /// <summary>
         /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, the function <paramref name="f"/> is applied to <see cref="Value"/> and returned, otherwise <paramref name="alternative"/> is returned.
@@ -67,21 +66,21 @@ namespace Indril.Functional.Data
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="f">The function to apply to the value, if present.</param>
         /// <param name="alternative">The value to return if the maybe has no value.</param>
-        public TResult ValueOr<TResult>(Func<T, TResult> f, TResult alternative) => hasValue ? f(value) : alternative;
+        public TResult ValueOr<TResult>(Func<T, TResult> f, TResult alternative) => HasValue ? f(value) : alternative;
 
         /// <summary>
         /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, <see cref="Value"/>
         /// is returned, otherwise, <paramref name="alternative"/> is returned. This version allows lazy evaluation of <paramref name="alternative"/>.
         /// </summary>
         /// <param name="alternative">The value to return if the maybe has no value. Wrapped in a lambda to permit lazy evaluation.</param>
-        public T ValueOrLazy(Func<T> alternative) => hasValue ? value : alternative();
+        public T ValueOrLazy(Func<T> alternative) => HasValue ? value : alternative();
 
         /// <summary>
         /// A safe way to get a maybe's value. If <see cref="HasValue"/> is true, the function <paramref name="f"/> is applied to <see cref="Value"/> and returned, otherwise, <paramref name="alternative"/> is returned. This version allows lazy evaluation of <paramref name="alternative"/>.
         /// </summary>
         /// <param name="f">The function to apply to the value, if present.</param>
         /// <param name="alternative">The value to return if the maybe has no value. Wrapped in a lambda to permit lazy evaluation.</param>
-        public TResult ValueOrLazy<TResult>(Func<T, TResult> f, Func<TResult> alternative) => hasValue ? f(value) : alternative();
+        public TResult ValueOrLazy<TResult>(Func<T, TResult> f, Func<TResult> alternative) => HasValue ? f(value) : alternative();
 
         /// <summary>
         /// A safe way to get a maybe's value. The return value is <see cref="HasValue"/>. If <see cref="HasValue"/> is true, <paramref name="result"/> will be set to <see cref="Value"/>, otherwise, it will be set to <paramref name="alternative"/>.
@@ -91,7 +90,7 @@ namespace Indril.Functional.Data
         /// <returns></returns>
         public bool TryGetValue(T alternative, out T result)
         {
-            if (hasValue)
+            if (HasValue)
             {
                 result = value;
                 return true;
@@ -111,7 +110,7 @@ namespace Indril.Functional.Data
         /// <returns></returns>
         public bool TryGetValueLazy(Func<T> alternativeFactory, out T result)
         {
-            if (hasValue)
+            if (HasValue)
             {
                 result = value;
                 return true;
@@ -144,11 +143,11 @@ namespace Indril.Functional.Data
             if (that == null || !(that is Maybe<T>))
                 throw new InvalidCastException();
 
-            return hasValue ? this : that;
+            return HasValue ? this : that;
         }
 
         /// <inheritdoc />
-        public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f) => hasValue ? f(value) : Maybe<TResult>.Nothing();
+        public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f) => HasValue ? f(value) : Maybe<TResult>.Nothing();
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => Maybe<TResult>.Just(x);
@@ -161,11 +160,11 @@ namespace Indril.Functional.Data
 
             var fMaybe = (Maybe<Func<T, TResult>>)f;
 
-            return (hasValue && fMaybe.HasValue) ? Maybe<TResult>.Just(fMaybe.Value()(value)) : Maybe<TResult>.Nothing();
+            return (HasValue && fMaybe.HasValue) ? Maybe<TResult>.Just(fMaybe.Value()(value)) : Maybe<TResult>.Nothing();
         }
 
         /// <inheritdoc />
-        public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => hasValue ? Maybe<TResult>.Just(f(value)) : Maybe<TResult>.Nothing();
+        public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => HasValue ? Maybe<TResult>.Just(f(value)) : Maybe<TResult>.Nothing();
 
         /// <summary>
         /// Compares two <see cref="Maybe{T}"/>-objects based on their values, if present. The comparison returns true if both values lack a value or if both have one and the values are equal based on their <see cref="Object.Equals(object)"/>-method.
@@ -178,16 +177,16 @@ namespace Indril.Functional.Data
 
             var thatMaybe = (Maybe<T>)obj;
 
-            if (hasValue != thatMaybe.hasValue)
+            if (HasValue != thatMaybe.HasValue)
                 return false;
-            else if (hasValue == false)
+            else if (HasValue == false)
                 return true;
             else
                 return value.Equals(thatMaybe.value);
         }
 
         /// <inheritdoc />
-        public override int GetHashCode() => this.DefaultHash(hasValue, hasValue ? value : default(T));
+        public override int GetHashCode() => this.DefaultHash(HasValue, HasValue ? value : default(T));
 
         /// <inheritdoc />
         public static bool operator ==(Maybe<T> left, Maybe<T> right) => left.Equals(right);

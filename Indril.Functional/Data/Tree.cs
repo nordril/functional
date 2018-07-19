@@ -1,5 +1,5 @@
 ﻿using Indril.Functional.Algebra;
-using Indril.Functional.CategoryTheory;
+using Indril.Functional.Category;
 using System;
 using System.Collections;
 using System.Collections.Generic;

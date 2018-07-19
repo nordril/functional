@@ -4,7 +4,7 @@ using System.Text;
 using Indril.Functional.Data;
 using Indril.TypeToolkit;
 
-namespace Indril.Functional.CategoryTheory.NaturalTransformations
+namespace Indril.Functional.Category.NaturalTransformations
 {
     /// <summary>
     /// A natural transformation from <see cref="Maybe{T}"/> to <see cref="FuncList{T}"/> which creates a 0-element list for <see cref="Maybe.Nothing{T}"/> and a 1-element list containing <see cref="Maybe{T}.Value"/> for <see cref="Maybe{T}.Just(T)"/>.

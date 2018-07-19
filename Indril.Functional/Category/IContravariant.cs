@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A contravariant functor. A contravariant functor is a functor that <em>needs</em> values of type <typeparamref name="TSource"/>

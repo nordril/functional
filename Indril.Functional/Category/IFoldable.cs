@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// Data structures that suppoort folding, i.e. aggregation over their members.

@@ -1,7 +1,7 @@
 ﻿using Indril.Functional.Function;
 using System;
 
-namespace Indril.Functional.CategoryTheory
+namespace Indril.Functional.Category
 {
     /// <summary>
     /// A monad. Monads, in addition to wrapping values (via <see cref="IApplicative{TSource}"/>
@@ -102,6 +102,6 @@ namespace Indril.Functional.CategoryTheory
         /// <typeparam name="T">The type in the monad.</typeparam>
         /// <param name="a">The monad to flatten.</param>
         /// <returns></returns>
-        public static IMonad<T> Join<T>(IMonad<IMonad<T>> a) => a.Bind(x => x);
+        public static IMonad<T> Join<T>(this IMonad<IMonad<T>> a) => a.Bind(x => x);
     }
 }
