@@ -27,7 +27,7 @@ namespace Indril.Functional.Category
     public interface IApplicative<TSource> : IFunctor<TSource>
     {
         /// <summary>
-        /// Wraps a value into an applicative. The this-value NOT BE USED by implementors.
+        /// Wraps a value into an applicative. The this-value MUST NOT BE USED by implementors.
         /// </summary>
         /// <typeparam name="TResult">The type of the value to wrap.</typeparam>
         /// <param name="x">The value to wrap.</param>

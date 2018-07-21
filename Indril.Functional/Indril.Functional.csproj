@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyVersion>1.4.18200.0</AssemblyVersion>
+    <AssemblyVersion>2.0.18200.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Indril</Authors>
     <Company>Indril</Company>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>1.4.0</Version>
+    <Version>2.0.0</Version>
     <Description>Function programming goodness: Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>1.4.2.0</FileVersion>
+    <FileVersion>2.0.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

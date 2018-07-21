@@ -30,7 +30,7 @@ namespace Indril.Functional.Collection
             => xs.Aggregate(acc, (a, x) => selector(x).Aggregate(a, (b, y) => f(b, x, y)));
 
         /// <summary>
-        /// Performs a right-fold on a sequence. For associative combining functions <paramref name="f"/>, <see cref="AggregateRight{T, TResult}(IEnumerable{T}, TResult, Func{T, TResult, TResult})"/> returns the same result as <see cref="Enumerable.Aggregate{TSource, TAccumulate}(IEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, TAccumulate})"/>, though it will use heap memory linear in the length of <paramref name="xs"/>. The definition is:
+        /// Performs a right-fold on a sequence. For associative combining functions <paramref name="f"/>, <see cref="AggregateRight{T, TResult}(IEnumerable{T}, Func{T, TResult, TResult}, TResult)"/> returns the same result as <see cref="Enumerable.Aggregate{TSource, TAccumulate}(IEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, TAccumulate})"/>, though it will use heap memory linear in the length of <paramref name="xs"/>. The definition is:
         /// <code>
         ///     {x1,x2,...,xn}.AggregateRight(acc, f) = f(x1, f(x2, ... f(xn, acc)...)
         ///     for instance

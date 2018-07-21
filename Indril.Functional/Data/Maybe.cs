@@ -9,7 +9,7 @@ namespace Indril.Functional.Data
     /// An optional type that works for both reference and value types.
     /// Also known as "Option".
     /// </summary>
-    public struct Maybe<T> : IMonadPlus<T>, IEquatable<Maybe<T>>
+    public struct Maybe<T> : IMonadPlus<T>, IAlternative<T>, IEquatable<Maybe<T>>
     {
         private T value;
 
@@ -133,7 +133,6 @@ namespace Indril.Functional.Data
         /// <param name="value">The value to store in the maybe.</param>
         public static Maybe<T> Just(T value) => new Maybe<T>(true, value);
 
-        #region IMonadPlus implementation
         /// <inheritdoc />
         public IMonadZero<T> Mzero() => Nothing();
 
@@ -167,6 +166,25 @@ namespace Indril.Functional.Data
         public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => HasValue ? Maybe<TResult>.Just(f(value)) : Maybe<TResult>.Nothing();
 
         /// <summary>
+        /// Returns <see cref="Maybe.Nothing{T}"/>.
+        /// </summary>
+        public IAlternative<T> Empty() => new Maybe<T>();
+
+        /// <summary>
+        /// Returns a copy of this, if it has a value, or a copy of <paramref name="x"/>.
+        /// </summary>
+        /// <param name="x">The other value.</param>
+        public IAlternative<T> Alt(IAlternative<T> x)
+        {
+            if (x == null || !(x is Maybe<T>))
+                throw new InvalidCastException();
+
+            var xMaybe = (Maybe<T>)x;
+
+            return HasValue ? new Maybe<T>(true, value) : new Maybe<T>(xMaybe.HasValue, xMaybe.value);
+        }
+
+        /// <summary>
         /// Compares two <see cref="Maybe{T}"/>-objects based on their values, if present. The comparison returns true if both values lack a value or if both have one and the values are equal based on their <see cref="Object.Equals(object)"/>-method.
         /// </summary>
         /// <param name="obj">The other object.</param>
@@ -196,7 +214,6 @@ namespace Indril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Maybe<T> other) => Equals((object)other);
-        #endregion
     }
 
     /// <summary>

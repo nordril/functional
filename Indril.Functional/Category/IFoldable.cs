@@ -44,7 +44,5 @@ namespace Indril.Functional.Category
         /// <param name="f">The function that maps an element to a monoid.</param>
         public static TMonoid FoldMap<TSource, TMonoid>(this IFoldable<TSource> foldable, Func<TMonoid> empty, Func<TSource, TMonoid> f) where TMonoid : IMonoid<TMonoid>
         => foldable.FoldMap(new Monoid<TMonoid>(empty(), (x, y) => x.Op(y)), f);
-
-        //TODO : FoldableExtensions (foldl, sequence, length, etc.)
     }
 }

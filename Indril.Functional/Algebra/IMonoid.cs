@@ -14,8 +14,8 @@ namespace Indril.Functional.Algebra
         /// <summary>
         /// Returns the neutral element. The neutral element must fulfill the following for any X and Y:
         /// <code>
-        ///     X.Neutral.Op(Y) == Y (left-neutrality)
-        ///     X.Op(Y.Neutral) == X (right-neutrality)
+        ///     X.Neutral().Op(Y) == Y (left-neutrality)
+        ///     X.Op(Y.Neutral()) == X (right-neutrality)
         /// </code>
         /// </summary>
         T Neutral { get; }

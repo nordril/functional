@@ -4,7 +4,7 @@
     /// Monads that support choice (see <see cref="IMonadPlus{T}.Mplus(IMonadPlus{T})"/>) in addition to failure (see <see cref="IMonadZero{T}.Mzero"/>).
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IMonadPlus<T> : IMonadZero<T>
+    public interface IMonadPlus<T> : IMonadZero<T>, IAlternative<T>
     {
         /// <summary>
         /// Adds two monad values. Implementors must fulfill the following for all X and a, b, c, and k:

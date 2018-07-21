@@ -91,7 +91,6 @@ namespace Indril.Functional.Data
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new FuncList<TResult> { x };
 
-        //todo: check this for correctness. either this or whereAp is wrong
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<T, TResult>> f)
         {
@@ -114,6 +113,25 @@ namespace Indril.Functional.Data
 
         /// <inheritdoc />
         public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator) => ListCoalesce().AggregateRight(f, accumulator);
+
+        /// <summary>
+        /// Returns an empty list.
+        /// </summary>
+        public IAlternative<T> Empty() => new FuncList<T>();
+
+        /// <summary>
+        /// Concatenates two lists. <paramref name="x"/> only has to be an <see cref="IEnumerable{T}"/>, not a <see cref="IFuncList{T}"/>.
+        /// </summary>
+        /// <param name="x">The other sequence.</param>
+        public IAlternative<T> Alt(IAlternative<T> x)
+        {
+            if (x == null || !(x is IEnumerable<T>))
+                throw new InvalidCastException();
+
+            var xList = (IEnumerable<T>)x;
+
+            return new FuncList<T>(ListCoalesce().Concat(xList));
+        }
 
         private List<T> ListCoalesce()
         {
