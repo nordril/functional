@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Indril.Functional", "Indril.Functional\Indril.Functional.csproj", "{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nordril.Functional", "Nordril.Functional\Nordril.Functional.csproj", "{D843ABE7-27D9-4D6F-B1A3-A0FA53BBFBA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indril.Functional.Tests", "Indril.Functional.Tests\Indril.Functional.Tests.csproj", "{9F78DB34-FBA8-496B-A987-F168A9001B60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nordril.Functional.Tests", "Nordril.Functional.Tests\Nordril.Functional.Tests.csproj", "{9F78DB34-FBA8-496B-A987-F168A9001B60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
