@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyVersion>1.0.18237.0</AssemblyVersion>
+    <AssemblyVersion>1.0.18242.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Indril.Functional\Nordril.Functional.csproj" />
+    <ProjectReference Include="..\Nordril.Functional\Nordril.Functional.csproj" />
   </ItemGroup>
 
 </Project>
