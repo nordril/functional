@@ -24,11 +24,11 @@ namespace Nordril.Functional
             {
                 int hash = 17;
 
-                hash = hash * 23 + obj.GetType().GetGenericName(true).GetHashCode(StringComparison.InvariantCulture);
+                hash = hash * 23 + obj.GetType().GetGenericName(true).GetHashCode();
 
                 foreach (var f in fields)
                     if (f != null)
-                        hash = hash * 23 + (f.GetType() == typeof(string) ? ((string)f).GetHashCode(StringComparison.InvariantCulture) : f.GetHashCode());
+                        hash = hash * 23 + (f.GetType() == typeof(string) ? ((string)f).GetHashCode() : f.GetHashCode());
 
                 return hash;
             }
@@ -55,7 +55,7 @@ namespace Nordril.Functional
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="useFullName">If true, the type's full (namespace-qualified) name will be used, otherwise the type's name.</param>
-        private static string GetGenericName(this Type type, bool useFullName = false)
+        public static string GetGenericName(this Type type, bool useFullName = false)
         {
             var ret = new StringBuilder();
 

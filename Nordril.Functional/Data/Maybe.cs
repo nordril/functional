@@ -29,7 +29,7 @@ namespace Nordril.Functional.Data
 
         private Maybe(bool hasValue, T value)
         {
-            this.HasValue = hasValue;
+            HasValue = hasValue;
             this.value = value;
         }
 
@@ -39,7 +39,7 @@ namespace Nordril.Functional.Data
         public void ClearValue()
         {
             HasValue = false;
-            value = default(T);
+            value = default;
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Returns a new maybe containing new value.
         /// </summary>
-        public static Maybe<T> Nothing() => new Maybe<T>(false, default(T));
+        public static Maybe<T> Nothing() => new Maybe<T>(false, default);
 
         /// <summary>
         /// Returns a new maybe containing a value.
@@ -203,7 +203,7 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
-        public override int GetHashCode() => this.DefaultHash(HasValue, HasValue ? value : default(T));
+        public override int GetHashCode() => this.DefaultHash(HasValue, HasValue ? value : default);
 
         /// <inheritdoc />
         public static bool operator ==(Maybe<T> left, Maybe<T> right) => left.Equals(right);
@@ -251,7 +251,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <typeparam name="T">The type of the value contained in the functor.</typeparam>
         /// <param name="f">The functor to cast to a maybe.</param>
-        public static Maybe<T> CastToMaybe<T>(this IFunctor<T> f) => (Maybe<T>)f;
+        public static Maybe<T> ToMaybe<T>(this IFunctor<T> f) => (Maybe<T>)f;
 
         /// <summary>
         /// Tries to get a value from a dictionary and applies a function if present, or returns an alternative value if not.

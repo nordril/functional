@@ -151,5 +151,12 @@ namespace Nordril.Functional.Data
         /// <param name="elements">The list of elements.</param>
         public static FuncList<T> Make<T>(params T[] elements)
             => new FuncList<T>(elements);
+
+        /// <summary>
+        /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="IFuncList{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static IFuncList<T> ToPredicate<T>(this IFunctor<T> x) => (IFuncList<T>)x;
     }
 }

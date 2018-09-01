@@ -31,6 +31,12 @@ namespace Nordril.Functional.Data
             Func = func;
         }
 
+        /// <summary>
+        /// Runs the predicate with an argument.
+        /// </summary>
+        /// <param name="arg">The argument.</param>
+        public bool Run(T arg) => Func(arg);
+
         /// <inheritdoc />
         public IContravariant<TResult> ContraMap<TResult>(Func<TResult, T> f)
             => new Predicate<TResult>(f.Then(Func));
@@ -44,5 +50,25 @@ namespace Nordril.Functional.Data
             var f = Func;
             return new Predicate<T>(x => f(x) && that.Func(x));
         }
+    }
+
+    /// <summary>
+    /// Extension methods for <see cref="Predicate{T}"/>.
+    /// </summary>
+    public static class Pred
+    {
+        /// <summary>
+        /// Creates a new <see cref="Predicate{T}"/> from a function <paramref name="f"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="f">The predicate function.</param>
+        public static Predicate<T> Create<T>(Func<T, bool> f) => new Predicate<T>(f);
+
+        /// <summary>
+        /// Unsafely casts an <see cref="IContravariant{TSource}"/> to a <see cref="Predicate{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static Predicate<T> ToPredicate<T>(this IContravariant<T> x) => (Predicate<T>)x;
     }
 }

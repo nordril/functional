@@ -4,7 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
+using System.Security;
 
 namespace Nordril.Functional.Data
 {
@@ -155,14 +157,6 @@ namespace Nordril.Functional.Data
             }
         }
 
-        private static TB ListFoldr<TA, TB>(Func<TA,TB,TB> f, TB acc, IEnumerable<TA> xs)
-        {
-            if (!xs.Any())
-                return acc;
-            else
-                return f(xs.First(), ListFoldr(f, acc, xs.Skip(1)));
-        }
-
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator() => Traverse(TreeTraversal.PreOrder).Select(x => x.Item1).GetEnumerator();
 
@@ -213,6 +207,44 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of the keys.</typeparam>
         /// <param name="key">The key of the node.</param>
         public static Tree<T> MakeLeaf<T>(T key) => Tree<T>.MakeLeaf(key);
+
+        /// <summary>
+        /// Takes a directory and returns a tree representing that directory as its root and the sub-directories and files as child-nodes, recursively. An <see cref="Either.FromLeft{TLeft, TRight}(TLeft)"/> represents a directory and will always be an inner-node, and an <see cref="Either.FromRight{TLeft, TRight}(TRight)"/> represents a file. No file will have a directory as a child.
+        /// <br />
+        /// This method uses direct recursion and thus required O(n) stack space, where n is the maximum depth of the directory structure. Symlinks are not traversed. As there are no filesystem-level locks, this method may fail if a file or directory is deleted partway through the computation.
+        /// </summary>
+        /// <param name="directory">The path to the directory.</param>
+        /// <param name="fullName">Where to use the full names of filesystem-entries.</param>
+        /// <exception cref="InvalidOperationException">If the directory <paramref name="directory"/> does not exist.</exception>
+        /// <exception cref="DirectoryNotFoundException">A directory path is invalid, such as referring to an unmapped drive or having been deleted.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name, or combined exceed the system-defined maximum length.</exception>
+        /// <exception cref="SecurityException">The caller does not have the required permission.</exception>
+        /// <exception cref="UnauthorizedAccessException">The caller does not have the required permission.</exception>
+        /// <exception cref="StackOverflowException">If the maximum stack size has been exceeded.</exception>
+        public static Tree<Either<string, string>> RetrieveDirectoryStructure(string directory, PathNameUsage fullName)
+        {
+            if (!Directory.Exists(directory))
+                throw new InvalidOperationException();
+
+            var key = (fullName == PathNameUsage.Always || fullName == PathNameUsage.RootOnly)
+                ? directory
+                : Path.GetDirectoryName(directory);
+            var ret = MakeInner(Either.FromLeft<string, string>(key));
+            var children = ret.Children.Value();
+            var fullNameRec = fullName == PathNameUsage.Always ? fullName : PathNameUsage.Never;
+            var useFullNameForFiles = fullName == PathNameUsage.Always;
+
+            foreach (var entry in Directory.EnumerateDirectories(directory))
+                children.Add(RetrieveDirectoryStructure(entry, fullNameRec));
+
+            foreach (var entry in Directory.EnumerateFiles(directory))
+                children.Add(
+                    MakeLeaf(
+                        Either.FromRight<string, string>(
+                            useFullNameForFiles ? entry : Path.GetFileName(entry))));
+
+            return ret;
+        }
     }
 
     /// <summary>
@@ -228,5 +260,24 @@ namespace Nordril.Functional.Data
         /// First the children, then the node.
         /// </summary>
         PostOrder
+    }
+
+    /// <summary>
+    /// Where the full names of filesystem-entries should be used.
+    /// </summary>
+    public enum PathNameUsage
+    {
+        /// <summary>
+        /// The full name should always be used.
+        /// </summary>
+        Always,
+        /// <summary>
+        /// The full name should only be used at the root.
+        /// </summary>
+        RootOnly,
+        /// <summary>
+        /// The full name should be used nowhere.
+        /// </summary>
+        Never
     }
 }

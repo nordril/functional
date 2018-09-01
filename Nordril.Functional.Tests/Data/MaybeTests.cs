@@ -151,10 +151,10 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.IsType<Maybe<int>>(x1.Mplus(y1));
 
-            var r1 = x1.Mplus(y1).CastToMaybe();
-            var r2 = x1.Mplus(y2).CastToMaybe();
-            var r3 = x2.Mplus(y1).CastToMaybe();
-            var r4 = x2.Mplus(y2).CastToMaybe();
+            var r1 = x1.Mplus(y1).ToMaybe();
+            var r2 = x1.Mplus(y2).ToMaybe();
+            var r3 = x2.Mplus(y1).ToMaybe();
+            var r4 = x2.Mplus(y2).ToMaybe();
 
             Assert.True(r1.IsNothing);
             Assert.True(r2.HasValue);
@@ -175,12 +175,12 @@ namespace Nordril.Functional.Tests.Data
             IMonad<int> f(int z) => Maybe.Nothing<int>();
             IMonad<int> g(int z) => Maybe.Just(z * 2);
 
-            Assert.True(x.Bind(f).CastToMaybe().IsNothing);
-            Assert.True(y.Bind(f).CastToMaybe().IsNothing);
-            Assert.True(x.Bind(g).CastToMaybe().IsNothing);
-            Assert.True(y.Bind(g).CastToMaybe().HasValue);
+            Assert.True(x.Bind(f).ToMaybe().IsNothing);
+            Assert.True(y.Bind(f).ToMaybe().IsNothing);
+            Assert.True(x.Bind(g).ToMaybe().IsNothing);
+            Assert.True(y.Bind(g).ToMaybe().HasValue);
             Assert.Equal(5, y.Value());
-            Assert.Equal(10, y.Bind(g).CastToMaybe().Value());
+            Assert.Equal(10, y.Bind(g).ToMaybe().Value());
         }
 
         [Fact]
@@ -192,13 +192,13 @@ namespace Nordril.Functional.Tests.Data
             var f = Maybe.Nothing<Func<int, bool>>();
             var g = Maybe.Just<Func<int, bool>>(i => i % 2 == 0);
 
-            Assert.True(x.Ap(f).CastToMaybe().IsNothing);
-            Assert.True(x.Ap(g).CastToMaybe().IsNothing);
-            Assert.True(y.Ap(f).CastToMaybe().IsNothing);
-            Assert.True(y.Ap(g).CastToMaybe().HasValue);
+            Assert.True(x.Ap(f).ToMaybe().IsNothing);
+            Assert.True(x.Ap(g).ToMaybe().IsNothing);
+            Assert.True(y.Ap(f).ToMaybe().IsNothing);
+            Assert.True(y.Ap(g).ToMaybe().HasValue);
 
             Assert.Equal(5, y.Value());
-            Assert.False(y.Ap(g).CastToMaybe().Value());
+            Assert.False(y.Ap(g).ToMaybe().Value());
         }
 
         [Fact]
@@ -207,16 +207,16 @@ namespace Nordril.Functional.Tests.Data
             var x = Maybe.Nothing<int>();
             var y = Maybe.Just(5);
 
-            Assert.True(x.Map(i => i*2).CastToMaybe().IsNothing);
-            Assert.True(y.Map(i => i * 2).CastToMaybe().HasValue);
-            Assert.Equal(10, y.Map(i => i * 2).CastToMaybe().Value());
+            Assert.True(x.Map(i => i*2).ToMaybe().IsNothing);
+            Assert.True(y.Map(i => i * 2).ToMaybe().HasValue);
+            Assert.Equal(10, y.Map(i => i * 2).ToMaybe().Value());
         }
 
         [Fact]
         public static void PureWrapsValue()
         {
             var x = Maybe.Nothing<int>();
-            var y = x.Pure(9).CastToMaybe();
+            var y = x.Pure(9).ToMaybe();
 
             Assert.False(x.HasValue);
             Assert.Equal(9, y.Value());

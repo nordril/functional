@@ -56,7 +56,7 @@ namespace Nordril.Functional
         }
 
         /// <summary>
-        /// Returns truee iff all elements of <paramref name="xs"/> equal true.
+        /// Returns true iff all elements of <paramref name="xs"/> equal true.
         /// </summary>
         /// <param name="xs">The list to check.</param>
         public static bool All(this IEnumerable<bool> xs) => xs.All(x => x);
@@ -65,7 +65,14 @@ namespace Nordril.Functional
         /// Returns true iff at least one element of <paramref name="xs"/> equals true.
         /// </summary>
         /// <param name="xs">The list to check.</param>
-        public static bool AnyTrue(this IEnumerable<bool> xs) => xs.Aggregate(false, (acc, x) => acc || x);
+        public static bool AnyTrue(this IEnumerable<bool> xs)
+        {
+            foreach (var x in xs)
+                if (x)
+                    return true;
+
+            return false;
+        }
 
         /// <summary>
         /// Returns true iff the sequence is empty.
@@ -98,7 +105,7 @@ namespace Nordril.Functional
             foreach (var x in xs)
             {
                 if (predicate(x))
-                    return Maybe.Just<T>(x);
+                    return Maybe.Just(x);
             }
 
             return Maybe.Nothing<T>();
@@ -263,7 +270,8 @@ namespace Nordril.Functional
                 previous = x;
             }
 
-            yield return isMerging ? merging : previous;
+            if (!first)
+                yield return isMerging ? merging : previous;
         }
 
         /// <summary>
@@ -383,7 +391,7 @@ namespace Nordril.Functional
         public static decimal Product(this IEnumerable<decimal?> xs) => xs.Aggregate(1m, (acc, x) => acc * (x ?? 1m));
 
         /// <summary>
-        /// Applies a function at a specific, 0-based index at a sequence and returns the original elements of the sequence at all others.
+        /// Applies a function at a specific, 0-based index at a sequence and returns the original elements of the sequence at all others. This method takes O(n) time.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="xs">The list to search.</param>

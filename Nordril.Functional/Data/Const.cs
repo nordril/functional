@@ -87,4 +87,24 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public bool Equals(Const<TReal, TPhantom> other) => Equals((object)other);
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="Const{T}"/>.
+    /// </summary>
+    public static class Const
+    {
+        /// <summary>
+        /// Unsafely casts an <see cref="IFunctor{TSource}"/> to a <see cref="Const{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static Const<T> ToConst<T>(this IFunctor<T> x) => (Const<T>)x;
+
+        /// <summary>
+        /// Unsafely casts an <see cref="IContravariant{TSource}"/> to a <see cref="Const{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static Const<T> ToConst<T>(this IContravariant<T> x) => (Const<T>)x;
+    }
 }

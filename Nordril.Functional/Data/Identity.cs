@@ -69,4 +69,17 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public bool Equals(Identity<T> other) => Equals((object)other);
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="Identity{T}"/>.
+    /// </summary>
+    public static class Identity
+    {
+        /// <summary>
+        /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="Identity{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static Identity<T> ToPredicate<T>(IFunctor<T> x) => (Identity<T>)x;
+    }
 }

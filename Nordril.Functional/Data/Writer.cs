@@ -48,6 +48,18 @@ namespace Nordril.Functional.Data
         {
         }
 
+        /// <summary>
+        /// Stores a new ouput in this <see cref="Writer{TState, TValue}"/>, mutating it.
+        /// <c>this</c> is returned.
+        /// </summary>
+        /// <param name="output">The new output to store.</param>
+        /// <returns>This object.</returns>
+        public Writer<TState, TValue> Tell(TState output)
+        {
+            Output = OutputMonoid.Op(Output, output);
+            return this;
+        }
+
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TValue, TResult>> f)
         {

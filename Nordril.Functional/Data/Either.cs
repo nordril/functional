@@ -45,7 +45,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
         /// <param name="discriminator">The discriminator tag.</param>
-        public Either(TLeft value, TagLeft discriminator) : this(value, default(TRight), EitherTag.Left)
+        public Either(TLeft value, TagLeft discriminator) : this(value, default, EitherTag.Left)
         {
         }
 
@@ -54,7 +54,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
         /// <param name="discriminator">The discriminator tag.</param>
-        public Either(TRight value, TagRight discriminator) : this(default(TLeft), value, EitherTag.Right)
+        public Either(TRight value, TagRight discriminator) : this(default, value, EitherTag.Right)
         {
         }
 
@@ -62,13 +62,13 @@ namespace Nordril.Functional.Data
         /// Creates a left-either from a value.
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
-        public static Either<TLeft, TRight> FromLeft(TLeft value) => new Either<TLeft, TRight>(value, default(TRight), EitherTag.Left);
+        public static Either<TLeft, TRight> FromLeft(TLeft value) => new Either<TLeft, TRight>(value, default, EitherTag.Left);
 
         /// <summary>
         /// Creates a right-either from a value.
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
-        public static Either<TLeft, TRight> FromRight(TRight value) => new Either<TLeft, TRight>(default(TLeft), value, EitherTag.Right);
+        public static Either<TLeft, TRight> FromRight(TRight value) => new Either<TLeft, TRight>(default, value, EitherTag.Right);
 
         /// <summary>
         /// Sets the either to a left, clearing the right, if present.
@@ -78,7 +78,7 @@ namespace Nordril.Functional.Data
         {
             discriminator = EitherTag.Left;
             this.left = left;
-            right = default(TRight);
+            right = default;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Nordril.Functional.Data
         public void SetRight(TRight right)
         {
             discriminator = EitherTag.Right;
-            left = default(TLeft);
+            left = default;
             this.right = right;
         }
 
@@ -143,8 +143,8 @@ namespace Nordril.Functional.Data
         public override int GetHashCode() =>
             this.DefaultHash(
                 discriminator,
-                discriminator == EitherTag.Left ? left : default(TLeft),
-                discriminator == EitherTag.Right ? right : default(TRight));
+                discriminator == EitherTag.Left ? left : default,
+                discriminator == EitherTag.Right ? right : default);
 
         /// <inheritdoc />
         public static bool operator ==(Either<TLeft, TRight> left, Either<TLeft, TRight> right) => left.Equals(right);
@@ -158,7 +158,7 @@ namespace Nordril.Functional.Data
         #region IBifunctor implementation
         /// <inheritdoc />
         public IBifunctor<TLeftResult, TRightResult> BiMap<TLeftResult, TRightResult>(Func<TLeft, TLeftResult> f, Func<TRight, TRightResult> g)
-            => IsLeft ? new Either<TLeftResult, TRightResult>(f(left), default(TRightResult), EitherTag.Left) : new Either<TLeftResult, TRightResult>(default(TLeftResult), g(right), EitherTag.Right);
+            => IsLeft ? new Either<TLeftResult, TRightResult>(f(left), default, EitherTag.Left) : new Either<TLeftResult, TRightResult>(default, g(right), EitherTag.Right);
         #endregion
 
         #region IMonad implementation
@@ -170,19 +170,19 @@ namespace Nordril.Functional.Data
 
             var fEither = (Either<TLeft, Func<TRight, TResult>>)f;
 
-            return IsLeft ? new Either<TLeft, TResult>(left, default(TResult), EitherTag.Left)
-                : fEither.IsLeft ? new Either<TLeft, TResult>(fEither.left, default(TResult), EitherTag.Left)
-                : new Either<TLeft, TResult>(default(TLeft), fEither.right(right), EitherTag.Right);
+            return IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left)
+                : fEither.IsLeft ? new Either<TLeft, TResult>(fEither.left, default, EitherTag.Left)
+                : new Either<TLeft, TResult>(default, fEither.right(right), EitherTag.Right);
         }
 
         /// <inheritdoc />
         public IMonad<TResult> Bind<TResult>(Func<TRight, IMonad<TResult>> f)
-            => IsLeft ? new Either<TLeft, TResult>(left, default(TResult), EitherTag.Left)
+            => IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left)
             : f(right);
 
         /// <inheritdoc />
         public IFunctor<TResult> Map<TResult>(Func<TRight, TResult> f)
-            => IsLeft ? new Either<TLeft, TResult>(left, default(TResult), EitherTag.Left) : new Either<TLeft, TResult>(default(TLeft), f(right), EitherTag.Right);
+            => IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left) : new Either<TLeft, TResult>(default, f(right), EitherTag.Right);
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new Either<Unit, TResult>(new Unit(), x, EitherTag.Right);

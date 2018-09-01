@@ -85,7 +85,7 @@ namespace Nordril.Functional.Category
             var pureMi = instancePure.Select(mi => (MethodInfo)mi).First(mi =>
             {
                 var gargs = mi.GetGenericArguments();
-                return gargs.Length == 1 && gargs[0].IsGenericMethodParameter && mi.IsGenericMethod;
+                return gargs.Length == 1 && gargs[0].IsGenericParameter && mi.IsGenericMethod;
             }).MakeGenericMethod(typeof(TSource));
 
             var pure = new DynamicMethod("pure", typeof(IApplicative<TSource>), new Type[] { typeof(TSource) });

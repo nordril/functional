@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nordril.Functional.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,11 +42,18 @@ namespace Nordril.Functional.Algebra
             => new Monoid<T>(instance.Neutral, (x, y) => x.Op(y));
 
         /// <summary>
-        /// The ([],++) monoid for lists.
+        /// The mutating ([],++) monoid for lists.
         /// </summary>
         /// <typeparam name="T">The type of element in the list.</typeparam>
         public static Monoid<List<T>> ListAppend<T>()
             => new Monoid<List<T>>(new List<T>(), (x, y) => { x.AddRange(y); return x; });
+
+        /// <summary>
+        /// The non-mutating ([],++) monoid for lists, meaning that the inputs of <see cref="Magma{T}.Op" /> aren't changed.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the list.</typeparam>
+        public static Monoid<IList<T>> ImmutableListAppend<T>()
+            => new Monoid<IList<T>>(new FuncList<T>(), (x, y) => new FuncList<T>(x.Concat(y)));
 
         /// <summary>
         /// The ("",+) monoid for <see cref="string"/>.

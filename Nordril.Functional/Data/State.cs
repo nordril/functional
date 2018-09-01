@@ -1,5 +1,6 @@
 ﻿using Nordril.Functional.Category;
 using System;
+using System.Text;
 
 namespace Nordril.Functional.Data
 {
@@ -101,6 +102,8 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="s">The state to run.</param>
         /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
         public static TResult RunForResult<TState, TResult>(this State<TState, TResult> s, TState initialState)
             => s.Run(initialState).result;
 
@@ -109,7 +112,17 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="s">The state to run.</param>
         /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
         public static TState RunForState<TState, TResult>(this State<TState, TResult> s, TState initialState)
             => s.Run(initialState).finalState;
+
+        /// <summary>
+        /// Runs the state function on a newly created <see cref="StringBuilder"/> and returns the final string. This is a convenience method if one uses <see cref="State{TState, TValue}"/> to efficiently build up strings.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="s">The state to run.</param>
+        public static string RunStringBuilder<TResult>(this State<StringBuilder, TResult> s)
+            => s.Run(new StringBuilder()).finalState.ToString();
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Category;
 using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -334,6 +336,108 @@ namespace Nordril.Functional.Tests.Data
             var treeSum = t.Traverse(TreeTraversal.PostOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
 
             Assert.Equal(sum, treeSum);
+        }
+
+        [Theory]
+        [InlineData(PathNameUsage.Always)]
+        [InlineData(PathNameUsage.RootOnly)]
+        [InlineData(PathNameUsage.Never)]
+        public static void RetrieveDirectoryStructureOnDirectory(PathNameUsage usage)
+        {
+            var dir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+            try
+            {
+                var expected = CreateTree(dir);
+
+                if (usage == PathNameUsage.RootOnly || usage == PathNameUsage.Never)
+                {
+                    expected = (Tree<Either<string, string>>)expected.Map(e
+                        => (Either<string, string>)e.BiMap(d => Path.GetDirectoryName(d), f => Path.GetFileName(f)));
+                }
+                if (usage == PathNameUsage.RootOnly)
+                    expected.Key = (Either<string, string>)expected.Key.LeftMap(_ => dir);
+
+                var actual = Tree.RetrieveDirectoryStructure(dir, usage);
+
+                Assert.Equal(expected, actual);
+
+            } finally
+            {
+                DeleteTree(dir);
+            }
+        }
+
+        private static Tree<Either<string, string>> CreateTree(string dir)
+        {
+            Either<string, string> mkDir(params string[] d) => Either.FromLeft<string, string>(Path.Combine(d));
+            Either<string, string> mkFile(params string[] d) => Either.FromRight<string, string>(Path.Combine(d));
+
+            Directory.CreateDirectory(dir);
+
+            //1st level
+            Directory.CreateDirectory(Path.Combine(dir, "a"));
+            Directory.CreateDirectory(Path.Combine(dir, "b"));
+            Directory.CreateDirectory(Path.Combine(dir, "c"));
+
+            File.Create(Path.Combine(dir, "f1")).Close();
+            File.Create(Path.Combine(dir, "f2")).Close();
+            File.Create(Path.Combine(dir, "f3")).Close();
+            File.Create(Path.Combine(dir, "f4")).Close();
+
+            //2nd level
+            Directory.CreateDirectory(Path.Combine(dir, "a", "aa"));
+            File.Create(Path.Combine(dir, "a", "af1")).Close();
+            Directory.CreateDirectory(Path.Combine(dir, "b", "ba"));
+            File.Create(Path.Combine(dir, "c", "cf1")).Close();
+            File.Create(Path.Combine(dir, "c", "cf2")).Close();
+
+            //3rd level
+            Directory.CreateDirectory(Path.Combine(dir, "a", "aa", "aaa"));
+
+            var expected = Tree.MakeInner(mkDir(dir), new[]
+                {
+                    Tree.MakeInner(mkDir(dir, "a"), new []
+                    {
+                        Tree.MakeInner(mkDir(dir, "a", "aa"), new [] {
+                            Tree.MakeInner(mkDir(dir, "a", "aa", "aaa"))
+                        }),
+                        Tree.MakeLeaf(mkFile(dir, "a", "af1"))
+                    }),
+                    Tree.MakeInner(mkDir(dir, "b"), new [] {
+                        Tree.MakeInner(mkDir(dir, "b", "ba"))
+                    }),
+                    Tree.MakeInner(mkDir(dir, "c"), new [] {
+                        Tree.MakeLeaf(mkFile(dir, "c", "cf1")),
+                        Tree.MakeLeaf(mkFile(dir, "c", "cf2"))
+                    }),
+                    Tree.MakeLeaf(mkFile(dir, "f1")),
+                    Tree.MakeLeaf(mkFile(dir, "f2")),
+                    Tree.MakeLeaf(mkFile(dir, "f3")),
+                    Tree.MakeLeaf(mkFile(dir, "f4")),
+                });
+
+            return expected;
+        }
+
+        private static void DeleteTree(string dir)
+        {
+            Directory.CreateDirectory(dir);
+
+            File.Delete(Path.Combine(dir, "f1"));
+            File.Delete(Path.Combine(dir, "f2"));
+            File.Delete(Path.Combine(dir, "f3"));
+            File.Delete(Path.Combine(dir, "f4"));
+            File.Delete(Path.Combine(dir, "a", "af1"));
+            File.Delete(Path.Combine(dir, "c", "cf1"));
+            File.Delete(Path.Combine(dir, "c", "cf2"));
+
+            Directory.Delete(Path.Combine(dir, "a", "aa", "aaa"));
+            Directory.Delete(Path.Combine(dir, "a", "aa"));
+            Directory.Delete(Path.Combine(dir, "b", "ba"));
+            Directory.Delete(Path.Combine(dir, "a"));
+            Directory.Delete(Path.Combine(dir, "b"));
+            Directory.Delete(Path.Combine(dir, "c"));
         }
     }
 }
