@@ -160,19 +160,5 @@ namespace Nordril.Functional.Tests
 
             Assert.NotEqual(x.GetHashCode(), y.GetHashCode());
         }
-
-        [Theory]
-        [InlineData(typeof(int), false, "Int32")]
-        [InlineData(typeof(int), true, "System.Int32")]
-        [InlineData(typeof(List<int>), false, "List<Int32>")]
-        [InlineData(typeof(List<int>), true, "System.Collections.Generic.List<System.Int32>")]
-        [InlineData(typeof(List<List<(int, bool)>>), false, "List<List<ValueTuple<Int32, Boolean>>>")]
-        [InlineData(typeof(List<List<(int, bool)>>), true, "System.Collections.Generic.List<System.Collections.Generic.List<System.ValueTuple<System.Int32, System.Boolean>>>")]
-        public static void GetGenericNameTest(Type t, bool useFullName, string expected)
-        {
-            var actual = t.GetGenericName(useFullName);
-
-            Assert.Equal(actual, expected);
-        }
     }
 }

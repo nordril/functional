@@ -10,6 +10,59 @@ namespace Nordril.Functional.Tests
 {
     public static class CollectionExtensionsTests
     {
+        public static IEnumerable<object[]> Aggregate2Data()
+        {
+            yield return new object[] {
+                new int[] { },
+                0
+            };
+
+            yield return new object[] {
+                new int[] { 1 },
+                //1..9
+                //sumUp    res   form  i    
+                //0+1+0 -> 1     1*1   0
+                //1+1+1 -> 3     1*3   1
+                //3+1+2 -> 6     2*3   2    res = (⌊i/2⌋+1) * (2⌈i/2⌉+1)
+                //6+1+3 -> 10    2*5   3        = ⌊i/2⌋ * (2⌈i/2⌉+1) + (2⌈i/2⌉+1)
+                //10+1+4 -> 15   3*5   4        = ⌊i/2⌋ * 2⌈i/2⌉ + ⌊i/2⌋ + (2⌈i/2⌉+1)
+                //15+1+5 -> 21   3*7   5        = 2⌊i/2⌋⌈i/2⌉ + ⌊i/2⌋ + 2⌈i/2⌉ + 1
+                //21+1+6 -> 28   4*7   6
+                //28+1+7 -> 36   4*9   7
+                //36+1+8 -> 45   5*9   8   i=8 -> 2⌊i/2⌋⌈i/2⌉ + ⌊i/2⌋ + 2⌈i/2⌉ + 1 = 45
+                //45+1+9 -> 55   5*11  9   i=9 -> 2*4*5 + 4 + 2*5 + 1 = 55
+                55
+            };
+
+            yield return new object[] {
+                new int[] { 1, 10 },
+                //0...9; 10..29
+                //sumUp    res   form  i    
+                //first sum: 55
+                //55+10+10 -> 75
+                //75+10+11 -> 96
+                //96+10+12 -> 118
+                //118+10+13 -> 141
+                //141+10+14 -> 165
+                //165+10+15 -> 190
+                //190+10+16 -> 216
+                //216+10+17 -> 243
+                //243+10+18 -> 271
+                //271+10+19 -> 300
+                //300+10+20 -> 330
+                //330+10+21 -> 361
+                //361+10+22 -> 393
+                //393+10+23 -> 426
+                //426+10+24 -> 460
+                //460+10+25 -> 495
+                //495+10+26 -> 531
+                //531+10+27 -> 568
+                //568+10+28 -> 606
+                //606+10+29 -> 645
+                645
+            };
+        }
+
         public static IEnumerable<object[]> FirstMaybeData()
         {
             yield return new object[] {
@@ -87,11 +140,11 @@ namespace Nordril.Functional.Tests
 
         public static IEnumerable<object[]> ProductIntTest2Data()
         {
-            yield return new object[] { new (string, int)[] { }, 1 };
-            yield return new object[] { new (string, int)[] { ("a",1) }, 1 };
-            yield return new object[] { new (string, int)[] { ("b", 2) }, 2 };
-            yield return new object[] { new (string, int)[] { ("b", 2), ("c",3), ("d",4) }, 24 };
-            yield return new object[] { new (string, int)[] { ("b",2), ("c", 3), ("d", 4) }, 24 };
+            yield return new object[] { new(string, int)[] { }, 1 };
+            yield return new object[] { new(string, int)[] { ("a", 1) }, 1 };
+            yield return new object[] { new(string, int)[] { ("b", 2) }, 2 };
+            yield return new object[] { new(string, int)[] { ("b", 2), ("c", 3), ("d", 4) }, 24 };
+            yield return new object[] { new(string, int)[] { ("b", 2), ("c", 3), ("d", 4) }, 24 };
         }
 
         public static IEnumerable<object[]> ProductLongTest2Data()
@@ -188,6 +241,773 @@ namespace Nordril.Functional.Tests
             yield return new object[] { new decimal?[] { 2, 3, 1.2M, null, 3.5M, null, 4, null }, 100.8M };
         }
 
+        public static IEnumerable<object[]> Unzip1Data()
+        {
+            yield return new object[] {
+                new Person[] { },
+                new string[] { },
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new [] { new Person("alice", 15 )},
+                new [] { "alice" },
+                new [] { 15 }
+            };
+
+            yield return new object[] {
+                new [] { new Person("alice", 15 ), new Person("bob", 30), new Person("cecil", 12 )},
+                new [] { "alice", "bob", "cecil" },
+                new [] { 15, 30, 12 }
+            };
+        }
+
+        public static IEnumerable<object[]> UnzipTupleData()
+        {
+            yield return new object[] {
+                new (string, int)[] { },
+                new string[] { },
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15 )},
+                new [] { "alice" },
+                new [] { 15 }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15 ), ("bob", 30), ("cecil", 12 )},
+                new [] { "alice", "bob", "cecil" },
+                new [] { 15, 30, 12 }
+            };
+        }
+
+        public static IEnumerable<object[]> UnzipTuple3Data()
+        {
+            yield return new object[] {
+                new (string, int, float)[] { },
+                new string[] { },
+                new int[] { },
+                new float[] { }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15, 165f )},
+                new [] { "alice" },
+                new [] { 15 },
+                new [] { 165f }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15, 165f ), ("bob", 30, 178f ), ("cecil", 12, 154f )},
+                new [] { "alice", "bob", "cecil" },
+                new [] { 15, 30, 12 },
+                new [] { 165f, 178f, 154f }
+            };
+        }
+
+        public static IEnumerable<object[]> UnzipTuple4Data()
+        {
+            yield return new object[] {
+                new (string, int, float, bool)[] { },
+                new string[] { },
+                new int[] { },
+                new float[] { },
+                new bool[] { }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15, 165f, true )},
+                new [] { "alice" },
+                new [] { 15 },
+                new [] { 165f },
+                new [] { true }
+            };
+
+            yield return new object[] {
+                new [] { ("alice", 15, 165f, true ), ("bob", 30, 178f, false ), ("cecil", 12, 154f, false )},
+                new [] { "alice", "bob", "cecil" },
+                new [] { 15, 30, 12 },
+                new [] { 165f, 178f, 154f },
+                new [] { true, false, false }
+            };
+        }
+
+        public static IEnumerable<object[]> ZipTupleData()
+        {
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new (int, bool)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 3 },
+                new bool[] { },
+                new (int, bool)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 3, 5, 6 },
+                new bool[] { },
+                new (int, bool)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { true },
+                new (int, bool)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { false, true, true },
+                new (int, bool)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 3 },
+                new bool[] { false },
+                new (int, bool)[] { (3, false) }
+            };
+
+            yield return new object[] {
+                new int[] { 3, 5, 6 },
+                new bool[] { false, true, false },
+                new (int, bool)[] { (3, false), (5, true), (6, false) }
+            };
+
+            yield return new object[] {
+                new int[] { 3, 5, 6, 7 },
+                new bool[] { false, true, false },
+                new (int, bool)[] { (3, false), (5, true), (6, false) }
+            };
+
+            yield return new object[] {
+                new int[] { 3, 5, 6 },
+                new bool[] { false, true, false, true, true },
+                new (int, bool)[] { (3, false), (5, true), (6, false) }
+            };
+        }
+
+        public static IEnumerable<object[]> ZipTuple3Data()
+        {
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { false },
+                new string[] { },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { "bla" },
+                new (int, bool, string)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { "bla" },
+                new (int, bool, string)[] { (5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { false },
+                new string[] { "bla" },
+                new (int, bool, string)[] { (5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false, true },
+                new string[] { "bla" },
+                new (int, bool, string)[] { (5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { "bla", "blu" },
+                new (int, bool, string)[] { (5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { false, true },
+                new string[] { "bla", "blu" },
+                new (int, bool, string)[] { (5, false, "bla"), (6, true, "blu") }
+            };
+        }
+
+        public static IEnumerable<object[]> ZipTuple4Data()
+        {
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { false },
+                new string[] { },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] {  },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] {  },
+                new bool[] { true },
+                new string[] { },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { (5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true, false },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { (5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla", "blu" },
+                new double[] { 6d },
+                new (int, bool, string, double)[] { (5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d, 7d },
+                new (int, bool, string, double)[] { (5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { true, false },
+                new string[] { "bla", "blu" },
+                new double[] { 6d, 19d },
+                new (int, bool, string, double)[] { (5, true, "bla", 6d), (6, false, "blu", 19d) }
+            };
+        }
+
+        public static IEnumerable<object[]> Zip3Data()
+        {
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { false },
+                new string[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { "bla" },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { "bla" },
+                new ZipRecord[] { new ZipRecord(5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { false },
+                new string[] { "bla" },
+                new ZipRecord[] { new ZipRecord(5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false, true },
+                new string[] { "bla" },
+                new ZipRecord[] { new ZipRecord(5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { "bla", "blu" },
+                new ZipRecord[] { new ZipRecord(5, false, "bla") }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { false, true },
+                new string[] { "bla", "blu" },
+                new ZipRecord[] { new ZipRecord(5, false, "bla"), new ZipRecord(6, true, "blu") }
+            };
+        }
+
+        public static IEnumerable<object[]> Zip4Data()
+        {
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { false },
+                new string[] { },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { false },
+                new string[] { },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5  },
+                new bool[] { },
+                new string[] { },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] {  },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] {  },
+                new bool[] { true },
+                new string[] { },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new ZipRecord[] { }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new ZipRecord[] { new ZipRecord(5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true, false },
+                new string[] { "bla" },
+                new double[] { 6d },
+                new ZipRecord[] { new ZipRecord(5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla", "blu" },
+                new double[] { 6d },
+                new ZipRecord[] { new ZipRecord(5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5 },
+                new bool[] { true },
+                new string[] { "bla" },
+                new double[] { 6d, 7d },
+                new ZipRecord[] { new ZipRecord(5, true, "bla", 6d) }
+            };
+
+            yield return new object[] {
+                new int[] { 5, 6 },
+                new bool[] { true, false },
+                new string[] { "bla", "blu" },
+                new double[] { 6d, 19d },
+                new ZipRecord[] { new ZipRecord(5, true, "bla", 6d), new ZipRecord(6, false, "blu", 19d) }
+            };
+        }
+
+        public static IEnumerable<object[]> ZipManyData()
+        {
+            yield return new object[] {
+                new int[][]
+                {
+                },
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[0]
+                },
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[0],
+                    new int[0],
+                    new int[0]
+                },
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3},
+                    new int[] {5},
+                    new int[0]
+                },
+                new int[] { 8 }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3,4,5},
+                    new int[0],
+                    new int[] {5,6,7,8}
+                },
+                new int[] { 8, 10, 12, 8}
+            };
+        }
+
+        public static IEnumerable<object[]> ZipManyListsData()
+        {
+            yield return new object[] {
+                new int[][]
+                {
+                },
+                new List<int>[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[0]
+                },
+                new List<int>[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[0],
+                    new int[0],
+                    new int[0]
+                },
+                new List<int>[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3},
+                    new int[] {5},
+                    new int[0]
+                },
+                new List<int>[] { new List<int> { 3, 5 } }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3,4,5},
+                    new int[0],
+                    new int[] {5,6,7,8}
+                },
+                new List<int>[] { new List<int> { 3,5 }, new List<int> { 4, 6 }, new List<int> { 5, 7 }, new List<int> { 8 } }
+            };
+        }
+
+        public static IEnumerable<object[]> ZipWithStreamData()
+        {
+            yield return new object[] {
+                new string[] { },
+                new (string, int)[] { }
+            };
+
+            yield return new object[] {
+                new string[] { "a" },
+                new (string, int)[] { ("a", 5) }
+            };
+
+            yield return new object[] {
+                new string[] { "a", "b", "c" },
+                new (string, int)[] { ("a", 5), ("b", 7), ("c", 9) }
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(Aggregate2Data))]
+        public static void Aggregate2Test(IEnumerable<int> xs, int expected)
+        {
+            int sumUp(int acc, int outer, int inner)
+            {
+                return acc + outer + inner;
+            }
+
+            var res = xs.Aggregate2(
+                0,
+                i => Enumerable.Range((i / 10) * 10, (((i / 10) + 1) * 10)),
+                sumUp);
+
+            Assert.Equal(expected, res);
+        }
+
         [Theory]
         [InlineData(new bool[] { }, true)]
         [InlineData(new bool[] { true }, true)]
@@ -216,7 +1036,7 @@ namespace Nordril.Functional.Tests
         [Theory]
         [InlineData(new int[] { }, true)]
         [InlineData(new int[] { 0 }, false)]
-        [InlineData(new int[] { 1, 2, 3}, false)]
+        [InlineData(new int[] { 1, 2, 3 }, false)]
         public static void EmptyTest(IEnumerable<int> xs, bool expected)
         {
             Assert.Equal(expected, xs.Empty());
@@ -294,7 +1114,7 @@ namespace Nordril.Functional.Tests
 
         [Theory]
         [InlineData(new int[] { }, new bool[] { }, 0)]
-        [InlineData(new int[] { 1, 2, 3}, new bool[] { }, 0)]
+        [InlineData(new int[] { 1, 2, 3 }, new bool[] { }, 0)]
         [InlineData(new int[] { }, new bool[] { true, true }, 0)]
         [InlineData(new int[] { 1, 5 }, new bool[] { true, true }, 6)]
         [InlineData(new int[] { 1, 5 }, new bool[] { true, true, true }, 6)]
@@ -311,7 +1131,7 @@ namespace Nordril.Functional.Tests
 
         [Theory]
         [InlineData(new int[] { }, new int[] { }, new bool[] { }, 0)]
-        [InlineData(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30}, new bool[] { }, 0)]
+        [InlineData(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 }, new bool[] { }, 0)]
         [InlineData(new int[] { }, new int[] { 10, 20, 30 }, new bool[] { true, true }, 0)]
         [InlineData(new int[] { 1, 5 }, new int[] { 10, 20, 30 }, new bool[] { true, true }, 110)]
         [InlineData(new int[] { 1, 5 }, new int[] { 10, 20, 30 }, new bool[] { true, true, true }, 110)]
@@ -321,7 +1141,7 @@ namespace Nordril.Functional.Tests
         {
             var actual = 0;
 
-            xs.ForEach(ys, zs, (i, j, b) => { if (b) actual += i*j; });
+            xs.ForEach(ys, zs, (i, j, b) => { if (b) actual += i * j; });
 
             Assert.Equal(expected, actual);
         }
@@ -330,7 +1150,7 @@ namespace Nordril.Functional.Tests
         [InlineData(new int[] { }, new int[] { }, new bool[] { }, new bool[] { }, 0)]
         [InlineData(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 }, new bool[] { true }, new bool[] { }, 0)]
         [InlineData(new int[] { }, new int[] { 10, 20, 30 }, new bool[] { }, new bool[] { true, true }, 0)]
-        [InlineData(new int[] { 1, 5 }, new int[] { 10, 20, 30 }, new bool[] { false, true}, new bool[] { true, true }, 100)]
+        [InlineData(new int[] { 1, 5 }, new int[] { 10, 20, 30 }, new bool[] { false, true }, new bool[] { true, true }, 100)]
         public static void Foreach4Test(
             IEnumerable<int> xs,
             IEnumerable<int> ys,
@@ -358,7 +1178,7 @@ namespace Nordril.Functional.Tests
         [Theory]
         [InlineData(new int[] { }, new int[] { })]
         [InlineData(new int[] { 1 }, new int[] { 1 })]
-        [InlineData(new int[] { 1, 11, 111 }, new int[] { 1, 11, 111})]
+        [InlineData(new int[] { 1, 11, 111 }, new int[] { 1, 11, 111 })]
         [InlineData(new int[] { 1, 2 }, new int[] { 0 })]
         [InlineData(new int[] { 1, 2, 3, 4 }, new int[] { 0 })]
         [InlineData(new int[] { 1, 2, 11, 22 }, new int[] { 0, 11, 22 })]
@@ -374,7 +1194,7 @@ namespace Nordril.Functional.Tests
         [InlineData(new int[] { }, new int[] { }, new int[] { })]
         [InlineData(new int[] { 1 }, new int[] { }, new int[] { 1 })]
         [InlineData(new int[] { 2 }, new int[] { 2 }, new int[] { })]
-        [InlineData(new int[] { 1, 2, 3, 4, 5 }, new int[] { 2, 4 }, new int[] { 1, 3, 5})]
+        [InlineData(new int[] { 1, 2, 3, 4, 5 }, new int[] { 2, 4 }, new int[] { 1, 3, 5 })]
         [InlineData(new int[] { 1, 2, 3, 4, 5, 6 }, new int[] { 2, 4, 6 }, new int[] { 1, 3, 5 })]
         public static void PartitionTest(IEnumerable<int> xs, IEnumerable<int> expectedTrue, IEnumerable<int> expectedFalse)
         {
@@ -513,7 +1333,7 @@ namespace Nordril.Functional.Tests
         [InlineData(new int[] { }, -1, new int[] { })]
         [InlineData(new int[] { }, 3, new int[] { })]
         [InlineData(new int[] { 1, }, 1, new int[] { 1 })]
-        [InlineData(new int[] { 1,2,3}, 0, new int[] { 10, 2, 3})]
+        [InlineData(new int[] { 1, 2, 3 }, 0, new int[] { 10, 2, 3 })]
         [InlineData(new int[] { 1, 2, 3 }, 1, new int[] { 1, 20, 3 })]
         [InlineData(new int[] { 1, 2, 3 }, 2, new int[] { 1, 2, 30 })]
         [InlineData(new int[] { 1, 2, 3 }, 4, new int[] { 1, 2, 3 })]
@@ -526,7 +1346,7 @@ namespace Nordril.Functional.Tests
         [Theory]
         [InlineData(0, 0, new int[] { })]
         [InlineData(0, 1, new int[] { 0 })]
-        [InlineData(0, 2, new int[] { 0, 10})]
+        [InlineData(0, 2, new int[] { 0, 10 })]
         [InlineData(5, 5, new int[] { })]
         [InlineData(5, 6, new int[] { 50 })]
         [InlineData(5, 10, new int[] { 50, 60, 70, 80, 90 })]
@@ -535,5 +1355,126 @@ namespace Nordril.Functional.Tests
             var actual = seed.Unfold(s => Maybe.JustIf(s < limit, () => (s + 1, s * 10)));
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [MemberData(nameof(Unzip1Data))]
+        public static void UnzipTest1(IEnumerable<Person> xs, IEnumerable<string> names, IEnumerable<int> money)
+        {
+            var (actualNames, actualMoney) = xs.Unzip(p => (p.Name, p.Money));
+
+            Assert.Equal(names, actualNames);
+            Assert.Equal(money, actualMoney);
+        }
+
+        [Theory]
+        [MemberData(nameof(UnzipTupleData))]
+        public static void UnzipTupleTest(IEnumerable<(string, int)> xs, IEnumerable<string> names, IEnumerable<int> money)
+        {
+            var (actualNames, actualMoney) = xs.Unzip();
+
+            Assert.Equal(names, actualNames);
+            Assert.Equal(money, actualMoney);
+        }
+
+        [Theory]
+        [MemberData(nameof(UnzipTuple3Data))]
+        public static void UnzipTuple3Test(IEnumerable<(string, int, float)> xs, IEnumerable<string> names, IEnumerable<int> money, IEnumerable<float> height)
+        {
+            var (actualNames, actualMoney, actualHeight) = xs.Unzip();
+
+            Assert.Equal(names, actualNames);
+            Assert.Equal(money, actualMoney);
+            Assert.Equal(height, actualHeight);
+        }
+
+        [Theory]
+        [MemberData(nameof(UnzipTuple4Data))]
+        public static void UnzipTuple4Test(IEnumerable<(string, int, float, bool)> xs, IEnumerable<string> names, IEnumerable<int> money, IEnumerable<float> height, IEnumerable<bool> employed)
+        {
+            var (actualNames, actualMoney, actualHeight, actualEmployed) = xs.Unzip();
+
+            Assert.Equal(names, actualNames);
+            Assert.Equal(money, actualMoney);
+            Assert.Equal(height, actualHeight);
+            Assert.Equal(employed, actualEmployed);
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipTupleData))]
+        public static void ZipTupleTest(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<(int, bool)> expected)
+        {
+            Assert.Equal(expected, xs.Zip(ys));
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipTuple3Data))]
+        public static void ZipTuple3Test(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<string> zs, IEnumerable<(int, bool, string)> expected)
+        {
+            Assert.Equal(expected, xs.Zip(ys, zs));
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipTuple4Data))]
+        public static void ZipTuple4Test(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<string> zs, IEnumerable<double> us, IEnumerable<(int, bool, string, double)> expected)
+        {
+            Assert.Equal(expected, xs.Zip(ys, zs, us));
+        }
+
+        [Theory]
+        [MemberData(nameof(Zip3Data))]
+        public static void Zip3Test(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<string> zs, IEnumerable<ZipRecord> expected)
+        {
+            Assert.Equal(expected, xs.Zip(ys, zs, (x, y, u) => new ZipRecord(x, y, u)));
+        }
+
+        [Theory]
+        [MemberData(nameof(Zip4Data))]
+        public static void Zip4Test(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<string> zs, IEnumerable<double> us, IEnumerable<ZipRecord> expected)
+        {
+            Assert.Equal(expected, xs.Zip(ys, zs, us, (x, y, u, z) => new ZipRecord(x, y, u, z)));
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipManyData))]
+        public static void ZipManyTest(IEnumerable<IEnumerable<int>> xs, IEnumerable<int> expected)
+        {
+            Assert.Equal(expected, xs.Zip(x => x.Sum()));
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipManyListsData))]
+        public static void ZipManyListsTest(IEnumerable<IEnumerable<int>> xs, IEnumerable<List<int>> expected)
+        {
+            Assert.Equal(expected, xs.Zip());
+        }
+
+        [Theory]
+        [MemberData(nameof(ZipWithStreamData))]
+        public static void ZipWithStreamTest(IEnumerable<string> xs, IEnumerable<(string, int)> expected)
+        {
+            Assert.Equal(expected, xs.ZipWithStream(5, x => x + 2));
+        }
+    }
+
+    public class Person
+    {
+        public string Name { get; private set; }
+        public int Money { get; private set; }
+
+        public Person(string name, int money) { Name = name; Money = money; }
+    }
+
+    public class ZipRecord : IEquatable<ZipRecord>
+    {
+        public int X { get; private set; } = 0;
+        public bool Y { get; private set; } = false;
+        public string Z { get; private set; } = "";
+        public double U { get; private set; } = 0d;
+
+        public ZipRecord(int x, bool y, string z, double u) { X = x; Y = y; Z = z; U = u; }
+
+        public ZipRecord(int x, bool y, string z) : this(x,y,z, 0d) { }
+
+        public bool Equals(ZipRecord other) => X == other.X && Y == other.Y && Z == other.Z && U == other.U;
     }
 }

@@ -560,7 +560,7 @@ namespace Nordril.Functional
             => Zip4Iterator(xs, ys, zs, us, f);
 
         /// <summary>
-        /// Zips a sequence of sequences together, iterating through all sequences in parallel, until the end of the shortest one. For each i, the list of elements at index i is combined into one result via <paramref name="f"/>.
+        /// Zips a sequence of sequences together, iterating through all sequences in parallel, until the end of the longest one, omitting those sequences whose end has been reached from the input of <paramref name="f"/>. For each i, the list of elements at index i is combined into one result via <paramref name="f"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequences.</typeparam>
         /// <typeparam name="TResult">The result type.</typeparam>
@@ -568,29 +568,52 @@ namespace Nordril.Functional
         /// <param name="f">The combining function.</param>
         public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<IEnumerable<T>> xs, Func<List<T>, TResult> f)
         {
+            var xsList = xs.ToList();
             var iterators = new List<IEnumerator<T>>();
+            var stillRunning = Enumerable.Repeat(true, xsList.Count).ToList();
+            var stillRunningCount = xsList.Count;
             var res = new List<TResult>();
 
             try
             {
-                foreach (var x in xs)
+                //Get an iterator for each sequence.
+                foreach (var x in xsList)
                     iterators.Add(x.GetEnumerator());
 
-                while (iterators.All(i => i.MoveNext()))
+                //While any sequence still has unvisited elements
+                while (stillRunningCount > 0)
                 {
+                    //Try to retrieve an element from each of the still-running sequences
+                    //and put those elements into a list, which is fed to f.
                     var nextList = new List<T>();
 
-                    foreach (var i in iterators)
-                        nextList.Add(i.Current);
+                    for (int i =0;i<iterators.Count;i++)
+                    {
+                        if (stillRunning[i])
+                        {
+                            if (iterators[i].MoveNext())
+                                nextList.Add(iterators[i].Current);
+                            else
+                            {
+                                iterators[i].Dispose();
+                                stillRunning[i] = false;
+                                stillRunningCount--;
+                            }
+                        }
+                    }
 
-                    res.Add(f(nextList));
+                    //If this is 0, it means we finished all sequences without reading anything -> don't call f.
+                    if (stillRunningCount > 0)
+                        res.Add(f(nextList));
                 }
 
                 return res;
             } finally
             {
-                foreach (var i in iterators)
-                    i.Dispose();
+                for (int i=0;i<iterators.Count;i++)
+                {
+                    try { if (stillRunning[i]) { iterators[i].Dispose(); } } catch { }
+                }
             }
         }
 

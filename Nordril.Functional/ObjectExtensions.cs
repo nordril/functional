@@ -55,7 +55,7 @@ namespace Nordril.Functional
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="useFullName">If true, the type's full (namespace-qualified) name will be used, otherwise the type's name.</param>
-        public static string GetGenericName(this Type type, bool useFullName = false)
+        internal static string GetGenericName(this Type type, bool useFullName = false)
         {
             var ret = new StringBuilder();
 
