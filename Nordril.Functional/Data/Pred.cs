@@ -10,7 +10,7 @@ namespace Nordril.Functional.Data
     /// </summary>
     /// <typeparam name="T">The type of the input parameter.</typeparam>
     [SuppressMessage("Microsoft.Design", "CA1815", Justification = "Equality between functions cannot, in general, be determined.")]
-    public struct Predicate<T> : IContravariant<T>, IMonoid<Predicate<T>>
+    public struct Pred<T> : IContravariant<T>, IMonoid<Pred<T>>
     {
         /// <summary>
         /// The predicate function.
@@ -20,13 +20,13 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// The neutral element w.r.t the predicate's monoid. Creates a predicate that always returns true.
         /// </summary>
-        public Predicate<T> Neutral => new Predicate<T>(_ => true);
+        public Pred<T> Neutral => new Pred<T>(_ => true);
 
         /// <summary>
         /// Creates a new predicate from a function.
         /// </summary>
         /// <param name="func"></param>
-        public Predicate(Func<T, bool> func)
+        public Pred(Func<T, bool> func)
         {
             Func = func;
         }
@@ -39,36 +39,36 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public IContravariant<TResult> ContraMap<TResult>(Func<TResult, T> f)
-            => new Predicate<TResult>(f.Then(Func));
+            => new Pred<TResult>(f.Then(Func));
 
         /// <summary>
         /// Combines two predicates via logical AND.
         /// </summary>
         /// <param name="that">The other predicate.</param>
-        public Predicate<T> Op(Predicate<T> that)
+        public Pred<T> Op(Pred<T> that)
         {
             var f = Func;
-            return new Predicate<T>(x => f(x) && that.Func(x));
+            return new Pred<T>(x => f(x) && that.Func(x));
         }
     }
 
     /// <summary>
-    /// Extension methods for <see cref="Predicate{T}"/>.
+    /// Extension methods for <see cref="Pred{T}"/>.
     /// </summary>
     public static class Pred
     {
         /// <summary>
-        /// Creates a new <see cref="Predicate{T}"/> from a function <paramref name="f"/>.
+        /// Creates a new <see cref="Pred{T}"/> from a function <paramref name="f"/>.
         /// </summary>
         /// <typeparam name="T">The type of the input parameter.</typeparam>
         /// <param name="f">The predicate function.</param>
-        public static Predicate<T> Create<T>(Func<T, bool> f) => new Predicate<T>(f);
+        public static Pred<T> Create<T>(Func<T, bool> f) => new Pred<T>(f);
 
         /// <summary>
-        /// Unsafely casts an <see cref="IContravariant{TSource}"/> to a <see cref="Predicate{T}"/>.
+        /// Unsafely casts an <see cref="IContravariant{TSource}"/> to a <see cref="Pred{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the input parameter.</typeparam>
         /// <param name="x">The object to cast.</param>
-        public static Predicate<T> ToPredicate<T>(this IContravariant<T> x) => (Predicate<T>)x;
+        public static Pred<T> ToPredicate<T>(this IContravariant<T> x) => (Pred<T>)x;
     }
 }

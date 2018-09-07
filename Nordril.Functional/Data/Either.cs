@@ -201,6 +201,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TRight">The type of the right-value.</typeparam>
         /// <param name="value">The value to store in the either.</param>
         public static Either<TLeft, TRight> FromLeft<TLeft, TRight>(TLeft value) => Either<TLeft, TRight>.FromLeft(value);
+
         /// <summary>
         /// Creates a right-either from a value.
         /// </summary>
@@ -208,6 +209,21 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TRight">The type of the right-value.</typeparam>
         /// <param name="value">The value to store in the either.</param>
         public static Either<TLeft, TRight> FromRight<TLeft, TRight>(TRight value) => Either<TLeft, TRight>.FromRight(value);
+
+        /// <summary>
+        /// Creates a right-either from a value.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the left-value.</typeparam>
+        /// <typeparam name="TRight">The type of the right-value.</typeparam>
+        /// <param name="isRight">If true, an <see cref="Either.FromRight{TLeft, TRight}(TRight)"/> will be created, and if false, an <see cref="Either.FromLeft{TLeft, TRight}(TLeft)"/>.</param>
+        /// <param name="leftFactory">The left-value to store in the either.</param>
+        /// <param name="rightFactory">The right-value to store in the either.</param>
+        public static Either<TLeft, TRight> EitherIf<TLeft, TRight>(
+            bool isRight,
+            Func<TLeft> leftFactory,
+            Func<TRight> rightFactory) => isRight ? 
+                Either<TLeft, TRight>.FromRight(rightFactory())
+                : Either<TLeft, TRight>.FromLeft(leftFactory());
 
         /// <summary>
         /// Tries to cast a generic bifunctor to an either via an explicit cast. Provided for convenience.
