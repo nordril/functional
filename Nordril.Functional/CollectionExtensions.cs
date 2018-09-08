@@ -75,6 +75,18 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Concatenates a sequence of sequences.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence whose elements to concatenate.</param>
+        public static IEnumerable<T> Concat<T>(this IEnumerable<IEnumerable<T>> xs)
+        {
+            foreach (var ys in xs)
+                foreach (var y in ys)
+                    yield return y;
+        }
+
+        /// <summary>
         /// Returns true iff the sequence is empty.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
@@ -227,6 +239,51 @@ namespace Nordril.Functional
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Intersperses a sequence <paramref name="separator"/> between each two elements of a sequence <paramref name="xs"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <param name="xs">The sequence to intersperse.</param>
+        /// <param name="separator">The separator to intersperse between each two elements of <paramref name="xs"/>.</param>
+        public static IEnumerable<T> Intercalate<T>(this IEnumerable<T> xs, IEnumerable<T> separator)
+        {
+            var first = true;
+
+            foreach (var x in xs)
+            {
+                if (!first)
+                    foreach (var s in separator)
+                        yield return s;
+
+                yield return x;
+
+                if (first)
+                    first = false;
+            }
+        }
+
+        /// <summary>
+        /// Intersperses an element <paramref name="separator"/> between each two elements of a sequence.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <param name="xs">The sequence to intersperse.</param>
+        /// <param name="separator">The separator to intersperse between each two elements of <paramref name="xs"/>.</param>
+        public static IEnumerable<T> Intersperse<T>(this IEnumerable<T> xs, T separator)
+        {
+            var first = true;
+
+            foreach (var x in xs)
+            {
+                if (!first)
+                    yield return separator;
+
+                yield return x;
+
+                if (first)
+                    first = false;
+            }
         }
 
         /// <summary>
