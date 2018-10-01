@@ -92,8 +92,8 @@ namespace Nordril.Functional
         /// </summary>
         /// <param name="xs">The sequence whose elements to concatenate.</param>
         /// <param name="separator">The separator to put between each two elements.</param>
-        public static string ConcatStrings(this IEnumerable<string> xs, string separator)
-            => string.Join(separator, xs);
+        public static string ConcatStrings(this IEnumerable<string> xs, string separator, string prefix = null, string postfix = null)
+            => (prefix ?? "") + string.Join(separator, xs) + (postfix ?? "");
 
         /// <summary>
         /// Returns true iff the sequence is empty.
