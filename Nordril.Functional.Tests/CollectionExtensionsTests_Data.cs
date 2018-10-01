@@ -261,6 +261,16 @@ namespace Nordril.Functional.Tests
             yield return new object[] { new decimal?[] { 2, 3, 1.2M, null, 3.5M, null, 4, null }, 100.8M };
         }
 
+        public static IEnumerable<object[]> SelectKeyValueData()
+        {
+            KeyValuePair<string, int> tokv(string k, int v) => KeyValuePair.Create(k, v);
+
+            yield return new object[] { new KeyValuePair<string, int>[0], };
+            yield return new object[] { new KeyValuePair<string, int>[] { tokv("alice", 35) } };
+            yield return new object[] { new KeyValuePair<string, int>[] { tokv("alice", 35), tokv("bob", 23) } };
+            yield return new object[] { new KeyValuePair<string, int>[] { tokv("alice", 35), tokv("bob", 23), tokv("cecil", 52) } };
+        }
+
         public static IEnumerable<object[]> Unzip1Data()
         {
             yield return new object[] {

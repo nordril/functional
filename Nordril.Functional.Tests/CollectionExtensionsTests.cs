@@ -393,6 +393,15 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [MemberData(nameof(SelectKeyValueData))]
+        public static void SelectKeyValueTest(IEnumerable<KeyValuePair<string, int>> xs)
+        {
+            Func<KeyValuePair<string, int>, string> f = kv => $"{kv.Key} is {kv.Value} yerars old.";
+
+            Assert.Equal(xs.Select(f), xs.SelectKeyValue((k,v) => f(new KeyValuePair<string, int>(k,v))));
+        }
+
+        [Theory]
         [InlineData(0, 0, new int[] { })]
         [InlineData(0, 1, new int[] { 0 })]
         [InlineData(0, 2, new int[] { 0, 10 })]

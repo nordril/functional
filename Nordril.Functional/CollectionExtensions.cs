@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Nordril.Functional
 {
@@ -85,6 +86,14 @@ namespace Nordril.Functional
                 foreach (var y in ys)
                     yield return y;
         }
+
+        /// <summary>
+        /// Efficiently concatenates the elements of a sequence of strings into a single strings. An alias for <see cref="string.Join(string, IEnumerable{string})"/>.
+        /// </summary>
+        /// <param name="xs">The sequence whose elements to concatenate.</param>
+        /// <param name="separator">The separator to put between each two elements.</param>
+        public static string ConcatStrings(this IEnumerable<string> xs, string separator)
+            => string.Join(separator, xs);
 
         /// <summary>
         /// Returns true iff the sequence is empty.
@@ -456,6 +465,17 @@ namespace Nordril.Functional
         /// <param name="f">The function to apply at index <paramref name="point"/>.</param>
         public static IEnumerable<T> SelectAt<T>(this IEnumerable<T> xs, int point, Func<T, T> f)
             => xs.Select((x, i) => i == point ? f(x) : x);
+
+        /// <summary>
+        /// Projects each element of a dictionary of key-value-pairs into a new form.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the keys.</typeparam>
+        /// <typeparam name="TValue">The type of the values.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The sequence to traverse.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static IEnumerable<TResult> SelectKeyValue<TKey, TValue, TResult>(this IEnumerable<KeyValuePair<TKey, TValue>> xs, Func<TKey, TValue, TResult> f)
+            => xs.Select(kv => f(kv.Key, kv.Value));
 
         /// <summary>
         /// Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.
