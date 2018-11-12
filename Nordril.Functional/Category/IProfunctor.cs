@@ -13,7 +13,7 @@ namespace Nordril.Functional.Category
     /// </summary>
     /// <typeparam name="TNeed">The type of values the functor needs.</typeparam>
     /// <typeparam name="THave">The type of values the functor contains.</typeparam>
-    public interface IProfunctor<TNeed, THave> : IContravariant<TNeed>, IFunctor<THave>
+    public interface IProfunctor<in TNeed, out THave> : IContravariant<TNeed>, IFunctor<THave>
     {
         /// <summary>
         /// Applies a function to the contravariant part of the functor and another over its covariant one.
