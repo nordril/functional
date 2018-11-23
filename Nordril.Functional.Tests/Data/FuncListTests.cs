@@ -111,6 +111,57 @@ namespace Nordril.Functional.Tests.Data
             };
         }
 
+        public static IEnumerable<object[]> EqualsData()
+        {
+            yield return new object[] {
+                FuncList.Make<int>(),
+                FuncList.Make<int>(),
+                true
+            };
+
+            yield return new object[] {
+                FuncList.Make(1),
+                FuncList.Make(1),
+                true
+            };
+
+            yield return new object[] {
+                FuncList.Make(1,2,3),
+                FuncList.Make(1,2,3),
+                true
+            };
+
+            yield return new object[] {
+                FuncList.Make(4),
+                FuncList.Make<int>(),
+                false
+            };
+
+            yield return new object[] {
+                FuncList.Make<int>(),
+                FuncList.Make(7),
+                false
+            };
+
+            yield return new object[] {
+                FuncList.Make(1,2),
+                FuncList.Make(5,6),
+                false
+            };
+
+            yield return new object[] {
+                FuncList.Make(1,2),
+                FuncList.Make(1),
+                false
+            };
+
+            yield return new object[] {
+                FuncList.Make(1,2,3),
+                FuncList.Make(1,2,3,4),
+                false
+            };
+        }
+
         [Theory]
         [MemberData(nameof(Ap1Data))]
         public static void FuncListAp1(FuncList<Func<int, int>> funcs, FuncList<int> args, IEnumerable<int> expected)
@@ -127,6 +178,13 @@ namespace Nordril.Functional.Tests.Data
             var res = args2.Ap(args1.Ap(funcs));
 
             Assert.Equal(expected, res as IEnumerable<int>);
+        }
+
+        [Theory]
+        [MemberData(nameof(EqualsData))]
+        public static void FuncListEquals(FuncList<int> xs, IList<int> ys, bool expected)
+        {
+            Assert.Equal(expected, xs.Equals(ys));
         }
     }
 }

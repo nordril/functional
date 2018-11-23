@@ -131,6 +131,29 @@ namespace Nordril.Functional.Data
             return new FuncList<T>(ListCoalesce().Concat(xList));
         }
 
+        /// <inheritdoc />
+        public bool Equals(IList<T> that)
+        {
+            using (var thisEnum = ListCoalesce().GetEnumerator())
+            using (var thatEnum = that.GetEnumerator())
+            {
+                bool thisNext, thatNext;
+
+                do
+                {
+                    thisNext = thisEnum.MoveNext();
+                    thatNext = thatEnum.MoveNext();
+
+                    if (thisNext != thatNext)
+                        return false;
+                    else if (!thisEnum.Current.Equals(thatEnum.Current))
+                        return false;
+                } while (thisNext && thatNext);
+
+                return true;
+            }
+        }
+
         private List<T> ListCoalesce()
         {
             if (list == null)
