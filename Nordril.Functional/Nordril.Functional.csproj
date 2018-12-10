@@ -8,7 +8,7 @@
     <Authors>Nordril Technologies</Authors>
     <Company>Nordril Technologies</Company>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>7.3.1</Version>
+    <Version>7.4.1</Version>
     <Description>Function programming goodness: Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
     <FileVersion>7.3.1.0</FileVersion>
     <PackageIconUrl>https://nordrilnugeticons.blob.core.windows.net/nuget-icons/cebd969f4bc14d5597856f700bbd5bf5.png</PackageIconUrl>
