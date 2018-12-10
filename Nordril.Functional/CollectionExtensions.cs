@@ -478,6 +478,13 @@ namespace Nordril.Functional
             => xs.Select(kv => f(kv.Key, kv.Value));
 
         /// <summary>
+        /// Creates an <see cref="IFuncList{T}"/> out of a sequence of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence to turn into a list.</param>
+        public static IFuncList<T> ToFuncList<T>(this IEnumerable<T> xs) => new FuncList<T>(xs);
+
+        /// <summary>
         /// Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.
         /// </summary>
         /// <typeparam name="TSeed">The type of the seed value.</typeparam>
@@ -643,7 +650,7 @@ namespace Nordril.Functional
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="xs">The sequences to zip.</param>
         /// <param name="f">The combining function.</param>
-        public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<IEnumerable<T>> xs, Func<List<T>, TResult> f)
+        public static IEnumerable<TResult> Zip<T, TResult>(this IEnumerable<IEnumerable<T>> xs, Func<IList<T>, TResult> f)
         {
             var xsList = xs.ToList();
             var iterators = new List<IEnumerator<T>>();
@@ -699,7 +706,7 @@ namespace Nordril.Functional
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequences.</typeparam>
         /// <param name="xs">The sequences to zip.</param>
-        public static IEnumerable<List<T>> Zip<T>(this IEnumerable<IEnumerable<T>> xs)
+        public static IEnumerable<IList<T>> Zip<T>(this IEnumerable<IEnumerable<T>> xs)
             => xs.Zip(ys => ys);
 
         /// <summary>
