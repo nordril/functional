@@ -186,5 +186,24 @@ namespace Nordril.Functional.Tests.Data
         {
             Assert.Equal(expected, xs.Equals(ys));
         }
+
+        [Theory]
+        [InlineData(null, 3)]
+        [InlineData(new int[0], 3)]
+        [InlineData(new int[] { 2 }, 3)]
+        [InlineData(new int[] { 1, 2, 3 }, 3)]
+        [InlineData(new int[] { 5, 4, 6, 7, 8 }, 47)]
+        public static void FuncListAdd(int[] xs, int elem)
+        {
+            var fl = new FuncList<int>(xs);
+            var origLength = fl.Count;
+            fl.Add(elem);
+
+            var list = new List<int>(xs ?? new int[0]);
+            list.Add(elem);
+
+            Assert.Equal(list, fl);
+            Assert.Equal(origLength + 1, fl.Count);
+        }
     }
 }
