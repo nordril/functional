@@ -637,6 +637,34 @@
             </summary>
             <param name="arg">The value to evaluate.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.IFilterable`2">
+            <summary>
+            Filterable data structures. A filterable structure supports a <see cref="M:Nordril.Functional.Category.IFilterable`2.Filter(System.Func{`1,System.Boolean})"/>-method which returns a filtered copy of the structure, with exactly the elements which fulfill a predicate.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TSource">The type of element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IFilterable`2.Filter(System.Func{`1,System.Boolean})">
+            <summary>
+            Filters the container's elements, leaving the original unchanged and returning a version of the container which have the same structure as the original, but only with those elements which fulfill <paramref name="f"/>. What "leaving out elements" means exactly, depends on the implementor.
+            </summary>
+            <param name="f">The predicate.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.ISemifilterable`2">
+            <summary>
+            Filterable data structures which do not support the removal of all elements. This is a weaker form of <see cref="!:IFilterable&lt;TSource&gt;"/> which does not support returning empty data structures if all elements have been excluded, but returns <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> instead.
+            An example is <see cref="T:Nordril.Functional.Data.Tree`1"/>, which cannot represent empty trees, but which still supports a kind of filtering of its nodes.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TSource">The type of element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.ISemifilterable`2.Semifilter(System.Func{`1,System.Boolean})">
+            <summary>
+            Filters the container's elements, leaving the original unchanged and returning a version of the container which have the same structure as the original, but only with those elements which fulfill <paramref name="f"/>. What "leaving out elements" means exactly, depends on the implementor.
+            If all elements have been excluded by <paramref name="f"/>, <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> is returned.
+            </summary>
+            <param name="f">The predicate.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IFoldable`1">
             <summary>
             Data structures that suppoort folding, i.e. aggregation over their members.
@@ -1219,6 +1247,29 @@
             <param name="xs">The sequence to traverse.</param>
             <param name="f">The function to apply to each element.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.SelectMaybe``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Data.Maybe{``1}})">
+            <summary>
+            Applies a function which produces a <see cref="T:Nordril.Functional.Data.Maybe`1"/> to each element of a sequence and returns a sequence of those resultant elements for which <see cref="P:Nordril.Functional.Data.Maybe`1.HasValue"/> is true. This is useful for appliying a function which may not have a results and filtering it for results in one go.
+            <br />
+            Semantically, the following holds for all xs:
+            <code>
+               xs.SelectMaybe(f) == xs.Select(f).Where(x =&lt; x.HasValue).Select(x =&gt; x.Value());
+            </code>
+            </summary>
+            <example>
+            We compute the square roots of all elements in the sequence and return only those which were computed from positive numbers:
+            <code>
+            var xs = new [] {9, -10, -5, 25, 16, -144};
+            
+            var ys = xs.SelectMaybe(x =&gt; Maybe.JustIf(x &gt;= 0, () =&gt; Math.Sqrt(x)));
+            //ys = [3, 5, 4]
+            </code>
+            </example>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TResult">The type of elements ot generate.</typeparam>
+            <param name="xs">The sequence to whose elements to apply the function.</param>
+            <param name="f">The function to apply to each element of the sequence.</param>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.ToFuncList``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Creates an <see cref="T:Nordril.Functional.Data.IFuncList`1"/> out of a sequence of elements.
@@ -1625,7 +1676,7 @@
             <param name="leftFactory">The left-value to store in the either.</param>
             <param name="rightFactory">The right-value to store in the either.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.CastToEither``2(Nordril.Functional.Category.IBifunctor{``0,``1})">
+        <member name="M:Nordril.Functional.Data.Either.ToEither``2(Nordril.Functional.Category.IBifunctor{``0,``1})">
             <summary>
             Tries to cast a generic bifunctor to an either via an explicit cast. Provided for convenience.
             </summary>
@@ -1751,6 +1802,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Filter(System.Func{`0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Semifilter(System.Func{`0,System.Boolean})">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.Foldr``1(System.Func{`0,``0,``0},``0)">
@@ -2350,11 +2407,15 @@
             </summary>
             <param name="key">The key.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Tree`1.Traverse(Nordril.Functional.Data.TreeTraversal)">
+        <member name="M:Nordril.Functional.Data.Tree`1.Traverse(Nordril.Functional.Data.TreeTraversal,System.Action{Nordril.Functional.Data.Tree{`0}},System.Action{Nordril.Functional.Data.Tree{`0},System.Int32},System.Action{Nordril.Functional.Data.Tree{`0}})">
             <summary>
             Traverses the tree in a certain order and yields the nodes.
+            Uses the visitor pattern.
             </summary>
             <param name="traversal">The type of the traversal.</param>
+            <param name="visit">The action to execute at each node, if any.</param>
+            <param name="down">The action to execute when entering a node's children. The arguments are the current node and the index of the child node.</param>
+            <param name="up">The action to execute when leaving a node. The argument is the node being left</param>
             <returns>The nodes of the tree, and whether each node is a leaf.</returns>
         </member>
         <member name="M:Nordril.Functional.Data.Tree`1.Map``1(System.Func{`0,``0})">
@@ -2364,6 +2425,9 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Tree`1.Foldr``1(System.Func{`0,``0,``0},``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.Semifilter(System.Func{`0,System.Boolean})">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Tree`1.GetEnumerator">
@@ -2404,7 +2468,7 @@
             <typeparam name="T">The type of the keys.</typeparam>
             <param name="key">The key of the node.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Tree.RetrieveDirectoryStructure(System.String,Nordril.Functional.Data.PathNameUsage)">
+        <member name="M:Nordril.Functional.Data.Tree.RetrieveDirectoryStructure(System.String,Nordril.Functional.Data.PathNameUsage,System.Func{System.String,System.Boolean})">
             <summary>
             Takes a directory and returns a tree representing that directory as its root and the sub-directories and files as child-nodes, recursively. An <see cref="M:Nordril.Functional.Data.Either.FromLeft``2(``0)"/> represents a directory and will always be an inner-node, and an <see cref="M:Nordril.Functional.Data.Either.FromRight``2(``1)"/> represents a file. No file will have a directory as a child.
             <br />
@@ -2412,6 +2476,7 @@
             </summary>
             <param name="directory">The path to the directory.</param>
             <param name="fullName">Where to use the full names of filesystem-entries.</param>
+            <param name="predicate">The optional predicate to which a path (except for the root-node) has to conform to be included as a node. The argument is always the full path of the filesystem-entry.</param>
             <exception cref="T:System.InvalidOperationException">If the directory <paramref name="directory"/> does not exist.</exception>
             <exception cref="T:System.IO.DirectoryNotFoundException">A directory path is invalid, such as referring to an unmapped drive or having been deleted.</exception>
             <exception cref="T:System.IO.PathTooLongException">The specified path, file name, or combined exceed the system-defined maximum length.</exception>
@@ -2831,6 +2896,26 @@
             <summary>
             Creates a deep copy of the object that can be modified independently of the original.
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.LexicographicalComparer`1">
+            <summary>
+            An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
+            </summary>
+            <typeparam name="T">The type of elements in the sequences.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.LexicographicalComparer`1.elementComparer">
+            <summary>
+            The underlying elementwise comparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.LexicographicalComparer`1.#ctor(System.Func{`0,`0,System.Int32})">
+            <summary>
+            Creates a new comparer.
+            </summary>
+            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
+        </member>
+        <member name="M:Nordril.Functional.LexicographicalComparer`1.Compare(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.ObjectExtensions">
             <summary>

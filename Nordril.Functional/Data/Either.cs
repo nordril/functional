@@ -231,7 +231,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TLeft">The type of the left-value.</typeparam>
         /// <typeparam name="TRight">The type of the right-value.</typeparam>
         /// <param name="f">The bifunctor.</param>
-        public static Either<TLeft, TRight> CastToEither<TLeft, TRight>(this IBifunctor<TLeft, TRight> f) => (Either<TLeft, TRight>)f;
+        public static Either<TLeft, TRight> ToEither<TLeft, TRight>(this IBifunctor<TLeft, TRight> f) => (Either<TLeft, TRight>)f;
     }
 
     /// <summary>

@@ -14,8 +14,7 @@ namespace Nordril.Functional.Data
     /// A rose tree, wherein each node has a single key and a list of children.
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
-    [SuppressMessage("Microsoft.Design","CA1724", Justification="That's what they're called.")]
-    public class Tree<T> : IFunctor<T>, IFoldable<T>, IEquatable<Tree<T>>
+    public class Tree<T> : IFunctor<T>, ISemifilterable<Tree<T>, T>, IEquatable<Tree<T>>
     {
         /// <summary>
         /// The node's key.
@@ -99,27 +98,43 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Traverses the tree in a certain order and yields the nodes.
+        /// Uses the visitor pattern.
         /// </summary>
         /// <param name="traversal">The type of the traversal.</param>
+        /// <param name="visit">The action to execute at each node, if any.</param>
+        /// <param name="down">The action to execute when entering a node's children. The arguments are the current node and the index of the child node.</param>
+        /// <param name="up">The action to execute when leaving a node. The argument is the node being left</param>
         /// <returns>The nodes of the tree, and whether each node is a leaf.</returns>
-        public IEnumerable<(T, bool)> Traverse(TreeTraversal traversal)
+        public IEnumerable<(T, bool)> Traverse(TreeTraversal traversal, Action<Tree<T>> visit = null, Action<Tree<T>, int> down = null, Action<Tree<T>> up = null)
         {
-            IEnumerable<(T, bool)> trav(Tree<T> tree)
+            IEnumerable<Tree<T>> trav(Tree<T> tree, int? parentIndex)
             {
                 if (traversal == TreeTraversal.PreOrder)
-                    yield return (tree.Key, tree.IsLeaf);
+                {
+                    if (parentIndex != null)
+                        down?.Invoke(tree, parentIndex.Value);
+                    visit?.Invoke(tree);
+                    yield return tree;
+                }
 
                 if (tree.IsInner)
-                    foreach (var subResult in tree.Children.Value().Select(trav))
-                        foreach (var node in subResult)
+                {
+                    foreach (var subResult in tree.Children.Value().Select((t, i) => trav(t, i)))
+                        foreach (var (node, index) in subResult.ZipWithStream(0, i => i + 1))
                             yield return node;
+                }
 
                 if (traversal == TreeTraversal.PostOrder)
-                    yield return (tree.Key, tree.IsLeaf);
+                {
+                    visit?.Invoke(tree);
+                    yield return tree;
+                }
+
+                up?.Invoke(tree);
             };
 
-            foreach (var n in trav(this))
-                yield return n;
+            foreach (var n in trav(this, null))
+                yield return (n.Key, n.IsLeaf);
         }
 
         /// <inheritdoc />
@@ -154,6 +169,21 @@ namespace Nordril.Functional.Data
                 var tail = revChildren.Skip(1);
 
                 return f(Key, Children.Value().Foldr((child, childAcc) => child.Foldr(f, childAcc), accumulator));
+            }
+        }
+
+        /// <inheritdoc />
+        public Maybe<Tree<T>> Semifilter(Func<T, bool> f)
+        {
+            if (!f(Key))
+                return Maybe.Nothing<Tree<T>>();
+            else if (IsLeaf)
+                return Maybe.Just(Tree.MakeLeaf(Key));
+            else
+            {
+                var children = Children.Value().Select(t => t.Semifilter(f)).Where(t => t.HasValue).Select(t => t.Value());
+
+                return Maybe.Just(Tree.MakeInner(Key, children));
             }
         }
 
@@ -215,14 +245,17 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="directory">The path to the directory.</param>
         /// <param name="fullName">Where to use the full names of filesystem-entries.</param>
+        /// <param name="predicate">The optional predicate to which a path (except for the root-node) has to conform to be included as a node. The argument is always the full path of the filesystem-entry.</param>
         /// <exception cref="InvalidOperationException">If the directory <paramref name="directory"/> does not exist.</exception>
         /// <exception cref="DirectoryNotFoundException">A directory path is invalid, such as referring to an unmapped drive or having been deleted.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or combined exceed the system-defined maximum length.</exception>
         /// <exception cref="SecurityException">The caller does not have the required permission.</exception>
         /// <exception cref="UnauthorizedAccessException">The caller does not have the required permission.</exception>
         /// <exception cref="StackOverflowException">If the maximum stack size has been exceeded.</exception>
-        public static Tree<Either<string, string>> RetrieveDirectoryStructure(string directory, PathNameUsage fullName)
+        public static Tree<Either<string, string>> RetrieveDirectoryStructure(string directory, PathNameUsage fullName = PathNameUsage.Always, Func<string, bool> predicate = null)
         {
+            predicate = predicate ?? (x => true);
+
             if (!Directory.Exists(directory))
                 throw new InvalidOperationException();
 
@@ -234,10 +267,10 @@ namespace Nordril.Functional.Data
             var fullNameRec = fullName == PathNameUsage.Always ? fullName : PathNameUsage.Never;
             var useFullNameForFiles = fullName == PathNameUsage.Always;
 
-            foreach (var entry in Directory.EnumerateDirectories(directory))
+            foreach (var entry in Directory.EnumerateDirectories(directory).Where(predicate))
                 children.Add(RetrieveDirectoryStructure(entry, fullNameRec));
 
-            foreach (var entry in Directory.EnumerateFiles(directory))
+            foreach (var entry in Directory.EnumerateFiles(directory).Where(predicate))
                 children.Add(
                     MakeLeaf(
                         Either.FromRight<string, string>(

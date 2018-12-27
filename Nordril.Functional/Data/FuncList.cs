@@ -110,6 +110,18 @@ namespace Nordril.Functional.Data
             => ListCoalesce().Aggregate(monoid.Neutral, (acc, x) => monoid.Op(acc, f(x)));
 
         /// <inheritdoc />
+        public IFuncList<T> Filter(Func<T, bool> f)
+            => new FuncList<T>(ListCoalesce().Where(f));
+
+        /// <inheritdoc />
+        public Maybe<IFuncList<T>> Semifilter(Func<T, bool> f)
+        {
+            var ret = Filter(f);
+
+            return Maybe.JustIf(ret.Count > 0, () => ret);
+        }
+
+        /// <inheritdoc />
         public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator) => ListCoalesce().AggregateRight(f, accumulator);
 
         /// <summary>

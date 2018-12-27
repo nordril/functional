@@ -480,6 +480,41 @@ namespace Nordril.Functional
             => xs.Select(kv => f(kv.Key, kv.Value));
 
         /// <summary>
+        /// Applies a function which produces a <see cref="Maybe{T}"/> to each element of a sequence and returns a sequence of those resultant elements for which <see cref="Maybe{T}.HasValue"/> is true. This is useful for appliying a function which may not have a results and filtering it for results in one go.
+        /// <br />
+        /// Semantically, the following holds for all xs:
+        /// <code>
+        ///    xs.SelectMaybe(f) == xs.Select(f).Where(x =&lt; x.HasValue).Select(x =&gt; x.Value());
+        /// </code>
+        /// </summary>
+        /// <example>
+        /// We compute the square roots of all elements in the sequence and return only those which were computed from positive numbers:
+        /// <code>
+        /// var xs = new [] {9, -10, -5, 25, 16, -144};
+        /// 
+        /// var ys = xs.SelectMaybe(x =&gt; Maybe.JustIf(x &gt;= 0, () =&gt; Math.Sqrt(x)));
+        /// //ys = [3, 5, 4]
+        /// </code>
+        /// </example>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of elements ot generate.</typeparam>
+        /// <param name="xs">The sequence to whose elements to apply the function.</param>
+        /// <param name="f">The function to apply to each element of the sequence.</param>
+        public static IEnumerable<TResult> SelectMaybe<T, TResult>(this IEnumerable<T> xs, Func<T, Maybe<TResult>>f)
+        {
+            using (var x = xs.GetEnumerator())
+            {
+                while (x.MoveNext())
+                {
+                    var y = f(x.Current);
+
+                    if (y.HasValue)
+                        yield return y.Value();
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates an <see cref="IFuncList{T}"/> out of a sequence of elements.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
