@@ -168,3 +168,88 @@ Of course, we can do this via global variables, but there we have two problems:
 As a solution, we have State.
 
 //todo: more to come.
+
+## Pattern-matching
+
+Pattern-matching in C# is done by the `switch`-statement, which suffices for most cases, but we also offer *first-class*-patterns. First-class patterns
+* can be passed as values,
+* can be assembled in a modular fashion,
+* support tail-recursion.
+
+As an example, let's compare two implementations which return the number of sides of geometric shapes. First, via `switch`-statements:
+
+```c#
+
+public int NumSides(Shape s)
+{
+   switch (s)
+   {
+      case Triangle t:
+         return 3;
+      case Rectangle r:
+         return 4;
+      case Pentagon p:
+         return 5;
+      default:
+         throw new ArgumentException("Unknown shape");
+   }
+}
+```
+
+Now we implement the equivalent functionality via pattern-matching:
+
+```c#
+public int NumSides(Shape s)
+{
+   var pattern = Pattern
+      .Match(x => x is Triangle, _ => 3)
+      .Match(x => x is Rectangle, _ => 4)
+      .Match(x => x is Pentagon, _ => 5)
+      .WithDefault(_ => throw new ArgumentException("Unknown shape");
+      
+   return pattern.Run(s);
+}
+```
+
+The first argument of `Match` is the predicate, which decides whether the cases has been matched. The second is the action, which is evaluated if the argument matches the predicate.
+
+The creation of `pattern` is *declarative*: it doesn't run anything, it just *declares* the pattern. We could also do this elsewhere, ideally statically. The pattern is then actually run via `pattern.Run`, which checks the cases declared via `Match` in-order, defaulting to the case declared via `WithDefault` if none of the match. We don't need to class `WithDefault` if we just want to error out, as a default-cass which throws a `PatternMatchException` is always provided as a default.
+
+More interestingly, we can also do recursion in pattern. Let's check the Collatz-conjecture, which states the following:
+* Take any number;
+* If the number is even, divide it by two and repeat the proceduce;
+* If the number is odd, multiply it by three, add one, and repeat the proceduce.
+
+The conjecture states that this always terminates with 1 as the result. First, via `switch`:
+
+```
+public int Collatz(int n)
+{
+   if (n <= 1)
+      return n;
+      
+   switch (n % 2)
+   {
+      case 0:
+         return Collatz(n/2);
+      case 1:
+         return Collatz(n * 3 + 1);
+   }
+}
+```
+
+The problem with this is that a stack-frame is allocated for each recursive call, even though that's unecessary. For large `n`, we'll get `StackOverflowExceptions`s. Of course, we could work around that with a loop, but we can also express out intent directly and more simply:
+
+```
+public int Collatz(int n)
+{
+   var pattern = Pattern
+      .Match((int x) => x <= 1, _ => 1)
+      .MatchTailRec(x => x % 2 == 0, x => x/2)
+      .MatchTailRec(x => x % 2 == 1, x => x * 3 + 1);
+      
+  return pattern.Run(n);
+}
+```
+
+`MatchTailRec` is a special match which returns a value of the same type of the input and recursively executes the pattern-match with that result as its new input, but without using up stack-space.
