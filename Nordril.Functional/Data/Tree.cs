@@ -149,10 +149,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public TResult FoldMap<TResult>(Monoid<TResult> monoid, Func<T, TResult> f)
         {
-            if (IsLeaf)
-                return f(Key);
-            else
-                return monoid.Op(f(Key), Children.Value().Select(c => c.FoldMap(monoid, f)).Msum(monoid));
+            return this.Aggregate(monoid.Neutral, (x, y) => monoid.Op(x, f(y)));
         }
 
         /// <inheritdoc />

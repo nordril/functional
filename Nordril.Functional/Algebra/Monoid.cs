@@ -46,7 +46,10 @@ namespace Nordril.Functional.Algebra
         /// </summary>
         /// <typeparam name="T">The type of element in the list.</typeparam>
         public static Monoid<List<T>> ListAppend<T>()
-            => new Monoid<List<T>>(new List<T>(), (x, y) => { x.AddRange(y); return x; });
+            => new Monoid<List<T>>(new List<T>(), (x, y) =>
+            {
+                x.AddRange(y); return x;
+            });
 
         /// <summary>
         /// The non-mutating ([],++) monoid for lists, meaning that the inputs of <see cref="Magma{T}.Op" /> aren't changed.

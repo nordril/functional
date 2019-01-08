@@ -78,6 +78,28 @@ namespace Nordril.Functional.Tests.Data
             };
         }
 
+        public static IEnumerable<object[]> TreeEnumFoldMapData()
+        {
+            yield return new object[] {
+                Tree.MakeLeaf(5),
+            };
+            yield return new object[] {
+                Tree.MakeInner(6),
+            };
+            yield return new object[] {
+                Tree.MakeInner(7, new[] { Tree.MakeLeaf(3) }),
+            };
+            yield return new object[] {
+                Tree.MakeInner(8, new[] { Tree.MakeLeaf(3), Tree.MakeLeaf(7), Tree.MakeLeaf(9) }),
+            };
+            yield return new object[] {
+                Tree.MakeInner(8, new[] { Tree.MakeInner(3, new[] { Tree.MakeLeaf(1), Tree.MakeLeaf(4) }), Tree.MakeInner(11, new[] { Tree.MakeLeaf(9), Tree.MakeLeaf(13) }) }),
+            };
+            yield return new object[] {
+                Tree.MakeInner(9, new[] { Tree.MakeLeaf(3), Tree.MakeInner(12, new[] { Tree.MakeLeaf(9), Tree.MakeInner(22) }), Tree.MakeLeaf(87), Tree.MakeInner(76), Tree.MakeInner(143, new[] { Tree.MakeLeaf(96), Tree.MakeLeaf(11) }), Tree.MakeLeaf(88) }),
+            };
+        }
+
         public static IEnumerable<object[]> TreeStringConcats()
         {
             yield return new object[] {
@@ -302,6 +324,17 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.Equal(2*sum, treeSum);
         }
+
+        [Theory]
+        [MemberData(nameof(TreeEnumFoldMapData))]
+        public static void FoldMapTreeEnum(Tree<int> t)
+        {
+            var expected = t.Select(x => x * 2).ToList();
+            var actual = t.FoldMap(Monoid.ListAppend<int>(), x => new List<int> { x * 2 });
+
+            Assert.Equal(expected, actual);
+        }
+
         [Theory]
         [MemberData(nameof(TreeStringConcats))]
         public static void FoldrStringConcat(Tree<string> t, string sum)
