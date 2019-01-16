@@ -8,7 +8,7 @@ namespace Nordril.Functional.Algebra
     /// A value-level structure that offers a binary operation.
     /// </summary>
     /// <typeparam name="T">The type of element in this structure.</typeparam>
-    public class Magma<T> : IInfinityLiftable<T, Magma<T>, Magma<Maybe<T>>>
+    public class Magma<T>
     {
         /// <summary>
         /// The binary operation.
@@ -23,9 +23,5 @@ namespace Nordril.Functional.Algebra
         {
             Op = f;
         }
-
-        /// <inheritdoc />
-        public Magma<Maybe<T>> LiftWithInfinity()
-            => new Magma<Maybe<T>>((x,y) => Op.LiftA()(x,y).ToMaybe());
     }
 }

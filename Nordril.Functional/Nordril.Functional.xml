@@ -149,6 +149,37 @@
             <param name="xs">The list of elements to sum.</param>
             <param name="empty">The neutral element.</param>
         </member>
+        <member name="T:Nordril.Functional.Algebra.IPartiallyOrdered`1">
+            <summary>
+            A type which supports a partial order. A partial order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/> with the following properties:
+            <list type="table">
+                <listheader>
+                    <term>Property</term>
+                    <description>Definition</description>
+                </listheader>
+                <item>
+                    <term>reflexivity</term>
+                    <description>[forall a] a.LeqPartial(a) == Maybe.Just(true)</description>
+                </item>
+                <item>
+                    <term>antisymmetry</term>
+                    <description>[forall a,b] if a.LeqPartial(b) == b.LeqPartial(a) == Maybe.Just(true) then a.Equals(b)</description>
+                </item>
+                <item>
+                    <term>transitivity</term>
+                    <description>[forall a,b,c] if a.LeqPartial(b) == b.LeqPartial(c) == Maybe.Just(true) then a.LeqPartial(c) == Maybe.Just(true)</description>
+                </item>
+            </list>
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)">
+            <summary>
+            The "less than or equals"-predicate which returns the comparison of two elements or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the two elements are incomparable.
+            </summary>
+            <param name="that">The second element to compare to the first.</param>
+            <returns>Maybe.Just(true) iff the first element is less than or equal to the second. Maybe.Nothing if the elements are incomparable.</returns>
+        </member>
         <member name="T:Nordril.Functional.Algebra.IRing`1">
             <summary>
             A algebraic ring, which is the combination of a commutative group (<see cref="M:Nordril.Functional.Algebra.IRing`1.Plus(`0)"/>, <see cref="P:Nordril.Functional.Algebra.IRing`1.Zero"/>) and a monoid (<see cref="M:Nordril.Functional.Algebra.IRing`1.Mult(`0)"/>, <see cref="P:Nordril.Functional.Algebra.IRing`1.One"/>), and where the following holds:
@@ -196,6 +227,70 @@
             A semigroup whose binary operation is associative.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotallyOrdered`1">
+            <summary>
+            A type which supports a total order. A total order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)"/> with the following properties:
+            <list type="table">
+                <listheader>
+                    <term>Property</term>
+                    <description>Definition</description>
+                </listheader>
+                <item>
+                    <term>reflexivity</term>
+                    <description>[forall a] a.Leq(a) == true</description>
+                </item>
+                <item>
+                    <term>antisymmetry</term>
+                    <description>[forall a,b] if a.Leq(b) == b.Leq(a) == true then a.Equals(b)</description>
+                </item>
+                <item>
+                    <term>transitivity</term>
+                    <description>[forall a,b,c] if a.Leq(b) == b.Leq(c) == true then a.Leq(c) == true</description>
+                </item>
+                <item>
+                    <term>agreement</term>
+                    <description>[forall a,b, t] if a.Leq(b) == t &lt;==&gt; a.LeqPartial(b) == Maybe.Just(t)</description>
+                </item>
+            </list>
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)">
+            <summary>
+            The "less than or equals"-predicate.
+            </summary>
+            <param name="that">The second element to compare to the first.</param>
+            <returns>true iff the first element is less than or equal to the second.</returns>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotallyOrderedExtenions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotallyOrdered`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Le``1(``0,``0)">
+            <summary>
+            The "strictly less than"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Ge``1(``0,``0)">
+            <summary>
+            The "strictly greater than"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Geq``1(``0,``0)">
+            <summary>
+            The "greater than or equals"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.Magma`1">
             <summary>
@@ -282,6 +377,27 @@
             The (0,+) monoid for <see cref="T:System.Int32"/>.
             </summary>
         </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.FirstOrDefault``1(``0)">
+            <summary>
+            The monoid whose operation always returns the first element and which has a default-value.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefault``1(``0)">
+            <summary>
+            The semigroup whose operation always returns the last element.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LiftMonoidWithInfinity``1(Nordril.Functional.Algebra.Monoid{``0})">
+            <summary>
+            Lifts a <see cref="T:Nordril.Functional.Algebra.Monoid`1"/> into one which has positive infinity (<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>) as a special element.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <param name="m">The monoid to lift.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0},Nordril.Functional.Algebra.Monoid{``0})">
             <summary>
             Sums a list of elements using a monoid instance. If the list is empty, the neutral element is returned.
@@ -289,6 +405,23 @@
             <typeparam name="T">The type of elements to sum.</typeparam>
             <param name="xs">The list of elements to sum.</param>
             <param name="m">The monoid instance.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.PartialOrder`1">
+            <summary>
+            A value-level partial order.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartialOrder`1.LeqPartial">
+            <summary>
+            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder`1.#ctor(System.Func{`0,`0,Nordril.Functional.Data.Maybe{System.Boolean}})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="leqPartial">The "less than or equals"-predicate.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.Semigroup`1">
             <summary>
@@ -311,6 +444,60 @@
             <summary>
             The (^) semigroup for <see cref="T:System.Boolean"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semigroup.First``1">
+            <summary>
+            The semigroup whose operation always returns the first element.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semigroup.Last``1">
+            <summary>
+            The semigroup whose operation always returns the last element.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semigroup.LiftSemigroupWithInfinity``1(Nordril.Functional.Algebra.Semigroup{``0})">
+            <summary>
+            Lifts a <see cref="T:Nordril.Functional.Algebra.Semigroup`1"/> into one which has positive infinity (<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>) as a special element.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <param name="m">The monoid to lift.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotalOrder`1">
+            <summary>
+            A value-level total order.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotalOrder`1.Leq">
+            <summary>
+            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder`1.#ctor(System.Func{`0,`0,System.Boolean})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="leq">The "less than or equals"-predicate.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotalOrder">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.TotalOrder`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.FromComparable``1">
+            <summary>
+            Returns the total order on a type <typeparamref name="T"/> which implements <see cref="T:System.IComparable`1"/>.
+            </summary>
+            <typeparam name="T">The type that implements <see cref="T:System.IComparable`1"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.LiftTotalOrderWithInfinity``1(Nordril.Functional.Algebra.TotalOrder{``0})">
+            <summary>
+            Lifts a total order into one which supports positive infinity in the form of <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in this structure.</typeparam>
+            <param name="order">The total order to lift.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IAlternative`1">
             <summary>
