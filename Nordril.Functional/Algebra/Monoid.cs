@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Data;
+﻿using Nordril.Functional.Category;
+using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +87,31 @@ namespace Nordril.Functional.Algebra
         /// The (0,+) monoid for <see cref="int"/>.
         /// </summary>
         public static readonly Monoid<int> IntMult = new Monoid<int>(0, (x, y) => x * y);
+
+        /// <summary>
+        /// The monoid whose operation always returns the first element and which has a default-value.
+        /// </summary>
+        /// <param name="default">The neutral element of the monoid.</param>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        public static Monoid<T> FirstOrDefault<T>(T @default) => new Monoid<T>(@default, (x, _) => x);
+
+        /// <summary>
+        /// The semigroup whose operation always returns the last element.
+        /// </summary>
+        /// <param name="default">The neutral element of the monoid.</param>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        public static Monoid<T> LastOrDefault<T>(T @default) => new Monoid<T>(@default, (_, y) => y);
+
+        /// <summary>
+        /// Lifts a <see cref="Monoid{T}"/> into one which has positive infinity (<see cref="Maybe.Nothing{T}"/>) as a special element.
+        /// </summary>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        /// <param name="m">The monoid to lift.</param>
+        public static Monoid<Maybe<T>> LiftMonoidWithInfinity<T>(this Monoid<T> m)
+            => new Monoid<Maybe<T>>(Maybe.Just(m.Neutral), (x, y) => m.Op.LiftA()(x,y).ToMaybe());
+
+        //todo: for relations also
+        //todo: for magmas also
 
         /// <summary>
         /// Sums a list of elements using a monoid instance. If the list is empty, the neutral element is returned.

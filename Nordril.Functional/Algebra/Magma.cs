@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Nordril.Functional.Category;
+using Nordril.Functional.Data;
+using System;
 
 namespace Nordril.Functional.Algebra
 {
@@ -6,20 +8,24 @@ namespace Nordril.Functional.Algebra
     /// A value-level structure that offers a binary operation.
     /// </summary>
     /// <typeparam name="T">The type of element in this structure.</typeparam>
-    public class Magma<T>
+    public class Magma<T> : IInfinityLiftable<T, Magma<T>, Magma<Maybe<T>>>
     {
         /// <summary>
         /// The binary operation.
         /// </summary>
-        public Func<T,T,T> Op { get; private set; }
+        public Func<T, T, T> Op { get; private set; }
 
         /// <summary>
         /// Creates a new magma.
         /// </summary>
         /// <param name="f">The binary operation.</param>
-        public Magma(Func<T,T,T> f)
+        public Magma(Func<T, T, T> f)
         {
             Op = f;
         }
+
+        /// <inheritdoc />
+        public Magma<Maybe<T>> LiftWithInfinity()
+            => new Magma<Maybe<T>>((x,y) => Op.LiftA()(x,y).ToMaybe());
     }
 }

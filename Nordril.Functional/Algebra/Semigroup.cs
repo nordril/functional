@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Nordril.Functional.Category;
+using Nordril.Functional.Data;
+using System;
 
 namespace Nordril.Functional.Algebra
 {
@@ -26,5 +28,25 @@ namespace Nordril.Functional.Algebra
         /// The (^) semigroup for <see cref="bool"/>.
         /// </summary>
         public static readonly Semigroup<bool> BoolXor = new Semigroup<bool>((x, y) => x ^ y);
+
+        /// <summary>
+        /// The semigroup whose operation always returns the first element.
+        /// </summary>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        public static Semigroup<T> First<T>() => new Semigroup<T>((x, _) => x);
+
+        /// <summary>
+        /// The semigroup whose operation always returns the last element.
+        /// </summary>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        public static Semigroup<T> Last<T>() => new Semigroup<T>((_, y) => y);
+
+        /// <summary>
+        /// Lifts a <see cref="Semigroup{T}"/> into one which has positive infinity (<see cref="Maybe.Nothing{T}"/>) as a special element.
+        /// </summary>
+        /// <typeparam name="T">The type of the element in the structure.</typeparam>
+        /// <param name="m">The monoid to lift.</param>
+        public static Semigroup<Maybe<T>> LiftSemigroupWithInfinity<T>(this Semigroup<T> m)
+            => new Semigroup<Maybe<T>>((x, y) => m.Op.LiftA()(x, y).ToMaybe());
     }
 }

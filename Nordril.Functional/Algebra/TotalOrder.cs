@@ -1,0 +1,63 @@
+﻿using Nordril.Functional.Data;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Nordril.Functional.Algebra
+{
+    /// <summary>
+    /// A value-level total order.
+    /// </summary>
+    /// <typeparam name="T">The type of element in this structure.</typeparam>
+    public class TotalOrder<T> : PartialOrder<T>
+    {
+        /// <summary>
+        /// The "less than or equals"-predicate. See <see cref="IPartiallyOrdered{T}.LeqPartial(T)"/>.
+        /// </summary>
+        public Func<T, T, bool> Leq { get; }
+
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="leq">The "less than or equals"-predicate.</param>
+        public TotalOrder(Func<T, T, bool> leq) : base((x,y) => Maybe.Just(leq(x,y)))
+        {
+            Leq = leq;
+        }
+    }
+
+    /// <summary>
+    /// Extension methods for <see cref="TotalOrder{T}"/>.
+    /// </summary>
+    public static class TotalOrder
+    {
+        /// <summary>
+        /// Returns the total order on a type <typeparamref name="T"/> which implements <see cref="IComparable{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type that implements <see cref="IComparable{T}"/>.</typeparam>
+        public static TotalOrder<T> FromComparable<T>()
+            where T : IComparable<T>
+            => new TotalOrder<T>((x, y) => x.CompareTo(y) <= 0);
+
+        /// <summary>
+        /// Lifts a total order into one which supports positive infinity in the form of <see cref="Maybe.Nothing{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in this structure.</typeparam>
+        /// <param name="order">The total order to lift.</param>
+        public static TotalOrder<Maybe<T>> LiftTotalOrderWithInfinity<T>(this TotalOrder<T> order)
+            => new TotalOrder<Maybe<T>>((x, y) => {
+                var comp = x.HasValue.CompareTo(y.HasValue);
+                //Only one is infinite
+                if (comp < 0)
+                    return true;
+                else if (comp > 0)
+                    return false;
+                //Neither have a value <-> both are infinite <-> true
+                else if (!x.HasValue)
+                    return true;
+                //Both have a value <-> neither are infinite <-> use underlying order
+                else
+                    return order.Leq(x.Value(), y.Value());
+            });
+    }
+}
