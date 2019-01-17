@@ -32,6 +32,38 @@ namespace Nordril.Functional.Algebra
     public static class TotalOrder
     {
         /// <summary>
+        /// The "strictly less than"-predicate
+        /// </summary>
+        /// <typeparam name="T">The type of the element.</typeparam>
+        /// <param name="order">The total order.</param>
+        /// <param name="x">The first element.</param>
+        /// <param name="y">The second element.</param>
+        public static bool Le<T>(this TotalOrder<T> order, T x, T y)
+            where T : IEquatable<T>
+            => order.Leq(x, y) && !x.Equals(y);
+
+        /// <summary>
+        /// The "strictly greater than"-predicate
+        /// </summary>
+        /// <typeparam name="T">The type of the element.</typeparam>
+        /// <param name="order">The total order.</param>
+        /// <param name="x">The first element.</param>
+        /// <param name="y">The second element.</param>
+        public static bool Ge<T>(this TotalOrder<T> order, T x, T y)
+            => !order.Leq(x,y);
+
+        /// <summary>
+        /// The "greater than or equals"-predicate
+        /// </summary>
+        /// <typeparam name="T">The type of the element.</typeparam>
+        /// <param name="order">The total order.</param>
+        /// <param name="x">The first element.</param>
+        /// <param name="y">The second element.</param>
+        public static bool Geq<T>(this TotalOrder<T> order, T x, T y)
+            where T : IEquatable<T>
+            => !order.Leq(x,y) || x.Equals(y);
+
+        /// <summary>
         /// Returns the total order on a type <typeparamref name="T"/> which implements <see cref="IComparable{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type that implements <see cref="IComparable{T}"/>.</typeparam>

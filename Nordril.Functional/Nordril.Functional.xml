@@ -486,6 +486,33 @@
             Extension methods for <see cref="T:Nordril.Functional.Algebra.TotalOrder`1"/>.
             </summary>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Le``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+            <summary>
+            The "strictly less than"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Ge``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+            <summary>
+            The "strictly greater than"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Geq``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+            <summary>
+            The "greater than or equals"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.FromComparable``1">
             <summary>
             Returns the total order on a type <typeparamref name="T"/> which implements <see cref="T:System.IComparable`1"/>.
