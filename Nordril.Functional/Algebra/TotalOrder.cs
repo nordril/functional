@@ -79,11 +79,12 @@ namespace Nordril.Functional.Algebra
         public static TotalOrder<Maybe<T>> LiftTotalOrderWithInfinity<T>(this TotalOrder<T> order)
             => new TotalOrder<Maybe<T>>((x, y) => {
                 var comp = x.HasValue.CompareTo(y.HasValue);
-                //Only one is infinite
+                //Exactly the first one is infinite -> the first one is greater
                 if (comp < 0)
-                    return true;
-                else if (comp > 0)
                     return false;
+                //Exactly the second is infinite -> the second one is greater
+                else if (comp > 0)
+                    return true;
                 //Neither have a value <-> both are infinite <-> true
                 else if (!x.HasValue)
                     return true;
