@@ -519,6 +519,13 @@
             </summary>
             <typeparam name="T">The type that implements <see cref="T:System.IComparable`1"/>.</typeparam>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.ToTotalOrder``1(System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Returns a total order on a type <typeparamref name="T"/> based on a <paramref name="comparer"/>.
+            </summary>
+            <typeparam name="T">The type for which we have an <see cref="T:System.Collections.Generic.IComparer`1"/>.</typeparam>
+            <param name="comparer">The comparer.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.LiftTotalOrderWithInfinity``1(Nordril.Functional.Algebra.TotalOrder{``0})">
             <summary>
             Lifts a total order into one which supports positive infinity in the form of <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>.
@@ -1948,7 +1955,7 @@
             A functional list. This class is a wrapper for <see cref="T:System.Collections.Generic.List`1"/> which implements various functional interfaces.
             </summary>
             <remarks>
-            Because an <see cref="T:System.Collections.Generic.IEnumerable`1"/>-implementation is all we need for the operations of <see cref="T:Nordril.Functional.Category.IApplicative`1"/>, <see cref="T:Nordril.Functional.Category.IMonad`1"/>, etc. (thanks to LINQ), these operations have correspondingly relax constraints, and instead of <see cref="T:Nordril.Functional.Data.FuncList`1"/> as their parameter, they only require <see cref="T:System.Collections.Generic.IEnumerable`1"/>. This applies to <see cref="M:Nordril.Functional.Data.FuncList`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>, <see cref="M:Nordril.Functional.Data.FuncList`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>, and <see cref="M:Nordril.Functional.Data.FuncList`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})"/>.
+            Because an <see cref="T:System.Collections.Generic.IEnumerable`1"/>-implementation is all we need for the operations of <see cref="T:Nordril.Functional.Category.IApplicative`1"/>, <see cref="T:Nordril.Functional.Category.IMonad`1"/>, etc. (thanks to LINQ), these operations have correspondingly relaxed constraints, and instead of <see cref="T:Nordril.Functional.Data.FuncList`1"/> as their parameter, they only require <see cref="T:System.Collections.Generic.IEnumerable`1"/>. This applies to <see cref="M:Nordril.Functional.Data.FuncList`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>, <see cref="M:Nordril.Functional.Data.FuncList`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>, and <see cref="M:Nordril.Functional.Data.FuncList`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})"/>.
             </remarks>
             <typeparam name="T">The type of elements in the list.</typeparam>
         </member>
@@ -2060,6 +2067,144 @@
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
         </member>
+        <member name="T:Nordril.Functional.Data.FuncSet`1">
+            <summary>
+            A functional set. This class is a wrapper for <see cref="T:System.Collections.Generic.HashSet`1"/> which implements various functional interfaces.
+            </summary>
+            <remarks>
+            Because an <see cref="T:System.Collections.Generic.IEnumerable`1"/>-implementation is all we need for the operations of <see cref="T:Nordril.Functional.Category.IApplicative`1"/>, <see cref="T:Nordril.Functional.Category.IMonad`1"/>, etc. (thanks to LINQ), these operations have correspondingly relaxed constraints, and instead of <see cref="T:Nordril.Functional.Data.FuncList`1"/> as their parameter, they only require <see cref="T:System.Collections.Generic.IEnumerable`1"/>. This applies to <see cref="M:Nordril.Functional.Data.FuncSet`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>, <see cref="M:Nordril.Functional.Data.FuncSet`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>.
+            </remarks>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncSet`1.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncSet`1.IsReadOnly">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/> from the elements of <paramref name="xs"/>.
+            </summary>
+            <param name="xs">The elements to store in the list.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Add(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.AddPure(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Clear">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Contains(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.CopyTo(`0[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.DifferencePure(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Equals(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Equals(Nordril.Functional.Data.IFuncSet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.ExceptWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Filter(System.Func{`0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Foldr``1(System.Func{`0,``0,``0},``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IntersectionPure(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IntersectWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IsProperSubsetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IsProperSupersetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IsSubsetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.IsSupersetOf(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Map``1(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Overlaps(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Remove(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.RemovePure(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Semifilter(System.Func{`0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.SetEquals(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.SymmetricDifferencePure(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.SymmetricExceptWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.UnionPure(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.UnionWith(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.System#Collections#Generic#ICollection{T}#Add(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.Copy">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.GetComparer``1">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Identity`1">
             <summary>
             The identity functor which does nothing but wrap a value.
@@ -2124,6 +2269,57 @@
             A "functional list" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.IList`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonadPlus`1"/> (and parent interfaces), <see cref="T:Nordril.Functional.Category.IAlternative`1"/>, and <see cref="T:Nordril.Functional.Category.IFoldable`1"/>.
             </summary>
             <typeparam name="T">The type of elements in the list.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.IFuncSet`1">
+            <summary>
+            A "functional set" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.ISet`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonad`1"/> (and parent interfaces).
+            </summary>
+            <typeparam name="T">The type of elements in the set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.AddPure(`0)">
+            <summary>
+            Returns a new set to which <paramref name="elem"/> has been added, while leaving this set unchanged.
+            </summary>
+            <param name="elem">The element to add.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.RemovePure(`0)">
+            <summary>
+            Returns a new set from which <paramref name="elem"/> has been removed, while leaving this set unchanged.
+            </summary>
+            <param name="elem">The element to remove.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.UnionPure(System.Collections.Generic.ISet{`0})">
+            <summary>
+            Returns the union of this set and <paramref name="elem"/>, while leaving this set unchanged.
+            </summary>
+            <param name="elem">The second set.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.IntersectionPure(System.Collections.Generic.ISet{`0})">
+            <summary>
+            Returns the intersection of this set and <paramref name="elem"/>, while leaving this set unchanged.
+            </summary>
+            <param name="elem">The second set.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.DifferencePure(System.Collections.Generic.ISet{`0})">
+            <summary>
+            Returns the difference between this set and <paramref name="elem"/>, while leaving this set unchanged.
+            The difference is set the of those elements which are contained in this set but not in <paramref name="elem"/>.
+            </summary>
+            <param name="elem">The second set.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.SymmetricDifferencePure(System.Collections.Generic.ISet{`0})">
+            <summary>
+            Returns a new set which is the symmetric difference of this set and <paramref name="elem"/>, while leaving this set unchanged.
+            The symmetric differnce is the set of those elements which are in one set but not both.
+            </summary>
+            <param name="elem">The second set.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncSet`1.GetComparer``1">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.ISet`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <returns></returns>
         </member>
         <member name="T:Nordril.Functional.Data.Maybe`1">
             <summary>
@@ -3063,6 +3259,25 @@
             <param name="obj">The object.</param>
             <param name="f">The function to apply to the object.</param>
         </member>
+        <member name="T:Nordril.Functional.FuncComparer`1">
+            <summary>
+            A comparer that uses a binary function to compare two objects.
+            </summary>
+            <typeparam name="T">The type of objects that this comparer can test for equality.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.FuncComparer`1.#ctor(System.Func{`0,`0,System.Int32})">
+            <summary>
+            Creates an <see cref="T:System.Collections.Generic.IComparer`1"/> out of a binary function.
+            </summary>
+            <param name="f">The binary function to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.FuncComparer`1.Compare(`0,`0)">
+            <summary>
+            Uses the supplied binary function to compare two objects.
+            </summary>
+            <param name="x">The first object.</param>
+            <param name="y">The second object.</param>
+        </member>
         <member name="T:Nordril.Functional.FuncEqualityComparer`1">
             <summary>
             An equality comparer that uses a binary predicate to compare two objects for equality.
@@ -3141,8 +3356,17 @@
             A default hashing function which hashes all given fields, plus the full name of the object's type.
             <see cref="T:System.String"/>-fields are hashed with the option <see cref="F:System.StringComparison.InvariantCulture"/>.
             This hashing function is well-suited to hashing according to structural equality in complex objects like trees and dictionaries.
-            See also 
             </summary>
+            <param name="obj">The object for which to get the hash.</param>
+            <param name="fields">The fields of the object.</param>
+        </member>
+        <member name="M:Nordril.Functional.ObjectExtensions.DefaultHash``1(System.Object,System.Object[])">
+            <summary>
+            A default hashing function which hashes all given fields, plus the full name of the object's type.
+            <see cref="T:System.String"/>-fields are hashed with the option <see cref="F:System.StringComparison.InvariantCulture"/>.
+            This hashing function is well-suited to hashing according to structural equality in complex objects like trees and dictionaries.
+            </summary>
+            <typeparam name="T">The type to incorporate into the hash.</typeparam>
             <param name="obj">The object for which to get the hash.</param>
             <param name="fields">The fields of the object.</param>
         </member>

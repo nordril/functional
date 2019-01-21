@@ -69,9 +69,16 @@ namespace Nordril.Functional.Tests.Algebra
             var order = new TotalOrder<int>((a, b) => a <= b).LiftTotalOrderWithInfinity();
 
             Assert.Equal(expected < 0, order.Le(x, y));
+            Assert.Equal(expected >= 0, !order.Le(x, y));
+
             Assert.Equal(expected <= 0, order.Leq(x, y));
+            Assert.Equal(expected > 0, !order.Leq(x, y));
+
             Assert.Equal(expected >= 0, order.Geq(x, y));
+            Assert.Equal(expected < 0, !order.Geq(x, y));
+
             Assert.Equal(expected > 0, order.Ge(x, y));
+            Assert.Equal(expected <= 0, !order.Ge(x, y));
         }
     }
 }

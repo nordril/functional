@@ -72,6 +72,14 @@ namespace Nordril.Functional.Algebra
             => new TotalOrder<T>((x, y) => x.CompareTo(y) <= 0);
 
         /// <summary>
+        /// Returns a total order on a type <typeparamref name="T"/> based on a <paramref name="comparer"/>.
+        /// </summary>
+        /// <typeparam name="T">The type for which we have an <see cref="IComparer{T}"/>.</typeparam>
+        /// <param name="comparer">The comparer.</param>
+        public static TotalOrder<T> ToTotalOrder<T>(this IComparer<T> comparer)
+            => new TotalOrder<T>((x, y) => comparer.Compare(x, y) <= 0);
+
+        /// <summary>
         /// Lifts a total order into one which supports positive infinity in the form of <see cref="Maybe.Nothing{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in this structure.</typeparam>

@@ -11,7 +11,7 @@ namespace Nordril.Functional.Data
     /// A functional list. This class is a wrapper for <see cref="List{T}"/> which implements various functional interfaces.
     /// </summary>
     /// <remarks>
-    /// Because an <see cref="IEnumerable{T}"/>-implementation is all we need for the operations of <see cref="IApplicative{TSource}"/>, <see cref="IMonad{TSource}"/>, etc. (thanks to LINQ), these operations have correspondingly relax constraints, and instead of <see cref="FuncList{T}"/> as their parameter, they only require <see cref="IEnumerable{T}"/>. This applies to <see cref="Ap{TResult}(IApplicative{Func{T, TResult}})"/>, <see cref="Bind{TResult}(Func{T, IMonad{TResult}})"/>, and <see cref="Mplus(IMonadPlus{T})"/>.
+    /// Because an <see cref="IEnumerable{T}"/>-implementation is all we need for the operations of <see cref="IApplicative{TSource}"/>, <see cref="IMonad{TSource}"/>, etc. (thanks to LINQ), these operations have correspondingly relaxed constraints, and instead of <see cref="FuncList{T}"/> as their parameter, they only require <see cref="IEnumerable{T}"/>. This applies to <see cref="Ap{TResult}(IApplicative{Func{T, TResult}})"/>, <see cref="Bind{TResult}(Func{T, IMonad{TResult}})"/>, and <see cref="Mplus(IMonadPlus{T})"/>.
     /// </remarks>
     /// <typeparam name="T">The type of elements in the list.</typeparam>
     public struct FuncList<T> : IFuncList<T>
@@ -84,7 +84,8 @@ namespace Nordril.Functional.Data
         public IMonadZero<T> Mzero() => new FuncList<T>();
 
         /// <inheritdoc />
-        public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f) => new FuncList<TResult>(ListCoalesce().SelectMany(x => (IEnumerable<TResult>)f(x)));
+        public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f)
+            => new FuncList<TResult>(ListCoalesce().SelectMany(x => (IEnumerable<TResult>)f(x)));
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new FuncList<TResult> { x };
@@ -107,7 +108,7 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public T1 FoldMap<T1>(Monoid<T1> monoid, Func<T, T1> f)
-            => ListCoalesce().Aggregate(monoid.Neutral, (acc, x) => monoid.Op(acc, f(x)));
+            => ListCoalesce().Select(f).Msum(monoid);
 
         /// <inheritdoc />
         public IFuncList<T> Filter(Func<T, bool> f)
@@ -122,7 +123,8 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
-        public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator) => ListCoalesce().AggregateRight(f, accumulator);
+        public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator)
+            => ListCoalesce().AggregateRight(f, accumulator);
 
         /// <summary>
         /// Returns an empty list.

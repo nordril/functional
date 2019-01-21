@@ -13,7 +13,6 @@ namespace Nordril.Functional
         /// A default hashing function which hashes all given fields, plus the full name of the object's type.
         /// <see cref="string"/>-fields are hashed with the option <see cref="StringComparison.InvariantCulture"/>.
         /// This hashing function is well-suited to hashing according to structural equality in complex objects like trees and dictionaries.
-        /// See also 
         /// </summary>
         /// <param name="obj">The object for which to get the hash.</param>
         /// <param name="fields">The fields of the object.</param>
@@ -25,6 +24,31 @@ namespace Nordril.Functional
                 int hash = 17;
 
                 hash = hash * 23 + obj.GetType().GetGenericName(true).GetHashCode();
+
+                foreach (var f in fields)
+                    if (f != null)
+                        hash = hash * 23 + (f.GetType() == typeof(string) ? ((string)f).GetHashCode() : f.GetHashCode());
+
+                return hash;
+            }
+        }
+
+        /// <summary>
+        /// A default hashing function which hashes all given fields, plus the full name of the object's type.
+        /// <see cref="string"/>-fields are hashed with the option <see cref="StringComparison.InvariantCulture"/>.
+        /// This hashing function is well-suited to hashing according to structural equality in complex objects like trees and dictionaries.
+        /// </summary>
+        /// <typeparam name="T">The type to incorporate into the hash.</typeparam>
+        /// <param name="obj">The object for which to get the hash.</param>
+        /// <param name="fields">The fields of the object.</param>
+        public static int DefaultHash<T>(this object obj, params object[] fields)
+        {
+            //From https://stackoverflow.com/a/263416, with modifications.
+            unchecked
+            {
+                int hash = 17;
+
+                hash = hash * 23 + typeof(T).GetGenericName(true).GetHashCode();
 
                 foreach (var f in fields)
                     if (f != null)
