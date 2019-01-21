@@ -158,6 +158,21 @@ namespace Nordril.Functional.Data
         IEnumerator IEnumerable.GetEnumerator() => SetCoalesce().GetEnumerator();
 
         /// <inheritdoc />
+        public IComparer<ISet<T1>> GetComparer<T1>() where T1 : IComparable<T1>
+        {
+            int f(ISet<T1> xs, ISet<T1> ys)
+            {
+                var lexicographicalComparer = new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
+                var xsOrd = xs.OrderBy(x => x);
+                var ysOrd = ys.OrderBy(y => y);
+
+                return lexicographicalComparer.Compare(xsOrd, ysOrd);
+            };
+
+            return new FuncComparer<ISet<T1>>(f);
+        }
+
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (!(obj is ISet<T> that))
@@ -195,20 +210,26 @@ namespace Nordril.Functional.Data
                 set = new HashSet<T>();
             return set;
         }
+    }
 
-        /// <inheritdoc />
-        public IComparer<ISet<T1>> GetComparer<T1>() where T1 : IComparable<T1>
-        {
-            int f(ISet<T1> xs, ISet<T1> ys)
-            {
-                var lexicographicalComparer = new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
-                var xsOrd = xs.OrderBy(x => x);
-                var ysOrd = ys.OrderBy(y => y);
+    /// <summary>
+    /// Extension methods for <see cref="FuncSet{T}"/>.
+    /// </summary>
+    public static class FuncSet
+    {
+        /// <summary>
+        /// Creates a new <see cref="FuncSet{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the set.</typeparam>
+        /// <param name="elements">The set of elements.</param>
+        public static FuncSet<T> Make<T>(params T[] elements)
+            => new FuncSet<T>(elements);
 
-                return lexicographicalComparer.Compare(xsOrd, ysOrd);
-            };
-
-            return new FuncComparer<ISet<T1>>(f);
-        }
+        /// <summary>
+        /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="IFuncSet{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static IFuncSet<T> ToFuncSet<T>(this IFunctor<T> x) => (IFuncSet<T>)x;
     }
 }

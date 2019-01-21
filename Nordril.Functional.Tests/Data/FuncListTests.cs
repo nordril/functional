@@ -1,6 +1,7 @@
 ﻿using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Nordril.Functional.Tests.Data
@@ -204,6 +205,56 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.Equal(list, fl);
             Assert.Equal(origLength + 1, fl.Count);
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, new int[] { })]
+        [InlineData(new int[] { 1 }, new int[] { 1 })]
+        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 })]
+        [InlineData(new int[] { 4 }, new int[] { })]
+        [InlineData(new int[] { }, new int[] { 7 })]
+        [InlineData(new int[] { 1, 5 }, new int[] { 1 })]
+        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3, 4 })]
+        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 8, 8, 3, 8, 2, 0 })]
+        public static void EqualTest(int[] xs, int[] ys)
+        {
+            Assert.Equal(xs.SequenceEqual(ys), new FuncList<int>(xs).Equals(new FuncList<int>(ys)));
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, new int[] { })]
+        [InlineData(new int[] { 1 }, new int[] { 1 })]
+        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 })]
+        [InlineData(new int[] { 4 }, new int[] { })]
+        [InlineData(new int[] { }, new int[] { 7 })]
+        [InlineData(new int[] { 1, 5 }, new int[] { 1 })]
+        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3, 4 })]
+        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 8, 8, 3, 8, 2, 0 })]
+        public static void HashCodeTest(int[] xs, int[] ys)
+        {
+            if (xs.SequenceEqual(ys))
+                Assert.Equal(new FuncList<int>(xs).GetHashCode(), new FuncList<int>(ys).GetHashCode());
+            else
+                Assert.NotEqual(new FuncList<int>(xs).GetHashCode(), new FuncList<int>(ys).GetHashCode());
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("a", "a")]
+        [InlineData("ab", "")]
+        [InlineData("ab", "c")]
+        [InlineData("ab", "ba")]
+        [InlineData("abc", "cba")]
+        [InlineData("abc", "acb")]
+        [InlineData("abc", "bac")]
+        public static void HashCodeTest2(IEnumerable<char> xs, IEnumerable<char> ys)
+        {
+            if (xs.SequenceEqual(ys))
+                Assert.Equal(new FuncList<char>(xs).GetHashCode(), new FuncList<char>(ys).GetHashCode());
+            else
+                Assert.NotEqual(new FuncList<char>(xs).GetHashCode(), new FuncList<char>(ys).GetHashCode());
         }
     }
 }

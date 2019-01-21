@@ -168,6 +168,53 @@ namespace Nordril.Functional.Data
             }
         }
 
+        /// <inheritdoc />
+        public IComparer<IList<T1>> GetComparer<T1>() where T1 : IComparable<T1>
+        {
+            int f(IList<T1> xs, IList<T1> ys)
+            {
+                var lexicographicalComparer = new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
+                var xsOrd = xs.OrderBy(x => x);
+                var ysOrd = ys.OrderBy(y => y);
+
+                return lexicographicalComparer.Compare(xsOrd, ysOrd);
+            };
+
+            return new FuncComparer<IList<T1>>(f);
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ISet<T> that))
+                return false;
+
+            var sThis = ListCoalesce();
+
+            return sThis.Count == that.Count && sThis.Zip(that, (x,y) => x.Equals(y)).All();
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            var elemsHash = ListCoalesce().HashElements();
+            return this.DefaultHash<IList<T>>(elemsHash);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            var s = ListCoalesce();
+
+            if (s.Count > 10)
+                return s.Take(10).Select(x => x.ToString()).ConcatStrings(", ", "[", ",...]");
+            else
+                return s.Take(10).Select(x => x.ToString()).ConcatStrings(", ", "[", "]");
+        }
+
+        /// <inheritdoc />
+        public IFuncList<T> Copy() => new FuncList<T>(list);
+
         private List<T> ListCoalesce()
         {
             if (list == null)
@@ -194,6 +241,6 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <typeparam name="T">The type of the input parameter.</typeparam>
         /// <param name="x">The object to cast.</param>
-        public static IFuncList<T> ToPredicate<T>(this IFunctor<T> x) => (IFuncList<T>)x;
+        public static IFuncList<T> ToFuncList<T>(this IFunctor<T> x) => (IFuncList<T>)x;
     }
 }

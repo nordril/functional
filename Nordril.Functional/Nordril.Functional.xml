@@ -2048,6 +2048,21 @@
         <member name="M:Nordril.Functional.Data.FuncList`1.Equals(System.Collections.Generic.IList{`0})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.GetComparer``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Copy">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.FuncList">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncList`1"/>.
@@ -2060,7 +2075,7 @@
             <typeparam name="T">The type of elements in the list.</typeparam>
             <param name="elements">The list of elements.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.FuncList.ToPredicate``1(Nordril.Functional.Category.IFunctor{``0})">
+        <member name="M:Nordril.Functional.Data.FuncList.ToFuncList``1(Nordril.Functional.Category.IFunctor{``0})">
             <summary>
             Unsafely casts an <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to an <see cref="T:Nordril.Functional.Data.IFuncList`1"/>.
             </summary>
@@ -2190,6 +2205,9 @@
         <member name="M:Nordril.Functional.Data.FuncSet`1.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.GetComparer``1">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.FuncSet`1.Equals(System.Object)">
             <inheritdoc />
         </member>
@@ -2202,8 +2220,24 @@
         <member name="M:Nordril.Functional.Data.FuncSet`1.Copy">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.FuncSet`1.GetComparer``1">
-            <inheritdoc />
+        <member name="T:Nordril.Functional.Data.FuncSet">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.FuncSet`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet.Make``1(``0[])">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the set.</typeparam>
+            <param name="elements">The set of elements.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet.ToFuncSet``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to an <see cref="T:Nordril.Functional.Data.IFuncSet`1"/>.
+            </summary>
+            <typeparam name="T">The type of the input parameter.</typeparam>
+            <param name="x">The object to cast.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Identity`1">
             <summary>
@@ -2270,6 +2304,12 @@
             </summary>
             <typeparam name="T">The type of elements in the list.</typeparam>
         </member>
+        <member name="M:Nordril.Functional.Data.IFuncList`1.GetComparer``1">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.IList`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
+            </summary>
+            <typeparam name="T1">The of element in the <see cref="T:System.Collections.Generic.IList`1"/>.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Data.IFuncSet`1">
             <summary>
             A "functional set" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.ISet`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonad`1"/> (and parent interfaces).
@@ -2318,8 +2358,7 @@
             <summary>
             Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.ISet`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
             </summary>
-            <typeparam name="T1"></typeparam>
-            <returns></returns>
+            <typeparam name="T1">The of element in the <see cref="T:System.Collections.Generic.ISet`1"/>.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.Maybe`1">
             <summary>

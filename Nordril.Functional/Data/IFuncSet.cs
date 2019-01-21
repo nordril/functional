@@ -52,8 +52,7 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Gets an <see cref="IComparer{T}"/> for <see cref="ISet{T}"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
         /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T1">The of element in the <see cref="ISet{T}"/>.</typeparam>
         IComparer<ISet<T1>> GetComparer<T1>() where T1 : IComparable<T1>;
     }
 }
