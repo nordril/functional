@@ -154,7 +154,7 @@ namespace Nordril.Functional.Category
         => (x, y, z, u) => (x.Map(f.Curry3()) as IApplicative<Func<T2, Func<T3, Func<T4, TResult>>>>).ApF(y).ApF(z).ApF(u);
 
         /// <summary>
-        /// An applicative/monadic filter operation which is a generaliztion of <see cref="Enumerable.Where{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>. If the applicative is <see cref="Identity{T}"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/>.
+        /// An applicative/monadic filter operation which is a generalization of <see cref="Enumerable.Where{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>. If the applicative is <see cref="Identity{T}"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/>.
         /// </summary>
         /// <example>
         ///     //Computing the powerset (interpreting a sequence as a set).
@@ -186,6 +186,47 @@ namespace Nordril.Functional.Category
             //Iterate through the sequence, unpacking, at each step, the accumulated list and the result of the predicate,
             //and either adding or not adding the current element.
             return xs.AggregateRight((x, acc) => (TResult)f(x).Ap(acc.Map(g(x)) as IApplicative<Func<bool, IEnumerable<T>>>), pure);
+        }
+
+        /// <summary>
+        /// An applicative/monadic <see cref="Enumerable.Select{TSource, TResult}(IEnumerable{TSource}, Func{TSource, TResult})"/> operation. If the applicative is <see cref="Identity{T}"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/>.
+        /// </summary>
+        /// <example>
+        ///     //Map each element to itself and its negation
+        ///     //Using the non-determinism monad of FuncList, every element is non-deterministically
+        ///     //mapped to both values, and the result is a FuncList containing as elements all possible
+        ///     //combinations.
+        ///     var new List&lt;int&gt; { 1, 2, 3}.SelectAp(x => new FuncList&lt;bool&gt; {x, x*(-1)});
+        ///     
+        ///     //result: [1,2,3], [1,2,-3], [1,-2,3], [1,-2,-3], [-1,2,3], [-1,2,-3], [-1,-2,3], [-1,-2,-3]
+        /// </example>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the result-elements.</typeparam>
+        /// <typeparam name="TResultList">The applicative-type of the result. This should agree with <typeparamref name="TResult"/></typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
+        /// <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
+        /// <exception cref="NullReferenceException">If the applicative in question does not implement <see cref="Pure{TSource, TResult}(TSource)"/> correctly and uses the this-pointer.</exception>
+        /// <exception cref="InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        public static IApplicative<IEnumerable<TResult>> SelectAp<T, TResult, TResultList>(this IEnumerable<T> xs, Func<T, IApplicative<TResult>> f)
+            where TResultList : IApplicative<IEnumerable<TResult>>
+        {
+            //The empty list as the base case.
+            var pure = new List<TResult>().PureUnsafe<IEnumerable<TResult>, TResultList>();
+
+            //The applicative-lifted prepend-function.
+            Func<TResult, IEnumerable<TResult>, IEnumerable<TResult>> prepend = (a, b) => b.Prepend(a);
+            var prependAp = prepend.LiftA();
+
+            TResultList go(IEnumerable<T> ys)
+            {
+                if (ys.Empty())
+                    return pure;
+                else
+                    return (TResultList)prependAp(f(ys.First()), go(ys.Skip(1)));
+            }
+
+            return go(xs);
         }
     }
 }
