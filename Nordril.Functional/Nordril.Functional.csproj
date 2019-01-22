@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyVersion>8.7.0.0</AssemblyVersion>
+    <AssemblyVersion>8.8.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies</Authors>
     <Company>Nordril Technologies</Company>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>8.7.0</Version>
+    <Version>8.8.0</Version>
     <Description>Function programming goodness: Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>8.7.0.0</FileVersion>
+    <FileVersion>8.8.0.0</FileVersion>
     <PackageIconUrl>https://nordrilnugeticons.blob.core.windows.net/nuget-icons/cebd969f4bc14d5597856f700bbd5bf5.png</PackageIconUrl>
   </PropertyGroup>
 
