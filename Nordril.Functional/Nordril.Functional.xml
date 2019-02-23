@@ -533,6 +533,21 @@
             <typeparam name="T">The type of elements in this structure.</typeparam>
             <param name="order">The total order to lift.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.IFunctor`4">
+            <summary>
+            A value-level functor which can map the contents of a data structure. See <see cref="T:Nordril.Functional.Category.IFunctor`1"/>.
+            </summary>
+            <typeparam name="TFSource">The type of the source data structure.</typeparam>
+            <typeparam name="TFResult">The type of the result data structure.</typeparam>
+            <typeparam name="TSource">The type of the contained elements in <typeparamref name="TFSource"/>.</typeparam>
+            <typeparam name="TResult">The type of the contained elements in <typeparamref name="TFResult"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IFunctor`4.Map(System.Func{`2,`3})">
+            <summary>
+            Applies a function to each element of a data structure. Implementors must obey the same laws as in <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            </summary>
+            <param name="f">The function to apply.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IAlternative`1">
             <summary>
             A subset of <see cref="T:Nordril.Functional.Category.IApplicative`1"/> that has a notion of "combining computations". It's up to the implementor to define how this combining works, but implementors should obey the following laws:
@@ -4241,6 +4256,36 @@
             <typeparam name="TResult">The result of the function.</typeparam>
             <param name="t">The tuple to which to apply the function.</param>
             <param name="f">The function to apply.</param>
+        </member>
+        <member name="T:Nordril.HedgingEngine.Logic.Mapping.IIsomorphism`2">
+            <summary>
+            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="M:Nordril.HedgingEngine.Logic.Mapping.IIsomorphism`2.ConvertBack(`1)">
+            <summary>
+            Converts an object back from <typeparamref name="TTo"/> to <typeparamref name="TFrom"/>.
+            The following holds for all <c>x</c>:
+            <code>
+                ConvertBack(Convert(x)) == x
+            </code>
+            </summary>
+            <param name="from">The object to convert.</param>
+        </member>
+        <member name="T:Nordril.HedgingEngine.Logic.Mapping.IMorphism`2">
+            <summary>
+            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="M:Nordril.HedgingEngine.Logic.Mapping.IMorphism`2.Convert(`0)">
+            <summary>
+            Converts an object.
+            </summary>
+            <param name="from">The object to convert.</param>
         </member>
     </members>
 </doc>
