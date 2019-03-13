@@ -83,6 +83,10 @@ namespace Nordril.Functional
         public static Pattern<TIn, TOut> Match<TIn, TOut>(Func<TIn, bool> predicate, Func<TIn, TOut> action)
             => Pattern<TIn, TOut>.StartMatch(predicate, action);
 
+        /*public static Pattern<TIn, TOut> MatchEnum<TIn, TOut>(TIn match, Func<TIn, TOut> action)
+            where TIn : Enum
+            => Pattern<TIn, TOut>.StartMatch(x => x.to == match, action);*/
+
         /// <summary>
         /// Creates a pattern-match on an input object <typeparamref name="TIn"/>, starting with a list of cases.
         /// </summary>

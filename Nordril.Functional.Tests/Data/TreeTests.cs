@@ -320,9 +320,9 @@ namespace Nordril.Functional.Tests.Data
         [MemberData(nameof(TreeSums))]
         public static void FoldMapTreeSumDouble(Tree<int> t, int sum)
         {
-            var treeSum = t.FoldMap(new Monoid<int>(0, (x, y) => x + y), x => x*2);
+            var treeSum = t.FoldMap(new Monoid<int>(0, (x, y) => x + y), x => x * 2);
 
-            Assert.Equal(2*sum, treeSum);
+            Assert.Equal(2 * sum, treeSum);
         }
 
         [Theory]
@@ -340,7 +340,7 @@ namespace Nordril.Functional.Tests.Data
         public static void FoldrStringConcat(Tree<string> t, string sum)
         {
             var treeSum = t.Foldr((x, acc) => x + acc, "");
-                
+
             Assert.Equal(sum, treeSum);
         }
 
@@ -369,6 +369,59 @@ namespace Nordril.Functional.Tests.Data
             var treeSum = t.Traverse(TreeTraversal.PostOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
 
             Assert.Equal(sum, treeSum);
+        }
+
+        [Fact]
+        public static void TraversePreOrderVisitors()
+        {
+            var tree = Tree.MakeInner(10, new[] {
+                Tree.MakeInner(5, new [] {
+                    Tree.MakeLeaf(2),
+                    Tree.MakeLeaf(7) }),
+                Tree.MakeInner(15, new [] {
+                    Tree.MakeInner(12, new[] {
+                        Tree.MakeLeaf(11) }),
+                    Tree.MakeLeaf(14),
+                    Tree.MakeLeaf(17)})
+                });
+
+            var visitorResultsExpected = new[] {
+                "visit 10",
+                "down 10 0",
+                "visit 5",
+                "down 5 0",
+                "visit 2",
+                "up 2",
+                "down 5 1",
+                "visit 7",
+                "up 7",
+                "up 5",
+                "down 10 1",
+                "visit 15",
+                "down 15 0",
+                "visit 12",
+                "down 12 0",
+                "visit 11",
+                "up 11",
+                "up 12",
+                "down 15 1",
+                "visit 14",
+                "up 14",
+                "down 15 2",
+                "visit 17",
+                "up 17",
+                "up 15",
+                "up 10"
+            };
+
+            var visitorResultsActual = new List<string>();
+
+            tree.Traverse(TreeTraversal.PreOrder,
+                t => visitorResultsActual.Add($"visit {t.Key}"),
+                (t, i) => visitorResultsActual.Add($"down {t.Key} {i}"),
+                t => visitorResultsActual.Add($"up {t.Key}")).ToList();
+
+            Assert.Equal(visitorResultsExpected, visitorResultsActual);
         }
 
         [Theory]

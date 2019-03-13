@@ -25,7 +25,7 @@ namespace Nordril.Functional.Category
     }
 
     /// <summary>
-    /// Filterable data structures which do not support the removal of all elements. This is a weaker form of <see cref="IFilterable{TSource}"/> which does not support returning empty data structures if all elements have been excluded, but returns <see cref="Maybe.Nothing{T}"/> instead.
+    /// Filterable data structures which do not support the removal of all elements. This is a weaker form of <see cref="IFilterable{T, TSource}"/> which does not support returning empty data structures if all elements have been excluded, but returns <see cref="Maybe.Nothing{T}"/> instead.
     /// An example is <see cref="Tree{T}"/>, which cannot represent empty trees, but which still supports a kind of filtering of its nodes.
     /// </summary>
     /// <typeparam name="T">The type of the implementor.</typeparam>

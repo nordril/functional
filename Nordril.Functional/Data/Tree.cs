@@ -103,23 +103,23 @@ namespace Nordril.Functional.Data
         /// <param name="traversal">The type of the traversal.</param>
         /// <param name="visit">The action to execute at each node, if any.</param>
         /// <param name="down">The action to execute when entering a node's children. The arguments are the current node and the index of the child node.</param>
-        /// <param name="up">The action to execute when leaving a node. The argument is the node being left</param>
+        /// <param name="up">The action to execute when leaving a node. The argument is the node being left.</param>
         /// <returns>The nodes of the tree, and whether each node is a leaf.</returns>
         public IEnumerable<(T, bool)> Traverse(TreeTraversal traversal, Action<Tree<T>> visit = null, Action<Tree<T>, int> down = null, Action<Tree<T>> up = null)
         {
-            IEnumerable<Tree<T>> trav(Tree<T> tree, int? parentIndex)
+            IEnumerable<Tree<T>> trav(Tree<T> tree, Tree<T> parent, int? parentIndex)
             {
                 if (traversal == TreeTraversal.PreOrder)
                 {
                     if (parentIndex != null)
-                        down?.Invoke(tree, parentIndex.Value);
+                        down?.Invoke(parent, parentIndex.Value);
                     visit?.Invoke(tree);
                     yield return tree;
                 }
 
                 if (tree.IsInner)
                 {
-                    foreach (var subResult in tree.Children.Value().Select((t, i) => trav(t, i)))
+                    foreach (var subResult in tree.Children.Value().Select((t, i) => trav(t, tree, i)))
                         foreach (var (node, index) in subResult.ZipWithStream(0, i => i + 1))
                             yield return node;
                 }
@@ -133,7 +133,7 @@ namespace Nordril.Functional.Data
                 up?.Invoke(tree);
             };
 
-            foreach (var n in trav(this, null))
+            foreach (var n in trav(this, null, null))
                 yield return (n.Key, n.IsLeaf);
         }
 

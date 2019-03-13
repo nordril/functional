@@ -910,7 +910,7 @@
         </member>
         <member name="T:Nordril.Functional.Category.ISemifilterable`2">
             <summary>
-            Filterable data structures which do not support the removal of all elements. This is a weaker form of <see cref="!:IFilterable&lt;TSource&gt;"/> which does not support returning empty data structures if all elements have been excluded, but returns <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> instead.
+            Filterable data structures which do not support the removal of all elements. This is a weaker form of <see cref="T:Nordril.Functional.Category.IFilterable`2"/> which does not support returning empty data structures if all elements have been excluded, but returns <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> instead.
             An example is <see cref="T:Nordril.Functional.Data.Tree`1"/>, which cannot represent empty trees, but which still supports a kind of filtering of its nodes.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
@@ -2901,7 +2901,7 @@
             <param name="traversal">The type of the traversal.</param>
             <param name="visit">The action to execute at each node, if any.</param>
             <param name="down">The action to execute when entering a node's children. The arguments are the current node and the index of the child node.</param>
-            <param name="up">The action to execute when leaving a node. The argument is the node being left</param>
+            <param name="up">The action to execute when leaving a node. The argument is the node being left.</param>
             <returns>The nodes of the tree, and whether each node is a leaf.</returns>
         </member>
         <member name="M:Nordril.Functional.Data.Tree`1.Map``1(System.Func{`0,``0})">
