@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyVersion>9.0.0.0</AssemblyVersion>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyVersion>9.0.1.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies</Authors>
     <Company>Nordril Technologies</Company>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>9.0.0</Version>
+    <Version>9.0.1</Version>
     <Description>Function programming goodness: Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>9.0.0.0</FileVersion>
+    <FileVersion>9.0.1.0</FileVersion>
     <PackageIconUrl>https://nordrilnugeticons.blob.core.windows.net/nuget-icons/cebd969f4bc14d5597856f700bbd5bf5.png</PackageIconUrl>
   </PropertyGroup>
 

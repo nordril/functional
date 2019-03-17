@@ -20,6 +20,9 @@ namespace Nordril.Functional.Data
         private HashSet<T> set;
 
         /// <inheritdoc />
+        public IEqualityComparer<T> Comparer => set.Comparer;
+
+        /// <inheritdoc />
         public int Count => SetCoalesce().Count;
 
         /// <inheritdoc />
@@ -77,7 +80,12 @@ namespace Nordril.Functional.Data
         public void CopyTo(T[] array, int arrayIndex) => SetCoalesce().CopyTo(array, arrayIndex);
 
         /// <inheritdoc />
-        public IFuncSet<T> DifferencePure(ISet<T> elem) => Copy().Set(x => x.ExceptWith(elem));
+        public IFuncSet<T> DifferencePure(ISet<T> elem)
+        {
+            var copy = Copy();
+            copy.ExceptWith(ReplaceEqualityComparer(elem));
+            return copy;
+        }
 
         /// <inheritdoc />
         public bool Equals(ISet<T> other) => Equals((object)other);
@@ -86,7 +94,7 @@ namespace Nordril.Functional.Data
         public bool Equals(IFuncSet<T> other) => Equals((object)other);
 
         /// <inheritdoc />
-        public void ExceptWith(IEnumerable<T> other) => SetCoalesce().ExceptWith(other);
+        public void ExceptWith(IEnumerable<T> other) => SetCoalesce().ExceptWith(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
         public IFuncSet<T> Filter(Func<T, bool> f) => new FuncSet<T>(SetCoalesce().Where(f));
@@ -105,28 +113,33 @@ namespace Nordril.Functional.Data
         public IEnumerator<T> GetEnumerator() => SetCoalesce().GetEnumerator();
 
         /// <inheritdoc />
-        public IFuncSet<T> IntersectionPure(ISet<T> elem) => Copy().Set(x => x.IntersectWith(elem));
+        public IFuncSet<T> IntersectionPure(ISet<T> elem)
+        {
+            var copy = Copy();
+            copy.IntersectWith(ReplaceEqualityComparer(elem));
+            return copy;
+        }
 
         /// <inheritdoc />
-        public void IntersectWith(IEnumerable<T> other) => SetCoalesce().IntersectWith(other);
+        public void IntersectWith(IEnumerable<T> other) => SetCoalesce().IntersectWith(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public bool IsProperSubsetOf(IEnumerable<T> other) => SetCoalesce().IsProperSubsetOf(other);
+        public bool IsProperSubsetOf(IEnumerable<T> other) => SetCoalesce().IsProperSubsetOf(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public bool IsProperSupersetOf(IEnumerable<T> other) => SetCoalesce().IsProperSupersetOf(other);
+        public bool IsProperSupersetOf(IEnumerable<T> other) => SetCoalesce().IsProperSupersetOf(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public bool IsSubsetOf(IEnumerable<T> other) => SetCoalesce().IsSubsetOf(other);
+        public bool IsSubsetOf(IEnumerable<T> other) => SetCoalesce().IsSubsetOf(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public bool IsSupersetOf(IEnumerable<T> other) => SetCoalesce().IsSupersetOf(other);
+        public bool IsSupersetOf(IEnumerable<T> other) => SetCoalesce().IsSupersetOf(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
         public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => new FuncSet<TResult>(SetCoalesce().Select(f));
 
         /// <inheritdoc />
-        public bool Overlaps(IEnumerable<T> other) => SetCoalesce().Overlaps(other);
+        public bool Overlaps(IEnumerable<T> other) => SetCoalesce().Overlaps(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new FuncSet<TResult>(new[] { x });
@@ -145,19 +158,29 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
-        public bool SetEquals(IEnumerable<T> other) => SetCoalesce().SetEquals(other);
+        public bool SetEquals(IEnumerable<T> other) => SetCoalesce().SetEquals(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public IFuncSet<T> SymmetricDifferencePure(ISet<T> elem) => Copy().Set(x => x.SymmetricExceptWith(elem));
+        public IFuncSet<T> SymmetricDifferencePure(ISet<T> elem)
+        {
+            var copy = Copy();
+            copy.SymmetricExceptWith(ReplaceEqualityComparer(elem));
+            return copy;
+        }
 
         /// <inheritdoc />
-        public void SymmetricExceptWith(IEnumerable<T> other) => SetCoalesce().SymmetricExceptWith(other);
+        public void SymmetricExceptWith(IEnumerable<T> other) => SetCoalesce().SymmetricExceptWith(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public IFuncSet<T> UnionPure(ISet<T> elem) => Copy().Set(x => x.UnionWith(elem));
+        public IFuncSet<T> UnionPure(ISet<T> elem)
+        {
+            var copy = Copy();
+            copy.UnionWith(ReplaceEqualityComparer(elem));
+            return copy;
+        }
 
         /// <inheritdoc />
-        public void UnionWith(IEnumerable<T> other) => SetCoalesce().UnionWith(other);
+        public void UnionWith(IEnumerable<T> other) => SetCoalesce().UnionWith(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
         void ICollection<T>.Add(T item) => SetCoalesce().Add(item);
@@ -188,7 +211,7 @@ namespace Nordril.Functional.Data
 
             var sThis = SetCoalesce();
 
-            return sThis.IsSubsetOf(that) && sThis.Count == that.Count;
+            return sThis.IsSubsetOf(ReplaceEqualityComparer(that)) && sThis.Count == that.Count;
         }
 
         /// <inheritdoc />
@@ -217,6 +240,37 @@ namespace Nordril.Functional.Data
             if (set == null)
                 set = new HashSet<T>();
             return set;
+        }
+
+        /// <summary>
+        /// Conditionally returns either <paramref name="that"/> that or, if its <see cref="IEqualityComparer{T}"/> is not reference-equals to ours, a copy with an equality-comparer that is reference-equals to ours. The point of this is so that set-theoretical operations use our equality-comparer instead of defaulting to reference-equality for elements if the equality-comparer of <paramref name="that"/> differs from ours (this behavior is from the .NET reference source).
+        /// See https://referencesource.microsoft.com/system.core/system/Collections/Generic/HashSet.cs.html (AreEqualityComparersEqual and the functions which use it).
+        /// </summary>
+        /// <param name="that">The set whose equality-comparer to replace.</param>
+        /// <returns>Either <paramref name="that"/> or a copy with its equality-comparer replaced.</returns>
+        private ISet<T> ReplaceEqualityComparer(IEnumerable<T> that)
+        {
+            //HashSet -> check the comparer.
+            if (that is HashSet<T> hs)
+            {
+                if (!hs.Comparer.Equals(set.Comparer))
+                    return new HashSet<T>(hs, set.Comparer);
+                else
+                    return hs;
+            }
+            //FuncSet -> check the comparer.
+            else if (that is IFuncSet<T> fs)
+            {
+                if (!(fs.Comparer.Equals(set.Comparer)))
+                    return new FuncSet<T>(set.Comparer, fs);
+                else
+                    return fs;
+            }
+            //Anything else -> always copy into a FuncSet, we don't know the comparer.
+            else
+            {
+                return new FuncSet<T>(set.Comparer, that);
+            }
         }
     }
 

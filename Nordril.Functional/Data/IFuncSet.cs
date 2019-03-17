@@ -8,9 +8,15 @@ namespace Nordril.Functional.Data
     /// <summary>
     /// A "functional set" which, in addition to supporting the operations <see cref="ISet{T}"/>, implements <see cref="IMonad{T}"/> (and parent interfaces).
     /// </summary>
+    /// <remarks>Be aware that the equality comparer of the <em>left</em> set is used for determining element-equality for all set-theoretical operations. If the right set has a different equality comparer, this behavior will violate the expected theory of equivalence relations, e.g. you might have the situation where <c>S.Equals(T) != T.Equals(S)</c> or <c>S.Except(T).UnionPure(T.Except(S)) != S.SymmetricDifferencePure(T)</c>. This is a conscious design choice, intended to allow you to use the equality comparer of your choice, and you should interpret all set-theoretical operations as modulo the equality comparer of the left set.</remarks>
     /// <typeparam name="T">The type of elements in the set.</typeparam>
     public interface IFuncSet<T> : ISet<T>, IMonad<T>, IEquatable<ISet<T>>, IEquatable<IFuncSet<T>>, IFoldable<T>, IFilterable<IFuncSet<T>, T>, ICopyable<IFuncSet<T>>
     {
+        /// <summary>
+        /// Returns the <see cref="IEqualityComparer{T}"/> of the set.
+        /// </summary>
+        IEqualityComparer<T> Comparer { get; }
+
         /// <summary>
         /// Returns a new set to which <paramref name="elem"/> has been added, while leaving this set unchanged.
         /// </summary>
