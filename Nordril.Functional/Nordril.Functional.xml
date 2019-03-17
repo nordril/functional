@@ -1998,9 +1998,16 @@
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            Creates a new <see cref="T:Nordril.Functional.Data.FuncList`1"/> from the elements of <paramref name="xs"/>.
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncList`1"/> from the elements of <paramref name="xs"/>, using <see cref="M:System.Object.Equals(System.Object)"/> for equality-comparisons among elements.
             </summary>
             <param name="xs">The elements to store in the list.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.#ctor(System.Collections.Generic.IEqualityComparer{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncList`1"/> from the elements of <paramref name="xs"/>, using <paramref name="comparer"/> for equality-comparisons among elements, or <see cref="M:System.Object.Equals(System.Object)"/> is <paramref name="comparer"/> is null.
+            </summary>
+            <param name="xs">The elements to store in the list.</param>
+            <param name="comparer">The equality comparer for the list's elements.</param>
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.IndexOf(`0)">
             <inheritdoc />
@@ -2100,6 +2107,23 @@
         <member name="M:Nordril.Functional.Data.FuncList`1.Copy">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.ListCoalesce">
+            <summary>
+            Retuns <see cref="F:Nordril.Functional.Data.FuncList`1.list"/>. If <see cref="F:Nordril.Functional.Data.FuncList`1.list"/> has not been assigned, it's set to a new, empty list first.
+            </summary>
+            <remarks>
+            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncList`1.list"/> has not been initialized yet, they will hold references to different lists after this method returns.
+            </remarks>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.ComparerCoalesce">
+            <summary>
+            Retuns <see cref="F:Nordril.Functional.Data.FuncList`1.list"/>. If <see cref="F:Nordril.Functional.Data.FuncList`1.list"/> has not been assigned, it's set to a new, empty list first.
+            </summary>
+            <remarks>
+            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncList`1.comparer"/> has not been initialized yet, they will hold references to different comparers after this method returns.
+            This should not be an issue since the created comparer is stateless, but it should be kept in mind.
+            </remarks>
+        </member>
         <member name="T:Nordril.Functional.Data.FuncList">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncList`1"/>.
@@ -2136,9 +2160,16 @@
         </member>
         <member name="M:Nordril.Functional.Data.FuncSet`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/> from the elements of <paramref name="xs"/>.
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/> from the elements of <paramref name="xs"/>, using <see cref="M:System.Object.Equals(System.Object)"/> for equality-comparisons among elements.
             </summary>
             <param name="xs">The elements to store in the list.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.#ctor(System.Collections.Generic.IEqualityComparer{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/> from the elements of <paramref name="xs"/>, using <paramref name="comparer"/> for equality-comparisons among elements, or <see cref="M:System.Object.Equals(System.Object)"/> if <paramref name="comparer"/> is null.
+            </summary>
+            <param name="xs">The elements to store in the list.</param>
+            <param name="comparer">The equality comparer for the list's elements.</param>
         </member>
         <member name="M:Nordril.Functional.Data.FuncSet`1.Add(`0)">
             <inheritdoc />
@@ -3263,7 +3294,7 @@
             <typeparam name="TOut">The output of the function.</typeparam>
             <param name="f">The function to curry.</param>
         </member>
-        <member name="M:Nordril.Functional.F.Curry3``4(System.Func{``0,``1,``2,``3})">
+        <member name="M:Nordril.Functional.F.Curry``4(System.Func{``0,``1,``2,``3})">
             <summary>
             Curries a ternary function, allowing it to take its arguments one by one.
             </summary>
@@ -3273,7 +3304,7 @@
             <typeparam name="TOut">The output of the function.</typeparam>
             <param name="f">The function to curry.</param>
         </member>
-        <member name="M:Nordril.Functional.F.Curry4``5(System.Func{``0,``1,``2,``3,``4})">
+        <member name="M:Nordril.Functional.F.Curry``5(System.Func{``0,``1,``2,``3,``4})">
             <summary>
             Curries a quaternary function, allowing it to take its arguments one by one.
             </summary>
@@ -3294,10 +3325,10 @@
             <typeparam name="TOut">The output of the function.</typeparam>
             <param name="f">The curried function.</param>
         </member>
-        <member name="M:Nordril.Functional.F.Uncurry3``4(System.Func{``0,System.Func{``1,System.Func{``2,``3}}})">
+        <member name="M:Nordril.Functional.F.Uncurry``4(System.Func{``0,System.Func{``1,System.Func{``2,``3}}})">
             <summary>
             Uncurries a ternary function, requiring it to take its arguments all at once.
-            The inverse of <see cref="M:Nordril.Functional.F.Curry3``4(System.Func{``0,``1,``2,``3})"/>.
+            The inverse of <see cref="M:Nordril.Functional.F.Curry``4(System.Func{``0,``1,``2,``3})"/>.
             </summary>
             <typeparam name="TIn1">The first argument of the function.</typeparam>
             <typeparam name="TIn2">The second argument of the function.</typeparam>
@@ -3305,10 +3336,10 @@
             <typeparam name="TOut">The output of the function.</typeparam>
             <param name="f">The curried function.</param>
         </member>
-        <member name="M:Nordril.Functional.F.Uncurry4``5(System.Func{``0,System.Func{``1,System.Func{``2,System.Func{``3,``4}}}})">
+        <member name="M:Nordril.Functional.F.Uncurry``5(System.Func{``0,System.Func{``1,System.Func{``2,System.Func{``3,``4}}}})">
             <summary>
             Uncurries a quaternary function, requiring it to take its arguments all at once.
-            The inverse of <see cref="M:Nordril.Functional.F.Curry4``5(System.Func{``0,``1,``2,``3,``4})"/>.
+            The inverse of <see cref="M:Nordril.Functional.F.Curry``5(System.Func{``0,``1,``2,``3,``4})"/>.
             </summary>
             <typeparam name="TIn1">The first argument of the function.</typeparam>
             <typeparam name="TIn2">The second argument of the function.</typeparam>

@@ -59,6 +59,25 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [InlineData(new string[0], "", null, null, "")]
+        [InlineData(new string[0], ", ", null, null, "")]
+        [InlineData(new string[0], "", "[", null, "[")]
+        [InlineData(new string[0], "", null, "]", "]")]
+        [InlineData(new string[0], "", "[", "]", "[]")]
+        [InlineData(new string[0], ", ", "[", "]", "[]")]
+        [InlineData(new string[] { "a" }, ", ", "[", "]", "[a]")]
+        [InlineData(new string[] { "a","b" }, ", ", "[", "]", "[a, b]")]
+        [InlineData(new string[] { "a","b, c" }, ", ", "[", "]", "[a, b, c]")]
+        [InlineData(new string[] { "a","b", "c" }, ", ", null, null, "a, b, c")]
+        [InlineData(new string[] { "a","b", "c" }, "", null, null, "abc")]
+        [InlineData(new string[] { "a","b", "c" }, null, null, null, "abc")]
+        [InlineData(new string[] { "a","b", "c" }, null, "{", "}", "{abc}")]
+        public static void ConcatStringsTest(IEnumerable<string> xs, string separator, string prefix, string postfix, string expected)
+        {
+            Assert.Equal(expected, xs.ConcatStrings(separator, prefix, postfix));
+        }
+
+        [Theory]
         [InlineData(new int[] { }, true)]
         [InlineData(new int[] { 0 }, false)]
         [InlineData(new int[] { 1, 2, 3 }, false)]
@@ -396,9 +415,18 @@ namespace Nordril.Functional.Tests
         [MemberData(nameof(SelectKeyValueData))]
         public static void SelectKeyValueTest(IEnumerable<KeyValuePair<string, int>> xs)
         {
-            Func<KeyValuePair<string, int>, string> f = kv => $"{kv.Key} is {kv.Value} yerars old.";
+            string f(KeyValuePair<string, int> kv) => $"{kv.Key} is {kv.Value} yerars old.";
 
             Assert.Equal(xs.Select(f), xs.SelectKeyValue((k,v) => f(new KeyValuePair<string, int>(k,v))));
+        }
+
+        [Theory]
+        [MemberData(nameof(SelectMaybeData))]
+        public static void SelectMaybeTest(IEnumerable<int> xs, IEnumerable<int> expected)
+        {
+            Maybe<int> f(int x) => Maybe.JustIf(x > 5, () => x);
+
+            Assert.Equal(expected, xs.SelectMaybe(f));
         }
 
         [Theory]

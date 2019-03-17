@@ -8,7 +8,7 @@ namespace Nordril.Functional
     /// An <see cref="IEqualityComparer{T}"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
     /// </summary>
     /// <typeparam name="T">The type of elements in the sequences.</typeparam>
-    class LexicographicalComparer<T> : IComparer<IEnumerable<T>>
+    public class LexicographicalComparer<T> : IComparer<IEnumerable<T>>
     {
         /// <summary>
         /// The underlying elementwise comparer.

@@ -54,7 +54,7 @@ namespace Nordril.Functional
         /// <typeparam name="TIn3">The third argument of the function.</typeparam>
         /// <typeparam name="TOut">The output of the function.</typeparam>
         /// <param name="f">The function to curry.</param>
-        public static Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> Curry3<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, TIn2, TIn3, TOut> f)
+        public static Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> Curry<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, TIn2, TIn3, TOut> f)
             => x => y => z => f(x, y, z);
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Nordril.Functional
         /// <typeparam name="TIn4">The fourth argument of the function.</typeparam>
         /// <typeparam name="TOut">The output of the function.</typeparam>
         /// <param name="f">The function to curry.</param>
-        public static Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> Curry4<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, TIn2, TIn3, TIn4, TOut> f)
+        public static Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> Curry<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, TIn2, TIn3, TIn4, TOut> f)
             => x => y => z => u => f(x, y, z, u);
 
         /// <summary>
@@ -82,19 +82,19 @@ namespace Nordril.Functional
 
         /// <summary>
         /// Uncurries a ternary function, requiring it to take its arguments all at once.
-        /// The inverse of <see cref="Curry3{TIn1, TIn2, TIn3, TOut}(Func{TIn1, TIn2, TIn3, TOut})"/>.
+        /// The inverse of <see cref="Curry{TIn1, TIn2, TIn3, TOut}(Func{TIn1, TIn2, TIn3, TOut})"/>.
         /// </summary>
         /// <typeparam name="TIn1">The first argument of the function.</typeparam>
         /// <typeparam name="TIn2">The second argument of the function.</typeparam>
         /// <typeparam name="TIn3">The third argument of the function.</typeparam>
         /// <typeparam name="TOut">The output of the function.</typeparam>
         /// <param name="f">The curried function.</param>
-        public static Func<TIn1, TIn2, TIn3, TOut> Uncurry3<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> f)
+        public static Func<TIn1, TIn2, TIn3, TOut> Uncurry<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> f)
             => (x, y, z) => f(x)(y)(z);
 
         /// <summary>
         /// Uncurries a quaternary function, requiring it to take its arguments all at once.
-        /// The inverse of <see cref="Curry4{TIn1, TIn2, TIn3, TIn4, TOut}(Func{TIn1, TIn2, TIn3, TIn4, TOut})"/>.
+        /// The inverse of <see cref="Curry{TIn1, TIn2, TIn3, TIn4, TOut}(Func{TIn1, TIn2, TIn3, TIn4, TOut})"/>.
         /// </summary>
         /// <typeparam name="TIn1">The first argument of the function.</typeparam>
         /// <typeparam name="TIn2">The second argument of the function.</typeparam>
@@ -102,7 +102,7 @@ namespace Nordril.Functional
         /// <typeparam name="TIn4">The fourth argument of the function.</typeparam>
         /// <typeparam name="TOut">The output of the function.</typeparam>
         /// <param name="f">The curried function.</param>
-        public static Func<TIn1, TIn2, TIn3, TIn4, TOut> Uncurry4<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> f)
+        public static Func<TIn1, TIn2, TIn3, TIn4, TOut> Uncurry<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> f)
             => (x, y, z, u) => f(x)(y)(z)(u);
 
         /// <summary>

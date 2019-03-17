@@ -271,6 +271,39 @@ namespace Nordril.Functional.Tests
             yield return new object[] { new KeyValuePair<string, int>[] { tokv("alice", 35), tokv("bob", 23), tokv("cecil", 52) } };
         }
 
+        public static IEnumerable<object[]> SelectMaybeData()
+        {
+            yield return new object[]
+            {
+                new List<int>{ },
+                new List<int>{ }
+            };
+
+            yield return new object[]
+            {
+                new List<int>{ 6 },
+                new List<int>{ 6 }
+            };
+
+            yield return new object[]
+            {
+                new List<int>{ 4 },
+                new List<int>{ }
+            };
+
+            yield return new object[]
+            {
+                new List<int>{ 4,3,1},
+                new List<int>{ }
+            };
+
+            yield return new object[]
+            {
+                new List<int>{ 7, 3, 1, 8, 9, 3},
+                new List<int>{ 7, 8, 9}
+            };
+        }
+
         public static IEnumerable<object[]> Unzip1Data()
         {
             yield return new object[] {

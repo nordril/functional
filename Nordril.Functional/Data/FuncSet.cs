@@ -26,15 +26,23 @@ namespace Nordril.Functional.Data
         public bool IsReadOnly => SetCoalesce().IsReadOnly;
 
         /// <summary>
-        /// Creates a new <see cref="FuncSet{T}"/> from the elements of <paramref name="xs"/>.
+        /// Creates a new <see cref="FuncSet{T}"/> from the elements of <paramref name="xs"/>, using <see cref="object.Equals(object)"/> for equality-comparisons among elements.
         /// </summary>
         /// <param name="xs">The elements to store in the list.</param>
         public FuncSet(IEnumerable<T> xs = null)
         {
-            if (xs == null)
-                set = new HashSet<T>();
-            else
-                set = new HashSet<T>(xs);
+            set = xs == null ? new HashSet<T>() : new HashSet<T>(xs);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="FuncSet{T}"/> from the elements of <paramref name="xs"/>, using <paramref name="comparer"/> for equality-comparisons among elements, or <see cref="object.Equals(object)"/> if <paramref name="comparer"/> is null.
+        /// </summary>
+        /// <param name="xs">The elements to store in the list.</param>
+        /// <param name="comparer">The equality comparer for the list's elements.</param>
+        public FuncSet(IEqualityComparer<T> comparer, IEnumerable<T> xs = null)
+        {
+            comparer = comparer ?? new FuncEqualityComparer<T>((x, y) => x.Equals(y));
+            set = xs == null ? new HashSet<T>(comparer) : new HashSet<T>(xs, comparer);
         }
 
         /// <inheritdoc />

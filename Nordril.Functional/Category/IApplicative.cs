@@ -138,7 +138,7 @@ namespace Nordril.Functional.Category
         /// <param name="f">The function to lift.</param>
         public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<T3>, IApplicative<TResult>>
             LiftA<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> f)
-        => (x, y, z) => (x.Map(f.Curry3()) as IApplicative<Func<T2, Func<T3, TResult>>>).ApF(y).ApF(z);
+        => (x, y, z) => (x.Map(f.Curry()) as IApplicative<Func<T2, Func<T3, TResult>>>).ApF(y).ApF(z);
 
         /// <summary>
         /// Lifts a quaternary function to take three applicative arguments. See <see cref="LiftA{T1, T2, TResult}(Func{T1, T2, TResult})"/>
@@ -151,7 +151,7 @@ namespace Nordril.Functional.Category
         /// <param name="f">The function to lift.</param>
         public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<T3>, IApplicative<T4>, IApplicative<TResult>>
             LiftA<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, TResult> f)
-        => (x, y, z, u) => (x.Map(f.Curry3()) as IApplicative<Func<T2, Func<T3, Func<T4, TResult>>>>).ApF(y).ApF(z).ApF(u);
+        => (x, y, z, u) => (x.Map(f.Curry()) as IApplicative<Func<T2, Func<T3, Func<T4, TResult>>>>).ApF(y).ApF(z).ApF(u);
 
         /// <summary>
         /// An applicative/monadic filter operation which is a generalization of <see cref="Enumerable.Where{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>. If the applicative is <see cref="Identity{T}"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/>.
