@@ -10,14 +10,29 @@ namespace Nordril.Functional
     public class FuncEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> f;
-        
+        private readonly Func<T, int> getHashCode;
+
         /// <summary>
         /// Creates an <see cref="IEqualityComparer{T}"/> out of a binary predicate.
+        /// If two objects should be equal, be sure that their hashcodes are equal as well, otherwise you will get spurious inequalities. Per default, <see cref="object.GetHashCode"/> will be used. See <see cref="FuncEqualityComparer{T}(Func{T,T,bool}, Func{T, int})"/> for specifying the hash-function.
         /// </summary>
         /// <param name="f">The binary predicate to lift.</param>
         public FuncEqualityComparer(Func<T, T, bool> f)
         {
             this.f = f;
+            getHashCode = x => x.GetHashCode();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IEqualityComparer{T}"/> out of a binary predicate.
+        /// If two objects should be equal, be sure that their hashcodes are equal as well, otherwise you will get spurious inequalities.
+        /// </summary>
+        /// <param name="f">The binary predicate to lift.</param>
+        /// <param name="getHashCode">The hashing-function for objects.</param>
+        public FuncEqualityComparer(Func<T, T, bool> f, Func<T, int> getHashCode)
+        {
+            this.f = f;
+            this.getHashCode = getHashCode;
         }
 
         /// <summary>
@@ -28,10 +43,10 @@ namespace Nordril.Functional
         public bool Equals(T x, T y) => f(x, y);
 
         /// <summary>
-        /// Uses the object's <see cref="object.GetHashCode"/> function to return a hash code.
+        /// Uses the object's <see cref="object.GetHashCode"/> function or the hashing-function passed in the constructor.
         /// </summary>
         /// <param name="obj">The object to hash.</param>
-        public int GetHashCode(T obj) => obj.GetHashCode();
+        public int GetHashCode(T obj) => getHashCode(obj);
     }
 
     /// <summary>

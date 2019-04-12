@@ -256,5 +256,31 @@ namespace Nordril.Functional.Tests.Data
             else
                 Assert.NotEqual(new FuncSet<char>(xs).GetHashCode(), new FuncSet<char>(ys).GetHashCode());
         }
+
+        [Theory]
+        [InlineData(new int[0], new int[0], true)]
+        [InlineData(new int[] { 3 }, new int[0], false)]
+        [InlineData(new int[] { 3, 13 }, new int[0], false)]
+        [InlineData(new int[] { 3, 13 }, new int[] { 4, 20 }, false)]
+        [InlineData(new int[] { 3, 23 }, new int[] { 4, 20 }, true)]
+        [InlineData(new int[] { 3, 23 }, new int[] { 4, 20, 30 }, false)]
+        [InlineData(new int[] { 3, 23, 30 }, new int[] { 4, 35, 30 }, false)]
+        [InlineData(new int[] { 3, 33, 30 }, new int[] { 4, 35, 30 }, true)]
+        public static void SetEqualsTest(IEnumerable<int> xs, IEnumerable<int> ys, bool expected)
+        {
+            //Ignores the last digit.
+            var comparer = new FuncEqualityComparer<int>((x, y) =>
+            {
+                x = x / 10;
+                y = y / 10;
+
+                return x == y;
+            }, x => (x/10).GetHashCode());
+
+            var xfs = new FuncSet<int>(comparer, xs);
+            var yfs = new HashSet<int>(ys, comparer);
+
+            Assert.Equal(expected, xfs.SetEquals(yfs));
+        }
     }
 }

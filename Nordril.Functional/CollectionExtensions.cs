@@ -546,6 +546,56 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>x.Equals(y)</c> is true. If two or more elements are equal, only the first element is returned.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        public static IEnumerable<T> Unique<T>(
+            this IEnumerable<T> xs)
+            where T : IEquatable<T>
+            => Unique(xs, x => x, (x, y) => x.Equals(y), x => x.GetHashCode());
+
+        /// <summary>
+        /// Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>keySelector(x).Equals(keySelector(y))</c> is true. If two or more elements are equal, only the first element is returned.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TKey">The keys of the elements.</typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <param name="keySelector">The keys selection function.</param>
+        /// <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        public static IEnumerable<T> Unique<T, TKey>(
+            this IEnumerable<T> xs,
+            Func<T, TKey> keySelector)
+            where TKey : IEquatable<TKey>
+            => Unique(xs, keySelector, (x, y) => x.Equals(y), x => x.GetHashCode());
+
+        /// <summary>
+        /// Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>comparer.Equal(keySelector(x), keySelector(y))</c> is true. If two or more elements are equal, only the first element is returned.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TKey">The keys of the elements.</typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <param name="keySelector">The keys selection function.</param>
+        /// <param name="comparer">The equality comparer to use to determine element equality.</param>
+        /// <param name="hashFunc">The hash-function. The following must hold: <c>comparer(x,y) => hashFunc(x) == hashFunc(y)</c>.</param>
+        /// <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        public static IEnumerable<T> Unique<T, TKey>(
+            this IEnumerable<T> xs,
+            Func<T, TKey> keySelector,
+            Func<TKey, TKey, bool> comparer,
+            Func<TKey, int> hashFunc)
+        {
+            var index = new HashSet<TKey>(new FuncEqualityComparer<TKey>(comparer, hashFunc));
+
+            foreach (var x in xs)
+            {
+                if (index.Add(keySelector(x)))
+                    yield return x;
+            }
+        }
+
+        /// <summary>
         /// The oppostive of <see cref="Enumerable.Zip{TFirst, TSecond, TResult}(IEnumerable{TFirst}, IEnumerable{TSecond}, Func{TFirst, TSecond, TResult})"/>, in that it takes a list <paramref name="xs"/> and splits it into two lists of the same size via a function <paramref name="f"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the source list.</typeparam>

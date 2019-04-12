@@ -1544,6 +1544,36 @@
             <param name="seed">The initial seed value.</param>
             <param name="next">The function to generate the next seed, and the next element to yield. If the return value is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>, the sequence-generation stops.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Unique``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>x.Equals(y)</c> is true. If two or more elements are equal, only the first element is returned.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="xs">The sequence to filter.</param>
+            <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Unique``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>keySelector(x).Equals(keySelector(y))</c> is true. If two or more elements are equal, only the first element is returned.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TKey">The keys of the elements.</typeparam>
+            <param name="xs">The sequence to filter.</param>
+            <param name="keySelector">The keys selection function.</param>
+            <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Unique``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``1,``1,System.Boolean},System.Func{``1,System.Int32})">
+            <summary>
+            Returns just the unique elements of the sequence. Two elements <c>x</c> and <c>y</c> are regarded as equal iff <c>comparer.Equal(keySelector(x), keySelector(y))</c> is true. If two or more elements are equal, only the first element is returned.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TKey">The keys of the elements.</typeparam>
+            <param name="xs">The sequence to filter.</param>
+            <param name="keySelector">The keys selection function.</param>
+            <param name="comparer">The equality comparer to use to determine element equality.</param>
+            <param name="hashFunc">The hash-function. The following must hold: <c>comparer(x,y) => hashFunc(x) == hashFunc(y)</c>.</param>
+            <returns>Those elements whose keys are the first occurrences in the sequence.</returns>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Unzip``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.ValueTuple{``1,``2}})">
             <summary>
             The oppostive of <see cref="M:System.Linq.Enumerable.Zip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})"/>, in that it takes a list <paramref name="xs"/> and splits it into two lists of the same size via a function <paramref name="f"/>.
@@ -2152,6 +2182,9 @@
             </remarks>
             <typeparam name="T">The type of elements in the list.</typeparam>
         </member>
+        <member name="P:Nordril.Functional.Data.FuncSet`1.Comparer">
+            <inheritdoc />
+        </member>
         <member name="P:Nordril.Functional.Data.FuncSet`1.Count">
             <inheritdoc />
         </member>
@@ -2288,6 +2321,14 @@
         <member name="M:Nordril.Functional.Data.FuncSet`1.Copy">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.ReplaceEqualityComparer(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Conditionally returns either <paramref name="that"/> that or, if its <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> is not reference-equals to ours, a copy with an equality-comparer that is reference-equals to ours. The point of this is so that set-theoretical operations use our equality-comparer instead of defaulting to reference-equality for elements if the equality-comparer of <paramref name="that"/> differs from ours (this behavior is from the .NET reference source).
+            See https://referencesource.microsoft.com/system.core/system/Collections/Generic/HashSet.cs.html (AreEqualityComparersEqual and the functions which use it).
+            </summary>
+            <param name="that">The set whose equality-comparer to replace.</param>
+            <returns>Either <paramref name="that"/> or a copy with its equality-comparer replaced.</returns>
+        </member>
         <member name="T:Nordril.Functional.Data.FuncSet">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncSet`1"/>.
@@ -2382,7 +2423,13 @@
             <summary>
             A "functional set" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.ISet`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonad`1"/> (and parent interfaces).
             </summary>
+            <remarks>Be aware that the equality comparer of the <em>left</em> set is used for determining element-equality for all set-theoretical operations. If the right set has a different equality comparer, this behavior will violate the expected theory of equivalence relations, e.g. you might have the situation where <c>S.Equals(T) != T.Equals(S)</c> or <c>S.Except(T).UnionPure(T.Except(S)) != S.SymmetricDifferencePure(T)</c>. This is a conscious design choice, intended to allow you to use the equality comparer of your choice, and you should interpret all set-theoretical operations as modulo the equality comparer of the left set.</remarks>
             <typeparam name="T">The type of elements in the set.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.IFuncSet`1.Comparer">
+            <summary>
+            Returns the <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> of the set.
+            </summary>
         </member>
         <member name="M:Nordril.Functional.Data.IFuncSet`1.AddPure(`0)">
             <summary>
@@ -3394,8 +3441,17 @@
         <member name="M:Nordril.Functional.FuncEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})">
             <summary>
             Creates an <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> out of a binary predicate.
+            If two objects should be equal, be sure that their hashcodes are equal as well, otherwise you will get spurious inequalities. Per default, <see cref="M:System.Object.GetHashCode"/> will be used. See <see cref="M:Nordril.Functional.FuncEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})"/> for specifying the hash-function.
             </summary>
             <param name="f">The binary predicate to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.FuncEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean},System.Func{`0,System.Int32})">
+            <summary>
+            Creates an <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> out of a binary predicate.
+            If two objects should be equal, be sure that their hashcodes are equal as well, otherwise you will get spurious inequalities.
+            </summary>
+            <param name="f">The binary predicate to lift.</param>
+            <param name="getHashCode">The hashing-function for objects.</param>
         </member>
         <member name="M:Nordril.Functional.FuncEqualityComparer`1.Equals(`0,`0)">
             <summary>
@@ -3406,7 +3462,7 @@
         </member>
         <member name="M:Nordril.Functional.FuncEqualityComparer`1.GetHashCode(`0)">
             <summary>
-            Uses the object's <see cref="M:System.Object.GetHashCode"/> function to return a hash code.
+            Uses the object's <see cref="M:System.Object.GetHashCode"/> function or the hashing-function passed in the constructor.
             </summary>
             <param name="obj">The object to hash.</param>
         </member>

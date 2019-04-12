@@ -443,6 +443,19 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [InlineData(new string[0], new string[0])]
+        [InlineData(new string[] { "ABC x", "DEF y", "FED y" }, new string [] { "ABC x", "DEF y", "FED y" })]
+        [InlineData(new string[] { "ABCx", "ABCy","DEFz","DEG" }, new string [] {"ABCx","DEFz","DEG" })]
+        [InlineData(new string[] {"ABCa","ABCb","ABCb","ABCj","XYZ","MNO","MNOh" }, new string [] { "ABCa", "XYZ", "MNO" })]
+        [InlineData(new string[] { "aaaOne", "aaaa", "aaaaa" }, new string [] { "aaaOne" })]
+        public static void UniqueTest(IEnumerable<string> xs, IEnumerable<string> expected)
+        {
+            var actual = xs.Unique(x => x.Substring(0, 3));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
         [MemberData(nameof(Unzip1Data))]
         public static void UnzipTest1(IEnumerable<Person> xs, IEnumerable<string> names, IEnumerable<int> money)
         {
