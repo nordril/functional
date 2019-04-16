@@ -59,6 +59,16 @@ namespace Nordril.Functional.Tests
             };
         }
 
+        public static IEnumerable<object[]> AverageDecimalData()
+        {
+            yield return new object[] { new decimal[] { } };
+            yield return new object[] { new decimal[] { 5 } };
+            yield return new object[] { new decimal[] { 5, 12 } };
+            yield return new object[] { new decimal[] { 5, 6, 36, 175, 1, 763 } };
+            yield return new object[] { new decimal[] { 5, 6, 36, 175, 1, 763, 236.2M } };
+            yield return new object[] { new decimal[] { 3.2378M, 1.4M, 7.862M } };
+        }
+
         public static IEnumerable<object[]> ConcatTestData()
         {
             yield return new object[] {

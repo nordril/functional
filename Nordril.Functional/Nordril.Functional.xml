@@ -1257,6 +1257,76 @@
             </summary>
             <param name="xs">The list to check.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Int32})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Int32})"/>, using double-precision for the computation.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Nullable{System.Int32}})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Int32}})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Int32}})"/>, using double-precision for the computation.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Int64})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Int64})"/>, using double-precision for the computation.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Nullable{System.Int64}})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Int64}})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Int64}})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Single})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Single})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Single})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Nullable{System.Single}})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Single}})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Single}})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Double})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Double})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Nullable{System.Double}})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Double}})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Double}})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Decimal})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Decimal})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Decimal})"/>, using decimal-precision for the computation. Due to numerical errors, values may diverage.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Nullable{System.Decimal}})">
+            <summary>
+            Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Decimal}})"/> possibly does.
+            Otherwise, the result will be the same as <see cref="M:System.Linq.Enumerable.Average(System.Collections.Generic.IEnumerable{System.Nullable{System.Decimal}})"/>, using decimal-precision for the computation.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Concat``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
             <summary>
             Concatenates a sequence of sequences.
@@ -1371,6 +1441,26 @@
             <param name="xs">The sequence to intersperse.</param>
             <param name="separator">The separator to intersperse between each two elements of <paramref name="xs"/>.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is maximal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Nullable{``1}})">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is maximal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+            <returns></returns>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.MergeAdjacent``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,Nordril.Functional.Data.Maybe{``0}})">
             <summary>
             Iterates through a sequence and merges any two adjacent elements for which the function <paramref name="mergeIf"/> returns a value. Multiple adjacent elements are merges as well, with the return value of <paramref name="mergeIf"/> functioning as an accumulator.
@@ -1379,11 +1469,51 @@
             <param name="xs">The list to merge.</param>
             <param name="mergeIf">The merging function. If two elements shouldn't be merged, it should return no value.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MinMaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Nullable{``1}},System.Boolean)">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal/maximal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as smaller/greater than all other values.</param>
+            <param name="minMax">If true, the minimum is returned, otherwise the maximum.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MinMaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Boolean)">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal/maximal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as smaller/greater than other values.</param>
+            <param name="minMax">If true, the minimum is returned, otherwise the maximum.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Nullable{``1}})">
+            <summary>
+            Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal, or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the sequence is empty.
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <param name="xs">The sequence.</param>
+            <param name="keySelector">The key-selection function. null-values count as smaller than all other values.</param>
+            <returns></returns>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Partition``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Partitions a list into two lists based on a predicate <paramref name="putInFirst"/>. All elements which fulfill <paramref name="putInFirst"/> are put into the first list, and all others are put into the second.
             </summary>
-            <typeparam name="T">The type of elements in the list.</typeparam>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
             <param name="xs">The source list to split.</param>
             <param name="putInFirst">The splitting predicate.</param>
         </member>

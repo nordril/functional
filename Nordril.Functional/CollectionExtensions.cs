@@ -76,6 +76,202 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{int})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{int})"/>, using double-precision for the computation.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double AverageIterative(this IEnumerable<int> xs)
+        {
+            //Sources:
+            //http://www.heikohoffmann.de/htmlthesis/node134.html
+            //https://stackoverflow.com/questions/1930454/what-is-a-good-solution-for-calculating-an-average-where-the-sum-of-all-values-e
+
+            //The iterative formula for computing the average is:
+            //xs = x1,...,xn
+            //avg(xs,m) denotes the average of the first m elements of xs
+            // avg(xs,i) = (i-1)/i * avg(x,i-1) + 1/i * x_i
+            //Or, transformed into loop-form:
+            //avg(xs,i) = avg(xs,i-1) + (x_i - avg(xs,i-1))/i
+
+            double avg = 0;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+                avg += (x - avg) / i;
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{int?})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{int?})"/>, using double-precision for the computation.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double? AverageIterative(this IEnumerable<int?> xs)
+        {
+            double avg = 0;
+            bool anyElement = false;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+            {
+                if (x != null)
+                {
+                    anyElement = true;
+                    avg += (x.Value - avg) / i;
+                }
+            }
+
+            return anyElement ? (double?)avg : null;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{long})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{long})"/>, using double-precision for the computation.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double AverageIterative(this IEnumerable<long> xs)
+        {
+            double avg = 0;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+                avg += (x - avg) / i;
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{long?})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{long?})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double? AverageIterative(this IEnumerable<long?> xs)
+        {
+            double avg = 0;
+            bool anyElement = false;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+            {
+                if (x != null)
+                {
+                    anyElement = true;
+                    avg += (x.Value - avg) / i;
+                }
+            }
+
+            return anyElement ? (double?)avg : null;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{float})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{float})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double AverageIterative(this IEnumerable<float> xs)
+        {
+            double avg = 0;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+                avg += (x - avg) / i;
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{float?})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{float?})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double? AverageIterative(this IEnumerable<float?> xs)
+        {
+            double avg = 0;
+            bool anyElement = false;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+            {
+                if (x != null)
+                {
+                    anyElement = true;
+                    avg += (x.Value - avg) / i;
+                }
+            }
+
+            return anyElement ? (double?)avg : null;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{double})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{double})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double AverageIterative(this IEnumerable<double> xs)
+        {
+            double avg = 0;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+                avg += (x - avg) / i;
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{double?})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{double?})"/>, using double-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static double? AverageIterative(this IEnumerable<double?> xs)
+        {
+            double avg = 0;
+            bool anyElement = false;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+            {
+                if (x != null)
+                {
+                    anyElement = true;
+                    avg += (x.Value - avg) / i;
+                }
+            }
+
+            return anyElement ? (double?)avg : null;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{decimal})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{decimal})"/>, using decimal-precision for the computation. Due to numerical errors, values may diverage.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static decimal AverageIterative(this IEnumerable<decimal> xs)
+        {
+            decimal avg = 0;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+                avg += (x - avg) / i;
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively, meaning that the calculation won't overflow, unlike <see cref="Enumerable.Average(IEnumerable{decimal?})"/> possibly does.
+        /// Otherwise, the result will be the same as <see cref="Enumerable.Average(IEnumerable{decimal?})"/>, using decimal-precision for the computation.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        public static decimal? AverageIterative(this IEnumerable<decimal?> xs)
+        {
+            decimal avg = 0;
+            bool anyElement = false;
+
+            foreach (var (x, i) in xs.ZipWithStream(1, i => i + 1))
+            {
+                if (x != null)
+                {
+                    anyElement = true;
+                    avg += (x.Value - avg) / i;
+                }
+            }
+
+            return anyElement ? (decimal?)avg : null;
+        }
+
+        /// <summary>
         /// Concatenates a sequence of sequences.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
@@ -298,6 +494,30 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is maximal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+        /// <returns></returns>
+        public static Maybe<T> MaxBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey> keySelector)
+            where TKey : IComparable<TKey>
+            => xs.MinMaxBy(keySelector, false);
+
+        /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is maximal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+        /// <returns></returns>
+        public static Maybe<T> MaxBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey?> keySelector)
+            where TKey : struct, IComparable<TKey>
+            => xs.MinMaxBy(keySelector, false);
+
+        /// <summary>
         /// Iterates through a sequence and merges any two adjacent elements for which the function <paramref name="mergeIf"/> returns a value. Multiple adjacent elements are merges as well, with the return value of <paramref name="mergeIf"/> functioning as an accumulator.
         /// </summary>
         /// <typeparam name="T">The type of elements in the list.</typeparam>
@@ -343,9 +563,109 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal/maximal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as smaller/greater than all other values.</param>
+        /// <param name="minMax">If true, the minimum is returned, otherwise the maximum.</param>
+        private static Maybe<T> MinMaxBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey?> keySelector, bool minMax)
+            where TKey : struct, IComparable<TKey>
+        {
+            T min = default;
+            TKey? minKey = default;
+            bool first = true;
+
+            foreach (var x in xs)
+            {
+                if (first)
+                {
+                    min = x;
+                    minKey = keySelector(min);
+                    first = false;
+                }
+                else
+                {
+                    var curKey = keySelector(x);
+                    if ((curKey == null && minKey != null)
+                        || (minKey != null && (minMax ? minKey.Value.CompareTo(curKey.Value) > 0 : minKey.Value.CompareTo(curKey.Value) < 0)))
+                    {
+                        minKey = curKey;
+                        min = x;
+                    }
+                }
+            }
+
+            return Maybe.JustIf(!first, () => min);
+        }
+
+        /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal/maximal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as smaller/greater than other values.</param>
+        /// <param name="minMax">If true, the minimum is returned, otherwise the maximum.</param>
+        public static Maybe<T> MinMaxBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey> keySelector, bool minMax)
+            where TKey : IComparable<TKey>
+        {
+            T min = default;
+            TKey minKey = default;
+            bool first = true;
+
+            foreach (var x in xs)
+            {
+                if (first)
+                {
+                    min = x;
+                    minKey = keySelector(min);
+                    first = false;
+                }
+                else
+                {
+                    var curKey = keySelector(x);
+                    if ((curKey == null && minKey != null)
+                        || (minKey != null && (minMax ? minKey.CompareTo(curKey) > 0 : minKey.CompareTo(curKey) < 0)))
+                    {
+                        minKey = curKey;
+                        min = x;
+                    }
+                }
+            }
+
+            return Maybe.JustIf(!first, () => min);
+        }
+
+        /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as greater than all other values.</param>
+        /// <returns></returns>
+        public static Maybe<T> MinBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey> keySelector)
+            where TKey : IComparable<TKey>
+            => xs.MinMaxBy(keySelector, true);
+
+        /// <summary>
+        /// Returns the element of the sequence whose key (extracted by <paramref name="keySelector"/>) is minimal, or <see cref="Maybe.Nothing{T}"/> if the sequence is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="xs">The sequence.</param>
+        /// <param name="keySelector">The key-selection function. null-values count as smaller than all other values.</param>
+        /// <returns></returns>
+        public static Maybe<T> MinBy<T, TKey>(this IEnumerable<T> xs, Func<T, TKey?> keySelector)
+            where TKey : struct, IComparable<TKey>
+            => xs.MinMaxBy(keySelector, true);
+
+        /// <summary>
         /// Partitions a list into two lists based on a predicate <paramref name="putInFirst"/>. All elements which fulfill <paramref name="putInFirst"/> are put into the first list, and all others are put into the second.
         /// </summary>
-        /// <typeparam name="T">The type of elements in the list.</typeparam>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
         /// <param name="xs">The source list to split.</param>
         /// <param name="putInFirst">The splitting predicate.</param>
         public static (IEnumerable<T>, IEnumerable<T>) Partition<T>(this IEnumerable<T> xs, Func<T, bool> putInFirst)

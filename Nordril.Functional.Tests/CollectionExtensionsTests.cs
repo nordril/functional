@@ -52,6 +52,102 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [InlineData(new int[] { })]
+        [InlineData(new int[] { 5 })]
+        [InlineData(new int[] { 5, 12 })]
+        [InlineData(new int[] { 5, 6, 36, 175, 1, 763 })]
+        public static void AverageIntTest(IEnumerable<int> xs)
+        {
+            if (xs.Count() == 0)
+            {
+                Assert.Equal(0D, xs.AverageIterative());
+                return;
+            }
+
+            var actual = xs.AverageIterative();
+            var expected = xs.Average();
+
+            Assert.Equal(expected, actual, 5);
+        }
+
+        [Theory]
+        [InlineData(new long[] { })]
+        [InlineData(new long[] { 5 })]
+        [InlineData(new long[] { 5, 12 })]
+        [InlineData(new long[] { 5, 6, 36, 175, 1, 763, 23789621785 })]
+        public static void AverageLongTest(IEnumerable<long> xs)
+        {
+            if (xs.Count() == 0)
+            {
+                Assert.Equal(0D, xs.AverageIterative());
+                return;
+            }
+
+            var actual = xs.AverageIterative();
+            var expected = xs.Average();
+
+            Assert.Equal(expected, actual, 5);
+        }
+
+        [Theory]
+        [InlineData(new float[] { })]
+        [InlineData(new float[] { 5 })]
+        [InlineData(new float[] { 5, 12 })]
+        [InlineData(new float[] { 5, 6, 36, 175, 1, 763 })]
+        [InlineData(new float[] { 5, 6, 36, 175, 1, 763, 18.4F })]
+        [InlineData(new float[] { 5, 6, 36, 175, 1, 763, 23789.4F })]
+        public static void AverageFloatTest(IEnumerable<float> xs)
+        {
+            if (xs.Count() == 0)
+            {
+                Assert.Equal(0D, xs.AverageIterative());
+                return;
+            }
+
+            var actual = xs.AverageIterative();
+            var expected = xs.Average();
+
+            Assert.Equal(expected, actual, 2);
+        }
+
+        [Theory]
+        [InlineData(new double[] { })]
+        [InlineData(new double[] { 5 })]
+        [InlineData(new double[] { 5, 12 })]
+        [InlineData(new double[] { 5, 6, 36, 175, 1, 763 })]
+        [InlineData(new double[] { 5, 6, 36, 175, 1, 763, 236.2 })]
+        [InlineData(new double[] { 3.23786, 1.4, 7.862 })]
+        public static void AverageDoubleTest(IEnumerable<double> xs)
+        {
+            if (xs.Count() == 0)
+            {
+                Assert.Equal(0D, xs.AverageIterative());
+                return;
+            }
+
+            var actual = xs.AverageIterative();
+            var expected = xs.Average();
+
+            Assert.Equal(expected, actual, 5);
+        }
+
+        [Theory]
+        [MemberData(nameof(AverageDecimalData))]
+        public static void AverageDecimalTest(IEnumerable<decimal> xs)
+        {
+            if (xs.Count() == 0)
+            {
+                Assert.Equal(0M, xs.AverageIterative());
+                return;
+            }
+
+            var actual = xs.AverageIterative();
+            var expected = xs.Average();
+
+            Assert.Equal(expected, actual, 5);
+        }
+
+        [Theory]
         [MemberData(nameof(ConcatTestData))]
         public static void ConcatTest(IEnumerable<IEnumerable<int>> xs, IEnumerable<int> expected)
         {
@@ -244,6 +340,40 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [InlineData(new int[] { }, false, 0)]
+        [InlineData(new int[] { 1 }, true, 1)]
+        [InlineData(new int[] { 1,2,3,11}, true, 3)]
+        [InlineData(new int[] { 3, 22, 2, 16}, true, 16)]
+        [InlineData(new int[] { 3, 22, 2, 16, 6}, true, 16)]
+        public static void MaxByTest(IEnumerable<int> xs, bool hasValue, int expected)
+        {
+            var actual = xs.MaxBy(x => x % 10);
+
+            if (!hasValue)
+                Assert.True(actual.IsNothing);
+            else
+                Assert.Equal(expected, actual.Value());
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, false, 0)]
+        [InlineData(new int[] { 1 }, true, 1)]
+        [InlineData(new int[] { 1, 2, 3, 11 }, true, 3)]
+        [InlineData(new int[] { 3, 22, 2, 16 }, true, 16)]
+        [InlineData(new int[] { 3, 22, 2, 16, 6 }, true, 16)]
+        [InlineData(new int[] { 3, 22, 2, 5, 16, 6 }, true, 5)]
+        [InlineData(new int[] { 3, 22, 2, 75, 5, 16, 6 }, true, 75)]
+        public static void MaxByNullableTest(IEnumerable<int> xs, bool hasValue, int expected)
+        {
+            var actual = xs.MaxBy(x => (x % 10) == 5 ? (int?)null : (x % 10));
+
+            if (!hasValue)
+                Assert.True(actual.IsNothing);
+            else
+                Assert.Equal(expected, actual.Value());
+        }
+
+        [Theory]
         [InlineData(new int[] { }, new int[] { })]
         [InlineData(new int[] { 1 }, new int[] { 1 })]
         [InlineData(new int[] { 1, 11, 111 }, new int[] { 1, 11, 111 })]
@@ -256,6 +386,39 @@ namespace Nordril.Functional.Tests
         {
             var merged = xs.MergeAdjacent((i, j) => Maybe.JustIf((i / 10) == (j / 10), () => (i / 10) * 10));
             Assert.Equal(expected, merged);
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, false, 0)]
+        [InlineData(new int[] { 1 }, true, 1)]
+        [InlineData(new int[] { 1, 2, 3, 11 }, true, 1)]
+        [InlineData(new int[] { 3, 22, 2, 16 }, true, 22)]
+        public static void MinByTest(IEnumerable<int> xs, bool hasValue, int expected)
+        {
+            var actual = xs.MinBy(x => x % 10);
+
+            if (!hasValue)
+                Assert.True(actual.IsNothing);
+            else
+                Assert.Equal(expected, actual.Value());
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, false, 0)]
+        [InlineData(new int[] { 1 }, true, 1)]
+        [InlineData(new int[] { 1, 2, 3, 11 }, true, 1)]
+        [InlineData(new int[] { 3, 22, 2, 16 }, true, 22)]
+        [InlineData(new int[] { 3, 22, 2, 16, 6 }, true, 22)]
+        [InlineData(new int[] { 3, 22, 2, 5, 16, 6 }, true, 5)]
+        [InlineData(new int[] { 3, 22, 2, 75, 5, 16, 6 }, true, 75)]
+        public static void MinByNullableTest(IEnumerable<int> xs, bool hasValue, int expected)
+        {
+            var actual = xs.MinBy(x => (x % 10) == 5 ? (int?)null : (x % 10));
+
+            if (!hasValue)
+                Assert.True(actual.IsNothing);
+            else
+                Assert.Equal(expected, actual.Value());
         }
 
         [Theory]
