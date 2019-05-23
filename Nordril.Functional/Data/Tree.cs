@@ -14,7 +14,7 @@ namespace Nordril.Functional.Data
     /// A rose tree, wherein each node has a single key and a list of children.
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
-    public class Tree<T> : IFunctor<T>, ISemifilterable<Tree<T>, T>, IEquatable<Tree<T>>
+    public class Tree<T> : IFunctor<T>, ISemifilterable<Tree<T>, T>, IEquatable<Tree<T>>, ITreeVisitable<Tree<T>, Tree<T>, int, IEnumerable<(T, bool)>, TreeTraversal>
     {
         /// <summary>
         /// The node's key.
@@ -96,6 +96,26 @@ namespace Nordril.Functional.Data
             return ret;
         }
 
+        /// <inheritdoc />
+        public IEnumerable<(T, bool)> VisitBidirectional(IBidirectionalVisitor<Tree<T>, Tree<T>, int> visitor, TreeTraversal order)
+            => Traverse(order, visitor.At, visitor.Forward, visitor.Backward);
+
+        /// <inheritdoc />
+        public IEnumerable<(T, bool)> VisitBidirectional(IBidirectionalVisitor<Tree<T>, Tree<T>, int> visitor)
+            => Traverse(TreeTraversal.PreOrder, visitor.At, visitor.Forward, visitor.Backward);
+
+        /// <inheritdoc />
+        public IEnumerable<(T, bool)> VisitForward(IForwardVisitor<Tree<T>, int> visitor)
+            => Traverse(TreeTraversal.PreOrder, visitor.At, visitor.Forward, null);
+
+        /// <inheritdoc />
+        public IEnumerable<(T, bool)> VisitBackward(IBackwardVisitor<Tree<T>, Tree<T>> visitor)
+            => Traverse(TreeTraversal.PreOrder, visitor.At, null, visitor.Backward);
+
+        /// <inheritdoc />
+        public IEnumerable<(T, bool)> Visit(IVisitor<Tree<T>> visitor)
+            => Traverse(TreeTraversal.PreOrder, visitor.At, null, null);
+
         /// <summary>
         /// Traverses the tree in a certain order and yields the nodes.
         /// Uses the visitor pattern.
@@ -105,7 +125,7 @@ namespace Nordril.Functional.Data
         /// <param name="down">The action to execute when entering a node's children. The arguments are the current node and the index of the child node.</param>
         /// <param name="up">The action to execute when leaving a node. The argument is the node being left.</param>
         /// <returns>The nodes of the tree, and whether each node is a leaf.</returns>
-        public IEnumerable<(T, bool)> Traverse(TreeTraversal traversal, Action<Tree<T>> visit = null, Action<Tree<T>, int> down = null, Action<Tree<T>> up = null)
+        private IEnumerable<(T, bool)> Traverse(TreeTraversal traversal, Action<Tree<T>> visit = null, Action<Tree<T>, int> down = null, Action<Tree<T>> up = null)
         {
             IEnumerable<Tree<T>> trav(Tree<T> tree, Tree<T> parent, int? parentIndex)
             {

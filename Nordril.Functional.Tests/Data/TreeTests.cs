@@ -357,7 +357,7 @@ namespace Nordril.Functional.Tests.Data
         [MemberData(nameof(TreeStringConcats))]
         public static void TraversePreOrder(Tree<string> t, string sum)
         {
-            var treeSum = t.Traverse(TreeTraversal.PreOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
+            var treeSum = t.TraverseTree(TreeTraversal.PreOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
 
             Assert.Equal(sum, treeSum);
         }
@@ -366,7 +366,7 @@ namespace Nordril.Functional.Tests.Data
         [MemberData(nameof(TreeStringConcatsPostOrder))]
         public static void TraversePostOrder(Tree<string> t, string sum)
         {
-            var treeSum = t.Traverse(TreeTraversal.PostOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
+            var treeSum = t.TraverseTree(TreeTraversal.PostOrder).Select(x => x.Item1).Aggregate("", (x, y) => x + y);
 
             Assert.Equal(sum, treeSum);
         }
@@ -416,10 +416,10 @@ namespace Nordril.Functional.Tests.Data
 
             var visitorResultsActual = new List<string>();
 
-            tree.Traverse(TreeTraversal.PreOrder,
+            tree.VisitBidirectional(VisitorFactory.MakeVisitor<Tree<int>, Tree<int>, int>(
                 t => visitorResultsActual.Add($"visit {t.Key}"),
                 (t, i) => visitorResultsActual.Add($"down {t.Key} {i}"),
-                t => visitorResultsActual.Add($"up {t.Key}")).ToList();
+                t => visitorResultsActual.Add($"up {t.Key}"))).ToList();
 
             Assert.Equal(visitorResultsExpected, visitorResultsActual);
         }

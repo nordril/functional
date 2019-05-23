@@ -11,7 +11,7 @@ namespace Nordril.Functional.Category
     /// function over one of more wrapped arguments.
     /// </summary>
     /// <typeparam name="TSource">The type of the values contained in the monad.</typeparam>
-    public interface IMonad<TSource> : IApplicative<TSource>
+    public interface IMonad<out TSource> : IApplicative<TSource>
     {
         /// <summary>
         /// Unpacks the value(s) contained in this monad and applies a function to them.

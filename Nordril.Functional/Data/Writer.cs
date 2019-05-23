@@ -2,7 +2,8 @@
 using Nordril.Functional.Category;
 using System;
 
-namespace Nordril.Functional.Data
+//WIP. The current implementation doesn't work with Applicative.Pure because there's no way to construct a writer just from a result.
+/*namespace Nordril.Functional.Data
 {
     /// <summary>
     /// The writer-monad, which provides write-only access to output, in addition to producing a result.
@@ -137,4 +138,4 @@ namespace Nordril.Functional.Data
         public static Writer<TState, TState> Listen<TState>(TState output, Monoid<TState> monoid)
             => new Writer<TState, TState>(output, output, monoid);
     }
-}
+}*/

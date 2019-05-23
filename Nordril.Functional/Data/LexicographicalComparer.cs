@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nordril.Functional
+namespace Nordril.Functional.Data
 {
     /// <summary>
-    /// An <see cref="IEqualityComparer{T}"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
+    /// An <see cref="IComparer{T}"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
     /// </summary>
     /// <typeparam name="T">The type of elements in the sequences.</typeparam>
     public class LexicographicalComparer<T> : IComparer<IEnumerable<T>>

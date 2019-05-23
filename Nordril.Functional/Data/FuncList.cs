@@ -17,7 +17,7 @@ namespace Nordril.Functional.Data
     public struct FuncList<T> : IFuncList<T>
     {
         private List<T> list;
-        private IEqualityComparer<T> comparer;
+        private IEqualityComparer<IEnumerable<T>> comparer;
 
         /// <summary>
         /// Creates a new <see cref="FuncList{T}"/> from the elements of <paramref name="xs"/>, using <see cref="object.Equals(object)"/> for equality-comparisons among elements.
@@ -26,7 +26,7 @@ namespace Nordril.Functional.Data
         public FuncList(IEnumerable<T> xs = null)
         {
             list = xs == null ? new List<T>() : new List<T>(xs);
-            comparer = new FuncEqualityComparer<T>((x, y) => x.Equals(y));
+            comparer = new ListEqualityComparer<T>((x, y) => x.Equals(y));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Nordril.Functional.Data
         public FuncList(IEqualityComparer<T> comparer, IEnumerable<T> xs = null)
         {
             list = xs == null ? new List<T>() : new List<T>(xs);
-            this.comparer = comparer ?? new FuncEqualityComparer<T>((x, y) => x.Equals(y));
+            this.comparer = comparer != null ? new ListEqualityComparer<T>((x,y) => comparer.Equals(x,y)) : new ListEqualityComparer<T>((x, y) => x.Equals(y));
         }
 
         /// <inheritdoc />
@@ -158,43 +158,13 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public bool Equals(IList<T> that)
         {
-            var comp = ComparerCoalesce();
-
-            using (var thisEnum = ListCoalesce().GetEnumerator())
-            using (var thatEnum = that.GetEnumerator())
-            {
-                bool thisNext, thatNext;
-
-                do
-                {
-                    thisNext = thisEnum.MoveNext();
-                    thatNext = thatEnum.MoveNext();
-
-                    //One list is shorter than the other.
-                    if (thisNext != thatNext)
-                        return false;
-                    //The elements are not equal.
-                    else if (!comp.Equals(thisEnum.Current, thatEnum.Current))
-                        return false;
-                } while (thisNext && thatNext);
-
-                return true;
-            }
+            return ComparerCoalesce().Equals(ListCoalesce(), that);
         }
 
         /// <inheritdoc />
         public IComparer<IList<T1>> GetComparer<T1>() where T1 : IComparable<T1>
         {
-            int f(IList<T1> xs, IList<T1> ys)
-            {
-                var lexicographicalComparer = new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
-                var xsOrd = xs.OrderBy(x => x);
-                var ysOrd = ys.OrderBy(y => y);
-
-                return lexicographicalComparer.Compare(xsOrd, ysOrd);
-            };
-
-            return new FuncComparer<IList<T1>>(f);
+            return new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
         }
 
         /// <inheritdoc />
@@ -241,16 +211,15 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
-        /// Retuns <see cref="list"/>. If <see cref="list"/> has not been assigned, it's set to a new, empty list first.
+        /// Retuns <see cref="comparer"/>. If <see cref="comparer"/> has not been assigned, it's set to a new, default comparer first
         /// </summary>
         /// <remarks>
-        /// If two callers hold references to this struct and <see cref="comparer"/> has not been initialized yet, they will hold references to different comparers after this method returns.
-        /// This should not be an issue since the created comparer is stateless, but it should be kept in mind.
+        /// If two callers hold references to this struct and <see cref="comparer"/> has not been initialized yet, they will hold references to different lists after this method returns.
         /// </remarks>
-        private IEqualityComparer<T> ComparerCoalesce()
+        private IEqualityComparer<IEnumerable<T>> ComparerCoalesce()
         {
             if (comparer == null)
-                comparer = new FuncEqualityComparer<T>((x, y) => x.Equals(y));
+                comparer = new ListEqualityComparer<T>((x, y) => x.Equals(y));
             return comparer;
         }
     }

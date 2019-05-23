@@ -228,6 +228,70 @@
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Algebra.ISemiring`3">
+            <summary>
+            A semiring, composed of a commutative monoid for addition and a monoid for multiplication.
+            Implementors MUST obey the following:
+            <code>
+                x.Mult(y.Plus(z)) == x.Mult(y).Plus(x.Mult(z)) (left-distribution)
+                (x.Mult(y)).Plus(z) == x.Mult(z).Plus(y.Mult(z)) (right-distribution)
+                x.Mult(Zero) == Zero.Mult(x) == Zero (annihilation)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TPlus">The type-tag for the addition. Canonically, <see cref="T:Nordril.Functional.Algebra.TagPlus"/>.</typeparam>
+            <typeparam name="TMult">The type-tag for the multiplication. Canonincally <see cref="T:Nordril.Functional.Algebra.TagMult"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ISemiring`3.Plus(`0)">
+            <summary>
+            The additive operation. This must be an alias of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> of the first monoid.
+            </summary>
+            <param name="y">The second operand.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ISemiring`3.Mult(`0)">
+            <summary>
+            The additive operation. This must be an alias of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> of the second monoid.
+            </summary>
+            <param name="y">The second operand.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ISemiring`3.One">
+            <summary>
+            The multiplicative neutral element. This must be an alias of <see cref="P:Nordril.Functional.Algebra.IMonoid`1.Neutral"/> of the second monoid.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ISemiring`3.Zero">
+            <summary>
+            The additive neutral element. This must be an alias of <see cref="P:Nordril.Functional.Algebra.IMonoid`1.Neutral"/> of the first monoid.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITaggegCommutativeGroup`2">
+            <summary>
+            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TOp">The type-tag of the operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITaggedCommutativeMonoid`2">
+            <summary>
+            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TOp">The type-tag of the operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITaggedGroup`2">
+            <summary>
+            A type-tagged <see cref="T:Nordril.Functional.Algebra.IGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TOp">The type-tag of the operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITaggedMonoid`2">
+            <summary>
+            A type-tagged <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TOp">The type-tag of the operation.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Algebra.ITotallyOrdered`1">
             <summary>
             A type which supports a total order. A total order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)"/> with the following properties:
@@ -463,6 +527,16 @@
             </summary>
             <typeparam name="T">The type of the element in the structure.</typeparam>
             <param name="m">The monoid to lift.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TagPlus">
+            <summary>
+            A type-level tags for "plus". This canonically denotes the first operation in an algebraic structure.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TagMult">
+            <summary>
+            A type-level tags for "plus". This canonically denotes the second operation in an algebraic structure.
+            </summary>
         </member>
         <member name="T:Nordril.Functional.Algebra.TotalOrder`1">
             <summary>
@@ -1845,6 +1919,17 @@
             <typeparam name="T">The type of elements in the collection.</typeparam>
             <param name="collection">The collection to hash.</param>
         </member>
+        <member name="T:Nordril.Functional.Composite.INamed`1">
+            <summary>
+            Objects which possess a unique name of type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Composite.INamed`1.Name">
+            <summary>
+            Gets the object's name.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Data.Const`1">
             <summary>
             A const-functor that does not actually contain any values.
@@ -1935,6 +2020,38 @@
             </summary>
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.DictionaryEqualityComparer">
+            <summary>
+            A factory-class that creates <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>s which compare dictionaries for structural equality.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2">
+            <summary>
+            An equality-comparer which compares two dictionaries for structural equality, meaning based on the keys and values they contain.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2.Equals(System.Collections.Generic.IDictionary{`0,`1},System.Collections.Generic.IDictionary{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2.GetHashCode(System.Collections.Generic.IDictionary{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.Make``2(System.Collections.Generic.IEqualityComparer{``0},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Creates a structural <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> for key- and value-types for which the caller provides <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>s.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.Make``2">
+            <summary>
+            Creates a structural <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> for key- and value-types which are <see cref="T:System.IEquatable`1"/>.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.Either`2">
             <summary>
@@ -2277,11 +2394,10 @@
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.ComparerCoalesce">
             <summary>
-            Retuns <see cref="F:Nordril.Functional.Data.FuncList`1.list"/>. If <see cref="F:Nordril.Functional.Data.FuncList`1.list"/> has not been assigned, it's set to a new, empty list first.
+            Retuns <see cref="F:Nordril.Functional.Data.FuncList`1.comparer"/>. If <see cref="F:Nordril.Functional.Data.FuncList`1.comparer"/> has not been assigned, it's set to a new, default comparer first
             </summary>
             <remarks>
-            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncList`1.comparer"/> has not been initialized yet, they will hold references to different comparers after this method returns.
-            This should not be an issue since the created comparer is stateless, but it should be kept in mind.
+            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncList`1.comparer"/> has not been initialized yet, they will hold references to different lists after this method returns.
             </remarks>
         </member>
         <member name="T:Nordril.Functional.Data.FuncList">
@@ -2543,12 +2659,6 @@
             </summary>
             <typeparam name="T">The type of elements in the list.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Data.IFuncList`1.GetComparer``1">
-            <summary>
-            Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.IList`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
-            </summary>
-            <typeparam name="T1">The of element in the <see cref="T:System.Collections.Generic.IList`1"/>.</typeparam>
-        </member>
         <member name="T:Nordril.Functional.Data.IFuncSet`1">
             <summary>
             A "functional set" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.ISet`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonad`1"/> (and parent interfaces).
@@ -2604,6 +2714,245 @@
             Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.ISet`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
             </summary>
             <typeparam name="T1">The of element in the <see cref="T:System.Collections.Generic.ISet`1"/>.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.IVisitable`2">
+            <summary>
+            Visitable structures which allow traversal of their elements, and the calling of a visit-function at each.
+            For constructing visitors, see <see cref="T:Nordril.Functional.Data.VisitorFactory"/>.
+            Implementors must obey the following:
+            <list type="number">
+                <item>The order in which the elements of the structure are visited by <see cref="M:Nordril.Functional.Data.IVisitable`2.Visit(Nordril.Functional.Data.IVisitor{`0})"/> is the same in which they would be folded.</item>
+            </list>
+            </summary>
+            <typeparam name="T">The type of element in the structure.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IVisitable`2.Visit(Nordril.Functional.Data.IVisitor{`0})">
+            <summary>
+            Traverses the structure and calls the visitor at each element.
+            </summary>
+            <param name="visitor">The visitor to call.</param>
+            <returns>The structure-specific result.</returns>
+        </member>
+        <member name="T:Nordril.Functional.Data.IForwardVisitable`3">
+            <summary>
+            Visitable structures which signal when the traversal moves forward. <see cref="M:Nordril.Functional.Data.IVisitable`2.Visit(Nordril.Functional.Data.IVisitor{`0})"/> only tells the visitor when an element is visited, but without any additional context. <see cref="M:Nordril.Functional.Data.IForwardVisitable`3.VisitForward(Nordril.Functional.Data.IForwardVisitor{`0,`1})"/> tells the visitor between which two elements the traversal is moving. On its own, this interface is not very useful and <see cref="T:Nordril.Functional.Data.IBidirectionalVisitable`4"/> is more often appropriate, esp. with non-linear structures likes trees or graphs, where it might matter whence one comes and whither one moves.
+            For constructing visitors, see <see cref="T:Nordril.Functional.Data.VisitorFactory"/>.
+            </summary>
+            <typeparam name="T">The type of element in the structure.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IForwardVisitable`3.VisitForward(Nordril.Functional.Data.IForwardVisitor{`0,`1})">
+            <summary>
+            Traverses the structure and calls the visitor at each element, and when moving forward from one element to the next.
+            Implementors must make following operations identical (in the result and the observable effects, save for those caused by <see cref="M:Nordril.Functional.Data.IForwardVisitor`2.Forward(`0,`1)"/>):
+            <code>
+               x.Visit(v) and x.VisitForward(v)
+            </code>
+            </summary>
+            <param name="visitor">The visitor to call.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.IBackwardVisitable`3">
+            <summary>
+            Visitable structures which signal when the traversal moves backward. <see cref="M:Nordril.Functional.Data.IVisitable`2.Visit(Nordril.Functional.Data.IVisitor{`0})"/> only tells the visitor when an element is visited, but without any additional context. <see cref="M:Nordril.Functional.Data.IBackwardVisitable`3.VisitBackward(Nordril.Functional.Data.IBackwardVisitor{`0,`1})"/> tells the visitor between which two elements the traversal is moving. On its own, this interface is not very useful and <see cref="T:Nordril.Functional.Data.IBidirectionalVisitable`4"/> is more often appropriate, esp. with non-linear structures likes trees or graphs, where it might matter whence one comes and whither one moves.
+            For constructing visitors, see <see cref="T:Nordril.Functional.Data.VisitorFactory"/>.
+            </summary>
+            <typeparam name="T">The type of element in the structure.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IBackwardVisitable`3.VisitBackward(Nordril.Functional.Data.IBackwardVisitor{`0,`1})">
+            <summary>
+            Traverses the structure and calls the visitor at each element, and when moving backwards from one element to the previous.
+            Implementors must make following operations identical (in the result and the observable effects, save for those caused by <see cref="M:Nordril.Functional.Data.IBackwardVisitor`2.Backward(`1)"/>):
+            <code>
+               x.Visit(v) and x.Reverse.VisitBackward(v)
+            </code>
+            </summary>
+            <param name="visitor">The visitor to call.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.IBidirectionalVisitable`4">
+             <summary>
+            A data structure which is both <see cref="T:Nordril.Functional.Data.IForwardVisitable`3"/> and <see cref="T:Nordril.Functional.Data.IBackwardVisitable`3"/>.
+             For constructing visitors, see <see cref="T:Nordril.Functional.Data.VisitorFactory"/>.
+             </summary>
+             <typeparam name="T">The type of element in the structure.</typeparam>
+             <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+             <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+             <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IBidirectionalVisitable`4.VisitBidirectional(Nordril.Functional.Data.IBidirectionalVisitor{`0,`1,`2})">
+            <summary>
+            Traverses the structure calls the visitor at each element, and when moving forward from one element to the next, and when moving backwards from one element to the previous.
+            </summary>
+            <param name="visitor">The visitor to call.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.ITreeVisitable`5">
+            <summary>
+            Implementors of <see cref="T:Nordril.Functional.Data.IBidirectionalVisitable`4"/> which also support a custom visitation-order. The typical example are trees, which support pre- and post-order traversal.
+            </summary>
+            <typeparam name="T">The type of element in the structure.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <typeparam name="TOrder">The type of the traversal-order.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.ITreeVisitable`5.VisitBidirectional(Nordril.Functional.Data.IBidirectionalVisitor{`0,`1,`2},`4)">
+            <summary>
+            Traverses the structure calls the visitor at each element, and when moving forward from one element to the next, and when moving backwards from one element to the previous.
+            </summary>
+            <param name="visitor">The visitor to call.</param>
+            <param name="order">The order of the traversal.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.TreeVisitableExtensions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.ITreeVisitable`5"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.TreeVisitableExtensions.TraverseTree``5(Nordril.Functional.Data.ITreeVisitable{``0,``1,``2,``3,``4},``4)">
+            <summary>
+            Traverses the tree without performing any visitation-actions, just returning the result.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement.</typeparam>
+            <typeparam name="TTo">The type of the element which indicates the target of a forward-movement.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <typeparam name="TOrder"></typeparam>
+            <param name="tree"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Nordril.Functional.Data.IVisitor`1">
+            <summary>
+            A visitor which can be used by an implementor of <see cref="T:Nordril.Functional.Data.IVisitable`2"/>.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IVisitor`1.At(`0)">
+            <summary>
+            The function to call when an element is visited.
+            </summary>
+            <param name="x">The element being visited.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.IForwardVisitor`2">
+            <summary>
+            A visitor which can be used by an implementor of <see cref="T:Nordril.Functional.Data.IForwardVisitable`3"/>.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IForwardVisitor`2.Forward(`0,`1)">
+            <summary>
+            The function to call when moving from one element to the next.
+            </summary>
+            <param name="x">The element being visited.</param>
+            <param name="to">The next element.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.IBackwardVisitor`2">
+            <summary>
+            A visitor which can be used by an implementor of <see cref="T:Nordril.Functional.Data.IForwardVisitable`3"/>.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IBackwardVisitor`2.Backward(`1)">
+            <summary>
+            The function to call when moving from one element to the previous.
+            </summary>
+            <param name="from">The previous element.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.IBidirectionalVisitor`3">
+            <summary>
+            A bi-directional visitor.
+            </summary>
+            <typeparam name="T">The type of element in the structure.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.VisitorFactory">
+            <summary>
+            A factory for visitors.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.VisitorFactory.MakeVisitor``1(System.Action{``0})">
+            <summary>
+            Makes an <see cref="T:Nordril.Functional.Data.IVisitor`1"/>.
+            </summary>
+            <typeparam name="T">The type of element in the structure being visited.</typeparam>
+            <param name="at">The function to call when an element is visited.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.VisitorFactory.MakeForwardVisitor``2(System.Action{``0},System.Action{``0,``1})">
+            <summary>
+            Makes an <see cref="T:Nordril.Functional.Data.IForwardVisitor`2"/>.
+            </summary>
+            <typeparam name="T">The type of element in the structure being visited.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <param name="at">The function to call when an element is visited.</param>
+            <param name="forward">The function to call when moving from one element to the next.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.VisitorFactory.MakeBackwardVisitor``2(System.Action{``0},System.Action{``1})">
+             <summary>
+             Makes an <see cref="T:Nordril.Functional.Data.IBackwardVisitor`2"/>.
+             </summary>
+             <typeparam name="T">The type of element in the structure being visited.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+             <param name="at">The function to call when an element is visited.</param>
+             <param name="backward">The function to call when moving from one element to the previous.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.VisitorFactory.MakeVisitor``3(System.Action{``0},System.Action{``0,``2},System.Action{``1})">
+             <summary>
+             Makes an <see cref="T:Nordril.Functional.Data.IBidirectionalVisitor`3"/>.
+             </summary>
+             <typeparam name="T">The type of element in the structure being visited.</typeparam>
+            <typeparam name="TFrom">The type of element which indicates the target of a backward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+            <typeparam name="TTo">The type of element which indicates the target of a forward-movement. This might be the same as <typeparamref name="T"/>, or, say, a integer-index.</typeparam>
+             <param name="at">The function to call when an element is visited.</param>
+             <param name="forward">The function to call when moving from one element to the next.</param>
+             <param name="backward">The function to call when moving from one element to the previous.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.LexicographicalComparer`1">
+            <summary>
+            An <see cref="T:System.Collections.Generic.IComparer`1"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
+            </summary>
+            <typeparam name="T">The type of elements in the sequences.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Data.LexicographicalComparer`1.elementComparer">
+            <summary>
+            The underlying elementwise comparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.LexicographicalComparer`1.#ctor(System.Func{`0,`0,System.Int32})">
+            <summary>
+            Creates a new comparer.
+            </summary>
+            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.LexicographicalComparer`1.Compare(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.ListEqualityComparer`1">
+            <summary>
+            An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> which compares two sequences of elements for structural equality.
+            </summary>
+            <typeparam name="T">The type of elements in the sequences.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Data.ListEqualityComparer`1.elementComparer">
+            <summary>
+            The underlying elementwise comparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.ListEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})">
+            <summary>
+            Creates a new comparer.
+            </summary>
+            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.ListEqualityComparer`1.Equals(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ListEqualityComparer`1.GetHashCode(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Maybe`1">
             <summary>
@@ -2846,6 +3195,29 @@
             </summary>
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.SetEqualityComparer`1">
+            <summary>
+            An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> which compares two sets of elements for structural equality.
+            </summary>
+            <typeparam name="T">The type of elements in the sequences.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Data.SetEqualityComparer`1.elementComparer">
+            <summary>
+            The underlying elementwise comparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})">
+            <summary>
+            Creates a new comparer.
+            </summary>
+            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.Equals(System.Collections.Generic.ISet{`0},System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.GetHashCode(System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.State`2">
             <summary>
@@ -3101,6 +3473,21 @@
             </summary>
             <param name="key">The key.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.VisitBidirectional(Nordril.Functional.Data.IBidirectionalVisitor{Nordril.Functional.Data.Tree{`0},Nordril.Functional.Data.Tree{`0},System.Int32},Nordril.Functional.Data.TreeTraversal)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.VisitBidirectional(Nordril.Functional.Data.IBidirectionalVisitor{Nordril.Functional.Data.Tree{`0},Nordril.Functional.Data.Tree{`0},System.Int32})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.VisitForward(Nordril.Functional.Data.IForwardVisitor{Nordril.Functional.Data.Tree{`0},System.Int32})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.VisitBackward(Nordril.Functional.Data.IBackwardVisitor{Nordril.Functional.Data.Tree{`0},Nordril.Functional.Data.Tree{`0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree`1.Visit(Nordril.Functional.Data.IVisitor{Nordril.Functional.Data.Tree{`0}})">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Tree`1.Traverse(Nordril.Functional.Data.TreeTraversal,System.Action{Nordril.Functional.Data.Tree{`0}},System.Action{Nordril.Functional.Data.Tree{`0},System.Int32},System.Action{Nordril.Functional.Data.Tree{`0}})">
             <summary>
             Traverses the tree in a certain order and yields the nodes.
@@ -3315,108 +3702,6 @@
             Constructs the void type (but you can't touch this).
             </summary>
         </member>
-        <member name="T:Nordril.Functional.Data.Writer`2">
-            <summary>
-            The writer-monad, which provides write-only access to output, in addition to producing a result.
-            The output can then be later extracted, but not by the computations within the writer-monad themselves.
-            </summary>
-            <typeparam name="TState">The type of the output.</typeparam>
-            <typeparam name="TValue">The type of the result.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Data.Writer`2.Output">
-            <summary>
-            The write-only output of the computation.
-            </summary>
-        </member>
-        <member name="P:Nordril.Functional.Data.Writer`2.Result">
-            <summary>
-            The result of the computation.
-            </summary>
-        </member>
-        <member name="P:Nordril.Functional.Data.Writer`2.OutputMonoid">
-            <summary>
-            The monoid to use when combining outputs.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.#ctor(`0,`1,Nordril.Functional.Algebra.Monoid{`0})">
-            <summary>
-            Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
-            </summary>
-            <param name="output">The initial output.</param>
-            <param name="result">The result to produce.</param>
-            <param name="outputMonoid">The monoid to use to combine outputs.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.#ctor(`1,Nordril.Functional.Algebra.Monoid{`0})">
-            <summary>
-            Creates a new writer from a result and a monoid to combine successive outputs.
-            The neutral element of the monoid will be used as the initial output.
-            </summary>
-            <param name="result">The result to produce.</param>
-            <param name="outputMonoid">The monoid to use to combine outputs.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.Tell(`0)">
-            <summary>
-            Stores a new ouput in this <see cref="T:Nordril.Functional.Data.Writer`2"/>, mutating it.
-            <c>this</c> is returned.
-            </summary>
-            <param name="output">The new output to store.</param>
-            <returns>This object.</returns>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`1,``0}})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.Bind``1(System.Func{`1,Nordril.Functional.Category.IMonad{``0}})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.Map``1(System.Func{`1,``0})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer`2.Pure``1(``0)">
-            <inheritdoc />
-        </member>
-        <member name="T:Nordril.Functional.Data.Writer">
-            <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Data.Writer`2"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer.Tell``1(``0)">
-            <summary>
-            Stores a new output in the writer and returns no result.
-            The <see cref="T:Nordril.Functional.Category.IMonad`1"/> instance of the output is used
-            to combine the new output with the existing ones.
-            </summary>
-            <typeparam name="TState">The type of the output.</typeparam>
-            <param name="output">The output to store.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer.Tell``1(``0,Nordril.Functional.Algebra.Monoid{``0})">
-            <summary>
-            Stores a new output in the writer and returns no result.
-            The caller can specify how to combine the new piece of output with
-            the existing ones.
-            </summary>
-            <typeparam name="TState">The type of the output.</typeparam>
-            <param name="output">The output to store.</param>
-            <param name="monoid">The monoid to use when combining outputs.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer.Listen``1(``0)">
-            <summary>
-            Stores a new output and returns it.
-            The <see cref="T:Nordril.Functional.Category.IMonad`1"/> instance of the output is used
-            to combine the new output with the existing ones.
-            </summary>
-            <typeparam name="TState">The type of the output.</typeparam>
-            <param name="output">The output to store and return.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Writer.Listen``1(``0,Nordril.Functional.Algebra.Monoid{``0})">
-            <summary>
-            Stores a new output and returns it.
-            The <see cref="T:Nordril.Functional.Category.IMonad`1"/> instance of the output is used
-            to combine the new output with the existing ones.
-            </summary>
-            <typeparam name="TState">The type of the output.</typeparam>
-            <param name="output">The output to store and return.</param>
-            <param name="monoid">The monoid to use when combining outputs.</param>
-        </member>
         <member name="T:Nordril.Functional.EnumExtensions">
             <summary>
             Extension methods for <see cref="T:System.Enum"/>.
@@ -3618,26 +3903,6 @@
             <summary>
             Creates a deep copy of the object that can be modified independently of the original.
             </summary>
-        </member>
-        <member name="T:Nordril.Functional.LexicographicalComparer`1">
-            <summary>
-            An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> which lexicographically compares two sequences of elements. If the elements in the shorter sequence are all equal according to the comparison, the longer sequence counts as the greater one.
-            </summary>
-            <typeparam name="T">The type of elements in the sequences.</typeparam>
-        </member>
-        <member name="F:Nordril.Functional.LexicographicalComparer`1.elementComparer">
-            <summary>
-            The underlying elementwise comparer.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.LexicographicalComparer`1.#ctor(System.Func{`0,`0,System.Int32})">
-            <summary>
-            Creates a new comparer.
-            </summary>
-            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
-        </member>
-        <member name="M:Nordril.Functional.LexicographicalComparer`1.Compare(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
-            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.ObjectExtensions">
             <summary>

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Nordril.Functional.Tests.Data
 {
-    public static class WriterTests
+    /*public static class WriterTests
     {
         [Fact]
         public static void MapTestEmptyOutput()
@@ -33,5 +33,5 @@ namespace Nordril.Functional.Tests.Data
             Assert.Equal(12, w.Result);
             Assert.Equal(new int[] { 2, 3, 4 }, w.Output);
         }
-    }
+    }*/
 }

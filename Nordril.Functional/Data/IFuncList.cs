@@ -10,10 +10,5 @@ namespace Nordril.Functional.Data
     /// <typeparam name="T">The type of elements in the list.</typeparam>
     public interface IFuncList<T> : IList<T>, IMonadPlus<T>, IFilterable<IFuncList<T>, T>, IAlternative<T>, IEquatable<IList<T>>, ICopyable<IFuncList<T>>
     {
-        /// <summary>
-        /// Gets an <see cref="IComparer{T}"/> for <see cref="IList{T}"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
-        /// </summary>
-        /// <typeparam name="T1">The of element in the <see cref="IList{T}"/>.</typeparam>
-        IComparer<IList<T1>> GetComparer<T1>() where T1 : IComparable<T1>;
     }
 }

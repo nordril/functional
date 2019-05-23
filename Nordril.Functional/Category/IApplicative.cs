@@ -21,7 +21,7 @@ namespace Nordril.Functional.Category
     /// </code>
     /// </summary>
     /// <typeparam name="TSource">The data contained in the functor.</typeparam>
-    public interface IApplicative<TSource> : IFunctor<TSource>
+    public interface IApplicative<out TSource> : IFunctor<TSource>
     {
         /// <summary>
         /// Wraps a value into an applicative. The this-value MUST NOT BE USED by implementors.

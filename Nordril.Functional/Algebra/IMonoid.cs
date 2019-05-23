@@ -42,5 +42,9 @@ namespace Nordril.Functional.Algebra
         /// <param name="empty">The neutral element.</param>
         public static T Msum<T>(this IEnumerable<T> xs, Func<T> empty) where T : IMonoid<T>
             => xs.Aggregate(empty(), (x, y) => x.Op(y));
+
+        /*public static ITaggedMonoid<T, TOp> Tag<T, TOp>(this IMonoid<T> x)
+            where T : IMonoid<T>
+            => new TaggedMonoid<T, TOp>(x);*/
     }
 }
