@@ -1,0 +1,14 @@
+dist: bionic
+language: csharp
+solution: Nordril.Functional.sln
+mono: none
+dotnet: 2.2.105
+env:
+  global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+    - DOTNET_CLI_TELEMETRY_OPTOUT=true
+install:
+- dotnet restore
+script:
+- dotnet build
+- dotnet test Nordril.Functional.Tests/Nordril.Functional.Tests.csproj
