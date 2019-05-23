@@ -3196,29 +3196,6 @@
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
         </member>
-        <member name="T:Nordril.Functional.Data.SetEqualityComparer`1">
-            <summary>
-            An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> which compares two sets of elements for structural equality.
-            </summary>
-            <typeparam name="T">The type of elements in the sequences.</typeparam>
-        </member>
-        <member name="F:Nordril.Functional.Data.SetEqualityComparer`1.elementComparer">
-            <summary>
-            The underlying elementwise comparer.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.#ctor(System.Func{`0,`0,System.Boolean})">
-            <summary>
-            Creates a new comparer.
-            </summary>
-            <param name="elementComparer">The comparison function for two elements of the sequences.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.Equals(System.Collections.Generic.ISet{`0},System.Collections.Generic.ISet{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Data.SetEqualityComparer`1.GetHashCode(System.Collections.Generic.ISet{`0})">
-            <inheritdoc />
-        </member>
         <member name="T:Nordril.Functional.Data.State`2">
             <summary>
             The state-monad, which maintains a state <typeparamref name="TState"/> and produces a result
