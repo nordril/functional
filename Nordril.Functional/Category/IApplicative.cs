@@ -44,6 +44,14 @@ namespace Nordril.Functional.Category
     /// </summary>
     public static class ApplicativeExtensions
     {
+#if NETFULL
+        private static IEnumerable<T> Prepend<T>(this IEnumerable<T> xs, T x)
+        {
+            yield return x;
+            foreach (var y in xs)
+                yield return y;
+        }
+#endif
         /// <summary>
         /// <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/> with the arguments reversed,
         /// meaning that the function is applied to the argument, which reads more natural.

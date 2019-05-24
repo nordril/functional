@@ -9,7 +9,11 @@ namespace Nordril.Functional.Data
     /// A unit-type containing no values and having just one instance.
     /// Forms the trivial, one-element commutative group and is a 0-tuple.
     /// </summary>
+#if NETFULL
+    public struct Unit : ICommutativeGroup<Unit>, IEquatable<Unit>, IComparable<Unit>
+#else
     public struct Unit : ICommutativeGroup<Unit>, ITuple, IEquatable<Unit>, IComparable<Unit>
+#endif
     {
         /// <inheritdoc />
         public Unit Inverse => new Unit();
