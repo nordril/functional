@@ -100,7 +100,7 @@ namespace Nordril.Functional.Data
         public IFuncSet<T> Filter(Func<T, bool> f) => new FuncSet<T>(SetCoalesce().Where(f));
 
         /// <inheritdoc />
-        public T1 FoldMap<T1>(Monoid<T1> monoid, Func<T, T1> f)
+        public T1 FoldMap<T1>(IMonoid<T1> monoid, Func<T, T1> f)
             => SetCoalesce().Select(f).Msum(monoid);
 
         /// <inheritdoc />

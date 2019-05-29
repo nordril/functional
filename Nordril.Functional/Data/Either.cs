@@ -1,15 +1,18 @@
 ﻿using Nordril.Functional.Category;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Nordril.Functional.Data
 {
     /// <summary>
     /// A sum type that can either be a left or a right, but not both. While left and right have no special semantics, per convention,
     /// the left is regarded as the "error-case", and the right is regarded as the "ok-case", if the either is used to model failure.
+    /// Available as a data-source in LINQ-queries.
     /// </summary>
     /// <typeparam name="TLeft">The type of the left value in the either.</typeparam>
     /// <typeparam name="TRight">The type of the right value in the either.</typeparam>
-    public struct Either<TLeft, TRight> : IMonad<TRight>, IBifunctor<TLeft, TRight>, IEquatable<Either<TLeft, TRight>>
+    public struct Either<TLeft, TRight> : IMonad<TRight>, IBifunctor<TLeft, TRight>, IEquatable<Either<TLeft, TRight>>, IEnumerable<TRight>
     {
         private EitherTag discriminator;
         private TLeft left;
@@ -155,13 +158,10 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public bool Equals(Either<TLeft, TRight> other) => Equals((object)other);
 
-        #region IBifunctor implementation
         /// <inheritdoc />
         public IBifunctor<TLeftResult, TRightResult> BiMap<TLeftResult, TRightResult>(Func<TLeft, TLeftResult> f, Func<TRight, TRightResult> g)
             => IsLeft ? new Either<TLeftResult, TRightResult>(f(left), default, EitherTag.Left) : new Either<TLeftResult, TRightResult>(default, g(right), EitherTag.Right);
-        #endregion
 
-        #region IMonad implementation
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TRight, TResult>> f)
         {
@@ -186,7 +186,20 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new Either<Unit, TResult>(new Unit(), x, EitherTag.Right);
-        #endregion
+
+        /// <inheritdoc />
+        public IEnumerator<TRight> GetEnumerator()
+        {
+            if (IsRight)
+                yield return right;
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if (IsRight)
+                yield return right;
+        }
     }
 
     /// <summary>

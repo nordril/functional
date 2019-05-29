@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Data;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

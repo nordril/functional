@@ -167,7 +167,7 @@ namespace Nordril.Functional.Data
         }
         
         /// <inheritdoc />
-        public TResult FoldMap<TResult>(Monoid<TResult> monoid, Func<T, TResult> f)
+        public TResult FoldMap<TResult>(IMonoid<TResult> monoid, Func<T, TResult> f)
         {
             return this.Aggregate(monoid.Neutral, (x, y) => monoid.Op(x, f(y)));
         }

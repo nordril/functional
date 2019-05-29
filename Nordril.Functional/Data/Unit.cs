@@ -10,13 +10,13 @@ namespace Nordril.Functional.Data
     /// Forms the trivial, one-element commutative group and is a 0-tuple.
     /// </summary>
 #if NETFULL
-    public struct Unit : ICommutativeGroup<Unit>, IEquatable<Unit>, IComparable<Unit>
+    public struct Unit : IHasCommutativeGroup<Unit>, IEquatable<Unit>, IComparable<Unit>
 #else
-    public struct Unit : ICommutativeGroup<Unit>, ITuple, IEquatable<Unit>, IComparable<Unit>
+    public struct Unit : IHasCommutativeGroup<Unit>, ITuple, IEquatable<Unit>, IComparable<Unit>
 #endif
     {
         /// <inheritdoc />
-        public Unit Inverse => new Unit();
+        public Unit Inverse(Unit x) => new Unit();
 
         /// <inheritdoc />
         public Unit Neutral => new Unit();
@@ -69,7 +69,7 @@ namespace Nordril.Functional.Data
         public override int GetHashCode() => this.DefaultHash();
 
         /// <inheritdoc />
-        public Unit Op(Unit that) => new Unit();
+        public Unit Op(Unit x, Unit y) => new Unit();
 
         /// <summary>
         /// Always returns 0.

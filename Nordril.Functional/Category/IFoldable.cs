@@ -12,11 +12,11 @@ namespace Nordril.Functional.Category
     {
         /// <summary>
         /// Maps each element of the structure to a monoid and then combines the elements
-        /// using the monoid's <see cref="IMagma{T}.Op(T)"/> operation.
+        /// using the monoid's <see cref="IMagma{T}.Op(T, T)"/> operation.
         /// </summary>
         /// <param name="monoid">The monoid dictionary that should be used.</param>
         /// <param name="f">The function that maps an element to a monoid.</param>
-        T FoldMap<T>(Monoid<T> monoid, Func<TSource, T> f);
+        T FoldMap<T>(IMonoid<T> monoid, Func<TSource, T> f);
 
         /// <summary>
         /// Right-associative fold of the data structure.
@@ -35,7 +35,7 @@ namespace Nordril.Functional.Category
     {
         /// <summary>
         /// Maps each element of the structure to a monoid and then combines the elements
-        /// using the monoid's <see cref="IMagma{T}.Op(T)"/> operation.
+        /// using the monoid's <see cref="IMagma{T}.Op(T, T)"/> operation.
         /// </summary>
         /// <typeparam name="TSource">The type of elements contained in <paramref name="foldable"/>.</typeparam>
         /// <typeparam name="TMonoid">The monoid to which to mape the elements.</typeparam>

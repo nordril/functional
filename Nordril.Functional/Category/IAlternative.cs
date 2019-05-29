@@ -13,7 +13,7 @@ namespace Nordril.Functional.Category
     ///     a.Alt(x.Empty()) == a (right-neutrality of Empty)
     ///     a.Alt(b).Alt(c)  == a.Alt(b.Alt(c)) (associativity of Alt)
     /// </code>
-    /// <see cref="IAlternative{TSource}"/> is thus a <see cref="IMonoid{TSource}"/> on <see cref="IApplicative{TSource}"/>.
+    /// <see cref="IAlternative{TSource}"/> is thus a <see cref="IHasMonoid{TSource}"/> on <see cref="IApplicative{TSource}"/>.
     /// Moreover, the implementor should obey
     /// <code>
     ///     x.Empty().Ap(a) == x.Empty() (guard)

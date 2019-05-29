@@ -21,7 +21,7 @@ namespace Nordril.Functional.Category
         ///     Pure(a).Bind(f) == f(a) (left identity of pure)
         ///     f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity)
         /// </code>
-        /// These laws are identical to the laws of <see cref="Algebra.IMonoid{TSource}"/>, except for the
+        /// These laws are identical to the laws of <see cref="Algebra.IHasMonoid{TSource}"/>, except for the
         /// type variable in <see cref="IMonad{TSource}"/>.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

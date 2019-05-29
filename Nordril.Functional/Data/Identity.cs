@@ -1,13 +1,17 @@
 ﻿using Nordril.Functional.Category;
+using Nordril.HedgingEngine.Logic.Mapping;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Nordril.Functional.Data
 {
     /// <summary>
     /// The identity functor which does nothing but wrap a value.
+    /// Available as a data-source in LINQ-queries.
     /// </summary>
     /// <typeparam name="T">The type of the value being wrapped.</typeparam>
-    public struct Identity<T> : IMonad<T>, IEquatable<Identity<T>>
+    public struct Identity<T> : IMonad<T>, IEquatable<Identity<T>>, IEnumerable<T>
     {
         /// <summary>
         /// Gets or sets the wrapped value.
@@ -68,6 +72,18 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Identity<T> other) => Equals((object)other);
+
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator()
+        {
+            yield return Value;
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return Value;
+        }
     }
 
     /// <summary>
@@ -76,10 +92,38 @@ namespace Nordril.Functional.Data
     public static class Identity
     {
         /// <summary>
+        /// An isomorphism between <see cref="Identity{T}"/> and any type.
+        /// </summary>
+        /// <typeparam name="T">The underlying type to wrap.</typeparam>
+        private class IdentityIso<T> : IIsomorphism<T, Identity<T>>
+        {
+            public T ConvertBack(Identity<T> from) => from.Value;
+
+            public Identity<T> Convert(T from) => new Identity<T>(from);
+        }
+
+        /// <summary>
+        /// An isomorphism between <see cref="Io{T}"/> and <see cref="Func{T, TResult}"/>.
+        /// </summary>
+        /// <typeparam name="T">The underlying type to wrap.</typeparam>
+        private class IoIso<T> : IIsomorphism<Func<T>, Io<T>>
+        {
+            public Func<T> ConvertBack(Io<T> from) => () => from.Run();
+
+            public Io<T> Convert(Func<T> from) => new Io<T>(from);
+        }
+
+        /// <summary>
         /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="Identity{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the input parameter.</typeparam>
         /// <param name="x">The object to cast.</param>
-        public static Identity<T> ToPredicate<T>(IFunctor<T> x) => (Identity<T>)x;
+        public static Identity<T> ToIdentity<T>(IFunctor<T> x) => (Identity<T>)x;
+
+        /// <summary>
+        /// Returns an isomorphism between <see cref="Func{TResult}"/> and <see cref="Io{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the result of computation.</typeparam>
+        public static IIsomorphism<T, Identity<T>> Iso<T>() => new IdentityIso<T>();
     }
 }

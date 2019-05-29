@@ -76,12 +76,13 @@ namespace Nordril.Functional.Category
 
         /// <summary>
         /// Wraps an object in an applicative via <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/>.
-        /// The applicative in question does not have to posess a parameterless constuctor; instead a call to <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> with the this-pointer being null is forced.
+        /// The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> with the this-pointer being null is forced.
         /// If the requested applicative uses the this-pointer in <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/>, this will result in a <see cref="NullReferenceException"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the object to wrap.</typeparam>
         /// <typeparam name="TResult">The type of the applicative to return.</typeparam>
         /// <param name="x">The value to wrap.</param>
+        /// <exception cref="NullReferenceException">If <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
         public static TResult PureUnsafe<TSource, TResult>(this TSource x)
             where TResult : IApplicative<TSource>
         {
@@ -90,16 +91,18 @@ namespace Nordril.Functional.Category
                 MemberTypes.Method,
                 BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public);
 
-            var pureMi = instancePure.Select(mi => (MethodInfo)mi).First(mi =>
+            var pureMi = instancePure.Cast<MethodInfo>().First(mi =>
             {
                 var gargs = mi.GetGenericArguments();
-                return gargs.Length == 1 && gargs[0].IsGenericParameter && mi.IsGenericMethod;
+                return gargs.Length == 1
+                && gargs[0].IsGenericParameter
+                && mi.IsGenericMethod
+                && mi.GetParameters().Length == 1;
             }).MakeGenericMethod(typeof(TSource));
 
             var pure = new DynamicMethod("pure", typeof(IApplicative<TSource>), new Type[] { typeof(TSource) });
             var generator = pure.GetILGenerator();
 
-            //generator.Emit(OpCodes.Ldnull);
             var applicativeThis = generator.DeclareLocal(typeof(TResult));
             generator.Emit(OpCodes.Ldloca_S, 0); //push applicativeThis (index 0) onto the stack: [] -> [at]
             generator.Emit(OpCodes.Initobj, typeof(TResult)); //initialize at to null: at -> []

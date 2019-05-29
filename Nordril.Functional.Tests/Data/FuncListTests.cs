@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Data;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -255,6 +256,20 @@ namespace Nordril.Functional.Tests.Data
                 Assert.Equal(new FuncList<char>(xs).GetHashCode(), new FuncList<char>(ys).GetHashCode());
             else
                 Assert.NotEqual(new FuncList<char>(xs).GetHashCode(), new FuncList<char>(ys).GetHashCode());
+        }
+
+        [Theory]
+        [InlineData(new char[] { })]
+        [InlineData(new char[] { 'x' })]
+        [InlineData(new char[] { 'a', 'b' })]
+        [InlineData(new char[] { 'b', 'f', 'a', 'á' })]
+        public static void FoldMapTest(IEnumerable<char> xs)
+        {
+            var actual = new FuncList<char>(xs).FoldMap(new Monoid<string>("", (x,y) => x + y), c => c + "");
+            var expected = new string(xs.ToArray());
+
+            Assert.Equal(expected, actual);
+
         }
     }
 }

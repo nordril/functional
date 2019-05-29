@@ -10,7 +10,7 @@ namespace Nordril.Functional.Data
     /// </summary>
     /// <typeparam name="T">The type of the input parameter.</typeparam>
     [SuppressMessage("Microsoft.Design", "CA1815", Justification = "Equality between functions cannot, in general, be determined.")]
-    public struct Pred<T> : IContravariant<T>, IMonoid<Pred<T>>
+    public struct Pred<T> : IContravariant<T>, IHasMonoid<Pred<T>>
     {
         /// <summary>
         /// The predicate function.
@@ -44,11 +44,11 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Combines two predicates via logical AND.
         /// </summary>
-        /// <param name="that">The other predicate.</param>
-        public Pred<T> Op(Pred<T> that)
+        /// <param name="x">The first predicate.</param>
+        /// <param name="y">The second predicate.</param>
+        public Pred<T> Op(Pred<T> x, Pred<T> y)
         {
-            var f = Func;
-            return new Pred<T>(x => f(x) && that.Func(x));
+            return new Pred<T>(z => x.Func(z) && y.Func(z));
         }
     }
 

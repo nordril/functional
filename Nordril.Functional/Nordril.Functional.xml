@@ -4,73 +4,23 @@
         <name>Nordril.Functional</name>
     </assembly>
     <members>
-        <member name="T:Nordril.Functional.Algebra.Group`1">
+        <member name="T:Nordril.Functional.Algebra.IHasMagma`1">
             <summary>
-            A value-level group.
+            An algebraic structure supporting a binary operation with no further guaranteed properties.
             </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Group`1.Invert">
+        <member name="T:Nordril.Functional.Algebra.IHasAssociativity`1">
             <summary>
-            The inversion function.
+            A magma whose binary operation is associative.
+            The binary operation must fulfill the following for all X and Y:
+            <code>
+                X.Op(Y).Op(Z) == X.Op(Y.Op(Z)) (associativity)
+            </code>
             </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Group`1.#ctor(`0,System.Func{`0,`0,`0},System.Func{`0,`0})">
-            <summary>
-            C
-            </summary>
-            <param name="neutral">The neutral element.</param>
-            <param name="op">The binary operation.</param>
-            <param name="invert">The inversion function.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.Group">
-            <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Group.FromGroupInstance``1(Nordril.Functional.Algebra.IGroup{``0})">
-            <summary>
-            Reifies a type's <see cref="T:Nordril.Functional.Algebra.IGroup`1"/> instance into its own <see cref="T:Nordril.Functional.Algebra.Group`1"/>-object.
-            </summary>
-            <typeparam name="T">The type that implements <see cref="T:Nordril.Functional.Algebra.IGroup`1"/>.</typeparam>
-            <param name="instance">An object that is an instance of <see cref="T:Nordril.Functional.Algebra.IGroup`1"/>.</param>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.IntAdd">
-            <summary>
-            The (0,+,negate) group for <see cref="T:System.Int32"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.FloatAdd">
-            <summary>
-            The (0,+,negate) group for <see cref="T:System.Single"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.DoubleAdd">
-            <summary>
-            The (0,+,negate) group for <see cref="T:System.Double"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.DecimalAdd">
-            <summary>
-            The (0,+,negate) group for <see cref="T:System.Decimal"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.FloatMult">
-            <summary>
-            The (1,*,x => 1/x) group for <see cref="T:System.Single"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.DoubleMult">
-            <summary>
-            The (1,*,x => 1/x) group for <see cref="T:System.Double"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Group.DecimalMult">
-            <summary>
-            The (1,*,x => 1/x) group for <see cref="T:System.Decimal"/>.
-            </summary>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ICommutative`1">
+        <member name="T:Nordril.Functional.Algebra.IHasCommutativity`1">
             <summary>
             A magma whose binary operation is commutative.
             The binary operation must fulfill the following for all X and Y:
@@ -80,74 +30,40 @@
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="T:Nordril.Functional.Algebra.ICommutativeGroup`1">
+        <member name="T:Nordril.Functional.Algebra.IHasNeutralElement`1">
             <summary>
-            A group which is also commutative.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.IGroup`1">
-            <summary>
-            A monoid which supports a unary inversion operator with respect to the associative binary operation.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.IGroup`1.Inverse">
-            <summary>
-            Returns the inverse of the object. The inverse must fulfill the following for all X:
-            <code>
-                X.Inverse.Op(X) == X.Neutral (left-inverse)
-                X.Op(X.Inverse) == X.Neutral (right-inverse)
-            </code>
-            </summary>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.IMagma`1">
-            <summary>
-            An algebraic structure supporting a binary operation with no further guaranteed properties.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)">
-            <summary>
-            The binary operation.
-            This operation should not change either operand.
-            </summary>
-            <param name="that">The second operand.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.IMonoid`1">
-            <summary>
-            A semigroup which has a neutral element with respect to the binary operation.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.IMonoid`1.Neutral">
-            <summary>
-            Returns the neutral element. The neutral element must fulfill the following for any X and Y:
+            A magma whose binary operation has a neutral element.
+            The binary operation must fulfill the following for all X and Y:
             <code>
                 X.Neutral().Op(Y) == Y (left-neutrality)
                 X.Op(Y.Neutral()) == X (right-neutrality)
             </code>
             </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="T:Nordril.Functional.Algebra.MonoidExtensions">
+        <member name="T:Nordril.Functional.Algebra.IHasSemigroup`1">
             <summary>
-            Extensions for monoids.
+            A semigroup whose binary operation is associative.
             </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.MonoidExtensions.Msum``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="T:Nordril.Functional.Algebra.IHasMonoid`1">
             <summary>
-            Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
+            A semigroup which has a neutral element with respect to the binary operation.
             </summary>
-            <typeparam name="T">The monoid type.</typeparam>
-            <param name="xs">The list of elements to sum.</param>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.MonoidExtensions.Msum``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0})">
+        <member name="T:Nordril.Functional.Algebra.IHasGroup`1">
             <summary>
-            Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
+            A monoid which supports a unary inversion operator with respect to the associative binary operation.
             </summary>
-            <typeparam name="T">The monoid type.</typeparam>
-            <param name="xs">The list of elements to sum.</param>
-            <param name="empty">The neutral element.</param>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasCommutativeGroup`1">
+            <summary>
+            A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.IPartiallyOrdered`1">
             <summary>
@@ -222,12 +138,6 @@
             </summary>
             <param name="that">The second operand.</param>
         </member>
-        <member name="T:Nordril.Functional.Algebra.ISemigroup`1">
-            <summary>
-            A semigroup whose binary operation is associative.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
         <member name="T:Nordril.Functional.Algebra.ISemiring`3">
             <summary>
             A semiring, composed of a commutative monoid for addition and a monoid for multiplication.
@@ -244,50 +154,50 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.ISemiring`3.Plus(`0)">
             <summary>
-            The additive operation. This must be an alias of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> of the first monoid.
+            The additive operation. This must be an alias of <see cref="!:IHasMagma&lt;T&gt;.Op(T)"/> of the first monoid.
             </summary>
             <param name="y">The second operand.</param>
         </member>
         <member name="M:Nordril.Functional.Algebra.ISemiring`3.Mult(`0)">
             <summary>
-            The additive operation. This must be an alias of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> of the second monoid.
+            The additive operation. This must be an alias of <see cref="!:IHasMagma&lt;T&gt;.Op(T)"/> of the second monoid.
             </summary>
             <param name="y">The second operand.</param>
         </member>
         <member name="P:Nordril.Functional.Algebra.ISemiring`3.One">
             <summary>
-            The multiplicative neutral element. This must be an alias of <see cref="P:Nordril.Functional.Algebra.IMonoid`1.Neutral"/> of the second monoid.
+            The multiplicative neutral element. This must be an alias of <see cref="!:IHasMonoid&lt;T&gt;.Neutral"/> of the second monoid.
             </summary>
         </member>
         <member name="P:Nordril.Functional.Algebra.ISemiring`3.Zero">
             <summary>
-            The additive neutral element. This must be an alias of <see cref="P:Nordril.Functional.Algebra.IMonoid`1.Neutral"/> of the first monoid.
+            The additive neutral element. This must be an alias of <see cref="!:IHasMonoid&lt;T&gt;.Neutral"/> of the first monoid.
             </summary>
         </member>
         <member name="T:Nordril.Functional.Algebra.ITaggegCommutativeGroup`2">
             <summary>
-            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
             <typeparam name="TOp">The type-tag of the operation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.ITaggedCommutativeMonoid`2">
             <summary>
-            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
             <typeparam name="TOp">The type-tag of the operation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.ITaggedGroup`2">
             <summary>
-            A type-tagged <see cref="T:Nordril.Functional.Algebra.IGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            A type-tagged <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
             <typeparam name="TOp">The type-tag of the operation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.ITaggedMonoid`2">
             <summary>
-            A type-tagged <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
+            A type-tagged <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
             <typeparam name="TOp">The type-tag of the operation.</typeparam>
@@ -356,120 +266,6 @@
             <param name="x">The first element.</param>
             <param name="y">The second element.</param>
         </member>
-        <member name="T:Nordril.Functional.Algebra.Magma`1">
-            <summary>
-            A value-level structure that offers a binary operation.
-            </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.Magma`1.Op">
-            <summary>
-            The binary operation.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Magma`1.#ctor(System.Func{`0,`0,`0})">
-            <summary>
-            Creates a new magma.
-            </summary>
-            <param name="f">The binary operation.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.Monoid`1">
-            <summary>
-            A value-level monoid.
-            </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.Monoid`1.Neutral">
-            <summary>
-            The neutral element of the binary operation.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid`1.#ctor(`0,System.Func{`0,`0,`0})">
-            <summary>
-            Creates a new monoid.
-            </summary>
-            <param name="neutral">The neutral element.</param>
-            <param name="op">The binary operation.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.Monoid">
-            <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.FromMonoidInstance``1(Nordril.Functional.Algebra.IMonoid{``0})">
-            <summary>
-            Reifies a type's <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> instance into its own <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>-object.
-            </summary>
-            <typeparam name="T">The type that implements <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/>.</typeparam>
-            <param name="instance">An object that is an instance of <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/>.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.ListAppend``1">
-            <summary>
-            The mutating ([],++) monoid for lists.
-            </summary>
-            <typeparam name="T">The type of element in the list.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.ImmutableListAppend``1">
-            <summary>
-            The non-mutating ([],++) monoid for lists, meaning that the inputs of <see cref="P:Nordril.Functional.Algebra.Magma`1.Op" /> aren't changed.
-            </summary>
-            <typeparam name="T">The type of element in the list.</typeparam>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Monoid.StringAppend">
-            <summary>
-            The ("",+) monoid for <see cref="T:System.String"/>.
-            BEWARE THAT THIS HAS VERY POOR PERFORMANCE.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Monoid.StringBuilderAppend">
-            <summary>
-            The ("",Append) monoid for <see cref="T:System.Text.StringBuilder"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Monoid.BoolAnd">
-            <summary>
-            The (true,&amp;&amp;) monoid for <see cref="T:System.Boolean"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Monoid.BoolOr">
-            <summary>
-            The (true,||) monoid for <see cref="T:System.Boolean"/>.
-            </summary>
-        </member>
-        <member name="F:Nordril.Functional.Algebra.Monoid.IntMult">
-            <summary>
-            The (0,+) monoid for <see cref="T:System.Int32"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.FirstOrDefault``1(``0)">
-            <summary>
-            The monoid whose operation always returns the first element and which has a default-value.
-            </summary>
-            <param name="default">The neutral element of the monoid.</param>
-            <typeparam name="T">The type of the element in the structure.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefault``1(``0)">
-            <summary>
-            The semigroup whose operation always returns the last element.
-            </summary>
-            <param name="default">The neutral element of the monoid.</param>
-            <typeparam name="T">The type of the element in the structure.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.LiftMonoidWithInfinity``1(Nordril.Functional.Algebra.Monoid{``0})">
-            <summary>
-            Lifts a <see cref="T:Nordril.Functional.Algebra.Monoid`1"/> into one which has positive infinity (<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>) as a special element.
-            </summary>
-            <typeparam name="T">The type of the element in the structure.</typeparam>
-            <param name="m">The monoid to lift.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0},Nordril.Functional.Algebra.Monoid{``0})">
-            <summary>
-            Sums a list of elements using a monoid instance. If the list is empty, the neutral element is returned.
-            </summary>
-            <typeparam name="T">The type of elements to sum.</typeparam>
-            <param name="xs">The list of elements to sum.</param>
-            <param name="m">The monoid instance.</param>
-        </member>
         <member name="T:Nordril.Functional.Algebra.PartialOrder`1">
             <summary>
             A value-level partial order.
@@ -487,17 +283,148 @@
             </summary>
             <param name="leqPartial">The "less than or equals"-predicate.</param>
         </member>
-        <member name="T:Nordril.Functional.Algebra.Semigroup`1">
+        <member name="T:Nordril.Functional.Algebra.IMagma`1">
             <summary>
-            A value-level semigroup whose binary operation is associative.
+            An algebraic structure supporting a binary operation with no further guaranteed properties.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)">
+            <summary>
+            The binary operation.
+            This operation should not change either operand.
+            </summary>
+            <param name="x">The first operand.</param>
+            <param name="y">The second operand.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IAssociative`1">
+            <summary>
+            A magma whose binary operation is associative.
+            The binary operation must fulfill the following for all X and Y:
+            <code>
+                m.Op(m.Op(X,Y),Z) == m.Op(X, m.Op(Y,Z)) (associativity)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ICommutative`1">
+            <summary>
+            A magma whose binary operation is commutative.
+            The binary operation must fulfill the following for all X and Y:
+            <code>
+                m.(X, Y) == m.Op(Y, X) (commutativity)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.INeutralElement`1">
+            <summary>
+            A magma whose binary operation has a neutral element.
+            The binary operation must fulfill the following for all X and Y:
+            <code>
+                m.Op(m.Neutral, X) == Y (left-neutrality)
+                m.Op(X, m.Neutral) == X (right-neutrality)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral">
+            <summary>
+            Returns the neutral element.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISemigroup`1">
+            <summary>
+            A semigroup whose binary operation is associative.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IMonoid`1">
+            <summary>
+            A semigroup which has a neutral element with respect to the binary operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IGroup`1">
+            <summary>
+            A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IGroup`1.Inverse(`0)">
+            <summary>
+            Returns the inverse of the object. The inverse must fulfill the following for all X:
+            <code>
+                m.Op(X.Inverse, X) == m.Neutral (left-inverse)
+                m.Op(X, X.Inverse) == m.Neutral (right-inverse)
+            </code>
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ICommutativeGroup`1">
+            <summary>
+            A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.StructuresExtensions">
+            <summary>
+            Extension methods for algebraic structures.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.StructuresExtensions.Op``1(``0,``0)">
+            <summary>
+            Applies the <see cref="T:Nordril.Functional.Algebra.IMagma`1"/>'s binary operation to this object and a second operand.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <param name="x">The first operand.</param>
+            <param name="y">The second operand.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.StructuresExtensions.Inverse``1(``0)">
+            <summary>
+            Applies the <see cref="M:Nordril.Functional.Algebra.IGroup`1.Inverse(`0)"/> to itself.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <param name="x">The operand.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Magma`1">
+            <summary>
+            A value-level monoid.
             </summary>
             <typeparam name="T">The type of element in this structure.</typeparam>
         </member>
+        <member name="F:Nordril.Functional.Algebra.Magma`1.op">
+            <summary>
+            The binary operation.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Magma`1.#ctor(System.Func{`0,`0,`0})">
+            <summary>
+            Creates a new monoid.
+            </summary>
+            <param name="op">The binary operation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Magma`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Semigroup`1">
+            <summary>
+            A value-level monoid.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Semigroup`1.op">
+            <summary>
+            The binary operation.
+            </summary>
+        </member>
         <member name="M:Nordril.Functional.Algebra.Semigroup`1.#ctor(System.Func{`0,`0,`0})">
             <summary>
-            Creates a new semigroup.
+            Creates a new monoid.
             </summary>
-            <param name="f">The binary operation.</param>
+            <param name="op">The binary operation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semigroup`1.Op(`0,`0)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Semigroup">
             <summary>
@@ -527,6 +454,432 @@
             </summary>
             <typeparam name="T">The type of the element in the structure.</typeparam>
             <param name="m">The monoid to lift.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid`1">
+            <summary>
+            A value-level monoid.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid`1.Neutral">
+            <summary>
+            The neutral element of the binary operation.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid`1.op">
+            <summary>
+            The binary operation.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid`1.#ctor(`0,System.Func{`0,`0,`0})">
+            <summary>
+            Creates a new monoid.
+            </summary>
+            <param name="neutral">The neutral element.</param>
+            <param name="op">The binary operation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.NeutralUnsafe``2">
+            <summary>
+            Returns <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of an <typeparamref name="TNeutralElement"/>. The type in question does not have to possess a parameterless constructor; instead, a call to <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> with the this-pointer being null is forced. If <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer, a <see cref="T:System.NullReferenceException"/> will be thrown.
+            </summary>
+            <typeparam name="T">The type of the neutral element.</typeparam>
+            <typeparam name="TNeutralElement">The type of the <see cref="T:Nordril.Functional.Algebra.INeutralElement`1"/>.</typeparam>
+            <exception cref="T:System.NullReferenceException">If <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.OpUnsafe``2">
+            <summary>
+            Calls <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> of of an <typeparamref name="TMagma"/>. The type in question does not have to possess a parameterless constructor; instead, a call to <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> with the this-pointer being null is forced. If <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> of <typeparamref name="TMagma"/> uses the this-pointer, a <see cref="T:System.NullReferenceException"/> will be thrown.
+            </summary>
+            <typeparam name="T">The type of the neutral element.</typeparam>
+            <typeparam name="TMagma">The type of the <see cref="T:Nordril.Functional.Algebra.IMagma`1"/>.</typeparam>
+            <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> of <typeparamref name="TMagma"/> uses the this-pointer.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
+            </summary>
+            <typeparam name="T">The monoid type.</typeparam>
+            <param name="xs">The list of elements to sum.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0})">
+            <summary>
+            Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
+            </summary>
+            <typeparam name="T">The monoid type.</typeparam>
+            <param name="xs">The list of elements to sum.</param>
+            <param name="empty">The neutral element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LiftMonoidWithInfinity``1(Nordril.Functional.Algebra.IMonoid{``0})">
+            <summary>
+            Lifts an <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> into one which has positive infinity (<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>) as a special element.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+            <param name="m">The monoid to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0},Nordril.Functional.Algebra.IMonoid{``0})">
+            <summary>
+            Sums a list of elements using a monoid instance. If the list is empty, the neutral element is returned.
+            </summary>
+            <typeparam name="T">The type of elements to sum.</typeparam>
+            <param name="xs">The list of elements to sum.</param>
+            <param name="m">The monoid instance.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.ListAppend``1">
+            <summary>
+            The mutating ([],++) monoid for lists. The binary operation mutates the first list.
+            </summary>
+            <typeparam name="T">The type of element in the list.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.ImmutableListAppend``1">
+            <summary>
+            The non-mutating ([],++) monoid for lists, meaning that the inputs of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)" /> aren't changed.
+            </summary>
+            <typeparam name="T">The type of element in the list.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid.StringAppend">
+            <summary>
+            The ("",+) monoid for <see cref="T:System.String"/>.
+            BEWARE THAT THIS HAS VERY POOR PERFORMANCE.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid.StringBuilderAppend">
+            <summary>
+            The ("",Append) monoid for <see cref="T:System.Text.StringBuilder"/>. Appending mutates the first argument.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid.BoolAnd">
+            <summary>
+            The (true,&amp;&amp;) monoid for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid.BoolOr">
+            <summary>
+            The (false,||) monoid for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Monoid.IntMult">
+            <summary>
+            The (1,*) monoid for <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.FirstOrDefault``1(``0)">
+            <summary>
+            The monoid whose operation always returns the first element and which has a default-value.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefault``1(``0)">
+            <summary>
+            The semigroup whose operation always returns the last element.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.ListAppendMonoid`1">
+            <summary>
+            The mutating ([],++) monoid for lists. The binary operation mutates the first list.
+            </summary>
+            <typeparam name="T">The type of element in the list.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.ListAppendMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.ListAppendMonoid`1.Op(System.Collections.Generic.List{`0},System.Collections.Generic.List{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.ListAppendImmutableMonoid`1">
+            <summary>
+            The non-mutating ([],++) monoid for lists, meaning that the inputs of <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)" /> aren't changed.
+            </summary>
+            <typeparam name="T">The type of element in the list.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.ListAppendImmutableMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.ListAppendImmutableMonoid`1.Op(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.StringBuilderAppendMonoid">
+            <summary>
+            The ("",Append) monoid for <see cref="T:System.Text.StringBuilder"/>. Appending mutates the first argument.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.StringBuilderAppendMonoid.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.StringBuilderAppendMonoid.Op(System.Text.StringBuilder,System.Text.StringBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.BoolAndMonoid">
+            <summary>
+            The (true,&amp;&amp;) monoid for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.BoolAndMonoid.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.BoolAndMonoid.Op(System.Boolean,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.BoolOrMonoid">
+            <summary>
+            The (false,||) monoid for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.BoolOrMonoid.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.BoolOrMonoid.Op(System.Boolean,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.IntMultMonoid">
+            <summary>
+            The (1,*) monoid for <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.IntMultMonoid.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.IntMultMonoid.Op(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.FirstOrDefaultMonoid`1">
+            <summary>
+            The monoid whose operation always returns the first element and which has a default-value.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.FirstOrDefaultMonoid`1.#ctor(`0)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.FirstOrDefaultMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.FirstOrDefaultMonoid`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.LastOrDefaultMonoid`1">
+            <summary>
+            The monoid whose operation always returns the last element and which has a default-value.
+            </summary>
+            <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefaultMonoid`1.#ctor(`0)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="default">The neutral element of the monoid.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.LastOrDefaultMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefaultMonoid`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group`1">
+            <summary>
+            A value-level group.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group`1.Neutral">
+            <summary>
+            The neutral element of the binary operation.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group`1.op">
+            <summary>
+            The binary operation.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group`1.Invert">
+            <summary>
+            The inversion function.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group`1.#ctor(`0,System.Func{`0,`0,`0},System.Func{`0,`0})">
+            <summary>
+            C
+            </summary>
+            <param name="neutral">The neutral element.</param>
+            <param name="op">The binary operation.</param>
+            <param name="invert">The inversion function.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.FromGroupInstance``1(Nordril.Functional.Algebra.IHasGroup{``0})">
+            <summary>
+            Reifies a type's <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> instance into its own <see cref="T:Nordril.Functional.Algebra.Group`1"/>-object.
+            </summary>
+            <typeparam name="T">The type that implements <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</typeparam>
+            <param name="instance">An object that is an instance of <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</param>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.IntAdd">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.LongAdd">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Int64"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.FloatAdd">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Single"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.DoubleAdd">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Double"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.DecimalAdd">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Decimal"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.FloatMult">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Single"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.DoubleMult">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Double"/>.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Group.DecimalMult">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Decimal"/>.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.IntAddGroup">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Int32"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.IntAddGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.IntAddGroup.Inverse(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.IntAddGroup.Op(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.LongAddGroup">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Int64"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.LongAddGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.LongAddGroup.Inverse(System.Int64)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.LongAddGroup.Op(System.Int64,System.Int64)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.FloatAddGroup">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Single"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.FloatAddGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.FloatAddGroup.Inverse(System.Single)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.FloatAddGroup.Op(System.Single,System.Single)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.DoubleAddGroup">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Double"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.DoubleAddGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DoubleAddGroup.Inverse(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DoubleAddGroup.Op(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.DecimalAddGroup">
+            <summary>
+            The (0,+,negate) group for <see cref="T:System.Decimal"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.DecimalAddGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DecimalAddGroup.Inverse(System.Decimal)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DecimalAddGroup.Op(System.Decimal,System.Decimal)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.FloatMultGroup">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Single"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.FloatMultGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.FloatMultGroup.Inverse(System.Single)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.FloatMultGroup.Op(System.Single,System.Single)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.DoubleMultGroup">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Double"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.DoubleMultGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DoubleMultGroup.Inverse(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DoubleMultGroup.Op(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.DecimalMultGroup">
+            <summary>
+            The (1,*,x =&gt; 1/x) group for <see cref="T:System.Decimal"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.DecimalMultGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DecimalMultGroup.Inverse(System.Decimal)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.DecimalMultGroup.Op(System.Decimal,System.Decimal)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.TagPlus">
             <summary>
@@ -630,7 +983,7 @@
                 a.Alt(x.Empty()) == a (right-neutrality of Empty)
                 a.Alt(b).Alt(c)  == a.Alt(b.Alt(c)) (associativity of Alt)
             </code>
-            <see cref="T:Nordril.Functional.Category.IAlternative`1"/> is thus a <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <see cref="T:Nordril.Functional.Category.IApplicative`1"/>.
+            <see cref="T:Nordril.Functional.Category.IAlternative`1"/> is thus a <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> on <see cref="T:Nordril.Functional.Category.IApplicative`1"/>.
             Moreover, the implementor should obey
             <code>
                 x.Empty().Ap(a) == x.Empty() (guard)
@@ -734,12 +1087,13 @@
         <member name="M:Nordril.Functional.Category.ApplicativeExtensions.PureUnsafe``2(``0)">
             <summary>
             Wraps an object in an applicative via <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
-            The applicative in question does not have to posess a parameterless constuctor; instead a call to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> with the this-pointer being null is forced.
+            The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> with the this-pointer being null is forced.
             If the requested applicative uses the this-pointer in <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>, this will result in a <see cref="T:System.NullReferenceException"/>.
             </summary>
             <typeparam name="TSource">The type of the object to wrap.</typeparam>
             <typeparam name="TResult">The type of the applicative to return.</typeparam>
             <param name="x">The value to wrap.</param>
+            <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
         </member>
         <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})">
             <summary>
@@ -1003,10 +1357,10 @@
             </summary>
             <typeparam name="TSource">The type of the values contained in the data structure.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Category.IFoldable`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+        <member name="M:Nordril.Functional.Category.IFoldable`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
             <summary>
             Maps each element of the structure to a monoid and then combines the elements
-            using the monoid's <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> operation.
+            using the monoid's <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> operation.
             </summary>
             <param name="monoid">The monoid dictionary that should be used.</param>
             <param name="f">The function that maps an element to a monoid.</param>
@@ -1028,7 +1382,7 @@
         <member name="M:Nordril.Functional.Category.FoldableExtensions.FoldMap``2(Nordril.Functional.Category.IFoldable{``0},System.Func{``1},System.Func{``0,``1})">
             <summary>
             Maps each element of the structure to a monoid and then combines the elements
-            using the monoid's <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0)"/> operation.
+            using the monoid's <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> operation.
             </summary>
             <typeparam name="TSource">The type of elements contained in <paramref name="foldable"/>.</typeparam>
             <typeparam name="TMonoid">The monoid to which to mape the elements.</typeparam>
@@ -1096,7 +1450,7 @@
                 Pure(a).Bind(f) == f(a) (left identity of pure)
                 f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity)
             </code>
-            These laws are identical to the laws of <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/>, except for the
+            These laws are identical to the laws of <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/>, except for the
             type variable in <see cref="T:Nordril.Functional.Category.IMonad`1"/>.
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
@@ -2057,6 +2411,7 @@
             <summary>
             A sum type that can either be a left or a right, but not both. While left and right have no special semantics, per convention,
             the left is regarded as the "error-case", and the right is regarded as the "ok-case", if the either is used to model failure.
+            Available as a data-source in LINQ-queries.
             </summary>
             <typeparam name="TLeft">The type of the left value in the either.</typeparam>
             <typeparam name="TRight">The type of the right value in the either.</typeparam>
@@ -2178,6 +2533,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`2.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`2.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`2.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either">
@@ -2343,7 +2704,7 @@
         <member name="M:Nordril.Functional.Data.FuncList`1.Map``1(System.Func{`0,``0})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.FuncList`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+        <member name="M:Nordril.Functional.Data.FuncList`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.Filter(System.Func{`0,System.Boolean})">
@@ -2486,7 +2847,7 @@
         <member name="M:Nordril.Functional.Data.FuncSet`1.Filter(System.Func{`0,System.Boolean})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.FuncSet`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+        <member name="M:Nordril.Functional.Data.FuncSet`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncSet`1.Foldr``1(System.Func{`0,``0,``0},``0)">
@@ -2597,6 +2958,7 @@
         <member name="T:Nordril.Functional.Data.Identity`1">
             <summary>
             The identity functor which does nothing but wrap a value.
+            Available as a data-source in LINQ-queries.
             </summary>
             <typeparam name="T">The type of the value being wrapped.</typeparam>
         </member>
@@ -2641,17 +3003,41 @@
         <member name="M:Nordril.Functional.Data.Identity`1.Equals(Nordril.Functional.Data.Identity{`0})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Identity">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Identity`1"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Data.Identity.ToPredicate``1(Nordril.Functional.Category.IFunctor{``0})">
+        <member name="T:Nordril.Functional.Data.Identity.IdentityIso`1">
+            <summary>
+            An isomorphism between <see cref="T:Nordril.Functional.Data.Identity`1"/> and any type.
+            </summary>
+            <typeparam name="T">The underlying type to wrap.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.Identity.IoIso`1">
+            <summary>
+            An isomorphism between <see cref="T:Nordril.Functional.Data.Io`1"/> and <see cref="T:System.Func`2"/>.
+            </summary>
+            <typeparam name="T">The underlying type to wrap.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity.ToIdentity``1(Nordril.Functional.Category.IFunctor{``0})">
             <summary>
             Unsafely casts an <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to an <see cref="T:Nordril.Functional.Data.Identity`1"/>.
             </summary>
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity.Iso``1">
+            <summary>
+            Returns an isomorphism between <see cref="T:System.Func`1"/> and <see cref="T:Nordril.Functional.Data.Io`1"/>.
+            </summary>
+            <typeparam name="T">The type of the result of computation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.IFuncList`1">
             <summary>
@@ -2714,6 +3100,139 @@
             Gets an <see cref="T:System.Collections.Generic.IComparer`1"/> for <see cref="T:System.Collections.Generic.ISet`1"/>s if the contained elements of type <typeparamref name="T1"/> are comparable.
             </summary>
             <typeparam name="T1">The of element in the <see cref="T:System.Collections.Generic.ISet`1"/>.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.Io`1">
+            <summary>
+            A value which has an arbitrary computation (mainly Io) attached to it. This corresponds to <see cref="T:System.Func`1"/>, since in C#, any function can perform Io without declaring that fact in its type; however, this type enables one to build lazy pipelines via the <see cref="T:Nordril.Functional.Category.IMonad`1"/>-functionality, like mapping over the result while executing the attached action, run a multi-argument function over the results of computations, and composing functions. The boilerplate which this type takes care of is essentially that of function composition.
+            </summary>
+            <example>
+            Suppose we have two actions: one which reads from the command-line and one which writes to it. We then assemble a computation which first reads two numbers from the command-line, adds them, and prints out the results:
+            <code>
+                var read = Io.ToIo(() => Console.ReadLine()).Map(int.Parse).ToIo();
+                var write = ((int x) => Console.WriteLine(x)).AsIoAction();
+                
+                var pipeline = read.Bind(x => read.Bind(y => write(x,y))).ToIo();
+                
+                //So far, nothing has been read from or written to console, pipeline is a delayed computation.
+                
+                //Now we run it
+                pipeline.Run();
+                //Results:
+                //&lt;read line&gt; 5
+                //&lt;read line&gt; 3
+                //&lt;write line&gt; 8
+            </code>
+            </example>
+            <typeparam name="T">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.#ctor(System.Func{`0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Io`1"/> out of a <see cref="T:System.Func`1"/>.
+            </summary>
+            <param name="value">The function which constitutes this computation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.Run">
+            <summary>
+            Returns the result of the computation, while also performing the side-effect.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})">
+            <summary>
+            Chains another <see cref="T:Nordril.Functional.Data.Io`1"/>-computation to this one.
+            </summary>
+            <typeparam name="TResult">The type of the result of the second computation.</typeparam>
+            <param name="f">A function which takes the result of this computation and returns a new one. The return-type of the function has to be <see cref="T:Nordril.Functional.Data.Io`1"/> with type <typeparamref name="TResult"/>, otherwise, an <see cref="T:System.InvalidCastException"/> is thrown.</param>
+            <exception cref="T:System.InvalidCastException">If the result of <paramref name="f"/> isn't <see cref="T:Nordril.Functional.Data.Io`1"/> with type <typeparamref name="TResult"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.BindFunc``1(System.Func{`0,``0})">
+            <summary>
+            Chains a function to this computation, with the same semantics as <see cref="M:Nordril.Functional.Data.Io`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>, i.e. lazily.
+            </summary>
+            <typeparam name="TResult">The type of the result of the second computation.</typeparam>
+            <param name="f">The function which takes the argument of this computation and returns a result, possibly performing side-effects.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.BindAction(System.Action{`0})">
+            <summary>
+            Chains an <see cref="T:System.Action`1"/> to this computation, with the same semantics as <see cref="M:Nordril.Functional.Data.Io`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>, i.e. lazily, and returns <see cref="T:Nordril.Functional.Data.Unit"/> as the overall result.
+            </summary>
+            <param name="f">The function which takes the argument of this computation and returns no result, possibly performing side-effects.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.Map``1(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Io`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Io">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.Io`1"/>.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.Io.IoIso`1">
+            <summary>
+            An isomorphism between <see cref="T:Nordril.Functional.Data.Io`1"/> and <see cref="T:System.Func`2"/>.
+            </summary>
+            <typeparam name="T">The underlying type to wrap.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.Pure``1(``0)">
+            <summary>
+            Returns a value as <see cref="T:Nordril.Functional.Data.Io`1"/>, without performing any side-effects. Shorthand for <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
+            </summary>
+            <typeparam name="T">The type of the value to wrap in <see cref="T:Nordril.Functional.Data.Io`1"/>.</typeparam>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.AsIo``1(System.Func{``0})">
+            <summary>
+            Wraps a function into an <see cref="T:Nordril.Functional.Data.Io`1"/>.
+            </summary>
+            <typeparam name="T">The type of the result.</typeparam>
+            <param name="f">The function to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.LiftIoFunc``2(System.Func{``0,``1})">
+            <summary>
+            Lifts a <see cref="T:System.Func`2"/> into a function which takes a value of type <typeparamref name="T"/> and returns a value of type <typeparamref name="TResult"/> into a function which takes a value of type <typeparamref name="T"/> and returns an <see cref="T:Nordril.Functional.Data.Io`1"/>. Useful for <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/> on <see cref="T:Nordril.Functional.Data.Io`1"/>-computations.
+            </summary>
+            <typeparam name="T">The type of the argument.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to lift into <see cref="T:Nordril.Functional.Data.Io`1"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.LiftIoAction``2(System.Action{``0})">
+            <summary>
+            Lifts an <see cref="T:System.Action`2"/> into a function which takes a value of type <typeparamref name="T"/> into a function which takes a value of type <typeparamref name="T"/> and returns an <see cref="T:Nordril.Functional.Data.Io`1"/> with no result. Useful for <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/> on <see cref="T:Nordril.Functional.Data.Io`1"/>-computations.
+            </summary>
+            <typeparam name="T">The type of the argument.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to lift into <see cref="T:Nordril.Functional.Data.Io`1"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.ToIo``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Data.Io`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to a maybe.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.Iso``1">
+            <summary>
+            Returns an isomorphism between <see cref="T:System.Func`1"/> and <see cref="T:Nordril.Functional.Data.Io`1"/>.
+            </summary>
+            <typeparam name="T">The type of the result of computation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.Unwrap``1(Nordril.Functional.Data.Io{``0})">
+            <summary>
+            Unwraps an <see cref="T:Nordril.Functional.Data.Io`1"/> into a <see cref="T:System.Func`1"/>.
+            </summary>
+            <typeparam name="T">The type of the result of the computation.</typeparam>
+            <param name="io">The computation to unwrap.</param>
         </member>
         <member name="T:Nordril.Functional.Data.IVisitable`2">
             <summary>
@@ -2957,7 +3476,7 @@
         <member name="T:Nordril.Functional.Data.Maybe`1">
             <summary>
             An optional type that works for both reference and value types.
-            Also known as "Option".
+            Also known as "Option". Available as a data-source in LINQ-queries.
             </summary>
         </member>
         <member name="M:Nordril.Functional.Data.Maybe`1.Value">
@@ -3089,10 +3608,22 @@
         <member name="M:Nordril.Functional.Data.Maybe`1.Equals(Nordril.Functional.Data.Maybe{`0})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Maybe">
             <summary>
             Static methods and extension for <see cref="T:Nordril.Functional.Data.Maybe`1"/>.
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.Maybe.MaybeIso`1">
+            <summary>
+            An isomorphism between <see cref="T:Nordril.Functional.Data.Maybe`1"/> and reference types, where <c>default</c> is mapped to <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and all other values to <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="T">The underlying type to wrap.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Data.Maybe.JustIf``1(System.Boolean,System.Func{``0})">
             <summary>
@@ -3112,6 +3643,20 @@
             </summary>
             <typeparam name="T">The type of the value.</typeparam>
             <param name="value">The value to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe.Iso``1">
+            <summary>
+            Returns an isomorphism between a reference type (which has null) and <see cref="T:Nordril.Functional.Data.Maybe`1"/>, which can be used to wrap/unwrap the <see cref="T:Nordril.Functional.Data.Maybe`1"/>.
+            null of the underlying type is mapped to <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and all other values are mapped to <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="T">The underlying type contained in the <see cref="T:Nordril.Functional.Data.Maybe`1"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe.Unwrap``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Returns the value of the <see cref="T:Nordril.Functional.Data.Maybe`1"/> or null if it has no value. Shorthand for <c>m.ValueOr(null)</c>.
+            </summary>
+            <typeparam name="T">The underlying type contained in the <see cref="T:Nordril.Functional.Data.Maybe`1"/>.</typeparam>
+            <param name="maybe">The <see cref="T:Nordril.Functional.Data.Maybe`1"/> to unwrap.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Maybe.Nothing``1">
             <summary>
@@ -3171,11 +3716,12 @@
         <member name="M:Nordril.Functional.Data.Pred`1.ContraMap``1(System.Func{``0,`0})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.Pred`1.Op(Nordril.Functional.Data.Pred{`0})">
+        <member name="M:Nordril.Functional.Data.Pred`1.Op(Nordril.Functional.Data.Pred{`0},Nordril.Functional.Data.Pred{`0})">
             <summary>
             Combines two predicates via logical AND.
             </summary>
-            <param name="that">The other predicate.</param>
+            <param name="x">The first predicate.</param>
+            <param name="y">The second predicate.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Pred">
             <summary>
@@ -3479,7 +4025,7 @@
         <member name="M:Nordril.Functional.Data.Tree`1.Map``1(System.Func{`0,``0})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.Tree`1.FoldMap``1(Nordril.Functional.Algebra.Monoid{``0},System.Func{`0,``0})">
+        <member name="M:Nordril.Functional.Data.Tree`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Tree`1.Foldr``1(System.Func{`0,``0,``0},``0)">
@@ -3583,7 +4129,7 @@
             Forms the trivial, one-element commutative group and is a 0-tuple.
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Data.Unit.Inverse">
+        <member name="M:Nordril.Functional.Data.Unit.Inverse(Nordril.Functional.Data.Unit)">
             <inheritdoc />
         </member>
         <member name="P:Nordril.Functional.Data.Unit.Neutral">
@@ -3642,7 +4188,7 @@
             Gets a hash code for a <see cref="T:Nordril.Functional.Data.Unit"/>. A constant.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Data.Unit.Op(Nordril.Functional.Data.Unit)">
+        <member name="M:Nordril.Functional.Data.Unit.Op(Nordril.Functional.Data.Unit,Nordril.Functional.Data.Unit)">
             <inheritdoc />
         </member>
         <member name="P:Nordril.Functional.Data.Unit.Length">
@@ -3678,6 +4224,137 @@
             <summary>
             Constructs the void type (but you can't touch this).
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.Writer`3">
+            <summary>
+            The writer-monad, which provides write-only access to a state, in addition to producing a result.
+            The output can then be later extracted, but not by the computations within the writer-monad themselves.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TValue">The type of the result.</typeparam>
+            <typeparam name="TMonoid">The monoid on <typeparamref name="TState"/> used to combine the outputs. This MUST be a type whose <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/>- and <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/>-operations DO NOT use the this-pointer, i.e. NOT a generic <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>-instance, but some user-made <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/>-instance.</typeparam>
+            <remarks>
+            The two main functions one can use with a writer are tell (which stores a new output in the state of the writer) and listen (which stores a new output in the state of the writer and also returns it as the writer's result).
+            Due to limits of type-inference, using <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/> and <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/> are quite cumbersome; for this reason, specialized versions are provided in the form of <see cref="M:Nordril.Functional.Data.Writer.BindTell``3(Nordril.Functional.Data.Writer{``0,``1,``2},System.Func{``1,``0})"/> and <see cref="M:Nordril.Functional.Data.Writer.BindListen``3(Nordril.Functional.Data.Writer{``0,``1,``2},System.Func{``1,``0})"/> (as a specialized replacement for <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>; and <see cref="M:Nordril.Functional.Data.Writer`3.MapWriter``1(System.Func{`1,``0})"/> (as a specialized replacement for <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>).
+            </remarks>
+        </member>
+        <member name="P:Nordril.Functional.Data.Writer`3.State">
+            <summary>
+            The write-only output of the computation.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Data.Writer`3.Result">
+            <summary>
+            The result of the computation.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.#ctor(`1)">
+            <summary>
+            Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
+            </summary>
+            <param name="result">The result to produce.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.#ctor(`1,`0)">
+            <summary>
+            Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
+            </summary>
+            <param name="state">The initial state of the writer.</param>
+            <param name="result">The result to produce.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.#ctor(`1,`0,Nordril.Functional.Algebra.IMonoid{`0})">
+            <summary>
+            Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
+            </summary>
+            <param name="state">The initial state of the writer.</param>
+            <param name="result">The result to produce.</param>
+            <param name="monoid">The monoid on <typeparamref name="TState"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.Tell(`0)">
+            <summary>
+            Returns a new writer which stores a new ouput <paramref name="state"/>.
+            </summary>
+            <param name="state">The new output to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`1,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.Bind``1(System.Func{`1,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.Map``1(System.Func{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.MapWriter``1(System.Func{`1,``0})">
+            <summary>
+            A specialized version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/> which preserves the type-information that the result is a <see cref="T:Nordril.Functional.Data.Writer`3"/>. Useful in oder to avoid having to specify types.
+            </summary>
+            <typeparam name="TResult">The result of the function.</typeparam>
+            <param name="f">The </param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer`3.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Writer">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.Writer`3"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.TellUnit``2(``0)">
+            <summary>
+            Stores a new output in the writer and returns no result.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TMonoid">The <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <typeparamref name="TState"/>.</typeparam>
+            <param name="state">The output to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.BindTell``3(Nordril.Functional.Data.Writer{``0,``1,``2},System.Func{``1,``0})">
+            <summary>
+            Stores a new output in the writer.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TValue">The result of the writer.</typeparam>
+            <typeparam name="TMonoid">The <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <typeparamref name="TState"/>.</typeparam>
+            <param name="w">The writer.</param>
+            <param name="f">The function which takes the writer's result and returns the output to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.BindTellUnit``3(Nordril.Functional.Data.Writer{``0,``1,``2},System.Func{``1,``0})">
+            <summary>
+            Stores a new output in the writer and returns it.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TValue">The result of the writer.</typeparam>
+            <typeparam name="TMonoid">The <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <typeparamref name="TState"/>.</typeparam>
+            <param name="w">The writer.</param>
+            <param name="f">The function which takes the writer's result and returns the output to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.Listen``2(``0)">
+            <summary>
+            Stores a new output and returns it.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TMonoid">The <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <typeparamref name="TState"/>.</typeparam>
+            <param name="state">The output to store and return.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.BindListen``3(Nordril.Functional.Data.Writer{``0,``1,``2},System.Func{``1,``0})">
+            <summary>
+            Stores a new output and returns it.
+            </summary>
+            <typeparam name="TState">The type of the output.</typeparam>
+            <typeparam name="TValue">The result of the writer.</typeparam>
+            <typeparam name="TMonoid">The <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> on <typeparamref name="TState"/>.</typeparam>
+            <param name="w">The writer.</param>
+            <param name="f">The output to store and return.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.ToWriter``3(Nordril.Functional.Category.IFunctor{``1})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Data.Writer`3"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="TValue">The type of the value contained in the functor.</typeparam>
+            <typeparam name="TState">The type of the writer's state.</typeparam>
+            <typeparam name="TMonoid">The type of the writer's monoid.</typeparam>
+            <param name="f">The functor to cast to a writer.</param>
         </member>
         <member name="T:Nordril.Functional.EnumExtensions">
             <summary>

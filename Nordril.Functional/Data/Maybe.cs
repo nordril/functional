@@ -1,14 +1,16 @@
 ﻿using Nordril.Functional.Category;
+using Nordril.HedgingEngine.Logic.Mapping;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Nordril.Functional.Data
 {
     /// <summary>
     /// An optional type that works for both reference and value types.
-    /// Also known as "Option".
+    /// Also known as "Option". Available as a data-source in LINQ-queries.
     /// </summary>
-    public struct Maybe<T> : IMonadPlus<T>, IAlternative<T>, IEquatable<Maybe<T>>
+    public struct Maybe<T> : IMonadPlus<T>, IAlternative<T>, IEquatable<Maybe<T>>, IEnumerable<T>
     {
         private T value;
 
@@ -213,6 +215,20 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Maybe<T> other) => Equals((object)other);
+
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (HasValue)
+                yield return value;
+        }
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if (HasValue)
+                yield return value;
+        }
     }
 
     /// <summary>
@@ -220,6 +236,18 @@ namespace Nordril.Functional.Data
     /// </summary>
     public static class Maybe
     {
+        /// <summary>
+        /// An isomorphism between <see cref="Maybe{T}"/> and reference types, where <c>default</c> is mapped to <see cref="Maybe.Nothing{T}"/> and all other values to <see cref="Maybe.Just{T}(T)"/>.
+        /// </summary>
+        /// <typeparam name="T">The underlying type to wrap.</typeparam>
+        private class MaybeIso<T> : IIsomorphism<T, Maybe<T>>
+            where T : class
+        {
+            public T ConvertBack(Maybe<T> from) => from.ValueOr(default);
+
+            public Maybe<T> Convert(T from) => JustIf(from != default, () => from);
+        }
+
         /// <summary>
         /// Creates a new maybe which contains a value if <paramref name="isJust"/> is true,
         /// and Nothing otherwise.
@@ -238,6 +266,20 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The value to store.</param>
         public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
+
+        /// <summary>
+        /// Returns an isomorphism between a reference type (which has null) and <see cref="Maybe{T}"/>, which can be used to wrap/unwrap the <see cref="Maybe{T}"/>.
+        /// null of the underlying type is mapped to <see cref="Maybe.Nothing{T}"/> and all other values are mapped to <see cref="Maybe.Just{T}(T)"/>.
+        /// </summary>
+        /// <typeparam name="T">The underlying type contained in the <see cref="Maybe{T}"/>.</typeparam>
+        public static IIsomorphism<T, Maybe<T>> Iso<T>() where T : class => new MaybeIso<T>();
+
+        /// <summary>
+        /// Returns the value of the <see cref="Maybe{T}"/> or null if it has no value. Shorthand for <c>m.ValueOr(null)</c>.
+        /// </summary>
+        /// <typeparam name="T">The underlying type contained in the <see cref="Maybe{T}"/>.</typeparam>
+        /// <param name="maybe">The <see cref="Maybe{T}"/> to unwrap.</param>
+        public static T Unwrap<T>(this Maybe<T> maybe) where T : class => maybe.ValueOr(null);
 
         /// <summary>
         /// Returns a new maybe containing no value.
