@@ -38,8 +38,9 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Returns a new dictionary in which the value of the key <paramref name="key"/> has been set to the result of <paramref name="f"/> if it was present, leaving the original unmodified.
+        /// </summary>
         /// <param name="key">The key whose value to update.</param>
-        /// <paramref name="f">The function whose result will be the new value. The first parameter is the key, the second is the old value.</paramref>
+        /// <param name="f">The function whose result will be the new value. The first parameter is the key, the second is the old value.</param>
         IFuncDictionary<TKey, TValue> UpdatePure(TKey key, Func<TKey, TValue, TValue> f);
     }
 }
