@@ -211,6 +211,7 @@ namespace Nordril.Functional.Data
 
             var sThis = SetCoalesce();
 
+
             return sThis.IsSubsetOf(ReplaceEqualityComparer(that)) && sThis.Count == that.Count;
         }
 

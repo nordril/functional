@@ -201,26 +201,34 @@ namespace Nordril.Functional.Tests.Data
             var origLength = fl.Count;
             fl.Add(elem);
 
-            var list = new List<int>(xs ?? new int[0]);
-            list.Add(elem);
+            var list = new List<int>(xs ?? new int[0])
+            {
+                elem
+            };
 
             Assert.Equal(list, fl);
             Assert.Equal(origLength + 1, fl.Count);
         }
 
         [Theory]
-        [InlineData(new int[] { }, new int[] { })]
-        [InlineData(new int[] { 1 }, new int[] { 1 })]
-        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
-        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 })]
-        [InlineData(new int[] { 4 }, new int[] { })]
-        [InlineData(new int[] { }, new int[] { 7 })]
-        [InlineData(new int[] { 1, 5 }, new int[] { 1 })]
-        [InlineData(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3, 4 })]
-        [InlineData(new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 8, 8, 3, 8, 2, 0 })]
-        public static void EqualTest(int[] xs, int[] ys)
+        [InlineData(true, new int[] { }, new int[] { })]
+        [InlineData(true, new int[] { 1 }, new int[] { 1 })]
+        [InlineData(true, new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [InlineData(true, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 })]
+        [InlineData(false, new int[] { 4 }, new int[] { })]
+        [InlineData(false, new int[] { }, new int[] { 7 })]
+        [InlineData(false, new int[] { 1, 5 }, new int[] { 1 })]
+        [InlineData(false, new int[] { 1, 5 }, new int[] { 5, 1 })]
+        [InlineData(false, new int[] { 1, 2, 3 }, new int[] { 1, 2, 3, 4 })]
+        [InlineData(false, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 8, 8, 3, 8, 2, 0 })]
+        [InlineData(false, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 5, 4, 2, 8, 8, 8, 3, 8, 2, 0, 7 })]
+        [InlineData(false, new int[] { 5, 4, 2, 8, 3, 8, 2, 0 }, new int[] { 2, 4, 2, 8, 8, 8, 3, 8, 2, 0 })]
+        public static void EqualTest(bool expectedEqual, int[] xs, int[] ys)
         {
-            Assert.Equal(xs.SequenceEqual(ys), new FuncList<int>(xs).Equals(new FuncList<int>(ys)));
+            if (expectedEqual)
+                Assert.True(new FuncList<int>(xs).Equals(new FuncList<int>(ys)));
+            else
+                Assert.False(new FuncList<int>(xs).Equals(new FuncList<int>(ys)));
         }
 
         [Theory]

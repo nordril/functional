@@ -2380,19 +2380,6 @@
             A factory-class that creates <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>s which compare dictionaries for structural equality.
             </summary>
         </member>
-        <member name="T:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2">
-            <summary>
-            An equality-comparer which compares two dictionaries for structural equality, meaning based on the keys and values they contain.
-            </summary>
-            <typeparam name="TKey">The type of the keys.</typeparam>
-            <typeparam name="TValue">The type of the values.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2.Equals(System.Collections.Generic.IDictionary{`0,`1},System.Collections.Generic.IDictionary{`0,`1})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.DictionaryEqualityComparerImpl`2.GetHashCode(System.Collections.Generic.IDictionary{`0,`1})">
-            <inheritdoc />
-        </member>
         <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer.Make``2(System.Collections.Generic.IEqualityComparer{``0},System.Collections.Generic.IEqualityComparer{``1})">
             <summary>
             Creates a structural <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> for key- and value-types for which the caller provides <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>s.
@@ -2406,6 +2393,36 @@
             </summary>
             <typeparam name="TKey">The type of the keys.</typeparam>
             <typeparam name="TValue">The type of the values.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Data.DictionaryEqualityComparer`2">
+            <summary>
+            An equality-comparer which compares two dictionaries for structural equality, meaning based on the keys and values they contain.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.DictionaryEqualityComparer`2.KeyComp">
+            <summary>
+            The key-comparer.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Data.DictionaryEqualityComparer`2.ValueComp">
+            <summary>
+            The value-commparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer`2.#ctor(System.Collections.Generic.IEqualityComparer{`0},System.Collections.Generic.IEqualityComparer{`1})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="keyComp">The key-comparer.</param>
+            <param name="valueComp">The value-comparer.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer`2.Equals(System.Collections.Generic.IDictionary{`0,`1},System.Collections.Generic.IDictionary{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer`2.GetHashCode(System.Collections.Generic.IDictionary{`0,`1})">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`2">
             <summary>
@@ -2624,6 +2641,183 @@
             <summary>
             The tag's singleton value.
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.FuncDictionary`2">
+            <summary>
+            A wrapper around an arbitrary <see cref="T:System.Collections.Generic.IDictionary`2"/> which can determine equality based on the contained keys and values instead of by reference, and which implements various functional interfaces. Two <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>-object are equal if they contain the same set of keys and, for every contained key, <see cref="M:System.Object.Equals(System.Object)"/> of the corresponding values returns true.
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="F:Nordril.Functional.Data.FuncDictionary`2.dict">
+            <summary>
+            The underlying dictionary field.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Data.FuncDictionary`2.comparer">
+            <summary>
+            The comparer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Add(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.ContainsKey(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Remove(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.TryGetValue(`0,`1@)">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncDictionary`2.Item(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> from a pair of keys and values.
+            </summary>
+            <param name="pairs">The pairs to put into the dictionary.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}},System.Collections.Generic.IEqualityComparer{`0},System.Collections.Generic.IEqualityComparer{`1})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> from a pair of keys and values, and a custom comparer.
+            </summary>
+            <param name="pairs">The pairs to put into the dictionary.</param>
+            <param name="keyComparer">The equality comparer for the keys.</param>
+            <param name="valueComparer">The equality comparer for the values.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{`0,`1}})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> from a pair of keys and values.
+            </summary>
+            <param name="pairs">The pairs to put into the dictionary.</param>
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncDictionary`2.Keys">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncDictionary`2.Values">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Clear">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncDictionary`2.Count">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.FuncDictionary`2.IsReadOnly">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Equals(System.Collections.Generic.IDictionary{`0,`1})">
+            <summary>
+            Determines equality based on the contents of two <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>-objects. Two objects are equal if they have the same set of keys and if, for every contained key, <see cref="M:System.IEquatable`1.Equals(`0)"/> of the values returns true.
+            </summary>
+            <param name="other">The other <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Equals(System.Object)">
+            <summary>
+            See <see cref="M:Nordril.Functional.Data.FuncDictionary`2.Equals(System.Collections.Generic.IDictionary{`0,`1})"/>.
+            </summary>
+            <param name="obj">The other oject.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.op_Equality(Nordril.Functional.Data.FuncDictionary{`0,`1},Nordril.Functional.Data.FuncDictionary{`0,`1})">
+            <summary>
+            See <see cref="M:Nordril.Functional.Data.FuncDictionary`2.Equals(System.Collections.Generic.IDictionary{`0,`1})"/>.
+            </summary>
+            <param name="left">The first object.</param>
+            <param name="right">The second object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.op_Inequality(Nordril.Functional.Data.FuncDictionary{`0,`1},Nordril.Functional.Data.FuncDictionary{`0,`1})">
+            <summary>
+            See <see cref="M:Nordril.Functional.Data.FuncDictionary`2.Equals(System.Collections.Generic.IDictionary{`0,`1})"/>.
+            </summary>
+            <param name="left">The first object.</param>
+            <param name="right">The second object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.GetHashCode">
+            <summary>
+            Computes the hash based on <see cref="M:Nordril.Functional.CollectionExtensions.HashElements``1(System.Collections.Generic.IEnumerable{``0})"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.AddPure(`0,`1,System.Boolean@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.RemovePure(`0,System.Boolean@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.UpsertPure(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.UpdatePure(`0,System.Func{`0,`1,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.DictCoalesce">
+            <summary>
+            Retuns <see cref="F:Nordril.Functional.Data.FuncDictionary`2.dict"/>. If <see cref="F:Nordril.Functional.Data.FuncDictionary`2.dict"/> has not been assigned, it's set to a new, empty dictionary first.
+            </summary>
+            <remarks>
+            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncDictionary`2.dict"/> has not been initialized yet, they will hold references to different dictionaries after this method returns.
+            </remarks>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.ComparerCoalesce">
+            <summary>
+            Retuns <see cref="F:Nordril.Functional.Data.FuncDictionary`2.comparer"/>. If <see cref="F:Nordril.Functional.Data.FuncDictionary`2.comparer"/> has not been assigned, it's set to a new, default comparer first
+            </summary>
+            <remarks>
+            If two callers hold references to this struct and <see cref="F:Nordril.Functional.Data.FuncDictionary`2.comparer"/> has not been initialized yet, they will hold references to different lists after this method returns.
+            </remarks>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.Map``1(System.Func{`1,``0})">
+            <summary>
+            Applies a function to the values of the dictionary and returns the new dictionary, leaving the old one unchanged. If <typeparamref name="TValue"/> is different from <typeparamref name="TResult"/>, the value-comparer is downgraded to <see cref="M:System.Object.Equals(System.Object)"/>.
+            </summary>
+            <typeparam name="TResult">The type of the new values.</typeparam>
+            <param name="f">The function to apply to the values.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.MonoMap(System.Func{`1,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.FuncDictionary">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary.Make``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> based on the <see cref="T:System.IEquatable`1"/>-instances of the keys and values.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+            <param name="xs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary.Make``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> based on the <see cref="T:System.IEquatable`1"/>-instances of the keys and values.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+            <param name="xs"></param>
+            <returns></returns>
         </member>
         <member name="T:Nordril.Functional.Data.FuncList`1">
             <summary>
@@ -3039,6 +3233,36 @@
             </summary>
             <typeparam name="T">The type of the result of computation.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Data.IFuncDictionary`2">
+            <summary>
+            A dictionary which supports pure operations which do not modify the original.
+            </summary>
+            <typeparam name="TKey">The type of the keys.</typeparam>
+            <typeparam name="TValue">The type of the values.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncDictionary`2.AddPure(`0,`1,System.Boolean@)">
+            <summary>
+            Returns a new dictionary to which the pair (<paramref name="key"/>, <paramref name="value"/>) has been added, leaving the original unmodified. <paramref name="success"/> is true if the key was not present in the original.
+            </summary>
+            <param name="key">The key to add.</param>
+            <param name="value">The value to add.</param>
+            <param name="success">true if the key was not present in the original, false otherwise.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncDictionary`2.RemovePure(`0,System.Boolean@)">
+            <summary>
+            Returns a new dictionary from which <paramref name="key"/>has been removed, leaving the original unmodified. <paramref name="success"/> is true if the key was present in the original.
+            </summary>
+            <param name="key">The key to remove.</param>
+            <param name="success">true if the key was present in the original, false otherwise.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.IFuncDictionary`2.UpsertPure(`0,`1)">
+            <summary>
+            Returns a new dictionary to which the pair (<paramref name="key"/>, <paramref name="value"/>) has been added if the key was not present, or one where the value of the key <paramref name="key"/> has been overwritten by <paramref name="value"/> if it was, leaving the original unmodified.
+            </summary>
+            <param name="key">The key to add/update.</param>
+            <param name="value">The value to add/update.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Nordril.Functional.Data.IFuncDictionary`2.UpdatePure(`0,System.Func{`0,`1,`1})" -->
         <member name="T:Nordril.Functional.Data.IFuncList`1">
             <summary>
             A "functional list" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.IList`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonadPlus`1"/> (and parent interfaces), <see cref="T:Nordril.Functional.Category.IAlternative`1"/>, and <see cref="T:Nordril.Functional.Category.IFoldable`1"/>.
