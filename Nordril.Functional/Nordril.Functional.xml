@@ -2805,6 +2805,9 @@
         <member name="M:Nordril.Functional.Data.FuncList`1.Map``1(System.Func{`0,``0})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.MapWithKey``1(System.Func{System.Int32,`0,``0})">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
             <inheritdoc />
         </member>

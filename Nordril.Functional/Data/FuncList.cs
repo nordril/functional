@@ -117,6 +117,10 @@ namespace Nordril.Functional.Data
             => new FuncList<TResult>(ListCoalesce().Select(x => f(x)));
 
         /// <inheritdoc />
+        public IKeyedFunctor<int, TResult> MapWithKey<TResult>(Func<int, T, TResult> f)
+            => new FuncList<TResult>(ListCoalesce().Select((x, i) => f(i, x)));
+
+        /// <inheritdoc />
         public T1 FoldMap<T1>(IMonoid<T1> monoid, Func<T, T1> f)
             => ListCoalesce().Select(f).Msum(monoid);
 
