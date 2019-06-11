@@ -271,6 +271,19 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
+        public IKeyedFunctor<TKey, TResult> MapWithKey<TResult>(Func<TKey, TValue, TResult> f)
+        {
+            var oldValueComp = ComparerCoalesce().ValueComp;
+
+            var valueComp = new FuncEqualityComparer<TResult>((x, y) => oldValueComp.Equals((TValue)(object)x, (TValue)(object)y));
+
+            if (typeof(TValue) != typeof(TResult))
+                valueComp = new FuncEqualityComparer<TResult>((x, y) => x.Equals(y));
+
+            return new FuncDictionary<TKey, TResult>(DictCoalesce().Select(kv => new KeyValuePair<TKey, TResult>(kv.Key, f(kv.Key, kv.Value))), ComparerCoalesce().KeyComp, valueComp);
+        }
+
+        /// <inheritdoc />
         public IFuncDictionary<TKey, TValue> MonoMap(Func<TValue, TValue> f)
         {
             return new FuncDictionary<TKey, TValue>(DictCoalesce().Select(kv => new KeyValuePair<TKey, TValue>(kv.Key, f(kv.Value))), ComparerCoalesce().KeyComp, ComparerCoalesce().ValueComp);

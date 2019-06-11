@@ -12,7 +12,7 @@ namespace Nordril.Functional.Data
     /// </summary>
     /// <typeparam name="TKey">The type of the keys.</typeparam>
     /// <typeparam name="TValue">The type of the values.</typeparam>
-    public interface IFuncDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEquatable<IDictionary<TKey, TValue>>, IFunctor<TValue>, IMonoFunctor<IFuncDictionary<TKey, TValue>, TValue>
+    public interface IFuncDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IEquatable<IDictionary<TKey, TValue>>, IKeyedFunctor<TKey, TValue>, IMonoFunctor<IFuncDictionary<TKey, TValue>, TValue>
     {
         /// <summary>
         /// Returns a new dictionary to which the pair (<paramref name="key"/>, <paramref name="value"/>) has been added, leaving the original unmodified. <paramref name="success"/> is true if the key was not present in the original.

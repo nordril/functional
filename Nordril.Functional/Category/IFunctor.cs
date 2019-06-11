@@ -7,7 +7,7 @@ namespace Nordril.Functional.Category
     /// A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/>.
     /// One can apply functions to functors to change their contained type.
     /// </summary>
-    /// <typeparam name="TSource">The data contained in the functor.</typeparam>
+    /// <typeparam name="TSource">The type of values contained in the functor.</typeparam>
     public interface IFunctor<out TSource>
     {
         /// <summary>

@@ -65,224 +65,6 @@
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
         </member>
-        <member name="T:Nordril.Functional.Algebra.IPartiallyOrdered`1">
-            <summary>
-            A type which supports a partial order. A partial order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/> with the following properties:
-            <list type="table">
-                <listheader>
-                    <term>Property</term>
-                    <description>Definition</description>
-                </listheader>
-                <item>
-                    <term>reflexivity</term>
-                    <description>[forall a] a.LeqPartial(a) == Maybe.Just(true)</description>
-                </item>
-                <item>
-                    <term>antisymmetry</term>
-                    <description>[forall a,b] if a.LeqPartial(b) == b.LeqPartial(a) == Maybe.Just(true) then a.Equals(b)</description>
-                </item>
-                <item>
-                    <term>transitivity</term>
-                    <description>[forall a,b,c] if a.LeqPartial(b) == b.LeqPartial(c) == Maybe.Just(true) then a.LeqPartial(c) == Maybe.Just(true)</description>
-                </item>
-            </list>
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)">
-            <summary>
-            The "less than or equals"-predicate which returns the comparison of two elements or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the two elements are incomparable.
-            </summary>
-            <param name="that">The second element to compare to the first.</param>
-            <returns>Maybe.Just(true) iff the first element is less than or equal to the second. Maybe.Nothing if the elements are incomparable.</returns>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.IRing`1">
-            <summary>
-            A algebraic ring, which is the combination of a commutative group (<see cref="M:Nordril.Functional.Algebra.IRing`1.Plus(`0)"/>, <see cref="P:Nordril.Functional.Algebra.IRing`1.Zero"/>) and a monoid (<see cref="M:Nordril.Functional.Algebra.IRing`1.Mult(`0)"/>, <see cref="P:Nordril.Functional.Algebra.IRing`1.One"/>), and where the following holds:
-            <br />
-            <code>
-               a.Mult(b.Plus(c)) == a.Mult(b).Plus(a.Mult(c)) (left-distributivity)
-               b.Plus(c).Mult(a) == b.Mult(a).Plus(c.Mult(a) (right-distributivity)
-            </code>
-            <br />
-            In standard mathematical notation, with Plus being '+' and Mult being '*':
-            <br />
-            <code>
-               a * (b + c) == (a * b) + (a * c)
-               (b + c) * a == (b * a) + (c * a)
-            </code>
-            <code>
-            </code>
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.IRing`1.Zero">
-            <summary>
-            The neutral element of <see cref="M:Nordril.Functional.Algebra.IRing`1.Plus(`0)"/>.
-            </summary>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.IRing`1.One">
-            <summary>
-            The neutral element of <see cref="M:Nordril.Functional.Algebra.IRing`1.Mult(`0)"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.IRing`1.Plus(`0)">
-            <summary>
-            The addition-operation which forms a commutative group with <see cref="P:Nordril.Functional.Algebra.IRing`1.Zero"/>.
-            </summary>
-            <param name="that">The second operand.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.IRing`1.Mult(`0)">
-            <summary>
-            The multiplication-operation which forms a monoid with <see cref="P:Nordril.Functional.Algebra.IRing`1.One"/>.
-            </summary>
-            <param name="that">The second operand.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ISemiring`3">
-            <summary>
-            A semiring, composed of a commutative monoid for addition and a monoid for multiplication.
-            Implementors MUST obey the following:
-            <code>
-                x.Mult(y.Plus(z)) == x.Mult(y).Plus(x.Mult(z)) (left-distribution)
-                (x.Mult(y)).Plus(z) == x.Mult(z).Plus(y.Mult(z)) (right-distribution)
-                x.Mult(Zero) == Zero.Mult(x) == Zero (annihilation)
-            </code>
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-            <typeparam name="TPlus">The type-tag for the addition. Canonically, <see cref="T:Nordril.Functional.Algebra.TagPlus"/>.</typeparam>
-            <typeparam name="TMult">The type-tag for the multiplication. Canonincally <see cref="T:Nordril.Functional.Algebra.TagMult"/>.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.ISemiring`3.Plus(`0)">
-            <summary>
-            The additive operation. This must be an alias of <see cref="!:IHasMagma&lt;T&gt;.Op(T)"/> of the first monoid.
-            </summary>
-            <param name="y">The second operand.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.ISemiring`3.Mult(`0)">
-            <summary>
-            The additive operation. This must be an alias of <see cref="!:IHasMagma&lt;T&gt;.Op(T)"/> of the second monoid.
-            </summary>
-            <param name="y">The second operand.</param>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.ISemiring`3.One">
-            <summary>
-            The multiplicative neutral element. This must be an alias of <see cref="!:IHasMonoid&lt;T&gt;.Neutral"/> of the second monoid.
-            </summary>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.ISemiring`3.Zero">
-            <summary>
-            The additive neutral element. This must be an alias of <see cref="!:IHasMonoid&lt;T&gt;.Neutral"/> of the first monoid.
-            </summary>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITaggegCommutativeGroup`2">
-            <summary>
-            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-            <typeparam name="TOp">The type-tag of the operation.</typeparam>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITaggedCommutativeMonoid`2">
-            <summary>
-            A type-tagged commutative <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-            <typeparam name="TOp">The type-tag of the operation.</typeparam>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITaggedGroup`2">
-            <summary>
-            A type-tagged <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-            <typeparam name="TOp">The type-tag of the operation.</typeparam>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITaggedMonoid`2">
-            <summary>
-            A type-tagged <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> which notes its operation as a type-level tag <typeparamref name="TOp"/>.
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-            <typeparam name="TOp">The type-tag of the operation.</typeparam>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITotallyOrdered`1">
-            <summary>
-            A type which supports a total order. A total order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)"/> with the following properties:
-            <list type="table">
-                <listheader>
-                    <term>Property</term>
-                    <description>Definition</description>
-                </listheader>
-                <item>
-                    <term>reflexivity</term>
-                    <description>[forall a] a.Leq(a) == true</description>
-                </item>
-                <item>
-                    <term>antisymmetry</term>
-                    <description>[forall a,b] if a.Leq(b) == b.Leq(a) == true then a.Equals(b)</description>
-                </item>
-                <item>
-                    <term>transitivity</term>
-                    <description>[forall a,b,c] if a.Leq(b) == b.Leq(c) == true then a.Leq(c) == true</description>
-                </item>
-                <item>
-                    <term>agreement</term>
-                    <description>[forall a,b, t] if a.Leq(b) == t &lt;==&gt; a.LeqPartial(b) == Maybe.Just(t)</description>
-                </item>
-            </list>
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)">
-            <summary>
-            The "less than or equals"-predicate.
-            </summary>
-            <param name="that">The second element to compare to the first.</param>
-            <returns>true iff the first element is less than or equal to the second.</returns>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.TotallyOrderedExtenions">
-            <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotallyOrdered`1"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Le``1(``0,``0)">
-            <summary>
-            The "strictly less than"-predicate
-            </summary>
-            <typeparam name="T">The type of the element.</typeparam>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Ge``1(``0,``0)">
-            <summary>
-            The "strictly greater than"-predicate
-            </summary>
-            <typeparam name="T">The type of the element.</typeparam>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Geq``1(``0,``0)">
-            <summary>
-            The "greater than or equals"-predicate
-            </summary>
-            <typeparam name="T">The type of the element.</typeparam>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.PartialOrder`1">
-            <summary>
-            A value-level partial order.
-            </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.PartialOrder`1.LeqPartial">
-            <summary>
-            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.PartialOrder`1.#ctor(System.Func{`0,`0,Nordril.Functional.Data.Maybe{System.Boolean}})">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="leqPartial">The "less than or equals"-predicate.</param>
-        </member>
         <member name="T:Nordril.Functional.Algebra.IMagma`1">
             <summary>
             An algebraic structure supporting a binary operation with no further guaranteed properties.
@@ -881,15 +663,117 @@
         <member name="M:Nordril.Functional.Algebra.Group.DecimalMultGroup.Op(System.Decimal,System.Decimal)">
             <inheritdoc />
         </member>
-        <member name="T:Nordril.Functional.Algebra.TagPlus">
+        <member name="T:Nordril.Functional.Algebra.IPartiallyOrdered`1">
             <summary>
-            A type-level tags for "plus". This canonically denotes the first operation in an algebraic structure.
+            A type which supports a partial order. A partial order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/> with the following properties:
+            <list type="table">
+                <listheader>
+                    <term>Property</term>
+                    <description>Definition</description>
+                </listheader>
+                <item>
+                    <term>reflexivity</term>
+                    <description>[forall a] a.LeqPartial(a) == Maybe.Just(true)</description>
+                </item>
+                <item>
+                    <term>antisymmetry</term>
+                    <description>[forall a,b] if a.LeqPartial(b) == b.LeqPartial(a) == Maybe.Just(true) then a.Equals(b)</description>
+                </item>
+                <item>
+                    <term>transitivity</term>
+                    <description>[forall a,b,c] if a.LeqPartial(b) == b.LeqPartial(c) == Maybe.Just(true) then a.LeqPartial(c) == Maybe.Just(true)</description>
+                </item>
+            </list>
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)">
+            <summary>
+            The "less than or equals"-predicate which returns the comparison of two elements or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the two elements are incomparable.
+            </summary>
+            <param name="that">The second element to compare to the first.</param>
+            <returns>Maybe.Just(true) iff the first element is less than or equal to the second. Maybe.Nothing if the elements are incomparable.</returns>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotallyOrdered`1">
+            <summary>
+            A type which supports a total order. A total order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)"/> with the following properties:
+            <list type="table">
+                <listheader>
+                    <term>Property</term>
+                    <description>Definition</description>
+                </listheader>
+                <item>
+                    <term>reflexivity</term>
+                    <description>[forall a] a.Leq(a) == true</description>
+                </item>
+                <item>
+                    <term>antisymmetry</term>
+                    <description>[forall a,b] if a.Leq(b) == b.Leq(a) == true then a.Equals(b)</description>
+                </item>
+                <item>
+                    <term>transitivity</term>
+                    <description>[forall a,b,c] if a.Leq(b) == b.Leq(c) == true then a.Leq(c) == true</description>
+                </item>
+                <item>
+                    <term>agreement</term>
+                    <description>[forall a,b, t] if a.Leq(b) == t &lt;==&gt; a.LeqPartial(b) == Maybe.Just(t)</description>
+                </item>
+            </list>
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)">
+            <summary>
+            The "less than or equals"-predicate.
+            </summary>
+            <param name="that">The second element to compare to the first.</param>
+            <returns>true iff the first element is less than or equal to the second.</returns>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotallyOrderedExtenions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotallyOrdered`1"/>.
             </summary>
         </member>
-        <member name="T:Nordril.Functional.Algebra.TagMult">
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Le``1(``0,``0)">
             <summary>
-            A type-level tags for "plus". This canonically denotes the second operation in an algebraic structure.
+            The "strictly less than"-predicate
             </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Ge``1(``0,``0)">
+            <summary>
+            The "strictly greater than"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Geq``1(``0,``0)">
+            <summary>
+            The "greater than or equals"-predicate
+            </summary>
+            <typeparam name="T">The type of the element.</typeparam>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.PartialOrder`1">
+            <summary>
+            A value-level partial order.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartialOrder`1.LeqPartial">
+            <summary>
+            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder`1.#ctor(System.Func{`0,`0,Nordril.Functional.Data.Maybe{System.Boolean}})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="leqPartial">The "less than or equals"-predicate.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.TotalOrder`1">
             <summary>
@@ -1395,7 +1279,7 @@
             A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/>.
             One can apply functions to functors to change their contained type.
             </summary>
-            <typeparam name="TSource">The data contained in the functor.</typeparam>
+            <typeparam name="TSource">The type of values contained in the functor.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})">
             <summary>
@@ -1429,6 +1313,26 @@
             <typeparam name="TSource">The source type of the functor.</typeparam>
             <param name="f">The functor.</param>
             <param name="a">The action to apply to the values in the functor.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.IKeyedFunctor`2">
+            <summary>
+            A keyed functor, meaning a container which not only has values of type <typeparamref name="TSource"/>, but also immutable keys of type <typeparamref name="TKey"/> which the mapping-function may use as input.
+            </summary>
+            <typeparam name="TKey">The type of keys contained in the functor.</typeparam>
+            <typeparam name="TSource">The type of values contained in the functor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IKeyedFunctor`2.MapWithKey``1(System.Func{`0,`1,``0})">
+            <summary>
+            Applies a function to the functor and returns a new functor without changing the original functor.
+            The first argument of the function is the key associated with the value.
+            Implementors must fulfill the following for all X and functions f and g:
+            <code>
+                X.Map((k,a) => a) == X (identity)
+                X.Map((k,a) => g(k, f(k, a))) == X.Map(f).Map(g) (homomorphism)
+            </code>
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to apply to the functor.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IMonad`1">
             <summary>
@@ -2793,6 +2697,9 @@
             <typeparam name="TResult">The type of the new values.</typeparam>
             <param name="f">The function to apply to the values.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary`2.MapWithKey``1(System.Func{`0,`1,``0})">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.FuncDictionary`2.MonoMap(System.Func{`1,`1})">
             <inheritdoc />
         </member>
@@ -3262,7 +3169,13 @@
             <param name="key">The key to add/update.</param>
             <param name="value">The value to add/update.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Nordril.Functional.Data.IFuncDictionary`2.UpdatePure(`0,System.Func{`0,`1,`1})" -->
+        <member name="M:Nordril.Functional.Data.IFuncDictionary`2.UpdatePure(`0,System.Func{`0,`1,`1})">
+            <summary>
+            Returns a new dictionary in which the value of the key <paramref name="key"/> has been set to the result of <paramref name="f"/> if it was present, leaving the original unmodified.
+            </summary>
+            <param name="key">The key whose value to update.</param>
+            <param name="f">The function whose result will be the new value. The first parameter is the key, the second is the old value.</param>
+        </member>
         <member name="T:Nordril.Functional.Data.IFuncList`1">
             <summary>
             A "functional list" which, in addition to supporting the operations <see cref="T:System.Collections.Generic.IList`1"/>, implements <see cref="T:Nordril.Functional.Category.IMonadPlus`1"/> (and parent interfaces), <see cref="T:Nordril.Functional.Category.IAlternative`1"/>, and <see cref="T:Nordril.Functional.Category.IFoldable`1"/>.
