@@ -1314,6 +1314,26 @@
             <param name="f">The functor.</param>
             <param name="a">The action to apply to the values in the functor.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.IKeyedContravariant`2">
+            <summary>
+            A keyed contravariant functor. A contravariant functor is a functor that <em>needs</em> keys of type <typeparamref name="TKey"/> and values of type <typeparamref name="TSource"/> instead of containing them.
+            </summary>
+            <typeparam name="TKey">The type of keys needed by the functor.</typeparam>
+            <typeparam name="TSource">The type of values needed by the functor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IKeyedContravariant`2.ContraMapWithKey``1(System.Func{`0,``0,`1})">
+            <summary>
+            Applies a function to the functor and returns a new functor without changing the original functor.
+            The first argument of the function is the key associated with the value.
+            Implementors must fulfill the following for all X and functions f and g:
+            <code>
+                X.ContraMap((k, a) => a) == X (identity)
+                X.ContraMap((k, a) => g(k, f(k, a))) == X.Map(g).Map(f) (contravariant homomorphism)
+            </code>
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to apply to the functor.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IKeyedFunctor`2">
             <summary>
             A keyed functor, meaning a container which not only has values of type <typeparamref name="TSource"/>, but also immutable keys of type <typeparamref name="TKey"/> which the mapping-function may use as input.
