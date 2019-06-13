@@ -984,7 +984,7 @@ namespace Nordril.Functional.Tests
                     new int[] {5},
                     new int[0]
                 },
-                new int[] { 8 }
+                new int[] { }
             };
 
             yield return new object[] {
@@ -994,7 +994,17 @@ namespace Nordril.Functional.Tests
                     new int[0],
                     new int[] {5,6,7,8}
                 },
-                new int[] { 8, 10, 12, 8}
+                new int[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3,4,5},
+                    new int[] {9, 19 },
+                    new int[] {5,6,7,8}
+                },
+                new int[] { 17, 29}
             };
         }
 
@@ -1032,7 +1042,17 @@ namespace Nordril.Functional.Tests
                     new int[] {5},
                     new int[0]
                 },
-                new List<int>[] { new List<int> { 3, 5 } }
+                new List<int>[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3},
+                    new int[] {5},
+                    new int[] {8}
+                },
+                new List<int>[] { new List<int> { 3, 5, 8} }
             };
 
             yield return new object[] {
@@ -1042,7 +1062,17 @@ namespace Nordril.Functional.Tests
                     new int[0],
                     new int[] {5,6,7,8}
                 },
-                new List<int>[] { new List<int> { 3,5 }, new List<int> { 4, 6 }, new List<int> { 5, 7 }, new List<int> { 8 } }
+                new List<int>[] { }
+            };
+
+            yield return new object[] {
+                new int[][]
+                {
+                    new int[] {3,4,5},
+                    new int[] {9, 19 },
+                    new int[] {5,6,7,8}
+                },
+                new List<int>[] { new List<int> { 3, 9, 5 }, new List<int> { 4, 19, 6 } }
             };
         }
 

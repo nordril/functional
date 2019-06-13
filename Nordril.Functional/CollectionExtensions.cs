@@ -1071,8 +1071,8 @@ namespace Nordril.Functional
                 foreach (var x in xsList)
                     iterators.Add(x.GetEnumerator());
 
-                //While any sequence still has unvisited elements
-                while (stillRunningCount > 0)
+                //While all sequences still has unvisited elements
+                while (stillRunningCount == Math.Max(1, xsList.Count))
                 {
                     //Try to retrieve an element from each of the still-running sequences
                     //and put those elements into a list, which is fed to f.
@@ -1093,8 +1093,8 @@ namespace Nordril.Functional
                         }
                     }
 
-                    //If this is 0, it means we finished all sequences without reading anything -> don't call f.
-                    if (stillRunningCount > 0)
+                    //If this is less than the number of input lists, it means we finished at least one list and we don't call f
+                    if (stillRunningCount == Math.Max(1, xsList.Count))
                         res.Add(f(nextList));
                 }
 

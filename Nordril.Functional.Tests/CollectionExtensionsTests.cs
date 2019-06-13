@@ -703,6 +703,19 @@ namespace Nordril.Functional.Tests
             Assert.Equal(expected, xs.Zip(x => x.Sum()));
         }
 
+        [Fact]
+        public static void ZipManyLengthTest()
+        {
+            var xs = new List<int> { 1, 2, 3 };
+            var ys = new List<int> { 10, 20, 30, 40 };
+            var zs = new List<int> { 100, 200 };
+
+            var actual = new[] { xs, ys, zs }.Zip(x => x.Sum()).ToList();
+
+            Assert.Equal(2, actual.Count);
+            Assert.Equal(new[] { 111, 222 }, actual);
+        }
+
         [Theory]
         [MemberData(nameof(ZipManyListsData))]
         public static void ZipManyListsTest(IEnumerable<IEnumerable<int>> xs, IEnumerable<List<int>> expected)
