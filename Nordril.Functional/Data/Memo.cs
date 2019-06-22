@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace Nordril.Functional.Data
 {
     /// <summary>
-    /// A memoization-monad which allows one to run computations that make use of memoization of the results.
+    /// A memoization-monad which allows one to run computations that make use of memoization of the results. This generally makes sense for recursive functions with overlapping subproblems where we only want to compute <c>f(x) = y</c> the first time and retrieve its stored result <c>y</c> whenever a subsequent call to <c>f(x)</c> is made.
+    /// The main function to use with this structure is <see cref="Memo.Memoized{TState, TKey, TValue}(TKey, Func{TKey, Memo{TState, TKey, TValue}})"/>.
+    /// <remarks>The memoization is backed by a finite <see cref="IDictionary{TKey, TValue}"/>. Commonly, there is no limit on the number of computed results to store, though one can limit this via a custom dictionary-implementation.</remarks>
     /// </summary>
     /// <typeparam name="TState">The type of the state.</typeparam>
     /// <typeparam name="TKey">The type of the key by which results are memoized.</typeparam>
@@ -32,16 +34,48 @@ namespace Nordril.Functional.Data
     /// var result = fib(30).RunForResult(new Dictionary&lt;int, int&gt;());
     /// </code>
     /// </example>
-    public class Memo<TState, TKey, TValue> : State<TState, TValue>
+    public class Memo<TState, TKey, TValue> : IMonoMonad<Memo<TState, TKey, TValue>, TValue>
         where TState : IDictionary<TKey, TValue>
     {
+        /// <summary>
+        /// The state-function which takes an initial state and produces
+        /// both a new state and a result.
+        /// </summary>
+        private readonly Func<TState, (TValue, TState)> runState;
+
         /// <summary>
         /// Creates a new instance.
         /// </summary>
         /// <param name="runState">The function to run.</param>
-        public Memo(Func<TState, (TValue, TState)> runState) : base(runState)
+        public Memo(Func<TState, (TValue, TState)> runState)
         {
+            this.runState = runState;
         }
+
+        /// <summary>
+        /// Runs the state function with an initial state and returns the result, plus the actual result.
+        /// </summary>
+        /// <param name="initialState">The initial state (the starting point of the computation).</param>
+        public (TValue result, TState finalState) Run(TState initialState) => runState(initialState);
+
+        /// <inheritdoc />
+        public Memo<TState, TKey, TValue> Bind(Func<TValue, Memo<TState, TKey, TValue>> f)
+            => new Memo<TState, TKey, TValue>(s =>
+            {
+                var (v, s1) = runState(s);
+                return f(v).Run(s1);
+            });
+
+        /// <inheritdoc />
+        public Memo<TState, TKey, TValue> MonoMap(Func<TValue, TValue> f)
+            => new Memo<TState, TKey, TValue>(s => {
+                var (v, s1) = runState(s);
+                return (f(v), s1);
+            });
+
+        /// <inheritdoc />
+        public Memo<TState, TKey, TValue> Pure(TValue x)
+            => new Memo<TState, TKey, TValue>(s => (x, s));
     }
 
     /// <summary>
@@ -70,7 +104,7 @@ namespace Nordril.Functional.Data
         /// <param name="f">The function to apply.</param>
         public static Memo<TState, TKey, TSource> Select<TState, TKey, TSource>(this Memo<TState, TKey, TSource> source, Func<TSource, TSource> f)
             where TState : IDictionary<TKey, TSource>
-            => (Memo<TState, TKey, TSource>)source.Map(f);
+            => (Memo<TState, TKey, TSource>)source.MonoMap(f);
 
         /// <summary>
         /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Memo{TState, TKey, TValue}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.

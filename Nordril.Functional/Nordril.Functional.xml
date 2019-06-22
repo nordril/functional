@@ -994,7 +994,7 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to lift.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``5(System.Func{``0,``1,``2,``4})">
+        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``5(System.Func{``0,``1,``2,``3,``4})">
             <summary>
             Lifts a quaternary function to take three applicative arguments. See <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})"/>
             </summary>
@@ -1491,21 +1491,126 @@
             </summary>
             <param name="f">The function to apply.</param>
         </member>
-        <member name="T:Nordril.Functional.Category.INaturalTransformation">
+        <member name="T:Nordril.Functional.Category.IMonoMonad`2">
             <summary>
-            A natural transformation which transforms one functor into another.
+            A monad. Monads, in addition to wrapping values (via <see cref="T:Nordril.Functional.Category.IApplicative`1"/>
+            and mapping over their contained values (via <see cref="T:Nordril.Functional.Category.IFunctor`1"/> support temporarily
+            unpacking their contained values and re-packing them via the <see cref="M:Nordril.Functional.Category.IMonoMonad`2.Bind(System.Func{`1,`0})"/>
+            operator. Unlike <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>,
+            this allows dynamically controlling the computational path at runtime, instead of just applying a fixed
+            function over one of more wrapped arguments.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="TSource">The type of the values contained in the monad.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonoMonad`2.Pure(`1)">
+            <summary>
+            Wraps a value into an applicative. The this-value MUST NOT BE USED by implementors.
+            </summary>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonoMonad`2.Bind(System.Func{`1,`0})">
+            <summary>
+            Unpacks the value(s) contained in this monad and applies a function to them.
+            Bind corresponds to chaining functions, with the addition of the monadic context.
+            Implementors must fulfill the following laws:
+            <code>
+                Pure(a).Bind(f) == f(a) (left identity of pure)
+                f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity)
+            </code>
+            These laws are identical to the laws of <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/>, except for the
+            type variable in <see cref="T:Nordril.Functional.Category.IMonad`1"/>.
+            </summary>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.MonoMonadExtensions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Category.INaturalTransformation.Transform``3(``1)">
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.ThenMono``2(Nordril.Functional.Category.IMonoMonad{``0,``1},System.Func{``1,``0})">
             <summary>
-            Transforms one functor into another. If the implementor can't transform between
-            the requested source and target functors, it should return Nothing.
+            A more readable alias to <see cref="M:Nordril.Functional.Category.IMonoMonad`2.Bind(System.Func{`1,`0})"/>.
             </summary>
-            <typeparam name="TSource">The type of the source elements.</typeparam>
-            <typeparam name="TFSource">The type of the source functor.</typeparam>
-            <typeparam name="TFTarget">The type of the target functor.</typeparam>
-            <param name="s">The source functor.</param>
-            <returns></returns>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="a">The value containing the source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.ThenMMono``2(System.Func{``1,``0},System.Func{``1,``0})">
+            <summary>
+            Chains two monad-producing functions by executing the first, then the second, gluing them together using
+            <see cref="M:Nordril.Functional.Category.IMonoMonad`2.Bind(System.Func{`1,`0})"/>. The monadic equivalent of
+            <see cref="M:Nordril.Functional.F.Then``3(System.Func{``0,``1},System.Func{``1,``2})"/>.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TSource">The input of the first function.</typeparam>
+            <param name="f">The first function.</param>
+            <param name="g">The second function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.AfterMMono``2(System.Func{``1,``0},System.Func{``1,``0})">
+            <summary>
+            Chains two monad-producing functions by executing the second, then the first, gluing them together using
+            <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>. The monadic equivalent of
+            <see cref="M:Nordril.Functional.F.After``3(System.Func{``1,``2},System.Func{``0,``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TSource">The input of the second function.</typeparam>
+            <param name="f">The first function.</param>
+            <param name="g">The second function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.ThenMono``2(Nordril.Functional.Category.IMonoMonad{``0,``1},``0)">
+            <summary>
+            Extracts the value(s) from the source and replaces it with another one, ignoring the values of the source.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="a">The value containing the source.</param>
+            <param name="b">The value containing the result.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.CompMono``2(System.Func{``1,``0},System.Func{``1,``0})">
+            <summary>
+            Concatenates two mono-monad-functions.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TSource">The source type.</typeparam>
+            <param name="f">The first monad function.</param>
+            <param name="g">The second monad function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.PureUnsafeMono``2(``0)">
+            <summary>
+            Wraps an object in an applicative via <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
+            The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> with the this-pointer being null is forced.
+            If the requested applicative uses the this-pointer in <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>, this will result in a <see cref="T:System.NullReferenceException"/>.
+            </summary>
+            <typeparam name="TValue">The type of the object to wrap.</typeparam>
+            <typeparam name="T">The type of the applicative to return.</typeparam>
+            <param name="x">The value to wrap.</param>
+            <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> of <typeparamref name="T"/> uses the this-pointer.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoM``2(System.Func{``1,``1,``1})">
+            <summary>
+            Lifts a binary function to take two <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/> arguments. See <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})"/>.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TValue">The type of the arguments.</typeparam>
+            <param name="f">The function to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoA``2(System.Func{``1,``1,``1,``1})">
+            <summary>
+            Lifts a ternary function to take three <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/> arguments. See <see cref="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoM``2(System.Func{``1,``1,``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TValue">The type of the arguments.</typeparam>
+            <param name="f">The function to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoA``2(System.Func{``1,``1,``1,``1,``1})">
+            <summary>
+            Lifts a quaternary function to take three <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/> arguments. See <see cref="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoM``2(System.Func{``1,``1,``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
+            <typeparam name="TValue">The type of the arguments.</typeparam>
+            <param name="f">The function to lift.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IPhantomFunctor`1">
             <summary>
@@ -1540,14 +1645,6 @@
             <typeparam name="THaveResult">The type of the new values the profunctor will contain.</typeparam>
             <param name="in">The function to apply to the contravariant values.</param>
             <param name="out">The function to apply to the covariant values.</param>
-        </member>
-        <member name="T:Nordril.Functional.Category.NaturalTransformations.MaybeToList">
-            <summary>
-            A natural transformation from <see cref="T:Nordril.Functional.Data.Maybe`1"/> to <see cref="T:Nordril.Functional.Data.FuncList`1"/> which creates a 0-element list for <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a 1-element list containing <see cref="M:Nordril.Functional.Data.Maybe`1.Value"/> for <see cref="M:Nordril.Functional.Data.Maybe`1.Just(`0)"/>.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Category.NaturalTransformations.MaybeToList.Transform``3(``1)">
-            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.CollectionExtensions">
             <summary>
@@ -4024,7 +4121,9 @@
         </member>
         <member name="T:Nordril.Functional.Data.Memo`3">
             <summary>
-            A memoization-monad which allows one to run computations that make use of memoization of the results.
+            A memoization-monad which allows one to run computations that make use of memoization of the results. This generally makes sense for recursive functions with overlapping subproblems where we only want to compute <c>f(x) = y</c> the first time and retrieve its stored result <c>y</c> whenever a subsequent call to <c>f(x)</c> is made.
+            The main function to use with this structure is <see cref="M:Nordril.Functional.Data.Memo.Memoized``3(``1,System.Func{``1,Nordril.Functional.Data.Memo{``0,``1,``2}})"/>.
+            <remarks>The memoization is backed by a finite <see cref="T:System.Collections.Generic.IDictionary`2"/>. Commonly, there is no limit on the number of computed results to store, though one can limit this via a custom dictionary-implementation.</remarks>
             </summary>
             <typeparam name="TState">The type of the state.</typeparam>
             <typeparam name="TKey">The type of the key by which results are memoized.</typeparam>
@@ -4049,11 +4148,32 @@
             </code>
             </example>
         </member>
+        <member name="F:Nordril.Functional.Data.Memo`3.runState">
+            <summary>
+            The state-function which takes an initial state and produces
+            both a new state and a result.
+            </summary>
+        </member>
         <member name="M:Nordril.Functional.Data.Memo`3.#ctor(System.Func{`0,System.ValueTuple{`2,`0}})">
             <summary>
             Creates a new instance.
             </summary>
             <param name="runState">The function to run.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo`3.Run(`0)">
+            <summary>
+            Runs the state function with an initial state and returns the result, plus the actual result.
+            </summary>
+            <param name="initialState">The initial state (the starting point of the computation).</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo`3.Bind(System.Func{`2,Nordril.Functional.Data.Memo{`0,`1,`2}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo`3.MonoMap(System.Func{`2,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo`3.Pure(`2)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Memo">
             <summary>
@@ -4164,11 +4284,35 @@
             <typeparam name="TRng">The type of the RNG. This will be wrapped in an <see cref="T:Nordril.Functional.Data.Rng`1"/>.</typeparam>
             <typeparam name="TValue">The type of the produced value.</typeparam>
         </member>
+        <member name="F:Nordril.Functional.Data.Random`2.runState">
+            <summary>
+            The state-function which takes an initial state and produces
+            both a new state and a result.
+            </summary>
+        </member>
         <member name="M:Nordril.Functional.Data.Random`2.#ctor(System.Func{Nordril.Functional.Data.Rng{`0},System.ValueTuple{`1,Nordril.Functional.Data.Rng{`0}}})">
             <summary>
             Creates a new instance.
             </summary>
             <param name="runState">The state-function to put into the random monad.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.Run(Nordril.Functional.Data.Rng{`0})">
+            <summary>
+            Runs the state function with an initial state and returns the result, plus the actual result.
+            </summary>
+            <param name="initialState">The initial state (the starting point of the computation).</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`1,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.Bind``1(System.Func{`1,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.Map``1(System.Func{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.Pure``1(``0)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Rnd">
             <summary>
@@ -4205,6 +4349,24 @@
             <param name="f">The function to apply.</param>
             <param name="resultSelector">The result-selector.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RunForResult``2(Nordril.Functional.Data.Random{``0,``1},Nordril.Functional.Data.Rng{``0})">
+            <summary>
+            Runs the state function with an initial state and returns the result, discarding the final state.
+            </summary>
+            <param name="s">The state to run.</param>
+            <param name="initialState">The initial state (the starting point of the computation).</param>
+            <typeparam name="TRng">The type of the state.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RunForState``2(Nordril.Functional.Data.Random{``0,``1},Nordril.Functional.Data.Rng{``0})">
+            <summary>
+            Runs the state function with an initial state and returns the final state, discarding the result.
+            </summary>
+            <param name="s">The state to run.</param>
+            <param name="initialState">The initial state (the starting point of the computation).</param>
+            <typeparam name="TRng">The type of the state.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
         <member name="M:Nordril.Functional.Data.Rnd.RandomInt``1">
             <summary>
             Gets a new random integer.
@@ -4216,9 +4378,19 @@
             Gets a new random integer in the specified range.
             </summary>
             <typeparam name="TRng">The type of the RNG.</typeparam>
-            <param name="min">The minium value (inclusive).</param>
+            <param name="min">The minimum value (inclusive).</param>
             <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
             <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomInts``1(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets a list of random integers, all in the specified range.
+            When a large list of integers is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <param name="min">The minimum value (inclusive).</param>
+            <param name="max">The maximum value (exclusive).</param>
+            <param name="num">The number of integers to return.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Rnd.RandomDouble``1">
             <summary>
@@ -4235,6 +4407,16 @@
             <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
             <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
         </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomDoubles``1(System.Double,System.Double,System.Int32)">
+            <summary>
+            Gets a list of random doubles, all in the specified range.
+            When a large list of doubles is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <param name="min">The minimum value (inclusive).</param>
+            <param name="max">The maximum value (exclusive).</param>
+            <param name="num">The number of integers to return.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.Rnd.RandomBytes``1(System.Byte[])">
             <summary>
             Fills a buffer <paramref name="buffer"/> with random bytes (mutating it) and returns it.
@@ -4248,6 +4430,21 @@
             Replaces the current state with a new one.
             </summary>
             <param name="seed">The new seed of the new PRNG.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RunRandom``1(Nordril.Functional.Data.Random{System.Random,``0},System.Int32)">
+            <summary>
+            Runs the state function with an initial seed and returns the result, discarding the final state.
+            </summary>
+            <param name="s">The computation to run.</param>
+            <param name="seed">The initial state (the starting point of the computation).</param>
+            <typeparam name="TResult">The type of the result.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RunRandom``1(Nordril.Functional.Data.Random{System.Random,``0})">
+            <summary>
+            Runs the state function with with an intial seed equalling <see cref="P:System.Environment.TickCount"/> (the same as when calling the parameterless constructor of <see cref="T:System.Random"/>), discarding the final state. As this is in an impure function where subsequent calls will return different results, the return-value is an <see cref="T:Nordril.Functional.Data.Io`1"/>.
+            </summary>
+            <param name="s">The computation to run.</param>
+            <typeparam name="TResult">The type of the result.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.Rng`1">
             <summary>

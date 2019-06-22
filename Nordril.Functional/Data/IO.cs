@@ -66,12 +66,9 @@ namespace Nordril.Functional.Data
         /// <exception cref="InvalidCastException">If the result of <paramref name="f"/> isn't <see cref="Io{T}"/> with type <typeparamref name="TResult"/>.</exception>
         public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f)
         {
-            if (!(f is Func<T, Io<TResult>> fIo))
-                throw new InvalidCastException();
-
             var valueThis = value;
 
-            return new Io<TResult>(() => fIo(valueThis()).Run());
+            return new Io<TResult>(() => ((Io<TResult>)f(valueThis())).Run());
         }
 
         /// <summary>

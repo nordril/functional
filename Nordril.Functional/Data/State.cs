@@ -73,8 +73,6 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x)
             => new State<TState, TResult>(s => (x, s));
-
-
     }
 
     /// <summary>

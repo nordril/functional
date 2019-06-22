@@ -161,7 +161,7 @@ namespace Nordril.Functional.Category
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="f">The function to lift.</param>
         public static Func<IApplicative<T1>, IApplicative<T2>, IApplicative<T3>, IApplicative<T4>, IApplicative<TResult>>
-            LiftA<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, TResult> f)
+            LiftA<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> f)
         => (x, y, z, u) => (x.Map(f.Curry()) as IApplicative<Func<T2, Func<T3, Func<T4, TResult>>>>).ApF(y).ApF(z).ApF(u);
 
         /// <summary>
