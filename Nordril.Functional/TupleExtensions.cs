@@ -8,6 +8,14 @@ namespace Nordril.Functional
     public static class TupleExtensions
     {
         /// <summary>
+        /// Flips the items of a 2-tuple.
+        /// </summary>
+        /// <typeparam name="T1">The first element.</typeparam>
+        /// <typeparam name="T2">The second element.</typeparam>
+        /// <param name="t">The tuple to flip.</param>
+        public static (T2, T1) Flip<T1, T2>(this (T1, T2) t) => (t.Item2, t.Item1);
+
+        /// <summary>
         /// Applies a function to the first element of a tuple.
         /// </summary>
         /// <typeparam name="T1">The first element.</typeparam>

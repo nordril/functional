@@ -1,6 +1,9 @@
 ﻿using Nordril.Functional.Category;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Nordril.Functional.Data
 {
@@ -70,6 +73,8 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x)
             => new State<TState, TResult>(s => (x, s));
+
+
     }
 
     /// <summary>
@@ -77,6 +82,38 @@ namespace Nordril.Functional.Data
     /// </summary>
     public static class State
     {
+        /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="State{TState, TValue}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static State<TState, TResult> Select<TState, TSource, TResult>(this State<TState, TSource> source, Func<TSource, TResult> f)
+            => (State<TState, TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="State{TState, TValue}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static State<TState, TResult> SelectMany<TState, TSource, TMiddle, TResult>
+            (this State<TState, TSource> source,
+             Func<TSource, State<TState, TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector) =>
+            new State<TState, TResult>(s =>
+            {
+                var (v1, s1) = source.Run(s);
+                var (v2, s2) = f(v1).Run(s1);
+                return (resultSelector(v1, v2), s2);
+            });
+
         /// <summary>
         /// Returns the current state.
         /// </summary>

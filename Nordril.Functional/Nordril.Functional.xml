@@ -844,21 +844,6 @@
             <typeparam name="T">The type of elements in this structure.</typeparam>
             <param name="order">The total order to lift.</param>
         </member>
-        <member name="T:Nordril.Functional.Category.IFunctor`4">
-            <summary>
-            A value-level functor which can map the contents of a data structure. See <see cref="T:Nordril.Functional.Category.IFunctor`1"/>.
-            </summary>
-            <typeparam name="TFSource">The type of the source data structure.</typeparam>
-            <typeparam name="TFResult">The type of the result data structure.</typeparam>
-            <typeparam name="TSource">The type of the contained elements in <typeparamref name="TFSource"/>.</typeparam>
-            <typeparam name="TResult">The type of the contained elements in <typeparamref name="TFResult"/>.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Category.IFunctor`4.Map(System.Func{`2,`3})">
-            <summary>
-            Applies a function to each element of a data structure. Implementors must obey the same laws as in <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
-            </summary>
-            <param name="f">The function to apply.</param>
-        </member>
         <member name="T:Nordril.Functional.Category.IAlternative`1">
             <summary>
             A subset of <see cref="T:Nordril.Functional.Category.IApplicative`1"/> that has a notion of "combining computations". It's up to the implementor to define how this combining works, but implementors should obey the following laws:
@@ -2235,6 +2220,15 @@
         <member name="M:Nordril.Functional.Data.Const`1.Equals(Nordril.Functional.Data.Const{`0})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Const`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`1.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Const`2">
             <summary>
             A const-functor that contains a "real" value, but which is a functor according to a
@@ -2268,6 +2262,15 @@
             </summary>
             <param name="obj">The other object.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.Const`2.Bind``1(System.Func{`1,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`2.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`2.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`1,``0}})">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Const`2.GetHashCode">
             <inheritdoc />
         </member>
@@ -2284,6 +2287,48 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Const`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const.Select``2(Nordril.Functional.Data.Const{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Const`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const.SelectMany``3(Nordril.Functional.Data.Const{``0},System.Func{``0,Nordril.Functional.Data.Const{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Const`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const.Select``3(Nordril.Functional.Data.Const{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Const`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TReal">The real value in the source.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const.SelectMany``4(Nordril.Functional.Data.Const{``0,``1},System.Func{``1,Nordril.Functional.Data.Const{``0,``2}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Const`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TReal">The real value in the source.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Const.ToConst``1(Nordril.Functional.Category.IFunctor{``0})">
             <summary>
@@ -2486,6 +2531,28 @@
             <summary>
             Static methods for <see cref="T:Nordril.Functional.Data.Either`2"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``3(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``4(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,Nordril.Functional.Data.Either{``0,``2}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Either.FromLeft``2(``0)">
             <summary>
@@ -2728,6 +2795,16 @@
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>.
             </summary>
         </member>
+        <member name="M:Nordril.Functional.Data.FuncDictionary.Select``3(Nordril.Functional.Data.FuncDictionary{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TKey">The type of the source's key.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.FuncDictionary.Make``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
             <summary>
             Creates a new <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/> based on the <see cref="T:System.IEquatable`1"/>-instances of the keys and values.
@@ -2889,6 +2966,26 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncList`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList.Select``2(Nordril.Functional.Data.FuncList{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.FuncList`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList.SelectMany``3(Nordril.Functional.Data.FuncList{``0},System.Func{``0,Nordril.Functional.Data.FuncList{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.FuncList`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="M:Nordril.Functional.Data.FuncList.Make``1(``0[])">
             <summary>
@@ -3065,6 +3162,26 @@
             Extension methods for <see cref="T:Nordril.Functional.Data.FuncSet`1"/>.
             </summary>
         </member>
+        <member name="M:Nordril.Functional.Data.FuncSet.Select``2(Nordril.Functional.Data.FuncSet{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.FuncSet`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet.SelectMany``3(Nordril.Functional.Data.FuncSet{``0},System.Func{``0,Nordril.Functional.Data.FuncSet{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.FuncSet`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.FuncSet.Make``1(``0[])">
             <summary>
             Creates a new <see cref="T:Nordril.Functional.Data.FuncSet`1"/>.
@@ -3137,6 +3254,26 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Identity`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity.Select``2(Nordril.Functional.Data.Identity{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Identity`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity.SelectMany``3(Nordril.Functional.Data.Identity{``0},System.Func{``0,Nordril.Functional.Data.Identity{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Io`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Identity.IdentityIso`1">
             <summary>
@@ -3336,6 +3473,26 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Io`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.Select``2(Nordril.Functional.Data.Io{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Io`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Io.SelectMany``3(Nordril.Functional.Data.Io{``0},System.Func{``0,Nordril.Functional.Data.Io{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Io`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Io.IoIso`1">
             <summary>
@@ -3779,6 +3936,26 @@
             Static methods and extension for <see cref="T:Nordril.Functional.Data.Maybe`1"/>.
             </summary>
         </member>
+        <member name="M:Nordril.Functional.Data.Maybe.Select``2(Nordril.Functional.Data.Maybe{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Maybe`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe.SelectMany``3(Nordril.Functional.Data.Maybe{``0},System.Func{``0,Nordril.Functional.Data.Maybe{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Maybe`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
         <member name="T:Nordril.Functional.Data.Maybe.MaybeIso`1">
             <summary>
             An isomorphism between <see cref="T:Nordril.Functional.Data.Maybe`1"/> and reference types, where <c>default</c> is mapped to <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and all other values to <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -3845,6 +4022,84 @@
             <param name="f">The function to apply to the key's value if the key is present.</param>
             <param name="alternative">The alternative value to return if the key is not present.</param>
         </member>
+        <member name="T:Nordril.Functional.Data.Memo`3">
+            <summary>
+            A memoization-monad which allows one to run computations that make use of memoization of the results.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TKey">The type of the key by which results are memoized.</typeparam>
+            <typeparam name="TValue">The type of the value which is computed.</typeparam>
+            <example>
+            We can calculate the fibonacci sequence, which has overlapping subproblems, as follows:
+            <code>
+            Memo&lt;Dictionary&lt;int, int&gt;, int, int&gt; fib(int x)
+            {
+                if (x == 0)
+                    return Memo.Pure&lt;Dictionary&lt;int, int&gt;, int, int&gt;(0);
+                else if (x == 1)
+                    return Memo.Pure&lt;Dictionary&lt;int, int&gt;, int, int&gt;(1);
+                else
+                    return from n1 in Memo.Memoized(x - 1, fib)
+                           from n2 in Memo.Memoized(x - 2, fib)
+                           select n1 + n2;
+            }
+            
+            //1346269
+            var result = fib(30).RunForResult(new Dictionary&lt;int, int&gt;());
+            </code>
+            </example>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo`3.#ctor(System.Func{`0,System.ValueTuple{`2,`0}})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="runState">The function to run.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Memo">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.Memo`3"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo.Pure``3(``2)">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>, but restricted to <see cref="T:Nordril.Functional.Data.Memo`3"/>. Useful for returning pure values, esp. in LINQ-queries.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TKey">The key of the memoization.</typeparam>
+            <typeparam name="TValue">The type of the source's value.</typeparam>
+            <param name="value">The value to return.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo.Select``3(Nordril.Functional.Data.Memo{``0,``1,``2},System.Func{``2,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Memo`3"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TKey">The key of the memoization.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo.SelectMany``3(Nordril.Functional.Data.Memo{``0,``1,``2},System.Func{``2,Nordril.Functional.Data.Memo{``0,``1,``2}},System.Func{``2,``2,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Memo`3"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TKey">The key of the memoization.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Memo.Memoized``3(``1,System.Func{``1,Nordril.Functional.Data.Memo{``0,``1,``2}})">
+            <summary>
+            Memoizes a function, either returning the memoized value without running <paramref name="f"/> if the key <paramref name="key"/> is already memoized, or running it, memoizing the key, and then returning the result.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TKey">The key of the memoization.</typeparam>
+            <typeparam name="TValue">The type of the source's value.</typeparam>
+            <param name="key">The key of the value to search. If this is present in the state, <paramref name="f"/> is not run.</param>
+            <param name="f">The function to run in memoized form.</param>
+        </member>
         <member name="T:Nordril.Functional.Data.Pred`1">
             <summary>
             A predicate which wraps a function that takes a <typeparamref name="T"/> and returns true or false.
@@ -3902,6 +4157,152 @@
             <typeparam name="T">The type of the input parameter.</typeparam>
             <param name="x">The object to cast.</param>
         </member>
+        <member name="T:Nordril.Functional.Data.Random`2">
+            <summary>
+            The "random"-monad, which provdes access to a pseudo-random number generator in a repeatable and pure way. Unlike using <see cref="T:System.Random"/>, two executions of <see cref="T:Nordril.Functional.Data.Random`2"/>-computations will produce the same result (provided the compuations are pure) when run with the same RNG.
+            </summary>
+            <typeparam name="TRng">The type of the RNG. This will be wrapped in an <see cref="T:Nordril.Functional.Data.Rng`1"/>.</typeparam>
+            <typeparam name="TValue">The type of the produced value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Random`2.#ctor(System.Func{Nordril.Functional.Data.Rng{`0},System.ValueTuple{`1,Nordril.Functional.Data.Rng{`0}}})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="runState">The state-function to put into the random monad.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Rnd">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.Random`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.Pure``2(``1)">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>, but restricted to <see cref="T:Nordril.Functional.Data.Random`2"/>. Useful for returning pure values, esp. in LINQ-queries.
+            </summary>
+            <typeparam name="TRng">The type of the state.</typeparam>
+            <typeparam name="TValue">The type of the source's value.</typeparam>
+            <param name="value">The value to return.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.Select``3(Nordril.Functional.Data.Random{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Random`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.SelectMany``4(Nordril.Functional.Data.Random{``0,``1},System.Func{``1,Nordril.Functional.Data.Random{``0,``2}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Random`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomInt``1">
+            <summary>
+            Gets a new random integer.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomInt``1(System.Int32,System.Int32)">
+            <summary>
+            Gets a new random integer in the specified range.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <param name="min">The minium value (inclusive).</param>
+            <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomDouble``1">
+            <summary>
+            Gets a new random double between 0.0 and 1.0.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomDouble``1(System.Double,System.Double)">
+            <summary>
+            Gets a new random double in the specified range.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <param name="min">The minium value (inclusive).</param>
+            <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.RandomBytes``1(System.Byte[])">
+            <summary>
+            Fills a buffer <paramref name="buffer"/> with random bytes (mutating it) and returns it.
+            </summary>
+            <typeparam name="TRng">The type of the RNG.</typeparam>
+            <param name="buffer">The buffer to fill and return.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="buffer"/> is null.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rnd.Put(System.Int32)">
+            <summary>
+            Replaces the current state with a new one.
+            </summary>
+            <param name="seed">The new seed of the new PRNG.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Rng`1">
+            <summary>
+            A virtual interface for a random number generator, acting as a wrapper which can be used even if the underlying RNG does not implement any specific interface.
+            </summary>
+            <typeparam name="T">The type of the underlying RNG.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.NextInt">
+            <summary>
+            Gets a new random integer.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.NextInt(System.Int32,System.Int32)">
+            <summary>
+            Gets a new random integer in the specified range.
+            </summary>
+            <param name="min">The minium value (inclusive).</param>
+            <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.NextDouble">
+            <summary>
+            Gets a new random double between 0.0 and 1.0.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.NextDouble(System.Double,System.Double)">
+            <summary>
+            Gets a new random double in the specified range.
+            </summary>
+            <param name="min">The minium value (inclusive).</param>
+            <param name="max">The maximum value (exclusive). If <paramref name="max"/> is equal to <paramref name="min"/>, <paramref name="min"/> is always returned by this method.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">If <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.NextBytes(System.Byte[])">
+            <summary>
+            Fills a buffer <paramref name="buffer"/> with random bytes (mutating it) and returns it.
+            </summary>
+            <param name="buffer">The buffer to fill and return.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.#ctor(`0,System.Func{`0,System.Int32,System.Int32,System.ValueTuple{System.Int32,`0}},System.Func{`0,System.ValueTuple{System.Double,`0}},System.Func{`0,System.Double,System.Double,System.ValueTuple{System.Double,`0}},System.Func{`0,System.Byte[],System.ValueTuple{System.Byte[],`0}})">
+            <summary>
+            Creates a new RNG-wrapper.
+            </summary>
+            <param name="obj">The underlying RNG.</param>
+            <param name="nextInt">The function to return a random integer.</param>
+            <param name="nextDouble">The function to return a random double between 0.0 and 1.0</param>
+            <param name="nextBoundedDouble">The function to return a random double in a custom interval.</param>
+            <param name="nextBytes">The function to fill a byte-array with random bytes.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Rng`1.FromRandom(System.Int32)">
+            <summary>
+            Creates an <see cref="T:Nordril.Functional.Data.Rng`1"/>-wrapper out of an instance of <see cref="T:System.Random"/>.
+            </summary>
+            <param name="seed">The see of the <see cref="T:System.Random"/>-object.</param>
+        </member>
         <member name="T:Nordril.Functional.Data.State`2">
             <summary>
             The state-monad, which maintains a state <typeparamref name="TState"/> and produces a result
@@ -3948,6 +4349,28 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.State`2"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.State.Select``3(Nordril.Functional.Data.State{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.State`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.State.SelectMany``4(Nordril.Functional.Data.State{``0,``1},System.Func{``1,Nordril.Functional.Data.State{``0,``2}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.State`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="M:Nordril.Functional.Data.State.Get``1">
             <summary>
@@ -4034,6 +4457,16 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Store`2"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Store.Select``3(Nordril.Functional.Data.Store{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Store`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TStore">The type of the store.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Store.GetStore``2(Nordril.Functional.Data.Store{``0,``1})">
             <summary>
@@ -4216,6 +4649,15 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Tree`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Tree.Select``2(Nordril.Functional.Data.Tree{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Tree`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Tree.MakeInner``1(``0,System.Collections.Generic.IEnumerable{Nordril.Functional.Data.Tree{``0}})">
             <summary>
@@ -4408,6 +4850,11 @@
             The result of the computation.
             </summary>
         </member>
+        <member name="P:Nordril.Functional.Data.Writer`3.Monoid">
+            <summary>
+            The output monoid for combining outputs.
+            </summary>
+        </member>
         <member name="M:Nordril.Functional.Data.Writer`3.#ctor(`1)">
             <summary>
             Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
@@ -4459,6 +4906,30 @@
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Data.Writer`3"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.Select``4(Nordril.Functional.Data.State{``0,``2},System.Func{``2,``3})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Writer`3"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TMonoid">The type of the output monoid.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Writer.SelectMany``5(Nordril.Functional.Data.Writer{``0,``2,``1},System.Func{``2,Nordril.Functional.Data.Writer{``0,``3,``1}},System.Func{``2,``3,``4})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Writer`3"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <typeparam name="TMonoid">The type of the output monoid.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Writer.TellUnit``2(``0)">
             <summary>
@@ -4956,6 +5427,14 @@
             <summary>
             Extension methods for <see cref="T:System.ValueTuple"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Flip``2(System.ValueTuple{``0,``1})">
+            <summary>
+            Flips the items of a 2-tuple.
+            </summary>
+            <typeparam name="T1">The first element.</typeparam>
+            <typeparam name="T2">The second element.</typeparam>
+            <param name="t">The tuple to flip.</param>
         </member>
         <member name="M:Nordril.Functional.TupleExtensions.First``2(System.ValueTuple{``0},System.Func{``0,``1})">
             <summary>

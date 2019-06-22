@@ -124,6 +124,33 @@ namespace Nordril.Functional.Data
     public static class Io
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Io{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Io<TResult> Select<TSource, TResult>(this Io<TSource> source, Func<TSource, TResult> f)
+            => (Io<TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Io{TValue}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static Io<TResult> SelectMany<TSource, TMiddle, TResult>
+            (this Io<TSource> source,
+             Func<TSource, Io<TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+        {
+            return new Io<TResult>(() => { var sourceRes = source.Run(); var middleRes = f(sourceRes).Run(); return resultSelector(sourceRes, middleRes); });
+        }
+
+        /// <summary>
         /// An isomorphism between <see cref="Io{T}"/> and <see cref="Func{T, TResult}"/>.
         /// </summary>
         /// <typeparam name="T">The underlying type to wrap.</typeparam>

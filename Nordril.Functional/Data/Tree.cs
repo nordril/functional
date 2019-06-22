@@ -241,6 +241,16 @@ namespace Nordril.Functional.Data
     public static class Tree
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Tree{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Tree<TResult> Select<TSource, TResult>(this Tree<TSource> source, Func<TSource, TResult> f)
+            => (Tree<TResult>)source.Map(f);
+
+        /// <summary>
         /// Creates an inner node.
         /// </summary>
         /// <typeparam name="T">The type of the keys.</typeparam>

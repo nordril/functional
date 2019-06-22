@@ -51,6 +51,17 @@ namespace Nordril.Functional.Data
     public static class Store
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Store{TStore, TValue}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TStore">The type of the store.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Store<TStore, TResult> Select<TStore, TSource, TResult>(this Store<TStore, TSource> source, Func<TSource, TResult> f)
+            => source.Map(f) as Store<TStore, TResult>;
+
+        /// <summary>
         /// Extracts the store as a value.
         /// </summary>
         /// <typeparam name="TStore">The type type of the store.</typeparam>

@@ -208,6 +208,45 @@ namespace Nordril.Functional.Data
     public static class Either
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Either{TLeft, TRight}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Either<TLeft, TResult> Select<TLeft, TSource, TResult>(this Either<TLeft, TSource> source, Func<TSource, TResult> f)
+            => (Either<TLeft, TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Either{TLeft, TRight}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static Either<TLeft, TResult> SelectMany<TLeft, TSource, TMiddle, TResult>
+            (this Either<TLeft, TSource> source,
+             Func<TSource, Either<TLeft, TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+        {
+            if (source.IsLeft)
+                return new Either<TLeft, TResult>(source.Left(), TagLeft.Value);
+
+            var right = source.Right();
+            var midRes = f(right);
+
+            if (midRes.IsLeft)
+                return new Either<TLeft, TResult>(midRes.Left(), TagLeft.Value);
+
+
+            return new Either<TLeft, TResult>(resultSelector(right, midRes.Right()), TagRight.Value);
+        }
+
+        /// <summary>
         /// Creates a left-either from a value.
         /// </summary>
         /// <typeparam name="TLeft">The type of the left-value.</typeparam>

@@ -92,6 +92,34 @@ namespace Nordril.Functional.Data
     public static class Identity
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Identity{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Identity<TResult> Select<TSource, TResult>(this Identity<TSource> source, Func<TSource, TResult> f)
+            => (Identity<TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Io{TValue}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static Identity<TResult> SelectMany<TSource, TMiddle, TResult>
+            (this Identity<TSource> source,
+             Func<TSource, Identity<TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+        {
+            var sourceRes = source.Value;
+            return new Identity<TResult>(resultSelector(sourceRes, f(sourceRes).Value));
+        }
+
+        /// <summary>
         /// An isomorphism between <see cref="Identity{T}"/> and any type.
         /// </summary>
         /// <typeparam name="T">The underlying type to wrap.</typeparam>

@@ -237,6 +237,31 @@ namespace Nordril.Functional.Data
     public static class Maybe
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Maybe{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Maybe<TResult> Select<TSource, TResult>(this Maybe<TSource> source, Func<TSource, TResult> f)
+            => (Maybe<TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Maybe{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static Maybe<TResult> SelectMany<TSource, TMiddle, TResult>
+            (this Maybe<TSource> source,
+             Func<TSource, Maybe<TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => source.ValueOr(s => f(s).ValueOr(m => Just(resultSelector(s, m)), Nothing<TResult>()), Nothing<TResult>());
+
+        /// <summary>
         /// An isomorphism between <see cref="Maybe{T}"/> and reference types, where <c>default</c> is mapped to <see cref="Maybe.Nothing{T}"/> and all other values to <see cref="Maybe.Just{T}(T)"/>.
         /// </summary>
         /// <typeparam name="T">The underlying type to wrap.</typeparam>

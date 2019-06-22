@@ -296,6 +296,17 @@ namespace Nordril.Functional.Data
     public static class FuncDictionary
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="FuncDictionary{TKey, TValue}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the source's key.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static FuncDictionary<TKey, TResult> Select<TKey, TSource, TResult>(this FuncDictionary<TKey, TSource> source, Func<TSource, TResult> f)
+            => (FuncDictionary<TKey, TResult>)source.Map(f);
+
+        /// <summary>
         /// Creates a new <see cref="FuncDictionary{TKey, TValue}"/> based on the <see cref="IEquatable{T}"/>-instances of the keys and values.
         /// </summary>
         /// <typeparam name="TKey">The type of the keys.</typeparam>

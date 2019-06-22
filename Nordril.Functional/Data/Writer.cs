@@ -27,7 +27,10 @@ namespace Nordril.Functional.Data
         /// </summary>
         public TValue Result { get; private set; }
 
-        private readonly IMonoid<TState> monoid;
+        /// <summary>
+        /// The output monoid for combining outputs.
+        /// </summary>
+        public IMonoid<TState> Monoid { get; private set; }
 
         /// <summary>
         /// Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
@@ -35,10 +38,10 @@ namespace Nordril.Functional.Data
         /// <param name="result">The result to produce.</param>
         public Writer(TValue result)
         {
-            var neutral = Monoid.NeutralUnsafe<TState, TMonoid>();
+            var neutral = Algebra.Monoid.NeutralUnsafe<TState, TMonoid>();
             State = neutral;
             Result = result;
-            monoid = new Monoid<TState>(neutral, Monoid.OpUnsafe<TState, TMonoid>());
+            Monoid = new Monoid<TState>(neutral, Algebra.Monoid.OpUnsafe<TState, TMonoid>());
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace Nordril.Functional.Data
         {
             State = state;
             Result = result;
-            monoid = new Monoid<TState>(Monoid.NeutralUnsafe<TState, TMonoid>(), Monoid.OpUnsafe<TState, TMonoid>());
+            Monoid = new Monoid<TState>(Algebra.Monoid.NeutralUnsafe<TState, TMonoid>(), Algebra.Monoid.OpUnsafe<TState, TMonoid>());
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace Nordril.Functional.Data
         {
             State = state;
             Result = result;
-            this.monoid = monoid;
+            this.Monoid = monoid;
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace Nordril.Functional.Data
         /// <param name="state">The new output to store.</param>
         public Writer<TState, TValue, TMonoid> Tell(TState state)
         {
-            return new Writer<TState, TValue, TMonoid>(Result, monoid.Op(State, state));
+            return new Writer<TState, TValue, TMonoid>(Result, Monoid.Op(State, state));
         }
 
         /// <inheritdoc />
@@ -83,7 +86,7 @@ namespace Nordril.Functional.Data
 
             var fWriter = f as Writer<TState, Func<TValue, TResult>, TMonoid>;
 
-            return new Writer<TState, TResult, TMonoid>(fWriter.Result(Result), monoid.Op(fWriter.State, State), monoid);
+            return new Writer<TState, TResult, TMonoid>(fWriter.Result(Result), Monoid.Op(fWriter.State, State), Monoid);
         }
 
         /// <inheritdoc />
@@ -91,7 +94,7 @@ namespace Nordril.Functional.Data
         {
             var ret = f(Result) as Writer<TState, TResult, TMonoid>;
 
-            return new Writer<TState, TResult, TMonoid>(ret.Result, monoid.Op(State, ret.State));
+            return new Writer<TState, TResult, TMonoid>(ret.Result, Monoid.Op(State, ret.State));
         }
 
         /// <inheritdoc />
@@ -117,6 +120,43 @@ namespace Nordril.Functional.Data
     /// </summary>
     public static class Writer
     {
+        /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Writer{TState, TValue, TMonoid}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TMonoid">The type of the output monoid.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static Writer<TState, TResult, TMonoid> Select<TState, TMonoid, TSource, TResult>(this State<TState, TSource> source, Func<TSource, TResult> f)
+            where TMonoid : IMonoid<TState>
+            => (Writer<TState, TResult, TMonoid>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Writer{TState, TValue, TMonoid}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <typeparam name="TMonoid">The type of the output monoid.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static Writer<TState, TResult, TMonoid> SelectMany<TState, TMonoid, TSource, TMiddle, TResult>
+            (this Writer<TState, TSource, TMonoid> source,
+             Func<TSource, Writer<TState, TMiddle, TMonoid>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            where TMonoid : IMonoid<TState>
+        {
+            var sourceRes = source.Result;
+            var midRes = f(sourceRes);
+            var midState = source.Monoid.Op(source.State, midRes.State);
+
+            return new Writer<TState, TResult, TMonoid>(resultSelector(sourceRes, midRes.Result), midState);
+        }
+
         /// <summary>
         /// Stores a new output in the writer and returns no result.
         /// </summary>

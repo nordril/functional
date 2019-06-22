@@ -281,6 +281,34 @@ namespace Nordril.Functional.Data
     public static class FuncSet
     {
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="FuncSet{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static FuncSet<TResult> Select<TSource, TResult>(this FuncSet<TSource> source, Func<TSource, TResult> f)
+            => (FuncSet<TResult>)source.Map(f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="FuncSet{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static FuncSet<TResult> SelectMany<TSource, TMiddle, TResult>
+            (this FuncSet<TSource> source,
+             Func<TSource, FuncSet<TMiddle>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+        {
+            var enumSource = ((IEnumerable<TSource>)source);
+            return new FuncSet<TResult>(enumSource.SelectMany(x => f(x), resultSelector));
+        }
+
+        /// <summary>
         /// Creates a new <see cref="FuncSet{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the set.</typeparam>
