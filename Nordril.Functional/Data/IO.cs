@@ -1,5 +1,5 @@
 ﻿using Nordril.Functional.Category;
-using Nordril.HedgingEngine.Logic.Mapping;
+using Nordril.Functional.Mapping;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -153,9 +153,9 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The underlying type to wrap.</typeparam>
         private class IoIso<T> : IIsomorphism<Func<T>, Io<T>>
         {
-            public Func<T> ConvertBack(Io<T> from) => () => from.Run();
+            public Func<T> ConvertBackWith(Unit _, Io<T> from) => () => from.Run();
 
-            public Io<T> Convert(Func<T> from) => new Io<T>(from);
+            public Io<T> ConvertWith(Unit _, Func<T> from) => new Io<T>(from);
         }
 
         /// <summary>

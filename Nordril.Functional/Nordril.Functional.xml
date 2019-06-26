@@ -3378,12 +3378,6 @@
             </summary>
             <typeparam name="T">The underlying type to wrap.</typeparam>
         </member>
-        <member name="T:Nordril.Functional.Data.Identity.IoIso`1">
-            <summary>
-            An isomorphism between <see cref="T:Nordril.Functional.Data.Io`1"/> and <see cref="T:System.Func`2"/>.
-            </summary>
-            <typeparam name="T">The underlying type to wrap.</typeparam>
-        </member>
         <member name="M:Nordril.Functional.Data.Identity.ToIdentity``1(Nordril.Functional.Category.IFunctor{``0})">
             <summary>
             Unsafely casts an <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to an <see cref="T:Nordril.Functional.Data.Identity`1"/>.
@@ -5386,6 +5380,82 @@
             Creates a deep copy of the object that can be modified independently of the original.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Mapping.IIsomorphism`2">
+            <summary>
+            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Mapping.IsomorphismExtensions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Mapping.IIsomorphism`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Mapping.IsomorphismExtensions.ConvertBack``2(Nordril.Functional.Mapping.IIsomorphismWith{Nordril.Functional.Data.Unit,``0,``1},``1)">
+            <summary>
+            Converts an object back from <typeparamref name="TTo"/> to <typeparamref name="TFrom"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+            <param name="iso">The isomorphism.</param>
+            <param name="from">The object to convert.</param>
+        </member>
+        <member name="T:Nordril.Functional.Mapping.IIsomorphismWith`3">
+            <summary>
+            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>, with the help of an environment-variable <typeparamref name="TEnv"/>.
+            </summary>
+            <typeparam name="TEnv">The environment.</typeparam>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Mapping.IIsomorphismWith`3.ConvertBackWith(`0,`2)">
+            <summary>
+            Converts an object back from <typeparamref name="TTo"/> to <typeparamref name="TFrom"/>.
+            The following holds for all <c>x</c>:
+            <code>
+                ConvertBack(env, Convert(env, x)) == x
+            </code>
+            </summary>
+            <param name="env">The environment.</param>
+            <param name="from">The object to convert.</param>
+        </member>
+        <member name="T:Nordril.Functional.Mapping.IMorphism`2">
+            <summary>
+            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Mapping.IMorphismExtensions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Mapping.IMorphism`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Mapping.IMorphismExtensions.Conver``2(Nordril.Functional.Mapping.IIsomorphismWith{Nordril.Functional.Data.Unit,``0,``1},``0)">
+            <summary>
+            Converts an object from <typeparamref name="TFrom"/> to <typeparamref name="TTo"/>.
+            </summary>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+            <param name="iso">The isomorphism.</param>
+            <param name="from">The object to convert.</param>
+        </member>
+        <member name="T:Nordril.Functional.Mapping.IMorphismWith`3">
+            <summary>
+            type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>., with the help of an environment-variable <typeparamref name="TEnv"/>.
+            </summary>
+            <typeparam name="TEnv">The environment.</typeparam>
+            <typeparam name="TFrom">The from-type.</typeparam>
+            <typeparam name="TTo">The to-type.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Mapping.IMorphismWith`3.ConvertWith(`0,`1)">
+            <summary>
+            Converts an object.
+            </summary>
+            <param name="env">The environment.</param>
+            <param name="from">The object to convert.</param>
+        </member>
         <member name="T:Nordril.Functional.ObjectExtensions">
             <summary>
             Extension methods for <see cref="T:System.Object"/>.
@@ -6228,36 +6298,6 @@
             <typeparam name="TResult">The result of the function.</typeparam>
             <param name="t">The tuple to which to apply the function.</param>
             <param name="f">The function to apply.</param>
-        </member>
-        <member name="T:Nordril.HedgingEngine.Logic.Mapping.IIsomorphism`2">
-            <summary>
-            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
-            </summary>
-            <typeparam name="TFrom">The from-type.</typeparam>
-            <typeparam name="TTo">The to-type.</typeparam>
-        </member>
-        <member name="M:Nordril.HedgingEngine.Logic.Mapping.IIsomorphism`2.ConvertBack(`1)">
-            <summary>
-            Converts an object back from <typeparamref name="TTo"/> to <typeparamref name="TFrom"/>.
-            The following holds for all <c>x</c>:
-            <code>
-                ConvertBack(Convert(x)) == x
-            </code>
-            </summary>
-            <param name="from">The object to convert.</param>
-        </member>
-        <member name="T:Nordril.HedgingEngine.Logic.Mapping.IMorphism`2">
-            <summary>
-            A type which can convert objects of type <typeparamref name="TFrom"/> to objects of type <typeparamref name="TTo"/>.
-            </summary>
-            <typeparam name="TFrom">The from-type.</typeparam>
-            <typeparam name="TTo">The to-type.</typeparam>
-        </member>
-        <member name="M:Nordril.HedgingEngine.Logic.Mapping.IMorphism`2.Convert(`0)">
-            <summary>
-            Converts an object.
-            </summary>
-            <param name="from">The object to convert.</param>
         </member>
     </members>
 </doc>

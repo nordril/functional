@@ -29,7 +29,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mapping\" />
     <Folder Include="PrettyPrinting\" />
   </ItemGroup>
 

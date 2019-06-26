@@ -1,5 +1,5 @@
 ﻿using Nordril.Functional.Category;
-using Nordril.HedgingEngine.Logic.Mapping;
+using Nordril.Functional.Mapping;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -268,9 +268,9 @@ namespace Nordril.Functional.Data
         private class MaybeIso<T> : IIsomorphism<T, Maybe<T>>
             where T : class
         {
-            public T ConvertBack(Maybe<T> from) => from.ValueOr(default);
+            public T ConvertBackWith(Unit _, Maybe<T> from) => from.ValueOr(default);
 
-            public Maybe<T> Convert(T from) => JustIf(from != default, () => from);
+            public Maybe<T> ConvertWith(Unit _, T from) => JustIf(from != default, () => from);
         }
 
         /// <summary>
