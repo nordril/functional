@@ -5432,7 +5432,7 @@
             Extension methods for <see cref="T:Nordril.Functional.Mapping.IMorphism`2"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Mapping.IMorphismExtensions.Conver``2(Nordril.Functional.Mapping.IIsomorphismWith{Nordril.Functional.Data.Unit,``0,``1},``0)">
+        <member name="M:Nordril.Functional.Mapping.IMorphismExtensions.Convert``2(Nordril.Functional.Mapping.IIsomorphismWith{Nordril.Functional.Data.Unit,``0,``1},``0)">
             <summary>
             Converts an object from <typeparamref name="TFrom"/> to <typeparamref name="TTo"/>.
             </summary>

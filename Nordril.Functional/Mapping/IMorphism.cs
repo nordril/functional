@@ -23,7 +23,7 @@ namespace Nordril.Functional.Mapping
         /// <typeparam name="TTo">The to-type.</typeparam>
         /// <param name="iso">The isomorphism.</param>
         /// <param name="from">The object to convert.</param>
-        public static TTo Conver<TFrom, TTo>(this IIsomorphismWith<Unit, TFrom, TTo> iso, TFrom from)
+        public static TTo Convert<TFrom, TTo>(this IIsomorphismWith<Unit, TFrom, TTo> iso, TFrom from)
             => iso.ConvertWith(new Unit(), from);
     }
 }
