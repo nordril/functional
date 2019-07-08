@@ -43,8 +43,9 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Creates a new <see cref="FuncDictionary{TKey, TValue}"/> from a pair of keys and values.
         /// </summary>
+        /// <param name="keyComparer">A comparer for the keys.</param>
         /// <param name="pairs">The pairs to put into the dictionary.</param>
-        public FuncDictionary(IEnumerable<KeyValuePair<TKey, TValue>> pairs)
+        public FuncDictionary(IComparer<TKey> keyComparer, IEnumerable<KeyValuePair<TKey, TValue>> pairs)
         {
             pairs = pairs ?? new KeyValuePair<TKey, TValue>[0];
 
@@ -57,7 +58,7 @@ namespace Nordril.Functional.Data
                 dict.Add(pair);
 #endif
             comparer = DictionaryEqualityComparer.Make(
-                new FuncEqualityComparer<TKey>((x,y) => x.Equals(y)),
+                keyComparer,
                 new FuncEqualityComparer<TValue>((x,y) => x.Equals(y)));
         }
 
@@ -65,9 +66,9 @@ namespace Nordril.Functional.Data
         /// Creates a new <see cref="FuncDictionary{TKey, TValue}"/> from a pair of keys and values, and a custom comparer.
         /// </summary>
         /// <param name="pairs">The pairs to put into the dictionary.</param>
-        /// <param name="keyComparer">The equality comparer for the keys.</param>
+        /// <param name="keyComparer">The comparer for the keys. This must also implement <see cref="IEqualityComparer{T}"/>.</param>
         /// <param name="valueComparer">The equality comparer for the values.</param>
-        public FuncDictionary(IEnumerable<KeyValuePair<TKey, TValue>> pairs, IEqualityComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
+        public FuncDictionary(IEnumerable<KeyValuePair<TKey, TValue>> pairs, IComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
         {
             pairs = pairs ?? new KeyValuePair<TKey, TValue>[0];
 
@@ -79,7 +80,6 @@ namespace Nordril.Functional.Data
             foreach (var pair in pairs)
                 dict.Add(pair);
 #endif
-            keyComparer = keyComparer ?? new FuncEqualityComparer<TKey>((x, y) => x.Equals(y));
             valueComparer = valueComparer ?? new FuncEqualityComparer<TValue>((x, y) => x.Equals(y));
 
             comparer = DictionaryEqualityComparer.Make(keyComparer, valueComparer);
@@ -88,8 +88,9 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Creates a new <see cref="FuncDictionary{TKey, TValue}"/> from a pair of keys and values.
         /// </summary>
+        /// <param name="keyComparer">The comparer for the keys. This must also implement <see cref="IEqualityComparer{T}"/>.</param>
         /// <param name="pairs">The pairs to put into the dictionary.</param>
-        public FuncDictionary(IEnumerable<(TKey, TValue)> pairs) : this(pairs.Select(p => new KeyValuePair<TKey, TValue>(p.Item1, p.Item2)))
+        public FuncDictionary(IComparer<TKey> keyComparer, IEnumerable<(TKey, TValue)> pairs) : this(keyComparer, pairs.Select(p => new KeyValuePair<TKey, TValue>(p.Item1, p.Item2)))
         {
         }
 
@@ -161,7 +162,7 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Computes the hash based on <see cref="Functional.CollectionExtensions.HashElements{T}(IEnumerable{T})"/>.
         /// </summary>
-        public override int GetHashCode() => this.HashElements();
+        public override int GetHashCode() => this.OrderBy(x => x.Key, comparer.KeyComp).HashElements();
 
         /// <inheritdoc />
         public IFuncDictionary<TKey, TValue> AddPure(TKey key, TValue value, out bool success)
@@ -246,9 +247,16 @@ namespace Nordril.Functional.Data
         /// </remarks>
         private DictionaryEqualityComparer<TKey, TValue> ComparerCoalesce()
         {
+            Func<TKey, TKey, int> keyComparer;
+
+            if (typeof(TKey) is IComparable<TKey>)
+                keyComparer = (x, y) => ((IComparable<TKey>)x).CompareTo(y);
+            else
+                keyComparer = (x, y) => x.GetHashCode().CompareTo(y.GetHashCode());
+
             if (comparer == null)
                 comparer = DictionaryEqualityComparer.Make(
-                new FuncEqualityComparer<TKey>((x, y) => x.Equals(y)),
+                new FuncComparer<TKey>(keyComparer, x => x.GetHashCode()),
                 new FuncEqualityComparer<TValue>((x, y) => x.Equals(y)));
             return comparer;
         }
@@ -314,10 +322,10 @@ namespace Nordril.Functional.Data
         /// <param name="xs"></param>
         /// <returns></returns>
         public static FuncDictionary<TKey, TValue> Make<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> xs = null)
-            where TKey : IEquatable<TKey>
+            where TKey : IComparable<TKey>
             where TValue : IEquatable<TValue>
         {
-            return new FuncDictionary<TKey, TValue>(xs, new FuncEqualityComparer<TKey>((x, y) => x.Equals(y)), new FuncEqualityComparer<TValue>((x, y) => x.Equals(y)));
+            return new FuncDictionary<TKey, TValue>(xs, new FuncComparer<TKey>((x,y) => x.CompareTo(y), x => x.GetHashCode()), new FuncEqualityComparer<TValue>((x, y) => x.Equals(y)));
         }
 
         /// <summary>
@@ -328,10 +336,10 @@ namespace Nordril.Functional.Data
         /// <param name="xs"></param>
         /// <returns></returns>
         public static FuncDictionary<TKey, TValue> Make<TKey, TValue>(IEnumerable<(TKey, TValue)> xs = null)
-            where TKey : IEquatable<TKey>
+            where TKey : IComparable<TKey>
             where TValue : IEquatable<TValue>
         {
-            return new FuncDictionary<TKey, TValue>(xs.Select(x => new KeyValuePair<TKey, TValue>(x.Item1,x.Item2)), new FuncEqualityComparer<TKey>((x, y) => x.Equals(y)), new FuncEqualityComparer<TValue>((x, y) => x.Equals(y)));
+            return new FuncDictionary<TKey, TValue>(xs.Select(x => new KeyValuePair<TKey, TValue>(x.Item1,x.Item2)), new FuncComparer<TKey>((x, y) => x.CompareTo(y), x => x.GetHashCode()), new FuncEqualityComparer<TValue>((x, y) => x.Equals(y)));
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TKey">The type of the keys.</typeparam>
         /// <typeparam name="TValue">The type of the values.</typeparam>
         public static DictionaryEqualityComparer<TKey, TValue> Make<TKey, TValue>(
-            IEqualityComparer<TKey> keyComp,
+            IComparer<TKey> keyComp,
             IEqualityComparer<TValue> valueComp)
             => new DictionaryEqualityComparer<TKey, TValue>(keyComp, valueComp);
 
@@ -26,10 +26,10 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TKey">The type of the keys.</typeparam>
         /// <typeparam name="TValue">The type of the values.</typeparam>
         public static DictionaryEqualityComparer<TKey, TValue> Make<TKey, TValue>()
-            where TKey : IEquatable<TKey>
+            where TKey : IComparable<TKey>
             where TValue : IEquatable<TValue>
             => Make(
-                new FuncEqualityComparer<TKey>((x, y) => x.Equals(y), x => x.GetHashCode()),
+                new FuncComparer<TKey>((x, y) => x.CompareTo(y), x => x.GetHashCode()),
                 new FuncEqualityComparer<TValue>((x, y) => x.Equals(y), x => x.GetHashCode()));
     }
 
@@ -43,7 +43,12 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// The key-comparer.
         /// </summary>
-        public IEqualityComparer<TKey> KeyComp { get; private set; }
+        public IComparer<TKey> KeyComp { get; private set; }
+
+        /// <summary>
+        /// The key-comparer, upcast to an <see cref="IEqualityComparer{T}"/>.
+        /// </summary>
+        public IEqualityComparer<TKey> KeyEqComp { get; private set; }
 
         /// <summary>
         /// The value-commparer.
@@ -53,11 +58,12 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Creates a new instance.
         /// </summary>
-        /// <param name="keyComp">The key-comparer.</param>
+        /// <param name="keyComp">The key-comparer. This must also implement <see cref="IEqualityComparer{T}"/>.</param>
         /// <param name="valueComp">The value-comparer.</param>
-        public DictionaryEqualityComparer(IEqualityComparer<TKey> keyComp, IEqualityComparer<TValue> valueComp)
+        public DictionaryEqualityComparer(IComparer<TKey> keyComp, IEqualityComparer<TValue> valueComp)
         {
             KeyComp = keyComp;
+            KeyEqComp = (IEqualityComparer<TKey>)keyComp;
             ValueComp = valueComp;
         }
 
@@ -86,7 +92,7 @@ namespace Nordril.Functional.Data
         public int GetHashCode(IDictionary<TKey, TValue> obj)
             => obj
             .Unzip(kv => (kv.Key, kv.Value))
-            .Both(ks => ks.Select(KeyComp.GetHashCode).HashElements(), vs => vs.Select(ValueComp.GetHashCode).HashElements())
+            .Both(ks => ks.Select(KeyEqComp.GetHashCode).HashElements(), vs => vs.Select(ValueComp.GetHashCode).HashElements())
             .Apply(xy => new object().DefaultHash(xy.Item1, xy.Item2));
     }
 }

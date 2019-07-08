@@ -16,7 +16,8 @@ namespace Nordril.Functional
         /// Creates an <see cref="IComparer{T}"/> out of a binary function.
         /// </summary>
         /// <param name="f">The binary function to lift.</param>
-        public FuncComparer(Func<T, T, int> f) : base((x,y) => f(x,y) == 0)
+        /// <param name="getHashCode"></param>
+        public FuncComparer(Func<T, T, int> f, Func<T, int> getHashCode) : base((x,y) => f(x,y) == 0, getHashCode)
         {
             this.f = f;
         }

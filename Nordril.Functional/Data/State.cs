@@ -14,7 +14,7 @@ namespace Nordril.Functional.Data
     /// is being passed around.
     /// As such, state is a more well-behaved replacement to modifying some global variable.
     /// </summary>
-    /// <typeparam name="TState">The type of the state</typeparam>
+    /// <typeparam name="TState">The type of the state.</typeparam>
     /// <typeparam name="TValue">The type of the value produced.</typeparam>
     public class State<TState, TValue> : IMonad<TValue>
     {
@@ -35,7 +35,7 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
-        /// Runs the state function with an initial state and returns the result, plus the actual result.
+        /// Runs the state function with an initial state and returns the final state, plus the result.
         /// </summary>
         /// <param name="initialState">The initial state (the starting point of the computation).</param>
         public (TValue result, TState finalState) Run(TState initialState) => runState(initialState);
