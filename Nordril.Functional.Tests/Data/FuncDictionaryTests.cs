@@ -17,11 +17,13 @@ namespace Nordril.Functional.Tests.Data
         [InlineData(new int[] { 5, 4, 6, 7, 8 }, new string[] { "e", "d", "f", "g", "h" }, 47, "xx")]
         public static void FuncDictionaryAdd(int[] xs, string[] ys, int key, string value)
         {
-            var fd = new FuncDictionary<int, string>((xs ?? new int[0]).Zip(ys ?? new string[0]));
+            var intComp = new FuncComparer<int>((x, y) => x.CompareTo(y), x => x.GetHashCode());
+
+            var fd = new FuncDictionary<int, string>(intComp, (xs ?? new int[0]).Zip(ys ?? new string[0]));
             var origLength = fd.Count;
             fd.Add(key, value);
 
-            var dict = new FuncDictionary<int, string>((xs ?? new int[0]).Zip(ys ?? new string[0]))
+            var dict = new FuncDictionary<int, string>(intComp, (xs ?? new int[0]).Zip(ys ?? new string[0]))
             {
                 { key, value }
             };

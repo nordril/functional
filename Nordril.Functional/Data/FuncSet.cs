@@ -200,7 +200,7 @@ namespace Nordril.Functional.Data
                 return lexicographicalComparer.Compare(xsOrd, ysOrd);
             };
 
-            return new FuncComparer<ISet<T1>>(f);
+            return new FuncComparer<ISet<T1>>(f, s => s.HashElements());
         }
 
         /// <inheritdoc />

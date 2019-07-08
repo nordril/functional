@@ -835,11 +835,11 @@ namespace Nordril.Functional
         }
 
         /// <summary>
-        /// Creates an <see cref="IFuncList{T}"/> out of a sequence of elements.
+        /// Creates an <see cref="IFuncList{T}"/> out of a sequence of elements. Analogous to <see cref="Enumerable.ToList{TSource}(IEnumerable{TSource})"/>.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="xs">The sequence to turn into a list.</param>
-        public static IFuncList<T> ToFuncList<T>(this IEnumerable<T> xs) => new FuncList<T>(xs);
+        public static IFuncList<T> MakeFuncList<T>(this IEnumerable<T> xs) => new FuncList<T>(xs);
 
         /// <summary>
         /// Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.

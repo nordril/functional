@@ -24,7 +24,5 @@ namespace Nordril.Functional.Tests.Data
             Assert.Equal(2, s);
             Assert.Equal(11, a);
         }
-
-
     }
 }

@@ -46,6 +46,8 @@ namespace Nordril.Functional.Data
         /// <param name="runRws">The RWS-function.</param>
         public Rws(Func<TEnvironment, TState, (TValue, TState, TOutput)> runRws)
         {
+            var neutral = Algebra.Monoid.NeutralUnsafe<TOutput, TMonoid>();
+            Monoid = new Monoid<TOutput>(neutral, Algebra.Monoid.OpUnsafe<TOutput, TMonoid>());
             this.runRws = runRws;
         }
 
@@ -121,8 +123,6 @@ namespace Nordril.Functional.Data
             where TMonoid : IMonoid<TOutput>
             => (Rws<TEnvironment, TOutput, TMonoid, TState, TResult>)source.Map(f);
 
-        //todo
-
         /// <summary>
         /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Rws{TEnvironment, TOutput, TMonoid, TState, TValue}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
         /// </summary>
@@ -185,6 +185,17 @@ namespace Nordril.Functional.Data
             => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
+        /// Returns the current environment.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment> GetEnvironment<TEnvironment, TOutput, TMonoid, TState>()
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment>((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+
+        /// <summary>
         /// Returns the result to of a function which takes the state as an input. Also known as <em>reader</em>.
         /// </summary>
         /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
@@ -211,6 +222,29 @@ namespace Nordril.Functional.Data
             where TMonoid : IMonoid<TOutput>
             => new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e,s) => r.Run(f(e), s));
 
-        //todo: add reader and writer-functions
+        /// <summary>
+        /// Stores a new output and returns it.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="state">The output to store and return.</param>
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, TOutput> Listen<TEnvironment, TOutput, TMonoid, TState>(TOutput state)
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, TOutput>((e,s) => (state, s, state));
+
+        /// <summary>
+        /// Returns a new <see cref="Rws{TEnvironment, TOutput, TMonoid, TState, TValue}"/> which stores a new ouput <paramref name="state"/>.
+        /// </summary>
+        /// <param name="state">The new output to store.</param>
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, TValue> Tell<TEnvironment, TOutput, TMonoid, TState, TValue>(this Rws<TEnvironment, TOutput, TMonoid, TState, TValue> rws, TOutput state)
+            where TMonoid : IMonoid<TOutput>
+        {
+            return new Rws<TEnvironment, TOutput, TMonoid, TState, TValue>((e, s) => {
+                var (a1, s1, w1) = rws.Run(e, s);
+                return (a1, s1, rws.Monoid.Op(w1, state));
+            });
+        }
     }
 }

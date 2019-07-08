@@ -135,5 +135,14 @@ namespace Nordril.Functional.Data
         /// <param name="r">The <see cref="Reader"/> to run in the modified environment.</param>
         public static Reader<TEnvironment, TResult> Local<TEnvironment, TResult>(Func<TEnvironment, TEnvironment> f, Reader<TEnvironment, TResult> r)
             => new Reader<TEnvironment, TResult>(s => r.Run(f(s)));
+
+        /// <summary>
+        /// Tries to cast a <see cref="IFunctor{TSource}"/> to a <see cref="Reader{TEnvironment, TValue}"/> via an explicit cast.
+        /// Convenience method.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the state.</typeparam>
+        /// <typeparam name="TValue">The type of the value contained in the functor.</typeparam>
+        /// <param name="f">The functor to cast to a writer.</param>
+        public static Reader<TEnvironment, TValue> ToReader<TEnvironment, TValue>(this IFunctor<TValue> f) => (Reader<TEnvironment, TValue>)f;
     }
 }
