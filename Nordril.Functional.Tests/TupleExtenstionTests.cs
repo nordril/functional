@@ -555,5 +555,18 @@ namespace Nordril.Functional.Tests
         {
             Assert.Equal(expected, t.ApplyToTuple(f));
         }
+
+        [Fact]
+        public static void AllTest()
+        {
+            Assert.Equal((6, 10), (3, 5).All(x => x * 2));
+            Assert.Equal((6, 10, 14), (3, 5, 7).All(x => x * 2));
+            Assert.Equal((6, 10, 14, 22), (3, 5, 7, 11).All(x => x * 2));
+            Assert.Equal((6, 10, 14, 22, 26), (3, 5, 7, 11, 13).All(x => x * 2));
+            Assert.Equal((6, 10, 14, 22, 26, 34), (3, 5, 7, 11, 13, 17).All(x => x * 2));
+            Assert.Equal((6, 10, 14, 22, 26, 34, 38), (3, 5, 7, 11, 13, 17, 19).All(x => x * 2));
+            Assert.Equal((6, 10, 14, 22, 26, 34, 38, 46), (3, 5, 7, 11, 13, 17, 19, 23).All(x => x * 2));
+
+        }
     }
 }

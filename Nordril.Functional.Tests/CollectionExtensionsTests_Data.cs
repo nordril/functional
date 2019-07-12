@@ -159,6 +159,44 @@ namespace Nordril.Functional.Tests
             };
         }
 
+        public static IEnumerable<object[]> PartitionEitherData()
+        {
+            yield return new object[]
+            {
+                new List<Either<int, string>>{ },
+                new List<int>{ },
+                new List<string>{ }
+            };
+
+            yield return new object[]
+            {
+                new List<Either<int, string>>{ Either.FromLeft<int, string>(5) },
+                new List<int>{ 5 },
+                new List<string>{ }
+            };
+
+            yield return new object[]
+            {
+                new List<Either<int, string>>{ Either.FromRight<int, string>("abc") },
+                new List<int>{ },
+                new List<string>{ "abc" }
+            };
+
+            yield return new object[]
+            {
+                new List<Either<int, string>>{ Either.FromLeft<int, string>(5), Either.FromLeft<int, string>(1), Either.FromRight<int, string>("xyz") },
+                new List<int>{ 5, 1 },
+                new List<string>{ "xyz" }
+            };
+
+            yield return new object[]
+            {
+                new List<Either<int, string>>{ Either.FromRight<int, string>("abc"), Either.FromLeft<int, string>(5), Either.FromLeft<int, string>(1), Either.FromRight<int, string>("xyz") },
+                new List<int>{ 5, 1 },
+                new List<string>{ "abc", "xyz" }
+            };
+        }
+
         public static IEnumerable<object[]> ProductDecimalTest1Data()
         {
             yield return new object[] { new decimal[] { }, 1 };

@@ -666,7 +666,7 @@ namespace Nordril.Functional
         /// Partitions a list into two lists based on a predicate <paramref name="putInFirst"/>. All elements which fulfill <paramref name="putInFirst"/> are put into the first list, and all others are put into the second.
         /// </summary>
         /// <typeparam name="T">The type of element in the sequence.</typeparam>
-        /// <param name="xs">The source list to split.</param>
+        /// <param name="xs">The sequence to split.</param>
         /// <param name="putInFirst">The splitting predicate.</param>
         public static (IEnumerable<T>, IEnumerable<T>) Partition<T>(this IEnumerable<T> xs, Func<T, bool> putInFirst)
             => xs.Aggregate((new List<T>(), new List<T>()), (acc, x) =>
@@ -677,6 +677,15 @@ namespace Nordril.Functional
                     acc.Item2.Add(x);
                 return acc;
             });
+
+        /// <summary>
+        /// Partitions a list of <see cref="Either{TLeft, TRight}"/> into left- and right-lists.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the left-elements.</typeparam>
+        /// <typeparam name="TRight">The type of the right-elements.</typeparam>
+        /// <param name="xs">The sequence to split.</param>
+        public static (IEnumerable<TLeft>, IEnumerable<TRight>) Partition<TLeft, TRight>(this IEnumerable<Either<TLeft, TRight>> xs)
+            => xs.Aggregate((new List<TLeft>(), new List<TRight>()), (acc, x) => { x.Coalesce(left => { acc.Item1.Add(left); return 0; }, right => { acc.Item2.Add(right); return 0; }); return acc; });
 
         /// <summary>
         /// Calculates the product of the elements of a sequence, returning 1 if the sequence is empty.

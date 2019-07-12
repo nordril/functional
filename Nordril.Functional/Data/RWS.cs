@@ -237,6 +237,7 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Returns a new <see cref="Rws{TEnvironment, TOutput, TMonoid, TState, TValue}"/> which stores a new ouput <paramref name="state"/>.
         /// </summary>
+        /// <param name="rws">The RWS to which to tell the output.</param>
         /// <param name="state">The new output to store.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TValue> Tell<TEnvironment, TOutput, TMonoid, TState, TValue>(this Rws<TEnvironment, TOutput, TMonoid, TState, TValue> rws, TOutput state)
             where TMonoid : IMonoid<TOutput>

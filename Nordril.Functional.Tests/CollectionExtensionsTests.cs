@@ -436,6 +436,16 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
+        [MemberData(nameof(PartitionEitherData))]
+        public static void PartitionEitherTest(IEnumerable<Either<int, string>> xs, IEnumerable<int> leftExpected, IEnumerable<string> rightExpected)
+        {
+            var (leftActual, rightActual) = xs.Partition();
+
+            Assert.Equal(leftExpected, leftActual);
+            Assert.Equal(rightExpected, rightActual);
+        }
+
+        [Theory]
         [InlineData(new int[] { }, 1)]
         [InlineData(new int[] { 1 }, 1)]
         [InlineData(new int[] { 2 }, 2)]

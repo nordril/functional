@@ -640,6 +640,76 @@ namespace Nordril.Functional
             => (f(t.Item1), g(t.Item2));
 
         /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult) All<T, TResult>(this (T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult) All<T, TResult>(this (T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult, TResult) All<T, TResult>(this (T, T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3), f(t.Item4));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult, TResult, TResult) All<T, TResult>(this (T, T, T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3), f(t.Item4), f(t.Item5));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult, TResult, TResult, TResult) All<T, TResult>(this (T, T, T, T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3), f(t.Item4), f(t.Item5), f(t.Item6));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult, TResult, TResult, TResult, TResult) All<T, TResult>(this (T, T, T, T, T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3), f(t.Item4), f(t.Item5), f(t.Item6), f(t.Item7));
+
+        /// <summary>
+        /// Applies the same function to all elements of a tuple.
+        /// </summary>
+        /// <typeparam name="T">The type of the tuple's elements.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="t">The tuple to the elements of which to apply the function.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        public static (TResult, TResult, TResult, TResult, TResult, TResult, TResult, TResult) All<T, TResult>(this (T, T, T, T, T, T, T, T) t, Func<T, TResult> f)
+            => (f(t.Item1), f(t.Item2), f(t.Item3), f(t.Item4), f(t.Item5), f(t.Item6), f(t.Item7), f(t.Item8));
+
+        /// <summary>
         /// Applies a binary function to the two elements of a tuple.
         /// </summary>
         /// <typeparam name="T1">The first element.</typeparam>

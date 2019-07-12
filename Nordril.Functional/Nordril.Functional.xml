@@ -1948,8 +1948,16 @@
             Partitions a list into two lists based on a predicate <paramref name="putInFirst"/>. All elements which fulfill <paramref name="putInFirst"/> are put into the first list, and all others are put into the second.
             </summary>
             <typeparam name="T">The type of element in the sequence.</typeparam>
-            <param name="xs">The source list to split.</param>
+            <param name="xs">The sequence to split.</param>
             <param name="putInFirst">The splitting predicate.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Partition``2(System.Collections.Generic.IEnumerable{Nordril.Functional.Data.Either{``0,``1}})">
+            <summary>
+            Partitions a list of <see cref="T:Nordril.Functional.Data.Either`2"/> into left- and right-lists.
+            </summary>
+            <typeparam name="TLeft">The type of the left-elements.</typeparam>
+            <typeparam name="TRight">The type of the right-elements.</typeparam>
+            <param name="xs">The sequence to split.</param>
         </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Product(System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
@@ -4768,6 +4776,7 @@
             <summary>
             Returns a new <see cref="T:Nordril.Functional.Data.Rws`5"/> which stores a new ouput <paramref name="state"/>.
             </summary>
+            <param name="rws">The RWS to which to tell the output.</param>
             <param name="state">The new output to store.</param>
         </member>
         <member name="T:Nordril.Functional.Data.State`2">
@@ -6484,6 +6493,69 @@
             <param name="f">The first function.</param>
             <param name="g">The second function.</param>
             <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0,``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0,``0,``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0,``0,``0,``0,``0},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.All``2(System.ValueTuple{``0,``0,``0,``0,``0,``0,``0,System.ValueTuple{``0}},System.Func{``0,``1})">
+            <summary>
+            Applies the same function to all elements of a tuple.
+            </summary>
+            <typeparam name="T">The type of the tuple's elements.</typeparam>
+            <typeparam name="TResult">The type of the function's result.</typeparam>
+            <param name="t">The tuple to the elements of which to apply the function.</param>
+            <param name="f">The function to apply to each element.</param>
         </member>
         <member name="M:Nordril.Functional.TupleExtensions.ApplyToTuple``3(System.ValueTuple{``0,``1},System.Func{``0,``1,``2})">
             <summary>
