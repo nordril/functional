@@ -5609,6 +5609,17 @@
             <param name="x">The first object.</param>
             <param name="y">The second object.</param>
         </member>
+        <member name="T:Nordril.Functional.FuncComparer">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.FuncComparer`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.FuncComparer.Make``1">
+            <summary>
+            Creates a <see cref="T:Nordril.Functional.FuncComparer`1"/> for a type implementing <see cref="T:System.IComparable`1"/>.
+            </summary>
+            <typeparam name="T">The type of objects to compare.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.FuncEqualityComparer`1">
             <summary>
             An equality comparer that uses a binary predicate to compare two objects for equality.
@@ -5643,17 +5654,23 @@
             </summary>
             <param name="obj">The object to hash.</param>
         </member>
-        <member name="T:Nordril.Functional.FuncEqualityComparerExtensions">
+        <member name="T:Nordril.Functional.FuncEqualityComparer">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.FuncEqualityComparer`1"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.FuncEqualityComparerExtensions.ToEqualityComparer``1(System.Func{``0,``0,System.Boolean})">
+        <member name="M:Nordril.Functional.FuncEqualityComparer.Make``1(System.Func{``0,``0,System.Boolean})">
             <summary>
             Turns a binary predicate into a <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>.
             </summary>
             <typeparam name="T">The type of objects to compare.</typeparam>
             <param name="f">The comparison function.</param>
+        </member>
+        <member name="M:Nordril.Functional.FuncEqualityComparer.Make``1">
+            <summary>
+            Creates a <see cref="T:Nordril.Functional.FuncEqualityComparer`1"/> for a type implementing <see cref="T:System.IEquatable`1"/>.
+            </summary>
+            <typeparam name="T">The type of objects to compare.</typeparam>
         </member>
         <member name="T:Nordril.Functional.ICopyable`1">
             <summary>

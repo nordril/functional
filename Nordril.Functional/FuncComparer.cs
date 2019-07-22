@@ -29,4 +29,16 @@ namespace Nordril.Functional
         /// <param name="y">The second object.</param>
         public int Compare(T x, T y) => f(x, y);
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="FuncComparer{T}"/>.
+    /// </summary>
+    public static class FuncComparer
+    {
+        /// <summary>
+        /// Creates a <see cref="FuncComparer{T}"/> for a type implementing <see cref="IComparable{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to compare.</typeparam>
+        public static IComparer<T> Make<T>() where T : IComparable<T> => new FuncComparer<T>((x, y) => x.CompareTo(y), x => x.GetHashCode());
+    }
 }

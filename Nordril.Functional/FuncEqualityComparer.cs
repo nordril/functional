@@ -52,13 +52,19 @@ namespace Nordril.Functional
     /// <summary>
     /// Extension methods for <see cref="FuncEqualityComparer{T}"/>.
     /// </summary>
-    public static class FuncEqualityComparerExtensions
+    public static class FuncEqualityComparer
     {
         /// <summary>
         /// Turns a binary predicate into a <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of objects to compare.</typeparam>
         /// <param name="f">The comparison function.</param>
-        public static IEqualityComparer<T> ToEqualityComparer<T>(this Func<T, T, bool> f) => new FuncEqualityComparer<T>(f);
+        public static IEqualityComparer<T> Make<T>(this Func<T, T, bool> f) => new FuncEqualityComparer<T>(f);
+
+        /// <summary>
+        /// Creates a <see cref="FuncEqualityComparer{T}"/> for a type implementing <see cref="IEquatable{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to compare.</typeparam>
+        public static IEqualityComparer<T> Make<T>() where T : IEquatable<T> => new FuncEqualityComparer<T>((x, y) => x.Equals(y));
     }
 }
