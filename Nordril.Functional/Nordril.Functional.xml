@@ -5671,6 +5671,7 @@
             </summary>
             <param name="expr">The expression containing the parameter.</param>
             <param name="value">The value with which to replace the parameter.</param>
+            <exception cref="T:System.ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of the parameter of <paramref name="expr"/>.</exception>
         </member>
         <member name="M:Nordril.Functional.FE.Beta(System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">
             <summary>
@@ -5679,6 +5680,25 @@
             <param name="expr">The expression containing the parameter.</param>
             <param name="param">The parameter to replace.</param>
             <param name="value">The value with which to replace the parameter.</param>
+            <exception cref="T:System.ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of <paramref name="param"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.FE.CastReturnType``3(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Returns a function expression whose return type is a supertype of the original function expression.
+            </summary>
+            <typeparam name="TA">The input of the function.</typeparam>
+            <typeparam name="TB">The output of the function.</typeparam>
+            <typeparam name="TBSuper">The output of the returned function, which is a supertype of <typeparamref name="TB"/>.</typeparam>
+            <param name="expr">The function expression.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.CastInputType``3(System.Linq.Expressions.Expression{System.Func{``0,``2}})">
+            <summary>
+            Returns a function expression whose input type is a subtype of the original function expression.
+            </summary>
+            <typeparam name="TA">The input of the function.</typeparam>
+            <typeparam name="TASub">The input of the returned function, which is a subtype of <typeparamref name="TA"/>.</typeparam>
+            <typeparam name="TB">The output of the function.</typeparam>
+            <param name="expr">The function expression.</param>
         </member>
         <member name="T:Nordril.Functional.FE.ParameterExpressionVisitor">
             <summary>

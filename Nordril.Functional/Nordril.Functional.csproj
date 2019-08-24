@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp2.2</TargetFrameworks>
-    <AssemblyVersion>17.1.0.0</AssemblyVersion>
+    <AssemblyVersion>17.2.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies d.o.o.</Authors>
     <Company>Nordril Technologies d.o.o.</Company>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>17.1.0</Version>
+    <Version>17.2.0</Version>
     <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>17.1.0.0</FileVersion>
+    <FileVersion>17.2.0.0</FileVersion>
     <PackageIconUrl>https://nordrilnugeticons.blob.core.windows.net/nuget-icons/cebd969f4bc14d5597856f700bbd5bf5.png</PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageProjectUrl>https://github.com/nordril/functional/</PackageProjectUrl>

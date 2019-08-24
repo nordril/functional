@@ -129,6 +129,7 @@ namespace Nordril.Functional
         /// </summary>
         /// <param name="expr">The expression containing the parameter.</param>
         /// <param name="value">The value with which to replace the parameter.</param>
+        /// <exception cref="ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of the parameter of <paramref name="expr"/>.</exception>
         public static Expression<Func<TB>> Beta<TA, TB>(this Expression<Func<TA, TB>> expr, Expression value)
         {
             var l = (LambdaExpression)expr;
@@ -149,6 +150,7 @@ namespace Nordril.Functional
         /// <param name="expr">The expression containing the parameter.</param>
         /// <param name="param">The parameter to replace.</param>
         /// <param name="value">The value with which to replace the parameter.</param>
+        /// <exception cref="ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of <paramref name="param"/>.</exception>
         public static Expression Beta(this Expression expr, ParameterExpression param, Expression value)
         {
             if (!param.Type.IsAssignableFrom(value.Type))
@@ -158,6 +160,35 @@ namespace Nordril.Functional
             var ret = visitor.Visit(expr);
 
             return ret;
+        }
+
+        /// <summary>
+        /// Returns a function expression whose return type is a supertype of the original function expression.
+        /// </summary>
+        /// <typeparam name="TA">The input of the function.</typeparam>
+        /// <typeparam name="TB">The output of the function.</typeparam>
+        /// <typeparam name="TBSuper">The output of the returned function, which is a supertype of <typeparamref name="TB"/>.</typeparam>
+        /// <param name="expr">The function expression.</param>
+        public static Expression<Func<TA, TBSuper>> CastReturnType<TA, TB, TBSuper>(this Expression<Func<TA, TB>> expr)
+            where TB : TBSuper
+        {
+            Expression converted = Expression.Convert(expr.Body, typeof(TBSuper));
+            return Expression.Lambda<Func<TA, TBSuper>>(converted, expr.Parameters);
+        }
+
+        /// <summary>
+        /// Returns a function expression whose input type is a subtype of the original function expression.
+        /// </summary>
+        /// <typeparam name="TA">The input of the function.</typeparam>
+        /// <typeparam name="TASub">The input of the returned function, which is a subtype of <typeparamref name="TA"/>.</typeparam>
+        /// <typeparam name="TB">The output of the function.</typeparam>
+        /// <param name="expr">The function expression.</param>
+        public static Expression<Func<TASub, TB>> CastInputType<TA, TASub, TB>(this Expression<Func<TA, TB>> expr)
+            where TASub : TA
+        {
+            var p = Expression.Parameter(typeof(TASub), expr.Parameters[0].Name);
+            Expression converted = new ParameterExpressionVisitor(expr.Parameters[0], _ => p).Visit(expr.Body);
+            return Expression.Lambda<Func<TASub, TB>>(converted, p);
         }
 
         /// <summary>

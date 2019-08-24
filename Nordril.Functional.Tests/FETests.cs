@@ -105,5 +105,52 @@ namespace Nordril.Functional.Tests
             var fRes = f.Beta(Expression.Constant(5)).Compile()();
             Assert.Equal(10, fRes);
         }
+
+        [Fact]
+        public static void CastOutputType()
+        {
+            Expression<Func<string, Manager>> f = x => new Manager { Name = x, Age = 20, Role = "CEO", LevelOfManageritude = 3 };
+
+            var fUpcast = f.CastReturnType<string, Manager, Person>();
+
+            Assert.IsType<Func<string, Person>>(fUpcast.Compile());
+
+            var res = fUpcast.Compile()("bill");
+
+            Assert.Equal("bill", res.Name);
+        }
+
+        [Fact]
+        public static void CastInputType()
+        {
+            Expression<Func<Employee, string>> f = x => x.Name;
+
+            var fDowncast = f.CastInputType<Employee, Manager, string>();
+
+            var e = new Manager { Name = "bob", Age = 30, Role = "accountant", LevelOfManageritude = 0 };
+
+            Assert.IsType<Func<Manager, string>>(fDowncast.Compile());
+
+            var res = fDowncast.Compile()(e);
+
+            Assert.Equal("bob", res);
+        }
+
+        public class Person
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+        }
+
+        public class Employee : Person
+        {
+            public string Role { get; set; }
+        }
+
+        public class Manager : Employee
+        {
+            public int LevelOfManageritude { get; set; }
+        }
+
     }
 }
