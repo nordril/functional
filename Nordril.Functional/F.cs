@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace Nordril.Functional
 {
@@ -25,7 +26,7 @@ namespace Nordril.Functional
             => x => g(f(x));
 
         /// <summary>
-        /// Composes two functions. The first function is run with the result of the first.
+        /// Composes two functions. The first function is run with the result of the second.
         /// This is "traditional" function chaining.
         /// </summary>
         /// <typeparam name="TA">The input of the second function.</typeparam>
@@ -39,70 +40,70 @@ namespace Nordril.Functional
         /// <summary>
         /// Curries a binary function, allowing it to take its arguments one by one.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The output of the function.</typeparam>
         /// <param name="f">The function to curry.</param>
-        public static Func<TIn1, Func<TIn2, TOut>> Curry<TIn1, TIn2, TOut>(this Func<TIn1, TIn2, TOut> f)
+        public static Func<TA, Func<TB, TC>> Curry<TA, TB, TC>(this Func<TA, TB, TC> f)
             => x => y => f(x, y);
 
         /// <summary>
         /// Curries a ternary function, allowing it to take its arguments one by one.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TIn3">The third argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The third argument of the function.</typeparam>
+        /// <typeparam name="TD">The output of the function.</typeparam>
         /// <param name="f">The function to curry.</param>
-        public static Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> Curry<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, TIn2, TIn3, TOut> f)
+        public static Func<TA, Func<TB, Func<TC, TD>>> Curry<TA, TB, TC, TD>(this Func<TA, TB, TC, TD> f)
             => x => y => z => f(x, y, z);
 
         /// <summary>
         /// Curries a quaternary function, allowing it to take its arguments one by one.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TIn3">The third argument of the function.</typeparam>
-        /// <typeparam name="TIn4">The fourth argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The third argument of the function.</typeparam>
+        /// <typeparam name="TD">The fourth argument of the function.</typeparam>
+        /// <typeparam name="TE">The output of the function.</typeparam>
         /// <param name="f">The function to curry.</param>
-        public static Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> Curry<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, TIn2, TIn3, TIn4, TOut> f)
+        public static Func<TA, Func<TB, Func<TC, Func<TD, TE>>>> Curry<TA, TB, TC, TD, TE>(this Func<TA, TB, TC, TD, TE> f)
             => x => y => z => u => f(x, y, z, u);
 
         /// <summary>
         /// Uncurries a binary function, requiring it to take its arguments all at once.
         /// The inverse of <see cref="Curry{TIn1, TIn2, TOut}(Func{TIn1, TIn2, TOut})"/>.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The output of the function.</typeparam>
         /// <param name="f">The curried function.</param>
-        public static Func<TIn1, TIn2, TOut> Uncurry<TIn1, TIn2, TOut>(this Func<TIn1, Func<TIn2, TOut>> f)
+        public static Func<TA, TB, TC> Uncurry<TA, TB, TC>(this Func<TA, Func<TB, TC>> f)
             => (x, y) => f(x)(y);
 
         /// <summary>
         /// Uncurries a ternary function, requiring it to take its arguments all at once.
         /// The inverse of <see cref="Curry{TIn1, TIn2, TIn3, TOut}(Func{TIn1, TIn2, TIn3, TOut})"/>.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TIn3">The third argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The third argument of the function.</typeparam>
+        /// <typeparam name="TD">The output of the function.</typeparam>
         /// <param name="f">The curried function.</param>
-        public static Func<TIn1, TIn2, TIn3, TOut> Uncurry<TIn1, TIn2, TIn3, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, TOut>>> f)
+        public static Func<TA, TB, TC, TD> Uncurry<TA, TB, TC, TD>(this Func<TA, Func<TB, Func<TC, TD>>> f)
             => (x, y, z) => f(x)(y)(z);
 
         /// <summary>
         /// Uncurries a quaternary function, requiring it to take its arguments all at once.
         /// The inverse of <see cref="Curry{TIn1, TIn2, TIn3, TIn4, TOut}(Func{TIn1, TIn2, TIn3, TIn4, TOut})"/>.
         /// </summary>
-        /// <typeparam name="TIn1">The first argument of the function.</typeparam>
-        /// <typeparam name="TIn2">The second argument of the function.</typeparam>
-        /// <typeparam name="TIn3">The third argument of the function.</typeparam>
-        /// <typeparam name="TIn4">The fourth argument of the function.</typeparam>
-        /// <typeparam name="TOut">The output of the function.</typeparam>
+        /// <typeparam name="TA">The first argument of the function.</typeparam>
+        /// <typeparam name="TB">The second argument of the function.</typeparam>
+        /// <typeparam name="TC">The third argument of the function.</typeparam>
+        /// <typeparam name="TD">The fourth argument of the function.</typeparam>
+        /// <typeparam name="TE">The output of the function.</typeparam>
         /// <param name="f">The curried function.</param>
-        public static Func<TIn1, TIn2, TIn3, TIn4, TOut> Uncurry<TIn1, TIn2, TIn3, TIn4, TOut>(this Func<TIn1, Func<TIn2, Func<TIn3, Func<TIn4, TOut>>>> f)
+        public static Func<TA, TB, TC, TD, TE> Uncurry<TA, TB, TC, TD, TE>(this Func<TA, Func<TB, Func<TC, Func<TD, TE>>>> f)
             => (x, y, z, u) => f(x)(y)(z)(u);
 
         /// <summary>
