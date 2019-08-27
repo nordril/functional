@@ -5593,6 +5593,18 @@
             <summary>
             Functional extension methods for function expressions and for metaprogramming.
             </summary>
+            <remarks>
+            <see cref="T:System.Linq.Expressions.Expression"/>, with the functions
+            <list type="number">
+                <item><see cref="M:Nordril.Functional.FE.Id``1"/>, </item>
+                <item><see cref="M:Nordril.Functional.FE.LiftToExpression``2(System.Func{``0,``1})"/>, </item>
+                <item><see cref="M:Nordril.Functional.FE.Then``3(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``1,``2}})"/>, </item>
+                <item><see cref="M:Nordril.Functional.FE.First``3(System.Linq.Expressions.Expression{System.Func{``0,``1}})"/>, </item>
+                <item><see cref="M:Nordril.Functional.FE.Both``4(System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``1,``3}})"/> </item>
+            </list>
+            forms a category and an arrow. Arrows are composable computations.
+            See http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Arrow.html.
+            </remarks>
         </member>
         <member name="M:Nordril.Functional.FE.Id``1">
             <summary>
@@ -5600,6 +5612,14 @@
             See <see cref="M:Nordril.Functional.F.Id``1"/>.
             </summary>
             <typeparam name="T">The type of the identity function.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.FE.LiftToExpression``2(System.Func{``0,``1})">
+            <summary>
+            Lifts a function into a function expression. Note that the returned function expression will simply invoke the given function, which will still be a black box, inaccessible to, e.g. LINQ.
+            </summary>
+            <typeparam name="TA">The input of the function.</typeparam>
+            <typeparam name="TB">The output of the function.</typeparam>
+            <param name="f">The function to lift.</param>
         </member>
         <member name="M:Nordril.Functional.FE.Then``3(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``1,``2}})">
             <summary>
@@ -5619,6 +5639,58 @@
             </summary>
             <typeparam name="TA">The input of the first function.</typeparam>
             <typeparam name="TB">The output of the first function and input of the second function.</typeparam>
+            <typeparam name="TC">The output of the second function.</typeparam>
+            <param name="f">The first function.</param>
+            <param name="g">The second function.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.Binary``4(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``1,``2,``3}})">
+            <summary>
+            Takes two function expressions and returns a new function expression which runs the two function expressions and combines their results via a third, binary function expression. The typical usage is to have two predicates which are combined via a binary operator like <see cref="M:System.Linq.Expressions.Expression.AndAlso(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)"/>.
+            </summary>
+            <typeparam name="TA">The input of the functions.</typeparam>
+            <typeparam name="TB">The output of the first function and the first input of the combining function.</typeparam>
+            <typeparam name="TC">The output of the second function and the second input of the combining function.</typeparam>
+            <typeparam name="TD">The output of the binary combining function.</typeparam>
+            <param name="f">The first function.</param>
+            <param name="g">The second function.</param>
+            <param name="combine">The combining function.</param>
+            <returns>A function expression which runs <paramref name="f"/> and <paramref name="g"/> and combines their results via <paramref name="combine"/>.</returns>
+        </member>
+        <member name="M:Nordril.Functional.FE.First``3(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Returns a function expression which applies <paramref name="expr"/> to the first element of the tuple and leaves the second tuple element unchanged.
+            </summary>
+            <typeparam name="TA">The input of the function.</typeparam>
+            <typeparam name="TB">The output of the function.</typeparam>
+            <typeparam name="TIgnored">The second input of the returned function, which is returned unchanged.</typeparam>
+            <param name="expr">The function to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.Second``3(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Returns a function expression which applies <paramref name="expr"/> to the second element of the tuple and leaves the first tuple element unchanged.
+            </summary>
+            <typeparam name="TA">The input of the function.</typeparam>
+            <typeparam name="TB">The output of the function.</typeparam>
+            <typeparam name="TIgnored">The first input of the returned function, which is returned unchanged.</typeparam>
+            <param name="expr">The function to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.Both``4(System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``1,``3}})">
+            <summary>
+            Takes two function expressions and returns one which executes both, taking and returning two values. Also known as <c>(***)</c>.
+            </summary>
+            <typeparam name="TA1">The input of the first function.</typeparam>
+            <typeparam name="TA2">The input of the second function.</typeparam>
+            <typeparam name="TB1">The output of the first function.</typeparam>
+            <typeparam name="TB2">The output of the second function.</typeparam>
+            <param name="f">The first function.</param>
+            <param name="g">The second function.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.Fanout``3(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}})">
+            <summary>
+            Takes two function expressions and returns one which executes both with the same argument, returning two values. Also known as <c>(&amp;&amp;&amp;)</c>.
+            </summary>
+            <typeparam name="TA">The input of the functions.</typeparam>
+            <typeparam name="TB">The output of the first function.</typeparam>
             <typeparam name="TC">The output of the second function.</typeparam>
             <param name="f">The first function.</param>
             <param name="g">The second function.</param>
@@ -5673,14 +5745,34 @@
             <param name="value">The value with which to replace the parameter.</param>
             <exception cref="T:System.ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of the parameter of <paramref name="expr"/>.</exception>
         </member>
-        <member name="M:Nordril.Functional.FE.Beta(System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">
+        <member name="M:Nordril.Functional.FE.Beta``3(System.Linq.Expressions.Expression{System.Func{``0,``1,``2}},System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)">
             <summary>
             Replaces a parameter in a function expression with a new expression, performing beta-reduction.
+            </summary>
+            <param name="expr">The expression containing the parameters.</param>
+            <param name="value1">The value with which to replace the first parameter.</param>
+            <param name="value2">The value with which to replace the second parameter.</param>
+            <exception cref="T:System.ArgumentException">If the type of <paramref name="value1"/>/<paramref name="value2"/> isn't a subtype of the type of the first/second parameter of <paramref name="expr"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.FE.Beta(System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">
+            <summary>
+            Replaces two parameter in a function expression with new expressions, performing binary beta-reduction.
             </summary>
             <param name="expr">The expression containing the parameter.</param>
             <param name="param">The parameter to replace.</param>
             <param name="value">The value with which to replace the parameter.</param>
             <exception cref="T:System.ArgumentException">If the type of <paramref name="value"/> isn't a subtype of the type of <paramref name="param"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.FE.Beta(System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)">
+            <summary>
+            Replaces a parameter in a function expression with a new expression, performing beta-reduction.
+            </summary>
+            <param name="expr">The expression containing the parameters.</param>
+            <param name="param1">The first parameter to replace.</param>
+            <param name="param2">The second parameter to replace.</param>
+            <param name="value1">The value with which to replace the first parameter.</param>
+            <param name="value2">The value with which to replace the second parameter.</param>
+            <exception cref="T:System.ArgumentException">If the type of <paramref name="value1"/>/<paramref name="value2"/> isn't a subtype of the type of <paramref name="param1"/>/<paramref name="param2"/>.</exception>
         </member>
         <member name="M:Nordril.Functional.FE.CastReturnType``3(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
@@ -5699,6 +5791,14 @@
             <typeparam name="TASub">The input of the returned function, which is a subtype of <typeparamref name="TA"/>.</typeparam>
             <typeparam name="TB">The output of the function.</typeparam>
             <param name="expr">The function expression.</param>
+        </member>
+        <member name="M:Nordril.Functional.FE.Compile``1(System.Linq.Expressions.Expression)">
+            <summary>
+            Compiles a closed expression to a function returning <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the expression's return value.</typeparam>
+            <param name="expr">The expression to compile.</param>
+            <exception cref="T:System.ArgumentException">If the type of <paramref name="expr"/> isn't <typeparamref name="T"/>.</exception>
         </member>
         <member name="T:Nordril.Functional.FE.ParameterExpressionVisitor">
             <summary>

@@ -21,6 +21,17 @@ namespace Nordril.Functional.Tests
         }
 
         [Fact]
+        public static void LiftTest()
+        {
+            Func<List<int>, int> f = x => x.Count * 2;
+            var expr = f.LiftToExpression().Compile();
+
+            var xs = new List<int> { 4, 7, 218, 47 };
+
+            Assert.Equal(f(xs), expr(xs));
+        }
+
+        [Fact]
         public static void ThenTest()
         {
             Expression<Func<List<int>, int>> length = x => x.Count;
@@ -152,5 +163,56 @@ namespace Nordril.Functional.Tests
             public int LevelOfManageritude { get; set; }
         }
 
+        [Fact]
+        public static void BinaryTest()
+        {
+            Expression<Func<int, double>> f = x => x * 2;
+            Expression<Func<int, double>> g = x => x * 3;
+            Expression<Func<double, double, double>> c = (x, y) => x + y;
+
+            var combined = f.Binary(g, c).Compile();
+
+            Assert.Equal(40, combined(8));
+        }
+
+        [Fact]
+        public static void FirstTest()
+        {
+            Expression<Func<int, string>> f = x => x.ToString();
+            var fFirst = f.First<int, string, double>().Compile();
+
+            Assert.Equal(("7", 3.14D), fFirst((7, 3.14D)));
+        }
+
+        [Fact]
+        public static void SecondTest()
+        {
+            Expression<Func<int, string>> f = x => x.ToString();
+            var fFirst = f.Second<int, string, double>().Compile();
+
+            Assert.Equal((3.14D, "7"), fFirst((3.14D, 7)));
+        }
+
+        [Fact]
+        public static void BothTest()
+        {
+            Expression<Func<int, double>> f = x => x * 2;
+            Expression<Func<string, int>> g = x => x.Length;
+
+            var compiled = f.Both(g).Compile();
+
+            Assert.Equal((8, 3), compiled((4, "abc")));
+        }
+
+        [Fact]
+        public static void FanoutTest()
+        {
+            Expression<Func<int, double>> f = x => x * 2;
+            Expression<Func<int, string>> g = x => x.ToString();
+
+            var compiled = f.Fanout(g).Compile();
+
+            Assert.Equal((6, "3"), compiled(3));
+        }
     }
 }
