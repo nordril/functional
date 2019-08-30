@@ -1,8 +1,10 @@
-﻿using Nordril.Functional.Data;
+﻿using Nordril.Functional.Category;
+using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -201,6 +203,75 @@ namespace Nordril.Functional
                         Expression.Invoke(g, x));
 
             var ret = Expression.Lambda<Func<TA, (TB, TC)>>(newBody, x);
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Takes a function expression and lifts it into a function expression taking and returning an <see cref="Either{TLeft, TRight}"/> which applies the original function to the <see cref="Either.FromLeft{TLeft, TRight}(TLeft)"/>, leaving the <see cref="Either.FromRight{TLeft, TRight}(TRight)"/> unchanged.
+        /// </summary>
+        /// <typeparam name="TA">Rhe input of the function.</typeparam>
+        /// <typeparam name="TB">The output of the function.</typeparam>
+        /// <typeparam name="TC">The right value of the <see cref="Either{TLeft, TRight}"/>, which is left unchanged.</typeparam>
+        /// <param name="f">The function.</param>
+        public static Expression<Func<Either<TA, TC>, Either<TB, TC>>> Left<TA, TB, TC>(this Expression<Func<TA, TB>> f)
+            => EitherOr(f, (TC x) => x);
+
+        /// <summary>
+        /// Takes a function expression and lifts it into a function expression taking and returning an <see cref="Either{TLeft, TRight}"/> which applies the original function to the <see cref="Either.FromRight{TLeft, TRight}(TRight)"/>, leaving the <see cref="Either.FromLeft{TLeft, TRight}(TLeft)"/> unchanged.
+        /// </summary>
+        /// <typeparam name="TA">Rhe input of the function.</typeparam>
+        /// <typeparam name="TB">The output of the function.</typeparam>
+        /// <typeparam name="TC">The left value of the <see cref="Either{TLeft, TRight}"/>, which is left unchanged.</typeparam>
+        /// <param name="f">The function.</param>
+        public static Expression<Func<Either<TC, TA>, Either<TC, TB>>> Right<TA, TB, TC>(this Expression<Func<TA, TB>> f)
+            => EitherOr((TC x) => x, f);
+
+        /// <summary>
+        /// Takes two function expressions and lifts them into a function which take take &amp; produce the input/output of either. Also known as <c>(+++)</c>.
+        /// </summary>
+        /// <typeparam name="TA">Rhe input of the first function.</typeparam>
+        /// <typeparam name="TB">The output of the first function.</typeparam>
+        /// <typeparam name="TC">Rhe input of the second function.</typeparam>
+        /// <typeparam name="TD">The output of the second function.</typeparam>
+        /// <param name="f">The first function.</param>
+        /// <param name="g">The second function.</param>
+        public static Expression<Func<Either<TA, TB>, Either<TC, TD>>> EitherOr<TA, TB, TC, TD>(this Expression<Func<TA, TC>> f, Expression<Func<TB, TD>> g)
+        {
+            var x = Expression.Parameter(typeof(Either<TA, TB>), "x");
+            var mapMethod = typeof(IBifunctor<TA, TB>)
+                .GetMethod(nameof(IBifunctor<TA, TB>.BiMap), BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod)
+                .MakeGenericMethod(typeof(TC), typeof(TD));
+            var toEitherMethod = typeof(Either)
+                .GetMethod(nameof(Either.ToEither), BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod)
+                .MakeGenericMethod(typeof(TC), typeof(TD));
+
+            var body = Expression.Call(
+                toEitherMethod,
+                Expression.Call(x, mapMethod, f, g));
+
+            var ret = Expression.Lambda<Func<Either<TA, TB>, Either<TC, TD>>>(body, x);
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Takes two function expressions and returns one which takes the inputs of either and merges the result. Also known as <c>|||</c>.
+        /// </summary>
+        /// <typeparam name="TA">The input of the first function.</typeparam>
+        /// <typeparam name="TB">The input of the second function.</typeparam>
+        /// <typeparam name="TC">The outpu of the two functions.</typeparam>
+        /// <param name="f">The first function.</param>
+        /// <param name="g">The second function.</param>
+        public static Expression<Func<Either<TA,TB>, TC>> Fanin<TA, TB, TC>(this Expression<Func<TA, TC>> f, Expression<Func<TB, TC>> g)
+        {
+            var x = Expression.Parameter(typeof(Either<TA, TB>), "x");
+
+            var coalesceMethod = typeof(Either<TA, TB>).GetMethod(nameof(Either<TA, TB>.Coalesce), BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod).MakeGenericMethod(typeof(TC));
+
+            var body = Expression.Call(x, coalesceMethod, f, g);
+
+            var ret = Expression.Lambda<Func<Either<TA, TB>, TC>>(body, x);
 
             return ret;
         }

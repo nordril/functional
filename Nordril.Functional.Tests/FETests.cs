@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nordril.Functional.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -213,6 +214,56 @@ namespace Nordril.Functional.Tests
             var compiled = f.Fanout(g).Compile();
 
             Assert.Equal((6, "3"), compiled(3));
+        }
+
+        [Fact]
+        public static void LeftTest()
+        {
+            Expression<Func<int, string>> f = x => x.ToString();
+            var fLifted = f.Left<int, string, bool>().Compile();
+
+            Assert.True(fLifted(Either.FromLeft<int, bool>(5)).IsLeft);
+            Assert.True(fLifted(Either.FromRight<int, bool>(false)).IsRight);
+            Assert.False(fLifted(Either.FromRight<int, bool>(false)).Right());
+            Assert.Equal("5", fLifted(Either.FromLeft<int, bool>(5)).Left());
+        }
+
+        [Fact]
+        public static void RightTest()
+        {
+            Expression<Func<int, string>> f = x => x.ToString();
+            var fLifted = f.Right<int, string, bool>().Compile();
+
+            Assert.True(fLifted(Either.FromLeft<bool, int>(false)).IsLeft);
+            Assert.False(fLifted(Either.FromLeft<bool, int>(false)).Left());
+            Assert.True(fLifted(Either.FromRight<bool, int>(5)).IsRight);
+            Assert.Equal("5", fLifted(Either.FromRight<bool, int>(5)).Right());
+        }
+
+        [Fact]
+        public static void EitherOrtest()
+        {
+            Expression<Func<int, double>> f = x => x * 2;
+            Expression<Func<string, char>> g = x => x[0];
+
+            var fg = f.EitherOr(g).Compile();
+
+            Assert.True(fg(Either.FromLeft<int, string>(5)).IsLeft);
+            Assert.True(fg(Either.FromRight<int, string>("abc")).IsRight);
+            Assert.Equal(10D, fg(Either.FromLeft<int, string>(5)).Left());
+            Assert.Equal('a', fg(Either.FromRight<int, string>("abc")).Right());
+        }
+
+        [Fact]
+        public static void FaninTest()
+        {
+            Expression<Func<double, int>> f = x => ((int)x) * 2;
+            Expression<Func<string, int>> g = x => x.Length;
+
+            var fg = f.Fanin(g).Compile();
+
+            Assert.Equal(14, fg(Either.FromLeft<double, string>(7.4D)));
+            Assert.Equal(3, fg(Either.FromRight<double, string>("xyz")));
         }
     }
 }
