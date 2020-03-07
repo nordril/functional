@@ -1000,8 +1000,8 @@ namespace Nordril.Functional
         /// <typeparam name="T2">The type of elements in the second list.</typeparam>
         /// <param name="xs">The first list.</param>
         /// <param name="ys">The second list.</param>
-        public static IEnumerable<(T1, T2)> Zip<T1, T2>(this IEnumerable<T1> xs, IEnumerable<T2> ys)
-            => xs.Zip(ys, (x, y) => (x, y));
+        /*public static IEnumerable<(T1, T2)> Zip<T1, T2>(this IEnumerable<T1> xs, IEnumerable<T2> ys)
+            => xs.Zip(ys, (x, y) => (x, y));*/
 
         /// <summary>
         /// Zips three sequences together, creating a sequence of tuples.

@@ -2193,15 +2193,6 @@
             <param name="xs">The source list to split.</param>
             <returns>Three lists of the same size as <paramref name="xs"/>, with the same element order.</returns>
         </member>
-        <member name="M:Nordril.Functional.CollectionExtensions.Zip``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1})">
-            <summary>
-            Zips two sequences together, creating a sequence of tuples.
-            </summary>
-            <typeparam name="T1">The type of elements in the first list.</typeparam>
-            <typeparam name="T2">The type of elements in the second list.</typeparam>
-            <param name="xs">The first list.</param>
-            <param name="ys">The second list.</param>
-        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Zip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2})">
             <summary>
             Zips three sequences together, creating a sequence of tuples.
