@@ -7,13 +7,43 @@
      */
 
     /*public interface ISemiring<T, TFirst, TSecond> : IFirstGrouplike<T, TFirst>, ISecondGrouplike<T, TSecond>
-        where TFirst : ICommutative<T>, IMonoid<T>
+        where TFirst : IFirstGrouplike<ICommutative<T>, IMonoid<T>>
         where TSecond : IMonoid<T>
     {
         T Plus(T x, T y);
         T Mult(T x, T y);
         T One { get; }
         T Zero { get; }
+    }
+
+    public struct Semiring<T, TFirst, TSecond> : ISemiring<T, TFirst, TSecond>
+        where TFirst : ICommutative<T>, IMonoid<T>
+        where TSecond : IMonoid<T>
+    {
+        public Semiring()
+        public T One => throw new System.NotImplementedException();
+
+        public T Zero => throw new System.NotImplementedException();
+
+        public T Mult(T x, T y)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public T Plus(T x, T y)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TFirst UnwrapFirst()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TSecond UnwrapSecond()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public interface IRing<T, TFirst, TSecond> : ISemiring<T, TFirst, TSecond>
@@ -45,21 +75,21 @@
         T Div(T x, T y);
     }
 
-    public interface IFirstGrouplike<T, TThis>
+    public interface IFirstGrouplike<T, out TThis>
     {
-        TThis Unwrap();
+        TThis UnwrapFirst();
     }
 
-    public interface ISecondGrouplike<T, TThis>
+    public interface ISecondGrouplike<T, out TThis>
     {
-        TThis Unwrap();
+        TThis UnwrapSecond();
     }
 
     public struct FirstGrouplike<T, TThis> : IFirstGrouplike<T, TThis>
     {
         private readonly TThis wrapped;
 
-        public TThis Unwrap() => wrapped;
+        public TThis UnwrapFirst() => wrapped;
 
         public FirstGrouplike(TThis wrapped)
         {
@@ -71,7 +101,7 @@
     {
         private readonly TThis wrapped;
 
-        public TThis Unwrap() => wrapped;
+        public TThis UnwrapSecond() => wrapped;
 
         public SecondGrouplike(TThis wrapped)
         {

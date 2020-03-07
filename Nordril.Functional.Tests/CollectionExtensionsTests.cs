@@ -672,13 +672,6 @@ namespace Nordril.Functional.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ZipTupleData))]
-        public static void ZipTupleTest(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<(int, bool)> expected)
-        {
-            Assert.Equal(expected, xs.Zip(ys));
-        }
-
-        [Theory]
         [MemberData(nameof(ZipTuple3Data))]
         public static void ZipTuple3Test(IEnumerable<int> xs, IEnumerable<bool> ys, IEnumerable<string> zs, IEnumerable<(int, bool, string)> expected)
         {

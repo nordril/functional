@@ -190,7 +190,7 @@
         </member>
         <member name="T:Nordril.Functional.Algebra.Semigroup`1">
             <summary>
-            A value-level monoid.
+            A value-level semigroup.
             </summary>
             <typeparam name="T">The type of element in this structure.</typeparam>
         </member>
@@ -486,18 +486,24 @@
             The binary operation.
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Group`1.Invert">
+        <member name="F:Nordril.Functional.Algebra.Group`1.inverse">
             <summary>
             The inversion function.
             </summary>
         </member>
         <member name="M:Nordril.Functional.Algebra.Group`1.#ctor(`0,System.Func{`0,`0,`0},System.Func{`0,`0})">
             <summary>
-            C
+            Creates a new instance.
             </summary>
             <param name="neutral">The neutral element.</param>
             <param name="op">The binary operation.</param>
-            <param name="invert">The inversion function.</param>
+            <param name="inverse">The inversion function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group`1.Inverse(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group`1.Op(`0,`0)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Group">
             <summary>

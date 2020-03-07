@@ -37,7 +37,7 @@ namespace Nordril.Functional.Algebra
 
     #region Semigroup
     /// <summary>
-    /// A value-level monoid.
+    /// A value-level semigroup.
     /// </summary>
     /// <typeparam name="T">The type of element in this structure.</typeparam>
     public struct Semigroup<T> : ISemigroup<T>
@@ -425,7 +425,7 @@ namespace Nordril.Functional.Algebra
     /// A value-level group.
     /// </summary>
     /// <typeparam name="T">The type of element in this structure.</typeparam>
-    public struct Group<T>
+    public struct Group<T> : IGroup<T>
     {
         /// <summary>
         /// The neutral element of the binary operation.
@@ -440,20 +440,26 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The inversion function.
         /// </summary>
-        public Func<T, T> Invert { get; private set; }
+        private readonly Func<T, T> inverse;
 
         /// <summary>
-        /// C
+        /// Creates a new instance.
         /// </summary>
         /// <param name="neutral">The neutral element.</param>
         /// <param name="op">The binary operation.</param>
-        /// <param name="invert">The inversion function.</param>
-        public Group(T neutral, Func<T, T, T> op, Func<T, T> invert)
+        /// <param name="inverse">The inversion function.</param>
+        public Group(T neutral, Func<T, T, T> op, Func<T, T> inverse)
         {
             Neutral = neutral;
             this.op = op;
-            Invert = invert;
+            this.inverse = inverse;
         }
+
+        /// <inheritdoc />
+        public T Inverse(T x) => inverse(x);
+
+        /// <inheritdoc />
+        public T Op(T x, T y) => op(x, y);
     }
 
     /// <summary>
