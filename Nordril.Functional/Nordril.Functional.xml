@@ -1443,6 +1443,17 @@
             <param name="a">The monad to flatten.</param>
             <returns></returns>
         </member>
+        <member name="M:Nordril.Functional.Category.MonadExtensions.AggregateM``3(System.Collections.Generic.IEnumerable{``0},``1,System.Func{``0,``1,``2})">
+            <summary>
+            A monadic version of <see cref="M:System.Linq.Enumerable.Aggregate``3(System.Collections.Generic.IEnumerable{``0},``1,System.Func{``1,``0,``1},System.Func{``1,``2})"/> which aggregates a sequence <paramref name="xs"/> with a monadic function <paramref name="f"/> and an accumulator <paramref name="acc"/>.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TAcc">The accumulator type.</typeparam>
+            <typeparam name="TMonadAcc"><typeparamref name="TAcc"/>, wrapped in an <see cref="T:Nordril.Functional.Category.IMonad`1"/>.</typeparam>
+            <param name="xs">The sequence to aggregate.</param>
+            <param name="acc">The initial accumulator.</param>
+            <param name="f">The folding function taking the aggregator and a sequence-element, and returning a monadic accumulator-value.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IMonadPlus`1">
             <summary>
             Monads that support choice (see <see cref="M:Nordril.Functional.Category.IMonadPlus`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})"/>) in addition to failure (see <see cref="M:Nordril.Functional.Category.IMonadZero`1.Mzero"/>).

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nordril.Functional.Category
 {
@@ -102,5 +104,25 @@ namespace Nordril.Functional.Category
         /// <param name="a">The monad to flatten.</param>
         /// <returns></returns>
         public static IMonad<T> Join<T>(this IMonad<IMonad<T>> a) => a.Bind(x => x);
+
+        /// <summary>
+        /// A monadic version of <see cref="Enumerable.Aggregate{TSource, TAccumulate, TResult}(IEnumerable{TSource}, TAccumulate, Func{TAccumulate, TSource, TAccumulate}, Func{TAccumulate, TResult})"/> which aggregates a sequence <paramref name="xs"/> with a monadic function <paramref name="f"/> and an accumulator <paramref name="acc"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TAcc">The accumulator type.</typeparam>
+        /// <typeparam name="TMonadAcc"><typeparamref name="TAcc"/>, wrapped in an <see cref="IMonad{TSource}"/>.</typeparam>
+        /// <param name="xs">The sequence to aggregate.</param>
+        /// <param name="acc">The initial accumulator.</param>
+        /// <param name="f">The folding function taking the aggregator and a sequence-element, and returning a monadic accumulator-value.</param>
+        public static TMonadAcc AggregateM<TSource, TAcc, TMonadAcc>(this IEnumerable<TSource> xs, TAcc acc, Func<TSource, TAcc, TMonadAcc> f)
+            where TMonadAcc : IMonad<TAcc>
+        {
+            var pureAcc = acc.PureUnsafe<TAcc, TMonadAcc>();
+
+            return xs.Aggregate(pureAcc, (acc, x) =>
+            {
+                return (TMonadAcc)acc.Bind(acc2 => f(x, acc2));
+            });
+        }
     }
 }
