@@ -6256,6 +6256,56 @@
             <param name="message">The error message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="T:Nordril.Functional.IRead`2">
+            <summary>
+            Types which can be parsed from a character-sequence, e.g. a string
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <typeparam name="TOptions">The type of the options.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)">
+            <summary>
+            Tries to parse a value of type <typeparamref name="T"/> from a character-sequence, using options of type <typeparamref name="TOptions"/>.
+            Implementors MUST NOT use the <c>this</c>-pointer during this operation.
+            </summary>
+            <param name="source">The character-sequence to parse.</param>
+            <param name="options">The options to use for the parsing.</param>
+            <returns><see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/> if the parsing was successful, and <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> otherwise.</returns>
+        </member>
+        <member name="T:Nordril.Functional.Read">
+            <summary>
+            Extensions methods for <see cref="T:Nordril.Functional.IRead`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Read.TryParse``1(Nordril.Functional.IRead{``0,Nordril.Functional.Data.Unit},System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Like <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>, but without options.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <param name="instance">The instance on which to call <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>.</param>
+            <param name="source">The character-sequences to parse.</param>
+        </member>
+        <member name="M:Nordril.Functional.Read.TryParseUnsafe``1(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Calls <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <param name="source">The character-sequences to parse.</param>
+        </member>
+        <member name="M:Nordril.Functional.Read.TryParseUnsafe``2(System.Collections.Generic.IEnumerable{System.Char},``1)">
+            <summary>
+            Calls <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <typeparam name="TOptions">The type of the options to use.</typeparam>
+            <param name="source">The character-sequences to parse.</param>
+            <param name="options">The options to use for the parsing.</param>
+        </member>
+        <member name="T:Nordril.Functional.Read.ReadProxy">
+            <summary>
+            A proxy for <c>nameof</c>.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.TupleExtensions">
             <summary>
             Extension methods for <see cref="T:System.ValueTuple"/>.

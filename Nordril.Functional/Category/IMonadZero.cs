@@ -5,7 +5,7 @@
     /// being, in essence, a "fail"-element.
     /// </summary>
     /// <typeparam name="T">The type of value contained in the monad.</typeparam>
-    public interface IMonadZero<T> : IMonad<T>
+    public interface IMonadZero<out T> : IMonad<T>
     {
         /// <summary>
         /// The zero of the monad. The zero must fulfill the following for any X:

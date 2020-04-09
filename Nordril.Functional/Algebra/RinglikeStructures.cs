@@ -6,8 +6,8 @@
      * ring: cgroup +, monoid *, distrib
      */
 
-    /*public interface ISemiring<T, TFirst, TSecond> : IFirstGrouplike<T, TFirst>, ISecondGrouplike<T, TSecond>
-        where TFirst : IFirstGrouplike<ICommutative<T>, IMonoid<T>>
+    /*public interface ISemiring<T, TFirst, TSecond> : IRinglike<T, TFirst, TSecond>
+        where TFirst : ICommutative<T>, IMonoid<T>
         where TSecond : IMonoid<T>
     {
         T Plus(T x, T y);
@@ -20,30 +20,26 @@
         where TFirst : ICommutative<T>, IMonoid<T>
         where TSecond : IMonoid<T>
     {
-        public Semiring()
-        public T One => throw new System.NotImplementedException();
+        private readonly TFirst first;
+        private readonly TSecond second;
 
-        public T Zero => throw new System.NotImplementedException();
-
-        public T Mult(T x, T y)
+        public Semiring(TFirst first, TSecond second)
         {
-            throw new System.NotImplementedException();
+            this.first = first;
+            this.second = second;
         }
 
-        public T Plus(T x, T y)
-        {
-            throw new System.NotImplementedException();
-        }
+        public T One => second.Neutral;
 
-        public TFirst UnwrapFirst()
-        {
-            throw new System.NotImplementedException();
-        }
+        public T Zero => first.Neutral;
 
-        public TSecond UnwrapSecond()
-        {
-            throw new System.NotImplementedException();
-        }
+        public TFirst FirstGrouplike() => first;
+
+        public T Mult(T x, T y) => second.Op(x, y);
+
+        public T Plus(T x, T y) => first.Op(x, y);
+
+        public TSecond SecondGrouplike() => second;
     }
 
     public interface IRing<T, TFirst, TSecond> : ISemiring<T, TFirst, TSecond>
@@ -75,48 +71,48 @@
         T Div(T x, T y);
     }
 
-    public interface IFirstGrouplike<T, out TThis>
+    public interface IRinglike<T, out TFirst, out TSecond>
+        where TFirst : IMagma<T>
+        where TSecond : IMagma<T>
     {
-        TThis UnwrapFirst();
+        TFirst FirstGrouplike();
+
+        TSecond SecondGrouplike();
     }
 
-    public interface ISecondGrouplike<T, out TThis>
+    public interface ITagged<out TThis, TTag>
     {
-        TThis UnwrapSecond();
+        TThis Untagged { get; }
     }
 
-    public struct FirstGrouplike<T, TThis> : IFirstGrouplike<T, TThis>
+    public class Tagged<TThis, TTag> : ITagged<TThis, TTag>
     {
-        private readonly TThis wrapped;
+        public TThis Untagged { get; }
 
-        public TThis UnwrapFirst() => wrapped;
-
-        public FirstGrouplike(TThis wrapped)
+        public Tagged(TThis untagged)
         {
-            this.wrapped = wrapped;
-        }
-    }
-
-    public struct SecondGrouplike<T, TThis> : ISecondGrouplike<T, TThis>
-    {
-        private readonly TThis wrapped;
-
-        public TThis UnwrapSecond() => wrapped;
-
-        public SecondGrouplike(TThis wrapped)
-        {
-            this.wrapped = wrapped;
+            Untagged = untagged;
         }
     }
 
     public static class GrouplikeExtensions
     {
-        public static IFirstGrouplike<T, TThis> WrapAsFirst<T, TThis>(this TThis grouplike)
+        public static ITagged<TThis, TagFirst> TagFirst<T, TThis>(this TThis grouplike)
             where TThis : IMagma<T>
-            => new FirstGrouplike<T, TThis>(grouplike);
+            => new Tagged<TThis, TagFirst>(grouplike);
 
-        public static ISecondGrouplike<T, TThis> WrapAsSecond<T, TThis>(this TThis grouplike)
+        public static ITagged<TThis, TagSecond> TagSecond<T, TThis>(this TThis grouplike)
             where TThis : IMagma<T>
-            => new SecondGrouplike<T, TThis>(grouplike);
+            => new Tagged<TThis, TagSecond>(grouplike);
+    }
+
+    public class TagFirst
+    {
+        private TagFirst() { }
+    }
+
+    public class TagSecond
+    {
+        private TagSecond() { }
     }*/
 }
