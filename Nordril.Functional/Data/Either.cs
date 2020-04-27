@@ -96,6 +96,27 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
+        /// Returns whether this <see cref="Either{TLeft, TRight}"/> contains a left- or a right-value. If it contains a left-value, <paramref name="left"/> will contain the left-value and <paramref name="right"/> will be <c>default</c> and vice versa.
+        /// </summary>
+        /// <param name="left">The left-value, if it exists, otherwise <c>default</c>.</param>
+        /// <param name="right">The right-value, if it exists, otherwise <c>default</c>.</param>
+        public EitherTag TryGetValue(out TLeft left, out TRight right)
+        {
+            if (discriminator == EitherTag.Left)
+            {
+                left = this.left;
+                right = default;
+                return EitherTag.Left;
+            }
+            else
+            {
+                left = default;
+                right = this.right;
+                return EitherTag.Right;
+            }
+        }
+
+        /// <summary>
         /// Turns a left-either into a right-either and vice versa.
         /// </summary>
         public Either<TRight, TLeft> Swap() => discriminator == EitherTag.Left ? Either.FromRight<TRight, TLeft>(left) : Either.FromLeft<TRight, TLeft>(right);

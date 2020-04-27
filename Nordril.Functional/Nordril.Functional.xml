@@ -2578,6 +2578,13 @@
             </summary>
             <param name="right">The value to put into the either.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.Either`2.TryGetValue(`0@,`1@)">
+            <summary>
+            Returns whether this <see cref="T:Nordril.Functional.Data.Either`2"/> contains a left- or a right-value. If it contains a left-value, <paramref name="left"/> will contain the left-value and <paramref name="right"/> will be <c>default</c> and vice versa.
+            </summary>
+            <param name="left">The left-value, if it exists, otherwise <c>default</c>.</param>
+            <param name="right">The right-value, if it exists, otherwise <c>default</c>.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.Either`2.Swap">
             <summary>
             Turns a left-either into a right-either and vice versa.

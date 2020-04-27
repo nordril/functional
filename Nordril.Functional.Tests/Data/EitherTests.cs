@@ -33,6 +33,22 @@ namespace Nordril.Functional.Tests.Data
         }
 
         [Fact]
+        public void TryGetValue()
+        {
+            var left = Either.FromLeft<int, float>(86);
+
+            Assert.Equal(EitherTag.Left, left.TryGetValue(out var leftRes, out var rightRes));
+            Assert.Equal(86, leftRes);
+            Assert.Equal(default, rightRes);
+
+            var right = Either.FromRight<int, float>(101f);
+
+            Assert.Equal(EitherTag.Right, right.TryGetValue(out var leftRes2, out var rightRes2));
+            Assert.Equal(default, leftRes2);
+            Assert.Equal(101f, rightRes2);
+        }
+
+        [Fact]
         public void EitherFromRight()
         {
             var id = Either.FromRight<int, float>(10.8f);
