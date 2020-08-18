@@ -215,17 +215,8 @@ namespace Nordril.Functional.Algebra
         /// </summary>
         /// <typeparam name="T">The monoid type.</typeparam>
         /// <param name="xs">The list of elements to sum.</param>
-        public static T Msum<T>(this IEnumerable<T> xs) where T : IHasMonoid<T>, new()
-            => xs.Aggregate(new T().Neutral, (x, y) => x.Op(y));
-
-        /// <summary>
-        /// Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
-        /// </summary>
-        /// <typeparam name="T">The monoid type.</typeparam>
-        /// <param name="xs">The list of elements to sum.</param>
-        /// <param name="empty">The neutral element.</param>
-        public static T Msum<T>(this IEnumerable<T> xs, Func<T> empty) where T : IMonoid<T>
-            => xs.Aggregate(empty(), (x, y) => x.Op(y));
+        public static T Msum<T>(this IEnumerable<T> xs) where T : IHasMonoid<T>
+            => xs.Aggregate(Monoid.NeutralUnsafe<T, T>(), (x, y) => x.Op(y));
 
         /// <summary>
         /// Lifts an <see cref="IMonoid{T}"/> into one which has positive infinity (<see cref="Maybe.Nothing{T}"/>) as a special element.
@@ -480,9 +471,11 @@ namespace Nordril.Functional.Algebra
         /// Reifies a type's <see cref="IHasGroup{T}"/> instance into its own <see cref="Group{T}"/>-object.
         /// </summary>
         /// <typeparam name="T">The type that implements <see cref="IHasGroup{T}"/>.</typeparam>
-        /// <param name="instance">An object that is an instance of <see cref="IHasGroup{T}"/>.</param>
-        public static Group<T> FromGroupInstance<T>(IHasGroup<T> instance) where T : IHasGroup<T>
-            => new Group<T>(instance.Neutral, (x, y) => x.Op(y), x => x.Inverse());
+        public static Group<T> FromGroupInstance<T>() where T : IGroup<T>
+        {
+            var instance = Monoid.NeutralUnsafe<T, T>();
+            return new Group<T>(instance.Neutral, (x, y) => x.Op(y), x => x.Inverse());
+        }
 
         /// <summary>
         /// The (0,XOR,id) group for <see cref="bool"/>.
@@ -556,7 +549,7 @@ namespace Nordril.Functional.Algebra
             public int Inverse(int x) => x * -1;
 
             /// <inheritdoc />
-            public int Op(int x, int y) => x + x;
+            public int Op(int x, int y) => x + y;
         }
 
         /// <summary>
@@ -571,7 +564,7 @@ namespace Nordril.Functional.Algebra
             public long Inverse(long x) => x * -1;
 
             /// <inheritdoc />
-            public long Op(long x, long y) => x + x;
+            public long Op(long x, long y) => x + y;
         }
 
         /// <summary>
@@ -586,7 +579,7 @@ namespace Nordril.Functional.Algebra
             public float Inverse(float x) => x * -1f;
 
             /// <inheritdoc />
-            public float Op(float x, float y) => x + x;
+            public float Op(float x, float y) => x + y;
         }
 
         /// <summary>
@@ -601,7 +594,7 @@ namespace Nordril.Functional.Algebra
             public double Inverse(double x) => x * -1d;
 
             /// <inheritdoc />
-            public double Op(double x, double y) => x + x;
+            public double Op(double x, double y) => x + y;
         }
 
         /// <summary>
@@ -616,7 +609,7 @@ namespace Nordril.Functional.Algebra
             public decimal Inverse(decimal x) => x * -1m;
 
             /// <inheritdoc />
-            public decimal Op(decimal x, decimal y) => x + x;
+            public decimal Op(decimal x, decimal y) => x + y;
         }
 
         /// <summary>
@@ -631,7 +624,7 @@ namespace Nordril.Functional.Algebra
             public float Inverse(float x) => 1f / x;
 
             /// <inheritdoc />
-            public float Op(float x, float y) => x + x;
+            public float Op(float x, float y) => x * y;
         }
 
         /// <summary>
@@ -646,7 +639,7 @@ namespace Nordril.Functional.Algebra
             public double Inverse(double x) => 1d / x;
 
             /// <inheritdoc />
-            public double Op(double x, double y) => x + x;
+            public double Op(double x, double y) => x * y;
         }
 
         /// <summary>
@@ -661,7 +654,7 @@ namespace Nordril.Functional.Algebra
             public decimal Inverse(decimal x) => 1m / x;
 
             /// <inheritdoc />
-            public decimal Op(decimal x, decimal y) => x + x;
+            public decimal Op(decimal x, decimal y) => x * y;
         }
     }
     #endregion

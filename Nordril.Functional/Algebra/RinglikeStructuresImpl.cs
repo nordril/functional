@@ -89,6 +89,26 @@ namespace Nordril.Functional.Algebra
             where TFirst : IMagma<T>
             where TSecond : INeutralElement<T>
             => r.SecondGrouplike.Neutral;
+
+        public static T Negate<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x)
+            where TFirst : IInverse<T>
+            where TSecond : IMagma<T>
+            => r.FirstGrouplike.Inverse(x);
+
+        public static T Minus<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x, T y)
+            where TFirst : IInverse<T>
+            where TSecond : IMagma<T>
+            => r.FirstGrouplike.Op(x, r.FirstGrouplike.Inverse(y));
+
+        public static T Reciprocal<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x)
+            where TFirst : IMagma<T>
+            where TSecond : IInverse<T>
+            => r.SecondGrouplike.Inverse(x);
+
+        public static T Divide<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x, T y)
+            where TFirst : IMagma<T>
+            where TSecond : IInverse<T>
+            => r.SecondGrouplike.Op(x, r.SecondGrouplike.Inverse(y));
     }
     #endregion
 
@@ -230,7 +250,7 @@ namespace Nordril.Functional.Algebra
             public Monoid.IntMultMonoid SecondGrouplike => Monoid.IntMult;
 
             /// <inheritdoc />
-            public (int quotient, int remainder) Divide(int x, int y)
+            public (int quotient, int remainder) EuclideanDivide(int x, int y)
             {
                 var q = x / y;
                 var r = x - q * y;
@@ -242,7 +262,7 @@ namespace Nordril.Functional.Algebra
         }
 
         /// <summary>
-        /// Performs the modulus-operation on two elements, returning the remainder of <see cref="IEuclideanDomain{T, TFirst, TSecond}.Divide(T, T)"/>.
+        /// Performs the modulus-operation on two elements, returning the remainder of <see cref="IEuclideanDomain{T, TFirst, TSecond}.EuclideanDivide(T, T)"/>.
         /// </summary>
         /// <typeparam name="T">The type of the carrier set.</typeparam>
         /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
@@ -253,7 +273,7 @@ namespace Nordril.Functional.Algebra
         public static T Mod<T, TFirst, TSecond>(this IEuclideanDomain<T, TFirst, TSecond> r, T x, T y)
             where TFirst : ICommutativeGroup<T>
             where TSecond : IMonoid<T>, ICommutative<T>
-            => r.Divide(x, y).remainder;
+            => r.EuclideanDivide(x, y).remainder;
 
         /// <summary>
         /// Gets the greatest common divisor of two elements in a <see cref="IEuclideanDomain{T, TFirst, TSecond}"/> via Euclid's algorithm. The GCD of two elements <c>X</c> and <c>Y</c> is the unique minimal principal ideal.
@@ -268,10 +288,13 @@ namespace Nordril.Functional.Algebra
             where TFirst : ICommutativeGroup<T>
             where TSecond : IMonoid<T>, ICommutative<T>
         {
+            if (r.IsZero(x) || r.IsZero(y))
+                return r.Zero();
+
             while (!r.IsZero(y))
             {
                 var t = y;
-                y = r.Divide(x, y).remainder;
+                y = r.EuclideanDivide(x, y).remainder;
                 x = t;
             }
 
@@ -290,13 +313,17 @@ namespace Nordril.Functional.Algebra
         /// <param name="r">The ringlike structure.</param>
         /// <param name="x">The first element.</param>
         /// <param name="y">The second element.</param>
+        /// <exception cref="DivideByZeroException">If <paramref name="x"/> or <paramref name="y"/> is zero.</exception>
         public static T Lcm<T, TFirst, TSecond>(this IEuclideanDomain<T, TFirst, TSecond> r, T x, T y)
             where TFirst : ICommutativeGroup<T>
             where TSecond : IMonoid<T>, ICommutative<T>
         {
+            if (r.IsZero(x) || r.IsZero(y))
+                throw new DivideByZeroException();
+
             var gcd = r.Gcd(x, y);
             var numerator = r.Mult(x, y);
-            var ret = r.Divide(numerator, gcd).quotient;
+            var ret = r.EuclideanDivide(numerator, gcd).quotient;
             return ret;
         }
     }
@@ -314,7 +341,7 @@ namespace Nordril.Functional.Algebra
         public static DoubleField Double = new DoubleField();
 
         /// <summary>
-        /// The field of <see cref="double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="IEuclideanDomain{T, TFirst, TSecond}.Divide(T, T)"/>-function may be numerically unstable.
+        /// The field of <see cref="double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="IEuclideanDomain{T, TFirst, TSecond}.EuclideanDivide(T, T)"/>-function may be numerically unstable.
         /// </summary>
         public class DoubleField : IField<double, Group.DoubleAddGroup, Group.DoubleMultGroup>
         {
@@ -325,9 +352,9 @@ namespace Nordril.Functional.Algebra
             public Group.DoubleMultGroup SecondGrouplike => Group.DoubleMult;
 
             /// <inheritdoc />
-            public (double quotient, double remainder) Divide(double x, double y)
+            public (double quotient, double remainder) EuclideanDivide(double x, double y)
             {
-                var q = x / y;
+                var q = Math.Floor(x / y);
                 var r = x - q * y;
                 return (q, r);
             }

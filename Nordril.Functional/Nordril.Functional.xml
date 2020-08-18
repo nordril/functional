@@ -326,14 +326,6 @@
             <typeparam name="T">The monoid type.</typeparam>
             <param name="xs">The list of elements to sum.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Monoid.Msum``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0})">
-            <summary>
-            Sums a list of monoid elements using the monoid operation. If the list is empty, the neutral element is returned. 
-            </summary>
-            <typeparam name="T">The monoid type.</typeparam>
-            <param name="xs">The list of elements to sum.</param>
-            <param name="empty">The neutral element.</param>
-        </member>
         <member name="M:Nordril.Functional.Algebra.Monoid.LiftMonoidWithInfinity``1(Nordril.Functional.Algebra.IMonoid{``0})">
             <summary>
             Lifts an <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/> into one which has positive infinity (<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>) as a special element.
@@ -545,12 +537,11 @@
             Extension methods for <see cref="T:Nordril.Functional.Algebra.Monoid`1"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Group.FromGroupInstance``1(Nordril.Functional.Algebra.IHasGroup{``0})">
+        <member name="M:Nordril.Functional.Algebra.Group.FromGroupInstance``1">
             <summary>
             Reifies a type's <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/> instance into its own <see cref="T:Nordril.Functional.Algebra.Group`1"/>-object.
             </summary>
             <typeparam name="T">The type that implements <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</typeparam>
-            <param name="instance">An object that is an instance of <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</param>
         </member>
         <member name="F:Nordril.Functional.Algebra.Group.BoolXor">
             <summary>
@@ -1644,7 +1635,7 @@
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)">
+        <member name="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)">
             <summary>
             Performs Euclidean division on two elements <paramref name="x"/> and <paramref name="y"/> and returns a quotient <c>q</c> and a remainder <c>r</c> such that the following holds:
             <code>
@@ -1882,7 +1873,7 @@
         <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.SecondGrouplike">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.Divide(System.Int32,System.Int32)">
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.EuclideanDivide(System.Int32,System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.IsZero(System.Int32)">
@@ -1890,7 +1881,7 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Mod``3(Nordril.Functional.Algebra.IEuclideanDomain{``0,``1,``2},``0,``0)">
             <summary>
-            Performs the modulus-operation on two elements, returning the remainder of <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)"/>.
+            Performs the modulus-operation on two elements, returning the remainder of <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
@@ -1923,6 +1914,7 @@
             <param name="r">The ringlike structure.</param>
             <param name="x">The first element.</param>
             <param name="y">The second element.</param>
+            <exception cref="T:System.DivideByZeroException">If <paramref name="x"/> or <paramref name="y"/> is zero.</exception>
         </member>
         <member name="T:Nordril.Functional.Algebra.Field">
             <summary>
@@ -1936,7 +1928,7 @@
         </member>
         <member name="T:Nordril.Functional.Algebra.Field.DoubleField">
             <summary>
-            The field of <see cref="T:System.Double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)"/>-function may be numerically unstable.
+            The field of <see cref="T:System.Double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>-function may be numerically unstable.
             </summary>
         </member>
         <member name="P:Nordril.Functional.Algebra.Field.DoubleField.FirstGrouplike">
@@ -1945,7 +1937,7 @@
         <member name="P:Nordril.Functional.Algebra.Field.DoubleField.SecondGrouplike">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Algebra.Field.DoubleField.Divide(System.Double,System.Double)">
+        <member name="M:Nordril.Functional.Algebra.Field.DoubleField.EuclideanDivide(System.Double,System.Double)">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.Field.DoubleField.IsZero(System.Double)">

@@ -251,7 +251,7 @@ namespace Nordril.Functional.Algebra
         ///     r.Divide(138, 16) = (8, 10)
         /// </code>
         /// </example>
-        (T quotient, T remainder) Divide(T x, T y);
+        (T quotient, T remainder) EuclideanDivide(T x, T y);
     }
 
     /// <summary>
