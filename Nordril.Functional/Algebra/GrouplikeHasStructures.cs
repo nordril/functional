@@ -88,8 +88,17 @@ namespace Nordril.Functional.Algebra
     /// A monoid which supports a unary inversion operator with respect to the associative binary operation.
     /// </summary>
     /// <typeparam name="T">The type of the implementor.</typeparam>
-    public interface IHasCommutativeGroup<T> : IHasGroup<T>, IHasCommutativity<T>, ICommutativeGroup<T>
+    public interface IHasCommutativeGroup<T> : ICommutativeGroup<T>
         where T : IHasCommutativeGroup<T>
+    {
+    }
+
+    /// <summary>
+    /// A semi-lattice, which is commutative, associative, and idempotent.
+    /// </summary>
+    /// <typeparam name="T">The type of the carrier set.</typeparam>
+    public interface IHasSemilattice<T> : ISemilattice<T>
+        where T : IHasSemilattice<T>
     {
     }
     #endregion 

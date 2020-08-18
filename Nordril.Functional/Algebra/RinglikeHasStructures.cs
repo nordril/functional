@@ -1,5 +1,6 @@
-﻿using Nordril.Functional.Data;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Nordril.Functional.Algebra
 {
@@ -13,7 +14,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface ILeftDistributive<T, out TFirst, out TSecond>
+    public interface IHasLeftDistributive<T, out TFirst, out TSecond>
+        : ILeftDistributive<T, TFirst, TSecond>
+        where T : IHasLeftDistributive<T, TFirst, TSecond>
         where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
@@ -29,7 +32,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IRightDistributive<T, out TFirst, out TSecond>
+    public interface IHasRightDistributive<T, out TFirst, out TSecond>
+        : IRightDistributive<T, TFirst, TSecond>
+        where T : IHasRightDistributive<T, TFirst, TSecond>
         where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
@@ -45,7 +50,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IJacobi<T, out TFirst, out TSecond>
+    public interface IHasJacobi<T, out TFirst, out TSecond>
+        : IJacobi<T, TFirst, TSecond>
+        where T : IHasJacobi<T, TFirst, TSecond>
         where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
@@ -55,30 +62,16 @@ namespace Nordril.Functional.Algebra
     /// <summary>
     /// Ringlike structures where the neutral element of the first operation annihiliates another element, if applied with the second operation, i.e.
     /// <code>
-    /// 0 * X = X * 0 == 0
+    /// 0 * X = X * 0 = 0
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IAnnihilation<T, out TFirst, out TSecond>
+    public interface IHasAnnihilation<T, out TFirst, out TSecond>
+        : IAnnihilation<T, TFirst, TSecond>
+        where T : IHasAnnihilation<T, TFirst, TSecond>
         where TFirst : IMagma<T>, INeutralElement<T>
-        where TSecond : IMagma<T>
-    {
-
-    }
-
-    /// <summary>
-    /// Ringlike structures which obey the absorption law:
-    /// <code>
-    ///     X * (X + Y) == X (absorption)
-    /// </code>
-    /// </summary>
-    /// <typeparam name="T">The type of the carrier set.</typeparam>
-    /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
-    /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IAbsorbption<T, out TFirst, out TSecond>
-        where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
 
@@ -93,19 +86,12 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IRinglike<T, out TFirst, out TSecond>
+    public interface IHasRinglike<T, out TFirst, out TSecond>
+        : IRinglike<T, TFirst, TSecond>
+        where T : IHasRinglike<T, TFirst, TSecond>
         where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
-        /// <summary>
-        /// Gets the first grouplike structure.
-        /// </summary>
-        TFirst FirstGrouplike { get; }
-
-        /// <summary>
-        /// Gets the second grouplike structure.
-        /// </summary>
-        TSecond SecondGrouplike { get; }
     }
 
     /// <summary>
@@ -115,11 +101,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface ISemiring<T, out TFirst, out TSecond>
-        : IRinglike<T, TFirst, TSecond>
-        , ILeftDistributive<T, TFirst, TSecond>
-        , IRightDistributive<T, TFirst, TSecond>
-        , IAnnihilation<T, TFirst, TSecond>
+    public interface IHasSemiring<T, out TFirst, out TSecond>
+        : ISemiring<T, TFirst, TSecond>
+        where T : IHasSemiring<T, TFirst, TSecond>
         where TFirst : ICommutative<T>, IMonoid<T>
         where TSecond : IMonoid<T>
     {
@@ -132,9 +116,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface INearRing<T, out TFirst, out TSecond>
-        : IRinglike<T, TFirst, TSecond>
-        , IRightDistributive<T, TFirst, TSecond>
+    public interface IHasNearRing<T, out TFirst, out TSecond>
+        : INearRing<T, TFirst, TSecond>
+        where T : IHasNearRing<T, TFirst, TSecond>
         where TFirst : IGroup<T>
         where TSecond : ISemigroup<T>
     {
@@ -146,8 +130,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IRing<T, out TFirst, out TSecond>
-        : ISemiring<T, TFirst, TSecond>
+    public interface IHasRing<T, out TFirst, out TSecond>
+        : IRing<T, TFirst, TSecond>
+        where T : IHasRing<T, TFirst, TSecond>
         where TFirst : IGroup<T>, ICommutative<T>
         where TSecond : IMonoid<T>
     {
@@ -159,8 +144,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IBooleanRing<T, out TFirst, out TSecond>
-        : IRing<T, TFirst, TSecond>
+    public interface IHasBooleanRing<T, out TFirst, out TSecond>
+        : IBooleanRing<T, TFirst, TSecond>
+        where T : IHasBooleanRing<T, TFirst, TSecond>
         where TFirst : IGroup<T>, ICommutative<T>
         where TSecond : IMonoid<T>, IIdempotent<T>
     {
@@ -172,7 +158,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface ICommutativeRing<T, out TFirst, out TSecond> : IRing<T, TFirst, TSecond>
+    public interface IHasCommutativeRing<T, out TFirst, out TSecond>
+        : ICommutativeRing<T, TFirst, TSecond>
+        where T : IHasCommutativeRing<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : IMonoid<T>, ICommutative<T>
     {
@@ -185,15 +173,12 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IIntegralDomain<T, out TFirst, out TSecond> : ICommutativeRing<T, TFirst, TSecond>
+    public interface IHasIntegralDomain<T, out TFirst, out TSecond>
+        : IIntegralDomain<T, TFirst, TSecond>
+        where T : IHasIntegralDomain<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : IMonoid<T>, ICommutative<T>
     {
-        /// <summary>
-        /// Returns whether an element <c>X</c> is the neutral element of the first operation of the structure, i.e. whether it is "zero". This is a special case of the general equatability of two elements.
-        /// </summary>
-        /// <param name="x">The element to check.</param>
-        bool IsZero(T x);
     }
 
     /// <summary>
@@ -203,8 +188,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IGcdDomain<T, out TFirst, out TSecond>
-        : IIntegralDomain<T, TFirst, TSecond>
+    public interface IHasGcdDomain<T, out TFirst, out TSecond>
+        : IGcdDomain<T, TFirst, TSecond>
+        where T : IHasGcdDomain<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : IMonoid<T>, ICommutative<T>
     {
@@ -217,8 +203,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IUniqueFactorizationDomain<T, out TFirst, out TSecond>
-        : IGcdDomain<T, TFirst, TSecond>
+    public interface IHasUniqueFactorizationDomain<T, out TFirst, out TSecond>
+        : IUniqueFactorizationDomain<T, TFirst, TSecond>
+        where T : IHasUniqueFactorizationDomain<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : IMonoid<T>, ICommutative<T>
     {
@@ -230,28 +217,12 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IEuclideanDomain<T, out TFirst, out TSecond>
-        : IUniqueFactorizationDomain<T, TFirst, TSecond>
+    public interface IHasEuclideanDomain<T, out TFirst, out TSecond>
+        : IEuclideanDomain<T, TFirst, TSecond>
+        where T : IHasEuclideanDomain<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : IMonoid<T>, ICommutative<T>
     {
-        /// <summary>
-        /// Performs Euclidean division on two elements <paramref name="x"/> and <paramref name="y"/> and returns a quotient <c>q</c> and a remainder <c>r</c> such that the following holds:
-        /// <code>
-        ///     var (q, r) = r.Divide(x,y);
-        ///     x = y * q + r
-        /// </code>
-        /// if <c>r.IsZero(y)</c> is false.
-        /// </summary>
-        /// <param name="x">The divident.</param>
-        /// <param name="y">The divisor.</param>
-        /// <example>
-        /// In the field of integers
-        /// <code>
-        ///     r.Divide(138, 16) = (8, 10)
-        /// </code>
-        /// </example>
-        (T quotient, T remainder) Divide(T x, T y);
     }
 
     /// <summary>
@@ -260,7 +231,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IField<T, TFirst, TSecond> : IEuclideanDomain<T, TFirst, TSecond>
+    public interface IHasField<T, TFirst, TSecond>
+        : IField<T, TFirst, TSecond>
+        where T : IHasField<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : ICommutativeGroup<T>
     {
@@ -272,14 +245,12 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IFiniteField<T, TFirst, TSecond> : IField<T, TFirst, TSecond>
+    public interface IHasFiniteField<T, TFirst, TSecond>
+        : IFiniteField<T, TFirst, TSecond>
+        where T : IHasFiniteField<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : ICommutativeGroup<T>
     {
-        /// <summary>
-        /// Enumerates the finitely many elements of the field.
-        /// </summary>
-        IEnumerable<T> Elements { get; }
     }
 
     /// <summary>
@@ -288,9 +259,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface ILattice<T, out TFirst, out TSecond>
-        : IRinglike<T, TFirst, TSecond>
-        , IAbsorbption<T, TFirst, TSecond>
+    public interface IHasLattice<T, out TFirst, out TSecond>
+        : ILattice<T, TFirst, TSecond>
+        where T : IHasLattice<T, TFirst, TSecond>
         where TFirst : ISemilattice<T>
         where TSecond : ISemilattice<T>
     {
@@ -303,8 +274,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IBoundedLattice<T, out TFirst, out TSecond>
-        : ILattice<T, TFirst, TSecond>
+    public interface IHasBoundedLattice<T, out TFirst, out TSecond>
+        : IBoundedLattice<T, TFirst, TSecond>
+        where T : IHasBoundedLattice<T, TFirst, TSecond>
         where TFirst : ISemilattice<T>, INeutralElement<T>
         where TSecond : ISemilattice<T>, INeutralElement<T>
     {
@@ -321,10 +293,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IDistributedLattice<T, out TFirst, out TSecond>
-        : ILattice<T, TFirst, TSecond>
-        , ILeftDistributive<T, TFirst, TSecond>
-        , IRightDistributive<T, TFirst, TSecond>
+    public interface IHasDistributedLattice<T, out TFirst, out TSecond>
+        : IDistributedLattice<T, TFirst, TSecond>
+        where T : IHasDistributedLattice<T, TFirst, TSecond>
         where TFirst : ISemilattice<T>
         where TSecond : ISemilattice<T>
     {

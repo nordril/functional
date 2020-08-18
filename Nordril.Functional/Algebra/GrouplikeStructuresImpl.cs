@@ -22,7 +22,7 @@ namespace Nordril.Functional.Algebra
         private readonly Func<T, T, T> op;
 
         /// <summary>
-        /// Creates a new monoid.
+        /// Creates a new magma.
         /// </summary>
         /// <param name="op">The binary operation.</param>
         public Magma(Func<T, T, T> op)
@@ -48,7 +48,7 @@ namespace Nordril.Functional.Algebra
         private readonly Func<T, T, T> op;
 
         /// <summary>
-        /// Creates a new monoid.
+        /// Creates a new semigroup.
         /// </summary>
         /// <param name="op">The binary operation.</param>
         public Semigroup(Func<T, T, T> op)
@@ -142,12 +142,23 @@ namespace Nordril.Functional.Algebra
         public static T NeutralUnsafe<T, TNeutralElement>()
             where TNeutralElement : INeutralElement<T>
         {
+            return GetNeutralUnsafe<T, TNeutralElement>()();
+        }
+
+        /// <summary>
+        /// Returns a function which, if called, returns <see cref="INeutralElement{T}.Neutral"/> of an <typeparamref name="TNeutralElement"/>. The type in question does not have to possess a parameterless constructor; instead, a call to <see cref="INeutralElement{T}.Neutral"/> with the this-pointer being null is forced. If <see cref="INeutralElement{T}.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer, a <see cref="NullReferenceException"/> will be thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the neutral element.</typeparam>
+        /// <typeparam name="TNeutralElement">The type of the <see cref="INeutralElement{T}"/>.</typeparam>
+        /// <exception cref="NullReferenceException">If <see cref="INeutralElement{T}.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer.</exception>
+        public static Func<T> GetNeutralUnsafe<T, TNeutralElement>()
+        {
             var instanceNeutral = typeof(TNeutralElement).GetProperty(nameof(INeutralElement<object>.Neutral)).GetMethod;
 
-            var neutral = new DynamicMethod("neutral", typeof(T), new Type[0]);
+            var neutral = new DynamicMethod("neutral", typeof(T), Array.Empty<Type>());
             var generator = neutral.GetILGenerator();
 
-            var monoidThis = generator.DeclareLocal(typeof(TNeutralElement));
+            _ = generator.DeclareLocal(typeof(TNeutralElement));
             generator.Emit(OpCodes.Ldloca_S, 0); //push monoidThis (index 0) onto the stack: [] -> [mt]
             generator.Emit(OpCodes.Initobj, typeof(TNeutralElement)); //initialize mt to null: mt -> []
             generator.Emit(OpCodes.Ldloc_0); //put local variable 0 to the stack again: [] -> mt
@@ -155,9 +166,7 @@ namespace Nordril.Functional.Algebra
             generator.EmitCall(OpCodes.Call, instanceNeutral, null); //call neutral without null-checking: [mt:heap] -> [ret]
             generator.Emit(OpCodes.Ret); //return: []
 
-            var res = (T)neutral.Invoke(null, new object[0]);
-
-            return res;
+            return (Func<T>)neutral.CreateDelegate(typeof(Func<T>));
         }
 
         /// <summary>
@@ -341,7 +350,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (true,&amp;&amp;) monoid for <see cref="bool"/>.
         /// </summary>
-        public class BoolAndMonoid : IMonoid<bool>
+        public class BoolAndMonoid : IMonoid<bool>, ICommutative<bool>, IIdempotent<bool>
         {
             /// <inheritdoc />
             public bool Neutral => true;
@@ -353,7 +362,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (false,||) monoid for <see cref="bool"/>.
         /// </summary>
-        public class BoolOrMonoid : IMonoid<bool>
+        public class BoolOrMonoid : IMonoid<bool>, ICommutative<bool>, IIdempotent<bool>
         {
             /// <inheritdoc />
             public bool Neutral => false;
@@ -365,7 +374,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (1,*) monoid for <see cref="int"/>.
         /// </summary>
-        public class IntMultMonoid : IMonoid<int>
+        public class IntMultMonoid : IMonoid<int>, ICommutative<int>
         {
             /// <inheritdoc />
             public int Neutral => 1;
@@ -476,6 +485,11 @@ namespace Nordril.Functional.Algebra
             => new Group<T>(instance.Neutral, (x, y) => x.Op(y), x => x.Inverse());
 
         /// <summary>
+        /// The (0,XOR,id) group for <see cref="bool"/>.
+        /// </summary>
+        public static readonly BoolXorGroup BoolXor = new BoolXorGroup();
+
+        /// <summary>
         /// The (0,+,negate) group for <see cref="int"/>.
         /// </summary>
         public static readonly IntAddGroup IntAdd = new IntAddGroup();
@@ -516,9 +530,24 @@ namespace Nordril.Functional.Algebra
         public static readonly DecimalMultGroup DecimalMult = new DecimalMultGroup();
 
         /// <summary>
+        /// The (0,XOR,id) group for <see cref="bool"/>.
+        /// </summary>
+        public class BoolXorGroup : ICommutativeGroup<bool>
+        {
+            /// <inheritdoc />
+            public bool Neutral => false;
+
+            /// <inheritdoc />
+            public bool Inverse(bool x) => x;
+
+            /// <inheritdoc />
+            public bool Op(bool x, bool y) => x ^ y;
+        }
+
+        /// <summary>
         /// The (0,+,negate) group for <see cref="int"/>.
         /// </summary>
-        public class IntAddGroup : IGroup<int>
+        public class IntAddGroup : ICommutativeGroup<int>
         {
             /// <inheritdoc />
             public int Neutral => 0;
@@ -533,7 +562,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (0,+,negate) group for <see cref="long"/>.
         /// </summary>
-        public class LongAddGroup : IGroup<long>
+        public class LongAddGroup : ICommutativeGroup<long>
         {
             /// <inheritdoc />
             public long Neutral => 0;
@@ -548,7 +577,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (0,+,negate) group for <see cref="float"/>.
         /// </summary>
-        public class FloatAddGroup : IGroup<float>
+        public class FloatAddGroup : ICommutativeGroup<float>
         {
             /// <inheritdoc />
             public float Neutral => 0;
@@ -563,7 +592,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (0,+,negate) group for <see cref="double"/>.
         /// </summary>
-        public class DoubleAddGroup : IGroup<double>
+        public class DoubleAddGroup : ICommutativeGroup<double>
         {
             /// <inheritdoc />
             public double Neutral => 0;
@@ -578,7 +607,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (0,+,negate) group for <see cref="decimal"/>.
         /// </summary>
-        public class DecimalAddGroup : IGroup<decimal>
+        public class DecimalAddGroup : ICommutativeGroup<decimal>
         {
             /// <inheritdoc />
             public decimal Neutral => 0;
@@ -593,7 +622,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (1,*,x =&gt; 1/x) group for <see cref="float"/>.
         /// </summary>
-        public class FloatMultGroup : IGroup<float>
+        public class FloatMultGroup : ICommutativeGroup<float>
         {
             /// <inheritdoc />
             public float Neutral => 1f;
@@ -608,7 +637,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (1,*,x =&gt; 1/x) group for <see cref="double"/>.
         /// </summary>
-        public class DoubleMultGroup : IGroup<double>
+        public class DoubleMultGroup : ICommutativeGroup<double>
         {
             /// <inheritdoc />
             public double Neutral => 1d;
@@ -623,7 +652,7 @@ namespace Nordril.Functional.Algebra
         /// <summary>
         /// The (1,*,x =&gt; 1/x) group for <see cref="decimal"/>.
         /// </summary>
-        public class DecimalMultGroup : IGroup<decimal>
+        public class DecimalMultGroup : ICommutativeGroup<decimal>
         {
             /// <inheritdoc />
             public decimal Neutral => 1m;
@@ -633,6 +662,60 @@ namespace Nordril.Functional.Algebra
 
             /// <inheritdoc />
             public decimal Op(decimal x, decimal y) => x + x;
+        }
+    }
+    #endregion
+
+    #region Semilattices
+    /// <summary>
+    /// A value-level group.
+    /// </summary>
+    /// <typeparam name="T">The type of element in this structure.</typeparam>
+    public struct Semilattice<T> : ISemilattice<T>
+    {
+        /// <summary>
+        /// The binary operation.
+        /// </summary>
+        private readonly Func<T, T, T> op;
+
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="op">The binary operation.</param>
+        public Semilattice(Func<T, T, T> op)
+        {
+            this.op = op;
+        }
+
+        /// <inheritdoc />
+        public T Op(T x, T y) => op(x, y);
+    }
+
+    /// <summary>
+    /// Extension methods for <see cref="ISemilattice{T}"/>s.
+    /// </summary>
+    public static class Semilattice
+    {
+        /// <summary>
+        /// A meet-semilattice whose operation creates the union of two sets.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the set.</typeparam>
+        public class SetMeetSemilattice<T> : ISemilattice<ISet<T>>
+            where T : IEquatable<T>
+        {
+            /// <inheritdoc />
+            public ISet<T> Op(ISet<T> x, ISet<T> y) => x.Union(y).ToHashSet();
+        }
+
+        /// <summary>
+        /// A join-semilattice whose operation creates the intersection of two sets.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the set.</typeparam>
+        public class SetJoinSemilattice<T> : ISemilattice<ISet<T>>
+            where T : IEquatable<T>
+        {
+            /// <inheritdoc />
+            public ISet<T> Op(ISet<T> x, ISet<T> y) => x.Intersect(y).ToHashSet();
         }
     }
     #endregion

@@ -66,6 +66,32 @@ namespace Nordril.Functional.Algebra
         T Neutral { get; }
     }
 
+    /// <summary>
+    /// A monoid which supports a unary inversion operator with respect to the associative binary operation.
+    /// </summary>
+    /// <typeparam name="T">The type of the carrier set.</typeparam>
+    public interface IInverse<T> : IMagma<T>
+    {
+        /// <summary>
+        /// Returns the inverse of the object. The inverse must fulfill the following for all X:
+        /// <code>
+        ///     m.Op(X.Inverse, X) == m.Neutral (left-inverse)
+        ///     m.Op(X, X.Inverse) == m.Neutral (right-inverse)
+        /// </code>
+        /// </summary>
+        T Inverse(T x);
+    }
+
+    /// <summary>
+    /// A magma where performing the binary operation <see cref="IMagma{T}.Op(T, T)"/> on an element <c>X</c> with itself results in that initial element, i.e.
+    /// <code>
+    ///     m.Op(X, X) == X (idempotence)
+    /// </code>
+    /// </summary>
+    /// <typeparam name="T">The type of the carrier set.</typeparam>
+    public interface IIdempotent<T> : IMagma<T>
+    {
+    }
     #endregion
 
     #region Named structures
@@ -89,16 +115,8 @@ namespace Nordril.Functional.Algebra
     /// A monoid which supports a unary inversion operator with respect to the associative binary operation.
     /// </summary>
     /// <typeparam name="T">The type of the carrier set.</typeparam>
-    public interface IGroup<T> : IMonoid<T>
+    public interface IGroup<T> : IMonoid<T>, IInverse<T>
     {
-        /// <summary>
-        /// Returns the inverse of the object. The inverse must fulfill the following for all X:
-        /// <code>
-        ///     m.Op(X.Inverse, X) == m.Neutral (left-inverse)
-        ///     m.Op(X, X.Inverse) == m.Neutral (right-inverse)
-        /// </code>
-        /// </summary>
-        T Inverse(T x);
     }
 
     /// <summary>
@@ -106,6 +124,17 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     public interface ICommutativeGroup<T> : IGroup<T>, ICommutative<T>
+    {
+    }
+
+    /// <summary>
+    /// A semi-lattice, which is commutative, associative, and idempotent.
+    /// </summary>
+    /// <typeparam name="T">The type of the carrier set.</typeparam>
+    public interface ISemilattice<T>
+        : ICommutative<T>
+        , IAssociative<T>
+        , IIdempotent<T>
     {
     }
     #endregion 
@@ -124,7 +153,7 @@ namespace Nordril.Functional.Algebra
         public static T Op<T>(this T x, T y) where T : IMagma<T> => x.Op(x, y);
 
         /// <summary>
-        /// Applies the <see cref="IGroup{T}.Inverse(T)"/> to itself.
+        /// Applies the <see cref="IInverse{T}.Inverse(T)"/> to itself.
         /// </summary>
         /// <typeparam name="T">The type of the carrier set.</typeparam>
         /// <param name="x">The operand.</param>

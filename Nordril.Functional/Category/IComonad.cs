@@ -13,6 +13,7 @@ namespace Nordril.Functional.Category
         /// Extracts a new value from the comonad.
         /// </summary>
         TSource Extract();
+
         /// <summary>
         /// Takes a function that extracts values from a comonad and chains it to this comonad by wrapping its result into a comonad.
         /// Implementros must fulfill the following for all X and f, g:
@@ -46,6 +47,15 @@ namespace Nordril.Functional.Category
         /// <param name="m">The comonad to duplicate.</param>
         public static IComonad<IComonad<TSource>> Duplicate<TSource>(this IComonad<TSource> m) => m.Extend(F.Id<IComonad<TSource>>());
 
-        //TODO: cokleisli composition
+        /// <summary>
+        /// Concatenates two comonad-functions.
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TResult1">The intermediate result type.</typeparam>
+        /// <typeparam name="TResult2">The funal result type.</typeparam>
+        /// <param name="f">The first comonad-function.</param>
+        /// <param name="g">The second comonad-function.</param>
+        public static Func<IComonad<TSource>, TResult2> Comp<TSource, TResult1, TResult2>(this Func<IComonad<TSource>, TResult1> f, Func<IComonad<TResult1>, TResult2> g)
+            => c => c.Extend(f).Extend(g).Extract();
     }
 }

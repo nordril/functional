@@ -36,6 +36,17 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
+        /// Tuple deconstructor function.
+        /// </summary>
+        /// <param name="hasValue">Whether the value is present.</param>
+        /// <param name="value">The value, if present, or <c>default</c>.</param>
+        public void Deconstruct(out bool hasValue, out T value)
+        {
+            hasValue = HasValue;
+            value = HasValue ? this.value : default;
+        }
+
+        /// <summary>
         /// Clears the value in-place. <see cref="HasValue"/> will be false.
         /// </summary>
         public void ClearValue()

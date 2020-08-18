@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nordril.Functional.Data
 {
@@ -43,11 +44,13 @@ namespace Nordril.Functional.Data
             this.discriminator = discriminator;
         }
 
+
         /// <summary>
         /// Creates a new left-<see cref="Either{TLeft, TRight}"/> from a value. The type-level tag is required to disambiguate between constructors.
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
         /// <param name="discriminator">The discriminator tag.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "used for constructor discrimination.")]
         public Either(TLeft value, TagLeft discriminator) : this(value, default, EitherTag.Left)
         {
         }
@@ -57,6 +60,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
         /// <param name="discriminator">The discriminator tag.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "used for constructor discrimination.")]
         public Either(TRight value, TagRight discriminator) : this(default, value, EitherTag.Right)
         {
         }
@@ -72,6 +76,19 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="value">The value to store in the either.</param>
         public static Either<TLeft, TRight> FromRight(TRight value) => new Either<TLeft, TRight>(default, value, EitherTag.Right);
+
+        /// <summary>
+        /// Tuple deconstructor function.
+        /// </summary>
+        /// <param name="isLeft">True if this <see cref="Either{TLeft, TRight}"/> has a left-value, and false if it has a right-value.</param>
+        /// <param name="left">The left-value, if present, or <c>default</c>.</param>
+        /// <param name="right">The right-value, if present, or <c>default</c>.</param>
+        public void Deconstruct(out bool isLeft, out TLeft left, out TRight right)
+        {
+            isLeft = IsLeft;
+            left = IsLeft ? this.left : default;
+            right = IsLeft ? default : this.right;
+        }
 
         /// <summary>
         /// Sets the either to a left, clearing the right, if present.

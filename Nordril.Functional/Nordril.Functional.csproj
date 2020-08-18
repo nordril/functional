@@ -2,20 +2,22 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <AssemblyVersion>19.3.0.0</AssemblyVersion>
+    <AssemblyVersion>20.0.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies d.o.o.</Authors>
     <Company>Nordril Technologies d.o.o.</Company>
-    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
-    <Version>19.3.0</Version>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <Version>20.0.0</Version>
     <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>19.3.0.0</FileVersion>
-    <PackageIconUrl>https://nordrilnugeticons.blob.core.windows.net/nuget-icons/cebd969f4bc14d5597856f700bbd5bf5.png</PackageIconUrl>
+    <FileVersion>20.0.0.0</FileVersion>
+    <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl></RepositoryUrl>
     <PackageProjectUrl>https://github.com/nordril/functional/</PackageProjectUrl>
     <PackageTags>functional langexts maybe functor monad lens algebra</PackageTags>
     <Copyright>Nordril Technologies d.o.o.</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageIcon>cebd969f4bc14d5597856f700bbd5bf5.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -34,6 +36,13 @@
 
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\cebd969f4bc14d5597856f700bbd5bf5.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1'">

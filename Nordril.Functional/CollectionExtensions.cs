@@ -307,10 +307,8 @@ namespace Nordril.Functional
         /// <param name="xs">The list to check.</param>
         public static Maybe<T> FirstMaybe<T>(this IEnumerable<T> xs)
         {
-            using (var x = xs.GetEnumerator())
-            {
-                return Maybe.JustIf(x.MoveNext(), () => x.Current);
-            }
+            using var x = xs.GetEnumerator();
+            return Maybe.JustIf(x.MoveNext(), () => x.Current);
         }
 
         /// <summary>
@@ -363,12 +361,10 @@ namespace Nordril.Functional
         /// <param name="action">The action to perform.</param>
         public static void ForEach<T1, T2>(this IEnumerable<T1> xs, IEnumerable<T2> ys, Action<T1, T2> action)
         {
-            using (var x = xs.GetEnumerator())
-            using (var y = ys.GetEnumerator())
-            {
-                while (x.MoveNext() && y.MoveNext())
-                    action(x.Current, y.Current);
-            }
+            using var x = xs.GetEnumerator();
+            using var y = ys.GetEnumerator();
+            while (x.MoveNext() && y.MoveNext())
+                action(x.Current, y.Current);
         }
 
         /// <summary>
@@ -387,13 +383,11 @@ namespace Nordril.Functional
             IEnumerable<T3> zs,
             Action<T1, T2, T3> action)
         {
-            using (var x = xs.GetEnumerator())
-            using (var y = ys.GetEnumerator())
-            using (var z = zs.GetEnumerator())
-            {
-                while (x.MoveNext() && y.MoveNext() && z.MoveNext())
-                    action(x.Current, y.Current, z.Current);
-            }
+            using var x = xs.GetEnumerator();
+            using var y = ys.GetEnumerator();
+            using var z = zs.GetEnumerator();
+            while (x.MoveNext() && y.MoveNext() && z.MoveNext())
+                action(x.Current, y.Current, z.Current);
         }
 
         /// <summary>
@@ -415,14 +409,12 @@ namespace Nordril.Functional
             IEnumerable<T4> us,
             Action<T1, T2, T3, T4> action)
         {
-            using (var x = xs.GetEnumerator())
-            using (var y = ys.GetEnumerator())
-            using (var z = zs.GetEnumerator())
-            using (var u = us.GetEnumerator())
-            {
-                while (x.MoveNext() && y.MoveNext() && z.MoveNext() && u.MoveNext())
-                    action(x.Current, y.Current, z.Current, u.Current);
-            }
+            using var x = xs.GetEnumerator();
+            using var y = ys.GetEnumerator();
+            using var z = zs.GetEnumerator();
+            using var u = us.GetEnumerator();
+            while (x.MoveNext() && y.MoveNext() && z.MoveNext() && u.MoveNext())
+                action(x.Current, y.Current, z.Current, u.Current);
         }
 
         /// <summary>
@@ -831,15 +823,13 @@ namespace Nordril.Functional
         /// <param name="f">The function to apply to each element of the sequence.</param>
         public static IEnumerable<TResult> SelectMaybe<T, TResult>(this IEnumerable<T> xs, Func<T, Maybe<TResult>>f)
         {
-            using (var x = xs.GetEnumerator())
+            using var x = xs.GetEnumerator();
+            while (x.MoveNext())
             {
-                while (x.MoveNext())
-                {
-                    var y = f(x.Current);
+                var y = f(x.Current);
 
-                    if (y.HasValue)
-                        yield return y.Value();
-                }
+                if (y.HasValue)
+                    yield return y.Value();
             }
         }
 
@@ -1126,13 +1116,11 @@ namespace Nordril.Functional
         /// <returns>The elements of the first list, together with the created elements of the stream.</returns>
         public static IEnumerable<(T1, T2)> ZipWithStream<T1, T2>(this IEnumerable<T1> xs, T2 start, Func<T2, T2> next)
         {
-            using (var iter = xs.GetEnumerator())
+            using var iter = xs.GetEnumerator();
+            while (iter.MoveNext())
             {
-                while (iter.MoveNext())
-                {
-                    yield return (iter.Current, start);
-                    start = next(start);
-                }
+                yield return (iter.Current, start);
+                start = next(start);
             }
         }
 
@@ -1160,21 +1148,21 @@ namespace Nordril.Functional
 
         static IEnumerable<TResult> Zip3Iterator<T1, T2, T3, TResult>(IEnumerable<T1> xs, IEnumerable<T2> ys, IEnumerable<T3> zs, Func<T1, T2, T3, TResult> f)
         {
-            using (IEnumerator<T1> x = xs.GetEnumerator())
-            using (IEnumerator<T2> y = ys.GetEnumerator())
-            using (IEnumerator<T3> z = zs.GetEnumerator())
-                while (x.MoveNext() && y.MoveNext() && z.MoveNext())
-                    yield return f(x.Current, y.Current, z.Current);
+            using IEnumerator<T1> x = xs.GetEnumerator();
+            using IEnumerator<T2> y = ys.GetEnumerator();
+            using IEnumerator<T3> z = zs.GetEnumerator();
+            while (x.MoveNext() && y.MoveNext() && z.MoveNext())
+                yield return f(x.Current, y.Current, z.Current);
         }
 
         static IEnumerable<TResult> Zip4Iterator<T1, T2, T3, T4, TResult>(IEnumerable<T1> xs, IEnumerable<T2> ys, IEnumerable<T3> zs, IEnumerable<T4> us, Func<T1, T2, T3, T4, TResult> f)
         {
-            using (IEnumerator<T1> x = xs.GetEnumerator())
-            using (IEnumerator<T2> y = ys.GetEnumerator())
-            using (IEnumerator<T3> z = zs.GetEnumerator())
-            using (IEnumerator<T4> u = us.GetEnumerator())
-                while (x.MoveNext() && y.MoveNext() && z.MoveNext() && u.MoveNext())
-                    yield return f(x.Current, y.Current, z.Current, u.Current);
+            using IEnumerator<T1> x = xs.GetEnumerator();
+            using IEnumerator<T2> y = ys.GetEnumerator();
+            using IEnumerator<T3> z = zs.GetEnumerator();
+            using IEnumerator<T4> u = us.GetEnumerator();
+            while (x.MoveNext() && y.MoveNext() && z.MoveNext() && u.MoveNext())
+                yield return f(x.Current, y.Current, z.Current, u.Current);
         }
     }
 }

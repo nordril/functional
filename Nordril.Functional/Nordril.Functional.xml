@@ -65,6 +65,12 @@
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Algebra.IHasSemilattice`1">
+            <summary>
+            A semi-lattice, which is commutative, associative, and idempotent.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Algebra.IMagma`1">
             <summary>
             An algebraic structure supporting a binary operation with no further guaranteed properties.
@@ -115,6 +121,30 @@
             Returns the neutral element.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Algebra.IInverse`1">
+            <summary>
+            A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IInverse`1.Inverse(`0)">
+            <summary>
+            Returns the inverse of the object. The inverse must fulfill the following for all X:
+            <code>
+                m.Op(X.Inverse, X) == m.Neutral (left-inverse)
+                m.Op(X, X.Inverse) == m.Neutral (right-inverse)
+            </code>
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IIdempotent`1">
+            <summary>
+            A magma where performing the binary operation <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> on an element <c>X</c> with itself results in that initial element, i.e.
+            <code>
+                m.Op(X, X) == X (idempotence)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Algebra.ISemigroup`1">
             <summary>
             A semigroup whose binary operation is associative.
@@ -133,18 +163,15 @@
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.IGroup`1.Inverse(`0)">
-            <summary>
-            Returns the inverse of the object. The inverse must fulfill the following for all X:
-            <code>
-                m.Op(X.Inverse, X) == m.Neutral (left-inverse)
-                m.Op(X, X.Inverse) == m.Neutral (right-inverse)
-            </code>
-            </summary>
-        </member>
         <member name="T:Nordril.Functional.Algebra.ICommutativeGroup`1">
             <summary>
             A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISemilattice`1">
+            <summary>
+            A semi-lattice, which is commutative, associative, and idempotent.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
         </member>
@@ -163,7 +190,7 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.StructuresExtensions.Inverse``1(``0)">
             <summary>
-            Applies the <see cref="M:Nordril.Functional.Algebra.IGroup`1.Inverse(`0)"/> to itself.
+            Applies the <see cref="M:Nordril.Functional.Algebra.IInverse`1.Inverse(`0)"/> to itself.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <param name="x">The operand.</param>
@@ -181,7 +208,7 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.Magma`1.#ctor(System.Func{`0,`0,`0})">
             <summary>
-            Creates a new monoid.
+            Creates a new magma.
             </summary>
             <param name="op">The binary operation.</param>
         </member>
@@ -201,7 +228,7 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.Semigroup`1.#ctor(System.Func{`0,`0,`0})">
             <summary>
-            Creates a new monoid.
+            Creates a new semigroup.
             </summary>
             <param name="op">The binary operation.</param>
         </member>
@@ -271,6 +298,14 @@
         <member name="M:Nordril.Functional.Algebra.Monoid.NeutralUnsafe``2">
             <summary>
             Returns <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of an <typeparamref name="TNeutralElement"/>. The type in question does not have to possess a parameterless constructor; instead, a call to <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> with the this-pointer being null is forced. If <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer, a <see cref="T:System.NullReferenceException"/> will be thrown.
+            </summary>
+            <typeparam name="T">The type of the neutral element.</typeparam>
+            <typeparam name="TNeutralElement">The type of the <see cref="T:Nordril.Functional.Algebra.INeutralElement`1"/>.</typeparam>
+            <exception cref="T:System.NullReferenceException">If <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.GetNeutralUnsafe``2">
+            <summary>
+            Returns a function which, if called, returns <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of an <typeparamref name="TNeutralElement"/>. The type in question does not have to possess a parameterless constructor; instead, a call to <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> with the this-pointer being null is forced. If <see cref="P:Nordril.Functional.Algebra.INeutralElement`1.Neutral"/> of <typeparamref name="TNeutralElement"/> uses the this-pointer, a <see cref="T:System.NullReferenceException"/> will be thrown.
             </summary>
             <typeparam name="T">The type of the neutral element.</typeparam>
             <typeparam name="TNeutralElement">The type of the <see cref="T:Nordril.Functional.Algebra.INeutralElement`1"/>.</typeparam>
@@ -517,6 +552,11 @@
             <typeparam name="T">The type that implements <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</typeparam>
             <param name="instance">An object that is an instance of <see cref="T:Nordril.Functional.Algebra.IHasGroup`1"/>.</param>
         </member>
+        <member name="F:Nordril.Functional.Algebra.Group.BoolXor">
+            <summary>
+            The (0,XOR,id) group for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
         <member name="F:Nordril.Functional.Algebra.Group.IntAdd">
             <summary>
             The (0,+,negate) group for <see cref="T:System.Int32"/>.
@@ -556,6 +596,20 @@
             <summary>
             The (1,*,x =&gt; 1/x) group for <see cref="T:System.Decimal"/>.
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Group.BoolXorGroup">
+            <summary>
+            The (0,XOR,id) group for <see cref="T:System.Boolean"/>.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Group.BoolXorGroup.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.BoolXorGroup.Inverse(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Group.BoolXorGroup.Op(System.Boolean,System.Boolean)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Group.IntAddGroup">
             <summary>
@@ -669,186 +723,1298 @@
         <member name="M:Nordril.Functional.Algebra.Group.DecimalMultGroup.Op(System.Decimal,System.Decimal)">
             <inheritdoc />
         </member>
-        <member name="T:Nordril.Functional.Algebra.IPartiallyOrdered`1">
+        <member name="T:Nordril.Functional.Algebra.Semilattice`1">
             <summary>
-            A type which supports a partial order. A partial order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/> with the following properties:
-            <list type="table">
-                <listheader>
-                    <term>Property</term>
-                    <description>Definition</description>
-                </listheader>
-                <item>
-                    <term>reflexivity</term>
-                    <description>[forall a] a.LeqPartial(a) == Maybe.Just(true)</description>
-                </item>
-                <item>
-                    <term>antisymmetry</term>
-                    <description>[forall a,b] if a.LeqPartial(b) == b.LeqPartial(a) == Maybe.Just(true) then a.Equals(b)</description>
-                </item>
-                <item>
-                    <term>transitivity</term>
-                    <description>[forall a,b,c] if a.LeqPartial(b) == b.LeqPartial(c) == Maybe.Just(true) then a.LeqPartial(c) == Maybe.Just(true)</description>
-                </item>
-            </list>
+            A value-level group.
             </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
+            <typeparam name="T">The type of element in this structure.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)">
+        <member name="F:Nordril.Functional.Algebra.Semilattice`1.op">
             <summary>
-            The "less than or equals"-predicate which returns the comparison of two elements or <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if the two elements are incomparable.
-            </summary>
-            <param name="that">The second element to compare to the first.</param>
-            <returns>Maybe.Just(true) iff the first element is less than or equal to the second. Maybe.Nothing if the elements are incomparable.</returns>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.ITotallyOrdered`1">
-            <summary>
-            A type which supports a total order. A total order has a "less then or equal" relation (<see cref="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)"/> with the following properties:
-            <list type="table">
-                <listheader>
-                    <term>Property</term>
-                    <description>Definition</description>
-                </listheader>
-                <item>
-                    <term>reflexivity</term>
-                    <description>[forall a] a.Leq(a) == true</description>
-                </item>
-                <item>
-                    <term>antisymmetry</term>
-                    <description>[forall a,b] if a.Leq(b) == b.Leq(a) == true then a.Equals(b)</description>
-                </item>
-                <item>
-                    <term>transitivity</term>
-                    <description>[forall a,b,c] if a.Leq(b) == b.Leq(c) == true then a.Leq(c) == true</description>
-                </item>
-                <item>
-                    <term>agreement</term>
-                    <description>[forall a,b, t] if a.Leq(b) == t &lt;==&gt; a.LeqPartial(b) == Maybe.Just(t)</description>
-                </item>
-            </list>
-            </summary>
-            <typeparam name="T">The type of the implementor.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.ITotallyOrdered`1.Leq(`0)">
-            <summary>
-            The "less than or equals"-predicate.
-            </summary>
-            <param name="that">The second element to compare to the first.</param>
-            <returns>true iff the first element is less than or equal to the second.</returns>
-        </member>
-        <member name="T:Nordril.Functional.Algebra.TotallyOrderedExtenions">
-            <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotallyOrdered`1"/>.
+            The binary operation.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Le``1(``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.Semilattice`1.#ctor(System.Func{`0,`0,`0})">
             <summary>
-            The "strictly less than"-predicate
+            Creates a new instance.
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
+            <param name="op">The binary operation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semilattice`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Semilattice">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.ISemilattice`1"/>s.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Semilattice.SetMeetSemilattice`1">
+            <summary>
+            A meet-semilattice whose operation creates the union of two sets.
+            </summary>
+            <typeparam name="T">The type of the elements of the set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semilattice.SetMeetSemilattice`1.Op(System.Collections.Generic.ISet{`0},System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Semilattice.SetJoinSemilattice`1">
+            <summary>
+            A join-semilattice whose operation creates the intersection of two sets.
+            </summary>
+            <typeparam name="T">The type of the elements of the set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semilattice.SetJoinSemilattice`1.Op(System.Collections.Generic.ISet{`0},System.Collections.Generic.ISet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.KeyAlreadyPresentException">
+            <summary>
+            Indicates that a string-key was already present when an attempt was made to
+            insert it into a collection.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.KeyAlreadyPresentException.Key">
+            <summary>
+            The key or its string-form.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.KeyAlreadyPresentException.#ctor(System.String)">
+            <summary>
+            Creates a new exception.
+            </summary>
+            <param name="key">The value of the duplicate key.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.KeyAlreadyPresentException.#ctor">
+            <summary>
+            Creates a new exception.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.KeyAlreadyPresentException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IBinaryRelation`2">
+            <summary>
+            A binary relation that can decide whether it contains a pair of elements.
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IBinaryRelation`2.Contains(`0,`1)">
+            <summary>
+            Returns true iff two elements occur as a pair in the relation.
+            </summary>
             <param name="x">The first element.</param>
             <param name="y">The second element.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Ge``1(``0,``0)">
+        <member name="T:Nordril.Functional.Algebra.IExtensionalBinaryRelation`2">
             <summary>
-            The "strictly greater than"-predicate
+            An extensible binary relation that can enumerate the pairs it contains.
+            Iff a a pair <c>(x,y)</c> occurs in the enumeration, then <c>r.Contains(x,y)</c> is true.
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotallyOrderedExtenions.Geq``1(``0,``0)">
+        <member name="T:Nordril.Functional.Algebra.IReflexiveRelation`1">
             <summary>
-            The "greater than or equals"-predicate
+            A reflexive relation, for which the following holds:
+            <code>
+                r.Contains(X,X) == true (reflexivity)
+            </code>
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISymmetricRelation`1">
+            <summary>
+            A symmetric relation, for which the following holds:
+            <code>
+                r.Contains(X,Y) == r.Contains(Y,X) (symmetric)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IAntisymmetricRelation`1">
+            <summary>
+            An antisymmetric relation, for which the following holds:
+            <code>
+                if r.Contains(X,Y) and r.Contains(Y,X) then a = b (anti-symmetry)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITransitiveRelation`1">
+            <summary>
+            A transitive relation, for which the following holds:
+            <code>
+                if r.Contains(X,Y) and r.Contains(Y,Z) then r.Contains(X,Z) (transitivity)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotalRelation`2">
+            <summary>
+            A total relation which is equivalent to the Cartesian product of <typeparamref name="T1"/> and <typeparamref name="T2"/>.
+            <code>
+                r.Contains
+            </code>
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IInjectiveRelation`2">
+            <summary>
+            An injective relation, for which the following holds:
+            <code>
+                if r.Contains(X,Y) and r.Contains(X,Z), then X = Y (injectivity)
+            </code>
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISurjectiveRelation`2">
+            <summary>
+            A surjective relation, for which the following holds:
+            <code>
+                for all Y, there exists an X such that r.Contains(X,Y) (surjectivity)
+            </code>
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IFunctionalRelation`2">
+            <summary>
+            A functional relation, where, for all X in <typeparamref name="T1"/>
+            <code>
+                if r.Contains(X,Y) and r.Contains(X,Z) then Y == Z (functional)
+            </code>
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IFunctionalRelation`2.MaybeResult(`0)">
+            <summary>
+            Returns the <typeparamref name="T2"/> associated with an <typeparamref name="T1"/>, if it exists.
+            </summary>
+            <param name="x">The <typeparamref name="T1"/>.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISerialRelation`2">
+            <summary>
+            A serial relation, where, for all X in <typeparamref name="T1"/>, there exists an Y in <typeparamref name="T2"/> such that
+            <code>
+                r.Contains(X,Y) (serial)
+            </code>
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IConnexRelation`1">
+            <summary>
+            For all X and Y, the following holds:
+            <code>
+                r.Contains(X,Y) or r.Contains(Y,X) (connex)
+            </code>
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IOneToOneRelation`2">
+            <summary>
+            A one-to-one mapping between some elements of <typeparamref name="T1"/> and some elements of <typeparamref name="T2"/>.
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IOneToOneRelation`2.GetMaybeLeft(`1)">
+            <summary>
+            Gets the unique left-key associated with a given right-key, if it exists.
+            </summary>
+            <param name="x">The right-key.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IOneToOneRelation`2.GetMaybeRight(`0)">
+            <summary>
+            Gets the unique right-key associated with a given right-key, if it exists.
+            </summary>
+            <param name="x">The right-key.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IBijectiveRelation`2">
+            <summary>
+            A bijective-relation, which is a one-to-one mapping from all elements of <typeparamref name="T1"/> to all elements of <typeparamref name="T2"/>.
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IBijectiveRelation`2.GetLeft(`1)">
+            <summary>
+            Gets the unique left-key associated with a given right-key.
+            </summary>
+            <param name="x">The right-key.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IBijectiveRelation`2.GetRight(`0)">
+            <summary>
+            Gets the unique right-key associated with a given left-key.
+            </summary>
+            <param name="x">The right-key.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IFunctionRelation`2">
+            <summary>
+            A relation which is equivalent to a total function.
+            </summary>
+            <typeparam name="T1">The type of the inputs.</typeparam>
+            <typeparam name="T2">The type of the outputs.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IFunctionRelation`2.Result(`0)">
+            <summary>
+            Returns the output associated with the input <paramref name="x"/>.
+            </summary>
+            <param name="x">The input.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IPartialOrder`1">
+            <summary>
+            A partial order, i.e. a reflexive, anti-symmetric, and transitive relationship.
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotalOrder`1">
+            <summary>
+            A total order, i.e. a partial order which is also total.
+            A total allows us to compare every pair of elements.
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ITotalOrder`1.Compare(`0,`0)">
+            <summary>
+            Compares two elements and returns a number smaller than 0 if <c>x &lt; y</c>, 0 if <c>x == y</c>, and a number greater than 0 if <c>x &gt; y</c>.
+            </summary>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasReflexiveRelation`1">
+            <summary>
+            A reflexive relation, for which the following holds:
+            <code>
+                r.Contains(X,X) == true (reflexivity)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasSymmetricRelation`1">
+            <summary>
+            A symmetric relation, for which the following holds:
+            <code>
+                r.Contains(X,Y) == r.Contains(Y,X) (symmetric)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasAntisymmetricRelation`1">
+            <summary>
+            An antisymmetric relation, for which the following holds:
+            <code>
+                if r.Contains(X,Y) and r.Contains(Y,X) then a = b (anti-symmetry)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasTransitiveRelation`1">
+            <summary>
+            A transitive relation, for which the following holds:
+            <code>
+                if r.Contains(X,Y) and r.Contains(Y,Z) then r.Contains(X,Z) (transitivity)
+            </code>
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasConnexRelation`1">
+            <summary>
+            For all X and Y, the following holds:
+            <code>
+                r.Contains(X,Y) or r.Contains(Y,X) (connex)
+            </code>
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasPartialOrder`1">
+            <summary>
+            A partial order, i.e. a reflexive, anti-symmetric, and transitive relationship.
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasTotalOrder`1">
+            <summary>
+            A total order, i.e. a partial order which is also total.
+            A total allows us to compare every pair of elements.
+            </summary>
+            <typeparam name="T">The type of elements contained in the relation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.BinaryRelation`2">
+            <summary>
+            A value-level binary relation.
+            </summary>
+            <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
+            <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BinaryRelation`2.#ctor(System.Func{`0,`1,System.Boolean})">
+            <summary>
+            Creates a new binary relation.
+            </summary>
+            <param name="contains">The "contains"-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BinaryRelation`2.Contains(`0,`1)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.PartialOrder`1">
             <summary>
             A value-level partial order.
             </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.PartialOrder`1.LeqPartial">
-            <summary>
-            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
-            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Algebra.PartialOrder`1.#ctor(System.Func{`0,`0,Nordril.Functional.Data.Maybe{System.Boolean}})">
             <summary>
-            Creates a new instance.
+            Creates a new partial order from a partial "less than or equal to"-function.
             </summary>
-            <param name="leqPartial">The "less than or equals"-predicate.</param>
+            <param name="leqPartial">The partial "less than or equal to"-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder`1.#ctor(System.Func{`0,`0,System.Boolean})">
+            <summary>
+            Creates a new partial order from a "contains"-function.
+            </summary>
+            <param name="contains">The "contains"-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder`1.Contains(`0,`0)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.TotalOrder`1">
             <summary>
             A value-level total order.
             </summary>
-            <typeparam name="T">The type of element in this structure.</typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Algebra.TotalOrder`1.Leq">
+        <member name="M:Nordril.Functional.Algebra.TotalOrder`1.#ctor(System.Func{`0,`0,System.Int16})">
             <summary>
-            The "less than or equals"-predicate. See <see cref="M:Nordril.Functional.Algebra.IPartiallyOrdered`1.LeqPartial(`0)"/>.
+            Creates a new total order from a comparison-function.
             </summary>
+            <param name="comparison">The comparison-function.</param>
         </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder`1.#ctor(System.Func{`0,`0,System.Boolean})">
             <summary>
-            Creates a new instance.
+            Creates a total order from a "less than or equal to"-function.
             </summary>
-            <param name="leq">The "less than or equals"-predicate.</param>
+            <param name="leq">The "less than or equal to"-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder`1.Compare(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder`1.Contains(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.FunctionRelation`2">
+            <summary>
+            A value-level function-relation.
+            </summary>
+            <typeparam name="T1">The type of the inputs.</typeparam>
+            <typeparam name="T2">The type of the outputs.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.FunctionRelation`2.#ctor(System.Func{`0,`1})">
+            <summary>
+            Creates a new relation.
+            </summary>
+            <param name="f">The underlying function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.FunctionRelation`2.Contains(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.FunctionRelation`2.MaybeResult(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.FunctionRelation`2.Result(`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.OneToOneRelation`2">
+            <summary>
+            A value-level, finite one-to-one relation (a partial bijection).
+            </summary>
+            <typeparam name="T1">The type of the inputs.</typeparam>
+            <typeparam name="T2">The type of the outputs.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">
+            <summary>
+            Creates a new relation.
+            </summary>
+            <param name="pairs">The pairs.</param>
+            <exception cref="T:Nordril.Functional.Algebra.KeyAlreadyPresentException">A left- or right-key occurred twice.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.Contains(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.GetMaybeLeft(`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.GetMaybeRight(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.OneToOneRelation`2.MaybeResult(`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.BijectiveRelation`2">
+            <summary>
+            A value-level (total) bijective relation.
+            </summary>
+            <typeparam name="T1">The type of the inputs.</typeparam>
+            <typeparam name="T2">The type of the outputs.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.#ctor(System.Func{`0,`1},System.Func{`1,`0})">
+            <summary>
+            Creates a new relation out of two functions.
+            </summary>
+            <param name="to">The function which converts from the codomain to the domain.</param>
+            <param name="from">The function which converts from the domain to the codomain</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.Contains(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetLeft(`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetRight(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.MaybeResult(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetMaybeLeft(`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetMaybeRight(`0)">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.TotalOrder">
             <summary>
-            Extension methods for <see cref="T:Nordril.Functional.Algebra.TotalOrder`1"/>.
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotalOrder`1"/>s.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.Le``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Le``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
-            The "strictly less than"-predicate
+            Returns true iff <paramref name="x"/> is strictly smaller than <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.Ge``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Leq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
-            The "strictly greater than"-predicate
+            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.Geq``1(Nordril.Functional.Algebra.TotalOrder{``0},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Eq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
-            The "greater than or equals"-predicate
+            Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
-            <typeparam name="T">The type of the element.</typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
-            <param name="x">The first element.</param>
-            <param name="y">The second element.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Neq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is strictly not equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Geq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is greater than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Ge``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is strictly greater than <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.FromEquatable``1">
+            <summary>
+            Creates a partial order and an equivalence relation from an <see cref="T:System.IEquatable`1"/> type.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.FromComparable``1">
             <summary>
-            Returns the total order on a type <typeparamref name="T"/> which implements <see cref="T:System.IComparable`1"/>.
+            Creates a total order from an <see cref="T:System.IComparable`1"/> type.
             </summary>
-            <typeparam name="T">The type that implements <see cref="T:System.IComparable`1"/>.</typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.ToTotalOrder``1(System.Collections.Generic.IComparer{``0})">
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.LiftTotalOrderWithInfinity``1(Nordril.Functional.Algebra.ITotalOrder{``0})">
             <summary>
-            Returns a total order on a type <typeparamref name="T"/> based on a <paramref name="comparer"/>.
+            Adds positive infinity, modeled via <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> to a total order.
             </summary>
-            <typeparam name="T">The type for which we have an <see cref="T:System.Collections.Generic.IComparer`1"/>.</typeparam>
-            <param name="comparer">The comparer.</param>
+            <typeparam name="T">The type of elements in the relation.</typeparam>
+            <param name="order">The total order.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.LiftTotalOrderWithInfinity``1(Nordril.Functional.Algebra.TotalOrder{``0})">
+        <member name="T:Nordril.Functional.Algebra.Relations">
             <summary>
-            Lifts a total order into one which supports positive infinity in the form of <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/>.
+            Extension methods for relations.
             </summary>
-            <typeparam name="T">The type of elements in this structure.</typeparam>
-            <param name="order">The total order to lift.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.AsRelation``2(System.Func{``0,``1})">
+            <summary>
+            Returns a total function as an <see cref="T:Nordril.Functional.Algebra.IFunctionRelation`2"/>.
+            </summary>
+            <typeparam name="T1">The type of the input.</typeparam>
+            <typeparam name="T2">The type of the output.</typeparam>
+            <param name="f">The function to transform into a relation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.FromRelation``2(Nordril.Functional.Algebra.IFunctionRelation{``0,``1})">
+            <summary>
+            Returns an <see cref="T:Nordril.Functional.Algebra.IFunctionRelation`2"/> as a total function.
+            </summary>
+            <typeparam name="T1">The type of the input.</typeparam>
+            <typeparam name="T2">The type of the output.</typeparam>
+            <param name="r">The relation to transform into a function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.AsBijective``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
+            <summary>
+            Creates a one-to-one relation (a bijective relation that is not total) from a list of key-value-pairs.
+            </summary>
+            <typeparam name="T1">The type of the left-keys.</typeparam>
+            <typeparam name="T2">The type of the right-keys.</typeparam>
+            <param name="pairs">The pairs of keys.</param>
+            <exception cref="T:Nordril.Functional.Algebra.KeyAlreadyPresentException">A left- or right-key occurred twice.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.AsBijective``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+            <summary>
+            Creates a one-to-one relation (a bijective relation that is not total) from a list of key-value-pairs.
+            </summary>
+            <typeparam name="T1">The type of the left-keys.</typeparam>
+            <typeparam name="T2">The type of the right-keys.</typeparam>
+            <param name="pairs">The pairs of keys.</param>
+            <exception cref="T:Nordril.Functional.Algebra.KeyAlreadyPresentException">A left- or right-key occurred twice.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.AsBijective``2(System.Func{``0,``1},System.Func{``1,``0})">
+            <summary>
+            Creates a bijection from two functions. It is the responsibility of the caller to ensure that the two function actually induce a bijection.
+            </summary>
+            <typeparam name="T1">The type of the left-keys.</typeparam>
+            <typeparam name="T2">The type of the right-keys.</typeparam>
+            <param name="to">The function which converts from the codomain to the domain.</param>
+            <param name="from">The function which converts from the domain to the codomain</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasLeftDistributive`3">
+            <summary>
+            Ringlike structures where the first operation left-distributes over the second, i.e.
+            <code>
+            X * (Y + Z) == (X * Y) + (X * Z)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasRightDistributive`3">
+            <summary>
+            Ringlike structures where the first operation right-distributes over the second, i.e.
+            <code>
+            (Y + Z) * X == (Y * X) + (Z * X)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasJacobi`3">
+            <summary>
+            Ringlike structures where which satisfy the Jacobi-identity, e.g.
+            <code>
+            X * (Y * Z) == (X * Y) * Z + Y * (X * Z)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasAnnihilation`3">
+            <summary>
+            Ringlike structures where the neutral element of the first operation annihiliates another element, if applied with the second operation, i.e.
+            <code>
+            0 * X = X * 0 = 0
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasRinglike`3">
+            <summary>
+            General algebraic structures with two operations. The two operations are grouplike and there may be addition relationships between them,
+            e.g. the second operation may distribute over the first.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasSemiring`3">
+            <summary>
+            A semiring; a structure with two operations, where the first operation is a commutative monoid and the second operation is a monoid.
+            In addition, the second operation, left- and right-distributes over the first and the neutral elemenent of the first operation is annihiliating in the second operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasNearRing`3">
+            <summary>
+            A near-ring; a structure with two operations, where the first operation is a group and the second operation is a semigroup.
+            In addition, the second operation, right-distributes over the first and the neutral elemenent of the first operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasRing`3">
+            <summary>
+            A ring. Like a semiring, but the first operation forms a commutative group, i.e. subtraction is also defined.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasBooleanRing`3">
+            <summary>
+            A Boolean ring; a ring where the second operation is idempotent.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasCommutativeRing`3">
+            <summary>
+            A ring where the second operation is commutative.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasIntegralDomain`3">
+            <summary>
+            A domain in which the product of two non-zero elements is also non-zero.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasGcdDomain`3">
+            <summary>
+            A domain in which every two elements have a greatest common divisor or, equivalently, a least common multiple, through an efficient algorithm for finding them might not exist.
+            See <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasUniqueFactorizationDomain`3">
+            <summary>
+            A domain in which every element can be uniquely factored into a product of prime elements.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasEuclideanDomain`3">
+            <summary>
+            A domain which has an Euclidean division-function (every two elements <c>X</c> and <c>Y</c> can be divided, resulting in <c>Divide(X,Y) = Q * Y + R</c>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasField`3">
+            <summary>
+            A domain in which both operations form commutative groups, i.e. addition, multiplication, subtraction, and division (except for zero-divisors) are defined.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasFiniteField`3">
+            <summary>
+            A field with finitely many elements.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasLattice`3">
+            <summary>
+            A lattice, having a meet- and join-operation, which are commutative, associative, idempotent, and connected via the absorption-law.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasBoundedLattice`3">
+            <summary>
+            A bounded lattice with a unique minimal and maximal element.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasDistributedLattice`3">
+            <summary>
+            A distributed latter where the join and meet distribute over each other.
+            </summary>
+            <remarks>
+            We cannot specify that the first operation should also distribute over the second
+            (in addition to the second distributing over the first) via inheriting from <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/> and <see cref="T:Nordril.Functional.Algebra.IRightDistributive`3"/> twice with <typeparamref name="TFirst"/> and <typeparamref name="TSecond"/>, since the C# forbids type parameter unification (<typeparamref name="TFirst"/> in the first instance of <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/> may be instantiated to the same type as <typeparamref name="TSecond"/> in the second instance of <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/>, etc.). One could work around this, but the workaround was considered clunky and inconvenient to users, so we consciously omit trying to model both distributive laws in favor of just one.
+            </remarks>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ILeftDistributive`3">
+            <summary>
+            Ringlike structures where the first operation left-distributes over the second, i.e.
+            <code>
+            X * (Y + Z) == (X * Y) + (X * Z)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IRightDistributive`3">
+            <summary>
+            Ringlike structures where the first operation right-distributes over the second, i.e.
+            <code>
+            (Y + Z) * X == (Y * X) + (Z * X)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IJacobi`3">
+            <summary>
+            Ringlike structures where which satisfy the Jacobi-identity, e.g.
+            <code>
+            X * (Y * Z) == (X * Y) * Z + Y * (X * Z)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IAnnihilation`3">
+            <summary>
+            Ringlike structures where the neutral element of the first operation annihiliates another element, if applied with the second operation, i.e.
+            <code>
+            0 * X = X * 0 == 0
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IAbsorbption`3">
+            <summary>
+            Ringlike structures which obey the absorption law:
+            <code>
+                X * (X + Y) == X (absorption)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IRinglike`3">
+            <summary>
+            General algebraic structures with two operations. The two operations are grouplike and there may be addition relationships between them,
+            e.g. the second operation may distribute over the first.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IRinglike`3.FirstGrouplike">
+            <summary>
+            Gets the first grouplike structure.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IRinglike`3.SecondGrouplike">
+            <summary>
+            Gets the second grouplike structure.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ISemiring`3">
+            <summary>
+            A semiring; a structure with two operations, where the first operation is a commutative monoid and the second operation is a monoid.
+            In addition, the second operation, left- and right-distributes over the first and the neutral elemenent of the first operation is annihiliating in the second operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.INearRing`3">
+            <summary>
+            A near-ring; a structure with two operations, where the first operation is a group and the second operation is a semigroup.
+            In addition, the second operation, right-distributes over the first and the neutral elemenent of the first operation.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IRing`3">
+            <summary>
+            A ring. Like a semiring, but the first operation forms a commutative group, i.e. subtraction is also defined.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IBooleanRing`3">
+            <summary>
+            A Boolean ring; a ring where the second operation is idempotent.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ICommutativeRing`3">
+            <summary>
+            A ring where the second operation is commutative.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IIntegralDomain`3">
+            <summary>
+            A domain in which the product of two non-zero elements is also non-zero.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IIntegralDomain`3.IsZero(`0)">
+            <summary>
+            Returns whether an element <c>X</c> is the neutral element of the first operation of the structure, i.e. whether it is "zero". This is a special case of the general equatability of two elements.
+            </summary>
+            <param name="x">The element to check.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IGcdDomain`3">
+            <summary>
+            A domain in which every two elements have a greatest common divisor or, equivalently, a least common multiple, through an efficient algorithm for finding them might not exist.
+            See <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IUniqueFactorizationDomain`3">
+            <summary>
+            A domain in which every element can be uniquely factored into a product of prime elements.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IEuclideanDomain`3">
+            <summary>
+            A domain which has an Euclidean division-function (every two elements <c>X</c> and <c>Y</c> can be divided, resulting in <c>Divide(X,Y) = Q * Y + R</c>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)">
+            <summary>
+            Performs Euclidean division on two elements <paramref name="x"/> and <paramref name="y"/> and returns a quotient <c>q</c> and a remainder <c>r</c> such that the following holds:
+            <code>
+                var (q, r) = r.Divide(x,y);
+                x = y * q + r
+            </code>
+            if <c>r.IsZero(y)</c> is false.
+            </summary>
+            <param name="x">The divident.</param>
+            <param name="y">The divisor.</param>
+            <example>
+            In the field of integers
+            <code>
+                r.Divide(138, 16) = (8, 10)
+            </code>
+            </example>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IField`3">
+            <summary>
+            A domain in which both operations form commutative groups, i.e. addition, multiplication, subtraction, and division (except for zero-divisors) are defined.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IFiniteField`3">
+            <summary>
+            A field with finitely many elements.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IFiniteField`3.Elements">
+            <summary>
+            Enumerates the finitely many elements of the field.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ILattice`3">
+            <summary>
+            A lattice, having a meet- and join-operation, which are commutative, associative, idempotent, and connected via the absorption-law.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IBoundedLattice`3">
+            <summary>
+            A bounded lattice with a unique minimal and maximal element.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IDistributedLattice`3">
+            <summary>
+            A distributed latter where the join and meet distribute over each other.
+            </summary>
+            <remarks>
+            We cannot specify that the first operation should also distribute over the second
+            (in addition to the second distributing over the first) via inheriting from <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/> and <see cref="T:Nordril.Functional.Algebra.IRightDistributive`3"/> twice with <typeparamref name="TFirst"/> and <typeparamref name="TSecond"/>, since the C# forbids type parameter unification (<typeparamref name="TFirst"/> in the first instance of <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/> may be instantiated to the same type as <typeparamref name="TSecond"/> in the second instance of <see cref="T:Nordril.Functional.Algebra.ILeftDistributive`3"/>, etc.). One could work around this, but the workaround was considered clunky and inconvenient to users, so we consciously omit trying to model both distributive laws in favor of just one.
+            </remarks>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Ringlike`3">
+            <summary>
+            A value-level ringlike structure.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new ringlike structure.
+            </summary>
+            <param name="first">The first grouplike structure.</param>
+            <param name="second">The second grouplike structure.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Ringlike`3.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Ringlike`3.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Ringlike">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.IRinglike`3"/>s.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Plus``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+            <summary>
+            Performs the operation of the first grouplike structure, commonly called "addition".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Mult``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+            <summary>
+            Performs the operation of the second grouplike structure, commonly called "multiplication".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Zero``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})">
+            <summary>
+            Returns the neutral element of the first grouplike structure, commonly called "zero".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.One``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})">
+            <summary>
+            Returns the neutral element of the second grouplike structure, commonly called "zero".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.NearRing`3">
+            <summary>
+            A value-level near-ring.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.NearRing`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new near-ring.
+            </summary>
+            <param name="first">The first grouplike structure.</param>
+            <param name="second">The second grouplike structure.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.NearRing`3.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.NearRing`3.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Semiring`3">
+            <summary>
+            A value-level semiring.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Semiring`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new semiring.
+            </summary>
+            <param name="first">The first grouplike structure.</param>
+            <param name="second">The second grouplike structure.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Semiring`3.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Semiring`3.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Ring`3">
+            <summary>
+            A value-level ring.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ring`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new ring.
+            </summary>
+            <param name="first">The first grouplike structure.</param>
+            <param name="second">The second grouplike structure.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Ring`3.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Ring`3.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.BooleanRing">
+            <summary>
+            Extension methods for boolean rings.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.BooleanRing.Bool">
+            <summary>
+            The boolean ring (B,XOR,&amp;&amp;,false,true).
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.BooleanRing.BoolXorRing">
+            <summary>
+            The boolean ring (B,XOR,&amp;&amp;,false,true).
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.EuclideanDomain">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/>s.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.EuclideanDomain.Integers">
+            <summary>
+            Gets the Euclidean domain of integers.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain">
+            <summary>
+            The Euclidean domain of integers.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.Divide(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.IsZero(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Mod``3(Nordril.Functional.Algebra.IEuclideanDomain{``0,``1,``2},``0,``0)">
+            <summary>
+            Performs the modulus-operation on two elements, returning the remainder of <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Gcd``3(Nordril.Functional.Algebra.IEuclideanDomain{``0,``1,``2},``0,``0)">
+            <summary>
+            Gets the greatest common divisor of two elements in a <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/> via Euclid's algorithm. The GCD of two elements <c>X</c> and <c>Y</c> is the unique minimal principal ideal.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Lcm``3(Nordril.Functional.Algebra.IEuclideanDomain{``0,``1,``2},``0,``0)">
+            <summary>
+            Gets the least common multiple of two elements in a <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/> via Euclid's algorithm. The LCDM is defined as:
+            <code>
+                r.Mult(r.Gcd(x,y), r.Lcm(x,y)) == r.Mult(x,y)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Field">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.IField`3"/>s.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Algebra.Field.Double">
+            <summary>
+            The double-field with addition and multiplication.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Field.DoubleField">
+            <summary>
+            The field of <see cref="T:System.Double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.Divide(`0,`0)"/>-function may be numerically unstable.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.DoubleField.Divide(System.Double,System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.DoubleField.IsZero(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Lattice">
+            <summary>
+            Extension methods for lattices.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Lattice.SetLattice`1">
+            <summary>
+            The set-lattice, with set-union as the meet and set-intersection as the join.
+            </summary>
+            <typeparam name="T">The type of elements in the sets.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasUnary`1">
+            <summary>
+            An algebraic structure supporting a unary operation with no further guaranteed properties.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasUnaryIdempotent`1">
+            <summary>
+            An algebraic structure with a unary operation which is idempotent.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IHasUnaryInvolution`1">
+            <summary>
+            An algebraic structure with a unary operation which is an involution, i.e.
+            <code>
+                m.UnaryOp(m.UnaryOp(X)) == X
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IUnary`1">
+            <summary>
+            An algebraic structure supporting a unary operation with no further guaranteed properties.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.IUnary`1.UnaryOp(`0)">
+            <summary>
+            The unary operation. This operation should not change its operand.
+            </summary>
+            <param name="x">The operand.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IUnaryIdempotent`1">
+            <summary>
+            An algebraic structure with a unary operation which is idempotent.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IUnaryInvolution`1">
+            <summary>
+            An algebraic structure with a unary operation which is an involution, i.e.
+            <code>
+                m.UnaryOp(m.UnaryOp(X)) == X
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Category.IAlternative`1">
             <summary>
@@ -1161,6 +2327,16 @@
             </summary>
             <typeparam name="TSource">The type of values produced by the comonad.</typeparam>
             <param name="m">The comonad to duplicate.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.ComonadExtensions.Comp``3(System.Func{Nordril.Functional.Category.IComonad{``0},``1},System.Func{Nordril.Functional.Category.IComonad{``1},``2})">
+            <summary>
+            Concatenates two comonad-functions.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult1">The intermediate result type.</typeparam>
+            <typeparam name="TResult2">The funal result type.</typeparam>
+            <param name="f">The first comonad-function.</param>
+            <param name="g">The second comonad-function.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IContravariant`1">
             <summary>
@@ -2566,6 +3742,14 @@
             </summary>
             <param name="value">The value to store in the either.</param>
         </member>
+        <member name="M:Nordril.Functional.Data.Either`2.Deconstruct(System.Boolean@,`0@,`1@)">
+            <summary>
+            Tuple deconstructor function.
+            </summary>
+            <param name="isLeft">True if this <see cref="T:Nordril.Functional.Data.Either`2"/> has a left-value, and false if it has a right-value.</param>
+            <param name="left">The left-value, if present, or <c>default</c>.</param>
+            <param name="right">The right-value, if present, or <c>default</c>.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.Either`2.SetLeft(`0)">
             <summary>
             Sets the either to a left, clearing the right, if present.
@@ -3931,6 +5115,13 @@
             <summary>
             Returns true iff the maybe does not have a value.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.Deconstruct(System.Boolean@,`0@)">
+            <summary>
+            Tuple deconstructor function.
+            </summary>
+            <param name="hasValue">Whether the value is present.</param>
+            <param name="value">The value, if present, or <c>default</c>.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Maybe`1.ClearValue">
             <summary>
