@@ -90,21 +90,55 @@ namespace Nordril.Functional.Algebra
             where TSecond : INeutralElement<T>
             => r.SecondGrouplike.Neutral;
 
+        /// <summary>
+        /// Returns the inverse element with respect to the first grouplike structure, typically called the "negation" of the element (as in subtraction).
+        /// </summary>
+        /// <typeparam name="T">The type of the carrier set.</typeparam>
+        /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+        /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        /// <param name="r">The ringlike structure.</param>
+        /// <param name="x">The element whose inverse to return.</param>
         public static T Negate<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x)
             where TFirst : IInverse<T>
             where TSecond : IMagma<T>
             => r.FirstGrouplike.Inverse(x);
 
+        /// <summary>
+        /// Applies <see cref="IMagma{T}.Op(T, T)"/> of the first grouplike structure to the first element <paramref name="x"/> and the inverse of the second element <paramref name="y"/>, equivalent to "subtraction" in the case of addition.
+        /// </summary>
+        /// <typeparam name="T">The type of the carrier set.</typeparam>
+        /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+        /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        /// <param name="r">The ringlike structure.</param>
+        /// <param name="x">The element.</param>
+        /// <param name="y">The second element whose inverse to add to the first.</param>
         public static T Minus<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x, T y)
             where TFirst : IInverse<T>
             where TSecond : IMagma<T>
             => r.FirstGrouplike.Op(x, r.FirstGrouplike.Inverse(y));
 
+        /// <summary>
+        /// Returns the inverse element with respect to the second grouplike structure, typically called the "reciprocal" of the element (as in division).
+        /// </summary>
+        /// <typeparam name="T">The type of the carrier set.</typeparam>
+        /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+        /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        /// <param name="r">The ringlike structure.</param>
+        /// <param name="x">The element whose inverse to return.</param>
         public static T Reciprocal<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x)
             where TFirst : IMagma<T>
             where TSecond : IInverse<T>
             => r.SecondGrouplike.Inverse(x);
 
+        /// <summary>
+        /// Applies <see cref="IMagma{T}.Op(T, T)"/> of the second grouplike structure to the first element <paramref name="x"/> and the inverse of the second element <paramref name="y"/>, equivalent to "division" in the case of multiplication.
+        /// </summary>
+        /// <typeparam name="T">The type of the carrier set.</typeparam>
+        /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+        /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+        /// <param name="r">The ringlike structure.</param>
+        /// <param name="x">The element.</param>
+        /// <param name="y">The second element whose inverse to add to the first.</param>
         public static T Divide<T, TFirst, TSecond>(this IRinglike<T, TFirst, TSecond> r, T x, T y)
             where TFirst : IMagma<T>
             where TSecond : IInverse<T>

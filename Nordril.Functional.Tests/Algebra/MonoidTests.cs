@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Nordril.Functional.Tests.Algebra
 {
-    public class MonoidTests
+    public static class MonoidTests
     {
         [Fact]
         public static void IntMonoidTest()

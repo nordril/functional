@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Nordril.Functional.Tests.Algebra
 {
-    public class TotalOrderTests
+    public static class TotalOrderTests
     {
         public static IEnumerable<object[]> IntInfinityTotalOrderTestData()
         {
