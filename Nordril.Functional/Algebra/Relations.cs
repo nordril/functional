@@ -166,6 +166,7 @@ namespace Nordril.Functional.Algebra
     public interface IOneToOneRelation<T1, T2>
         : IInjectiveRelation<T1, T2>
         , IFunctionalRelation<T1, T2>
+        , IExtensionalBinaryRelation<T1, T2>
     {
         /// <summary>
         /// Gets the unique left-key associated with a given right-key, if it exists.
@@ -186,8 +187,9 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
     public interface IBijectiveRelation<T1, T2>
-    : IOneToOneRelation<T1, T2>
-    , ISurjectiveRelation<T1, T2>
+        : IInjectiveRelation<T1, T2>
+        , IFunctionalRelation<T1, T2>
+        , ISurjectiveRelation<T1, T2>
     {
         /// <summary>
         /// Gets the unique left-key associated with a given right-key.

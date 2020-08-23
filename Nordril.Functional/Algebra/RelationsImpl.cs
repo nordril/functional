@@ -229,6 +229,34 @@ namespace Nordril.Functional.Algebra
     }
 
     /// <summary>
+    /// Extension methods for <see cref="IPartialOrder{T}"/>s.
+    /// </summary>
+    public static class PartialOrder
+    {
+        /// <summary>
+        /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <param name="order">The total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Leq<T>(this IPartialOrder<T> order, T x, T y)
+            => order.Contains(x, y);
+
+        /// <summary>
+        /// Creates a partial order and an equivalence relation from an <see cref="IEquatable{T}"/> type.
+        /// The resultant partial order only captures the notion of equality, not "less than", so the following might occur:
+        /// <code>
+        ///     X.CompareTo(Y) &lt; 0 != r.Leq(X,Y)
+        /// </code>
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        public static IPartialOrder<T> FromEquatable<T>()
+            where T : IEquatable<T>
+            => new PartialOrder<T>((x, y) => x.Equals(y));
+    }
+
+    /// <summary>
     /// Extension methods for <see cref="ITotalOrder{T}"/>s.
     /// </summary>
     public static class TotalOrder
@@ -242,16 +270,6 @@ namespace Nordril.Functional.Algebra
         /// <param name="y">The second element to compare.</param>
         public static bool Le<T>(this ITotalOrder<T> order, T x, T y)
             => order.Compare(x, y) < 0;
-
-        /// <summary>
-        /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
-        /// <param name="order">The total order.</param>
-        /// <param name="x">The first element to compare.</param>
-        /// <param name="y">The second element to compare.</param>
-        public static bool Leq<T>(this ITotalOrder<T> order, T x, T y)
-            => order.Compare(x, y) <= 0;
 
         /// <summary>
         /// Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
@@ -292,14 +310,6 @@ namespace Nordril.Functional.Algebra
         /// <param name="y">The second element to compare.</param>
         public static bool Ge<T>(this ITotalOrder<T> order, T x, T y)
             => order.Compare(x, y) > 0;
-
-        /// <summary>
-        /// Creates a partial order and an equivalence relation from an <see cref="IEquatable{T}"/> type.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
-        public static IPartialOrder<T> FromEquatable<T>()
-            where T : IEquatable<T>
-            => new PartialOrder<T>((x, y) => x.Equals(y));
 
         /// <summary>
         /// Creates a total order from an <see cref="IComparable{T}"/> type.

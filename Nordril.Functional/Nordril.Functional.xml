@@ -1182,6 +1182,30 @@
         <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetMaybeRight(`0)">
             <inheritdoc />
         </member>
+        <member name="T:Nordril.Functional.Algebra.PartialOrder">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.IPartialOrder`1"/>s.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder.Leq``1(Nordril.Functional.Algebra.IPartialOrder{``0},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder.FromEquatable``1">
+            <summary>
+            Creates a partial order and an equivalence relation from an <see cref="T:System.IEquatable`1"/> type.
+            The resultant partial order only captures the notion of equality, not "less than", so the following might occur:
+            <code>
+                X.CompareTo(Y) &lt; 0 != r.Leq(X,Y)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Algebra.TotalOrder">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Algebra.ITotalOrder`1"/>s.
@@ -1190,15 +1214,6 @@
         <member name="M:Nordril.Functional.Algebra.TotalOrder.Le``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
             Returns true iff <paramref name="x"/> is strictly smaller than <paramref name="y"/> in the total order <paramref name="order"/>.
-            </summary>
-            <typeparam name="T">The type of the elements in the relation.</typeparam>
-            <param name="order">The total order.</param>
-            <param name="x">The first element to compare.</param>
-            <param name="y">The second element to compare.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.Leq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
-            <summary>
-            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
             <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
@@ -1240,12 +1255,6 @@
             <param name="order">The total order.</param>
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
-        </member>
-        <member name="M:Nordril.Functional.Algebra.TotalOrder.FromEquatable``1">
-            <summary>
-            Creates a partial order and an equivalence relation from an <see cref="T:System.IEquatable`1"/> type.
-            </summary>
-            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.FromComparable``1">
             <summary>

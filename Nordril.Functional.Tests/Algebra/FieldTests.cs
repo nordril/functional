@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Nordril.Functional.Tests.Algebra
 {
-    public class FieldTests
+    public static class FieldTests
     {
         [Fact]
         public static void FieldTest()
