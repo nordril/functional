@@ -13,7 +13,7 @@ namespace Nordril.Functional.Tests.Algebra
         [Fact]
         public static void ContainsTest()
         {
-            var r = new BinaryRelation<string, int>((s, i) => s.Length == i);
+            var r = Relations.Make<string, int>((s, i) => s.Length == i);
 
             Assert.True(r.Contains("", 0));
             Assert.True(r.Contains("x", 1));
@@ -34,7 +34,7 @@ namespace Nordril.Functional.Tests.Algebra
         [InlineData(6, 3, false)]
         public static void PartialOrderTest(int x, int y, bool shouldContain)
         {
-            var r = new PartialOrder<int>((x, y) => y % x == 0);
+            var r = PartialOrder.Make<int>((x, y) => Maybe.JustIf(y >= x, () => y % x == 0));
 
             if (shouldContain)
             {
@@ -57,7 +57,7 @@ namespace Nordril.Functional.Tests.Algebra
         [InlineData(6, 3, false)]
         public static void PartialOrderPartialLeqTest(int x, int y, bool shouldContain)
         {
-            var r = new PartialOrder<int>((x, y) => Maybe.JustIf(x <= y, () => true));
+            var r = PartialOrder.Make<int>((x, y) => Maybe.JustIf(x <= y, () => true));
 
             if (shouldContain)
             {
@@ -81,7 +81,7 @@ namespace Nordril.Functional.Tests.Algebra
         [InlineData(8, 1)]
         public static void TotalOrderTest(int x, int y)
         {
-            var r = new TotalOrder<int>((x, y) => x < y ? (short)-1 : x > y ? (short)1 : (short)0);
+            var r = TotalOrder.Make<int>((x, y) => x < y ? (short)-1 : x > y ? (short)1 : (short)0);
 
             Assert.Equal(x < y, r.Le(x, y));
             Assert.Equal(x <= y, r.Leq(x, y));

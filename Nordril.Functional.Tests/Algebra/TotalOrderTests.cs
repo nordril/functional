@@ -54,7 +54,7 @@ namespace Nordril.Functional.Tests.Algebra
         [InlineData(14, 18)]
         public static void IntTotalOrderTest(int x, int y)
         {
-            var order = new TotalOrder<int>((a, b) => a <= b);
+            var order = TotalOrder.Make<int>((a, b) => a <= b);
 
             Assert.Equal(x < y, order.Le(x, y));
             Assert.Equal(x <= y, order.Leq(x, y));
@@ -66,7 +66,7 @@ namespace Nordril.Functional.Tests.Algebra
         [MemberData(nameof(IntInfinityTotalOrderTestData))]
         public static void IntInfinityTotalOrderTest(Maybe<int> x, Maybe<int> y, int expected)
         {
-            var order = new TotalOrder<int>((a, b) => a <= b).LiftTotalOrderWithInfinity();
+            var order = TotalOrder.Make<int>((a, b) => a <= b).LiftTotalOrderWithInfinity();
 
             Assert.Equal(expected < 0, order.Le(x, y));
             Assert.Equal(expected >= 0, !order.Le(x, y));

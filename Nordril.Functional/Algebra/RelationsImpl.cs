@@ -13,7 +13,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public struct BinaryRelation<T1, T2> : IBinaryRelation<T1, T2>
+    internal struct BinaryRelation<T1, T2> : IBinaryRelation<T1, T2>
     {
         private readonly Func<T1, T2, bool> contains;
 
@@ -34,7 +34,7 @@ namespace Nordril.Functional.Algebra
     /// A value-level partial order.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the relation.</typeparam>
-    public struct PartialOrder<T> : IPartialOrder<T>
+    internal struct PartialOrder<T> : IPartialOrder<T>
     {
         private readonly Func<T, T, bool> contains;
 
@@ -47,15 +47,6 @@ namespace Nordril.Functional.Algebra
             contains = (x, y) => { leqPartial(x, y).TryGetValue(false, out var res); return res; } ;
         }
 
-        /// <summary>
-        /// Creates a new partial order from a "contains"-function.
-        /// </summary>
-        /// <param name="contains">The "contains"-function.</param>
-        public PartialOrder(Func<T, T, bool> contains)
-        {
-            this.contains = contains;
-        }
-
         /// <inheritdoc />
         public bool Contains(T x, T y) => contains(x, y);
     }
@@ -64,7 +55,7 @@ namespace Nordril.Functional.Algebra
     /// A value-level total order.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the relation.</typeparam>
-    public struct TotalOrder<T> : ITotalOrder<T>
+    internal struct TotalOrder<T> : ITotalOrder<T>
     {
         private readonly Func<T, T, short> comparison;
 
@@ -101,7 +92,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of the inputs.</typeparam>
     /// <typeparam name="T2">The type of the outputs.</typeparam>
-    public struct FunctionRelation<T1, T2> : IFunctionRelation<T1, T2>
+    internal struct FunctionRelation<T1, T2> : IFunctionRelation<T1, T2>
         where T2 : IEquatable<T2>
     {
         private readonly Func<T1, T2> f;
@@ -131,7 +122,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of the inputs.</typeparam>
     /// <typeparam name="T2">The type of the outputs.</typeparam>
-    public struct OneToOneRelation<T1, T2>
+    internal struct OneToOneRelation<T1, T2>
         : IOneToOneRelation<T1, T2>
         , IExtensionalBinaryRelation<T1, T2>
         where T1 : IEquatable<T1>
@@ -150,7 +141,7 @@ namespace Nordril.Functional.Algebra
             toDict = new Dictionary<T1, T2>();
             fromDict = new Dictionary<T2, T1>();
 
-            foreach (var (k,v) in pairs)
+            foreach (var (k,v) in pairs ?? Array.Empty<KeyValuePair<T1, T2>>())
             {
                 if (toDict.ContainsKey(k))
                     throw new KeyAlreadyPresentException($"The left-key {k} occurred twice in the list of pairs.");
@@ -192,7 +183,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of the inputs.</typeparam>
     /// <typeparam name="T2">The type of the outputs.</typeparam>
-    public struct BijectiveRelation<T1, T2> : IBijectiveRelation<T1, T2>
+    internal struct BijectiveRelation<T1, T2> : IBijectiveRelation<T1, T2>
         where T2 : IEquatable<T2>
     {
         private readonly Func<T1, T2> to;
@@ -234,6 +225,14 @@ namespace Nordril.Functional.Algebra
     public static class PartialOrder
     {
         /// <summary>
+        /// Creates a new partial order from a partial "less than or equal to"-function.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <param name="leqPartial">The partial "less than or equal to"-function.</param>
+        public static IPartialOrder<T> Make<T>(Func<T, T, Maybe<bool>> leqPartial)
+            => new PartialOrder<T>(leqPartial);
+
+        /// <summary>
         /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
@@ -253,7 +252,7 @@ namespace Nordril.Functional.Algebra
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
         public static IPartialOrder<T> FromEquatable<T>()
             where T : IEquatable<T>
-            => new PartialOrder<T>((x, y) => x.Equals(y));
+            => new PartialOrder<T>((x, y) => Maybe.JustIf(x.Equals(y), () => true));
     }
 
     /// <summary>
@@ -261,6 +260,22 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     public static class TotalOrder
     {
+        /// <summary>
+        /// Creates a total order out of a comparison-function.
+        /// </summary>
+        /// <typeparam name="T">The type of elements to compare.</typeparam>
+        /// <param name="comparison">The comparison-function.</param>
+        public static ITotalOrder<T> Make<T>(Func<T, T, short> comparison)
+            => new TotalOrder<T>(comparison);
+
+        /// <summary>
+        /// Creates a total order out of a "less than or equal to"-function.
+        /// </summary>
+        /// <typeparam name="T">The type of elements to compare.</typeparam>
+        /// <param name="leq">The "less then or equal to"-function.</param>
+        public static ITotalOrder<T> Make<T>(Func<T, T, bool> leq)
+            => new TotalOrder<T>(leq);
+
         /// <summary>
         /// Returns true iff <paramref name="x"/> is strictly smaller than <paramref name="y"/> in the total order <paramref name="order"/>.
         /// </summary>
@@ -349,6 +364,15 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     public static class Relations
     {
+        /// <summary>
+        /// Creates a new intensional binary relation with no further guaranteed properties.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first elements.</typeparam>
+        /// <typeparam name="T2">The type of the second elements.</typeparam>
+        /// <param name="contains">The contains-predicate.</param>
+        public static IBinaryRelation<T1, T2> Make<T1, T2>(Func<T1, T2, bool> contains)
+            => new BinaryRelation<T1, T2>(contains);
+
         /// <summary>
         /// Returns a total function as an <see cref="IFunctionRelation{T1, T2}"/>.
         /// </summary>
