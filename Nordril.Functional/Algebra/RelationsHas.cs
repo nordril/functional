@@ -13,7 +13,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IHasReflexiveRelation<T> : IReflexiveRelation<T>
+    public interface IHasReflexiveRelation<in T> : IReflexiveRelation<T>
         where T : IHasReflexiveRelation<T>
     {
     }
@@ -25,7 +25,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IHasSymmetricRelation<T> : ISymmetricRelation<T>
+    public interface IHasSymmetricRelation<in T> : ISymmetricRelation<T>
         where T : IHasSymmetricRelation<T>
     {
     }
@@ -37,7 +37,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IHasAntisymmetricRelation<T> : IAntisymmetricRelation<T>
+    public interface IHasAntisymmetricRelation<in T> : IAntisymmetricRelation<T>
         where T : IHasAntisymmetricRelation<T>
     {
     }
@@ -49,7 +49,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IHasTransitiveRelation<T> : ITransitiveRelation<T>
+    public interface IHasTransitiveRelation<in T> : ITransitiveRelation<T>
         where T : IHasTransitiveRelation<T>
     {
     }
@@ -61,7 +61,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IHasConnexRelation<T> : IConnexRelation<T>
+    public interface IHasConnexRelation<in T> : IConnexRelation<T>
         where T : IHasConnexRelation<T>
     {
     }

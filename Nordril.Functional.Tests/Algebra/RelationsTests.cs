@@ -136,7 +136,7 @@ namespace Nordril.Functional.Tests.Algebra
                 ? Relations.AsBijective(arr)
                 : Relations.AsBijective(arr.Select(t => KeyValuePair.Create(t.Item1, t.Item2)));
 
-            Assert.Empty(r);
+            Assert.Empty(r.Elements);
 
             Assert.False(r.MaybeResult(3).HasValue);
             Assert.False(r.Contains(1, 3D));
@@ -149,7 +149,7 @@ namespace Nordril.Functional.Tests.Algebra
                 ? Relations.AsBijective(arr)
                 : Relations.AsBijective(arr.Select(t => KeyValuePair.Create(t.Item1, t.Item2)));
 
-            Assert.Equal(new (int, double)[] { (1, 2D) }, r);
+            Assert.Equal(new (int, double)[] { (1, 2D) }, r.Elements);
 
             Assert.True(r.MaybeResult(1).HasValue);
             Assert.Equal(2D, r.MaybeResult(1).Value());
@@ -169,7 +169,7 @@ namespace Nordril.Functional.Tests.Algebra
                 ? Relations.AsBijective(arr)
                 : Relations.AsBijective(arr.Select(t => KeyValuePair.Create(t.Item1, t.Item2)));
 
-            Assert.Equal(new (int, double)[] { (1, 2D), (2,4D), (3,6D) }, r.OrderBy(x => x.Item1));
+            Assert.Equal(new (int, double)[] { (1, 2D), (2,4D), (3,6D) }, r.Elements.OrderBy(x => x.Item1));
 
             Assert.True(r.MaybeResult(1).HasValue);
             Assert.Equal(2D, r.MaybeResult(1).Value());
@@ -270,6 +270,62 @@ namespace Nordril.Functional.Tests.Algebra
             Assert.Equal(0, f(""));
             Assert.Equal(1, f("x"));
             Assert.Equal(4, f("xfha"));
+        }
+
+        [Fact]
+        public static void DictionaryRelationTest()
+        {
+            var r = Relations.AsRelation(new Dictionary<string, int>());
+
+            Assert.Empty(r);
+            Assert.Equal(0, r.Count);
+            Assert.False(r.Contains("", 0));
+            Assert.False(r.ContainsKey(""));
+            Assert.Empty(r.Keys);
+            Assert.Empty(r.Values);
+            Assert.False(r.MaybeResult("").HasValue);
+            Assert.False(r.TryGetValue("", out var value));
+            Assert.Equal(0, value);
+            Assert.Throws<KeyNotFoundException>(() => r[""]);
+
+            r = Relations.AsRelation(new Dictionary<string, int> {
+                { "ab", 2 },
+                { "hello", 5 },
+                { "xyz", 3 },
+                { "abc", 3 }
+            });
+
+            Assert.NotEmpty(r);
+            Assert.Equal(4, r.Count);
+
+            Assert.False(r.Contains("", 0));
+            Assert.False(r.Contains("xyz", 4));
+            Assert.False(r.Contains("ab", 3));
+            Assert.True(r.Contains("xyz", 3));
+
+            Assert.False(r.ContainsKey(""));
+            Assert.True(r.ContainsKey("hello"));
+
+            Assert.Equal(new string[] { "ab", "abc", "hello", "xyz" }, r.Keys.OrderBy(k => k));
+            Assert.Equal(new int[] {2,3,3,5 }, r.Values.OrderBy(v => v));
+
+            Assert.False(r.MaybeResult("").HasValue);
+            Assert.False(r.MaybeResult("xxx").HasValue);
+            Assert.True(r.MaybeResult("ab").HasValue);
+            Assert.Equal(2, r.MaybeResult("ab").Value());
+
+            Assert.False(r.TryGetValue("", out value));
+            Assert.Equal(0, value);
+            Assert.True(r.TryGetValue("hello", out value));
+            Assert.Equal(5, value);
+            Assert.True(r.TryGetValue("xyz", out value));
+            Assert.Equal(3, value);
+            Assert.False(r.TryGetValue("xxx", out value));
+            Assert.Equal(0, value);
+
+            Assert.Throws<KeyNotFoundException>(() => r[""]);
+            Assert.Throws<KeyNotFoundException>(() => r["xxx"]);
+            Assert.Equal(3, r["xyz"]);
         }
     }
 }

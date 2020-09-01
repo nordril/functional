@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -174,8 +175,7 @@ namespace Nordril.Functional.Algebra
         /// <inheritdoc />
         public Maybe<T2> MaybeResult(T1 x) => GetMaybeRight(x);
 
-        IEnumerator IEnumerable.GetEnumerator()
-            => toDict.Select(kv => (kv.Key, kv.Value)).GetEnumerator();
+        public IEnumerable<(T1, T2)> Elements => toDict.Select(kv => (kv.Key, kv.Value));
     }
 
     /// <summary>
@@ -217,6 +217,63 @@ namespace Nordril.Functional.Algebra
 
         /// <inheritdoc />
         public Maybe<T2> GetMaybeRight(T1 x) => Maybe.Just(to(x));
+    }
+
+    /// <summary>
+    /// A value-level dictionary-relation.
+    /// </summary>
+    /// <typeparam name="T1">The type of the keys.</typeparam>
+    /// <typeparam name="T2">The type of the values.</typeparam>
+    internal struct DictionaryRelation<T1, T2> : IDictionaryRelation<T1, T2>
+        where T1 : IEquatable<T1>
+        where T2 : IEquatable<T2>
+    {
+        private readonly IDictionary<T1, T2> dict;
+
+        public DictionaryRelation(IDictionary<T1, T2> dict)
+        {
+            this.dict = dict.ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
+
+        /// <inheritdoc />
+        public T2 this[T1 key] => dict[key];
+
+        /// <inheritdoc />
+        public IEnumerable<T1> Keys => dict.Keys;
+
+        /// <inheritdoc />
+        public IEnumerable<T2> Values => dict.Values;
+
+        /// <inheritdoc />
+        public int Count => dict.Count;
+
+        /// <inheritdoc />
+        public bool Contains(T1 x, T2 y)
+            => dict.TryGetValue(x, out var value) && value.Equals(y);
+
+        /// <inheritdoc />
+        public bool ContainsKey(T1 key)
+            => dict.ContainsKey(key);
+
+        /// <inheritdoc />
+        public Maybe<T2> MaybeResult(T1 x)
+            => Maybe.JustIf(dict.TryGetValue(x, out var value), () => value);
+
+        /// <inheritdoc />
+        public bool TryGetValue(T1 key, out T2 value)
+            => dict.TryGetValue(key, out value);
+
+        /// <inheritdoc />
+        IEnumerator<KeyValuePair<T1, T2>> IEnumerable<KeyValuePair<T1, T2>>.GetEnumerator()
+            => dict.GetEnumerator();
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator()
+            => dict.GetEnumerator();
+
+        /// <inheritdoc />
+        public IEnumerable<(T1, T2)> Elements
+            => dict.Select(kv => (kv.Key, kv.Value));
     }
 
     /// <summary>
@@ -382,6 +439,18 @@ namespace Nordril.Functional.Algebra
         public static IFunctionRelation<T1, T2> AsRelation<T1, T2>(Func<T1, T2> f)
             where T2 : IEquatable<T2>
             => new FunctionRelation<T1, T2>(f);
+
+        /// <summary>
+        /// Returns an <see cref="IDictionaryRelation{T1, T2}"/> from an <see cref="IDictionary{TKey, TValue}"/>.
+        /// </summary>
+        /// <typeparam name="T1">The type of the keys.</typeparam>
+        /// <typeparam name="T2">The type of the values.</typeparam>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static IDictionaryRelation<T1, T2> AsRelation<T1, T2>(IDictionary<T1, T2> dict)
+            where T1 : IEquatable<T1>
+            where T2 : IEquatable<T2>
+            => new DictionaryRelation<T1, T2>(dict);
 
         /// <summary>
         /// Returns an <see cref="IFunctionRelation{T1, T2}"/> as a total function.

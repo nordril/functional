@@ -808,6 +808,11 @@
             <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
             <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
         </member>
+        <member name="P:Nordril.Functional.Algebra.IExtensionalBinaryRelation`2.Elements">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/>, listing the relation's elements.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Algebra.IReflexiveRelation`1">
             <summary>
             A reflexive relation, for which the following holds:
@@ -907,7 +912,7 @@
                 r.Contains(X,Y) or r.Contains(Y,X) (connex)
             </code>
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.IOneToOneRelation`2">
             <summary>
@@ -959,6 +964,13 @@
             Returns the output associated with the input <paramref name="x"/>.
             </summary>
             <param name="x">The input.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IDictionaryRelation`2">
+            <summary>
+            A relation that has the semantics of a read-only dictionary: functional and extensible.
+            </summary>
+            <typeparam name="T1">The type of the inputs.</typeparam>
+            <typeparam name="T2">The type of the outputs.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.IPartialOrder`1">
             <summary>
@@ -1176,6 +1188,46 @@
         <member name="M:Nordril.Functional.Algebra.BijectiveRelation`2.GetMaybeRight(`0)">
             <inheritdoc />
         </member>
+        <member name="T:Nordril.Functional.Algebra.DictionaryRelation`2">
+            <summary>
+            A value-level dictionary-relation.
+            </summary>
+            <typeparam name="T1">The type of the keys.</typeparam>
+            <typeparam name="T2">The type of the values.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.DictionaryRelation`2.Item(`0)">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.DictionaryRelation`2.Keys">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.DictionaryRelation`2.Values">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.DictionaryRelation`2.Count">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.Contains(`0,`1)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.ContainsKey(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.MaybeResult(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.TryGetValue(`0,`1@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.System#Collections#Generic#IEnumerable{System#Collections#Generic#KeyValuePair{T1,T2}}#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.DictionaryRelation`2.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.DictionaryRelation`2.Elements">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Algebra.PartialOrder">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Algebra.IPartialOrder`1"/>s.
@@ -1304,6 +1356,15 @@
             <typeparam name="T1">The type of the input.</typeparam>
             <typeparam name="T2">The type of the output.</typeparam>
             <param name="f">The function to transform into a relation.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Relations.AsRelation``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Returns an <see cref="T:Nordril.Functional.Algebra.IDictionaryRelation`2"/> from an <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <typeparam name="T1">The type of the keys.</typeparam>
+            <typeparam name="T2">The type of the values.</typeparam>
+            <param name="dict"></param>
+            <returns></returns>
         </member>
         <member name="M:Nordril.Functional.Algebra.Relations.FromRelation``2(Nordril.Functional.Algebra.IFunctionRelation{``0,``1})">
             <summary>

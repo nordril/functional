@@ -10,7 +10,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public interface IBinaryRelation<T1, T2>
+    public interface IBinaryRelation<in T1, in T2>
     {
         /// <summary>
         /// Returns true iff two elements occur as a pair in the relation.
@@ -28,8 +28,11 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
     public interface IExtensionalBinaryRelation<T1, T2>
         : IBinaryRelation<T1, T2>
-        , IEnumerable<(T1, T2)>
     {
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{T}"/>, listing the relation's elements.
+        /// </summary>
+        IEnumerable<(T1, T2)> Elements { get; }
     }
 
     #region Single properties
@@ -40,7 +43,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IReflexiveRelation<T> : IBinaryRelation<T, T>
+    public interface IReflexiveRelation<in T> : IBinaryRelation<T, T>
     {
     }
 
@@ -51,7 +54,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface ISymmetricRelation<T> : IBinaryRelation<T, T>
+    public interface ISymmetricRelation<in T> : IBinaryRelation<T, T>
     {
     }
 
@@ -62,7 +65,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface IAntisymmetricRelation<T> : IBinaryRelation<T, T>
+    public interface IAntisymmetricRelation<in T> : IBinaryRelation<T, T>
     {
     }
 
@@ -73,7 +76,7 @@ namespace Nordril.Functional.Algebra
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of elements contained in the relation.</typeparam>
-    public interface ITransitiveRelation<T> : IBinaryRelation<T, T>
+    public interface ITransitiveRelation<in T> : IBinaryRelation<T, T>
     {
     }
 
@@ -85,7 +88,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public interface ITotalRelation<T1, T2>
+    public interface ITotalRelation<in T1, in T2>
         : ISerialRelation<T1, T2>
         , ISurjectiveRelation<T1, T2>
     {
@@ -99,7 +102,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public interface IInjectiveRelation<T1, T2> : IBinaryRelation<T1, T2>
+    public interface IInjectiveRelation<in T1, in T2> : IBinaryRelation<T1, T2>
     {
     }
 
@@ -111,7 +114,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public interface ISurjectiveRelation<T1, T2> : IBinaryRelation<T1, T2>
+    public interface ISurjectiveRelation<in T1, in T2> : IBinaryRelation<T1, T2>
     {
     }
 
@@ -140,7 +143,7 @@ namespace Nordril.Functional.Algebra
     /// </summary>
     /// <typeparam name="T1">The type of first elements contained in the relation.</typeparam>
     /// <typeparam name="T2">The type of second elements contained in the relation.</typeparam>
-    public interface ISerialRelation<T1, T2> : IBinaryRelation<T1, T2>
+    public interface ISerialRelation<in T1, in T2> : IBinaryRelation<T1, T2>
     {
     }
 
@@ -150,8 +153,8 @@ namespace Nordril.Functional.Algebra
     ///     r.Contains(X,Y) or r.Contains(Y,X) (connex)
     /// </code>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IConnexRelation<T> : IBinaryRelation<T, T>
+    /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+    public interface IConnexRelation<in T> : IBinaryRelation<T, T>
     {
     }
     #endregion
@@ -219,6 +222,18 @@ namespace Nordril.Functional.Algebra
         /// </summary>
         /// <param name="x">The input.</param>
         T2 Result(T1 x);
+    }
+
+    /// <summary>
+    /// A relation that has the semantics of a read-only dictionary: functional and extensible.
+    /// </summary>
+    /// <typeparam name="T1">The type of the inputs.</typeparam>
+    /// <typeparam name="T2">The type of the outputs.</typeparam>
+    public interface IDictionaryRelation<T1, T2>
+        : IFunctionalRelation<T1, T2>
+        , IExtensionalBinaryRelation<T1, T2>
+        , IReadOnlyDictionary<T1, T2>
+    {
     }
 
     /// <summary>
