@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional
 {
@@ -52,6 +53,28 @@ namespace Nordril.Functional
 
             foreach (var x in stack)
                 acc = f(x, acc);
+
+            return acc;
+        }
+
+        /// <summary>
+        /// The async-version of <see cref="AggregateRight{T, TResult}(IEnumerable{T}, Func{T, TResult, TResult}, TResult)"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the result/accumulator.</typeparam>
+        /// <param name="xs">The sequence to aggregate.</param>
+        /// <param name="acc">The accumulator.</param>
+        /// <param name="f">The combining function.</param>
+        public static async Task<TResult> AggregateRightAsync<T, TResult>(
+            this IEnumerable<T> xs, Func<T, TResult, Task<TResult>> f, TResult acc)
+        {
+            var stack = new Stack<T>();
+
+            foreach (var x in xs)
+                stack.Push(x);
+
+            foreach (var x in stack)
+                acc = await f(x, acc);
 
             return acc;
         }

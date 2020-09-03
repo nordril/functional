@@ -2324,6 +2324,19 @@
             <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
+        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.WhereApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <summary>
+            The async-version of <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.WhereAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TPredicate">The applicate-type of the predicate.</typeparam>
+            <typeparam name="TResult">The applicative-type of the result. This should agree with <typeparamref name="TPredicate"/>.</typeparam>
+            <param name="xs">The sequence to filter.</param>
+            <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
+            <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        </member>
         <member name="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})">
             <summary>
             An applicative/monadic <see cref="M:System.Linq.Enumerable.Select``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/> operation. If the applicative is <see cref="T:Nordril.Functional.Data.Identity`1"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
@@ -2337,6 +2350,19 @@
                 
                 //result: [1,2,3], [1,2,-3], [1,-2,3], [1,-2,-3], [-1,2,3], [-1,2,-3], [-1,-2,3], [-1,-2,-3]
             </example>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <typeparam name="TResult">The type of the result-elements.</typeparam>
+            <typeparam name="TResultList">The applicative-type of the result. This should agree with <typeparamref name="TResult"/></typeparam>
+            <param name="xs">The sequence to filter.</param>
+            <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
+            <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.SelectApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Category.IApplicative{``1}}})">
+            <summary>
+            The async-version of <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>
+            </summary>
             <typeparam name="T">The type of elements in the sequence.</typeparam>
             <typeparam name="TResult">The type of the result-elements.</typeparam>
             <typeparam name="TResultList">The applicative-type of the result. This should agree with <typeparamref name="TResult"/></typeparam>
@@ -2992,6 +3018,16 @@
                 for instance
                 {1, 2, 3, 4}.AggregateRight(0, (x, acc) =&gt; x + acc = 1 + (2 + (3 + (4 + 0)))
             </code>
+            </summary>
+            <typeparam name="T">The type of element in the sequence.</typeparam>
+            <typeparam name="TResult">The type of the result/accumulator.</typeparam>
+            <param name="xs">The sequence to aggregate.</param>
+            <param name="acc">The accumulator.</param>
+            <param name="f">The combining function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.AggregateRightAsync``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1,System.Threading.Tasks.Task{``1}},``1)">
+            <summary>
+            The async-version of <see cref="M:Nordril.Functional.CollectionExtensions.AggregateRight``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1,``1},``1)"/>.
             </summary>
             <typeparam name="T">The type of element in the sequence.</typeparam>
             <typeparam name="TResult">The type of the result/accumulator.</typeparam>

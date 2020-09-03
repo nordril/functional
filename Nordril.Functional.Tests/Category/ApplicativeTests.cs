@@ -2,6 +2,7 @@
 using Nordril.Functional.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Nordril.Functional.Tests.Category
@@ -66,10 +67,35 @@ namespace Nordril.Functional.Tests.Category
         }
 
         [Theory]
+        [MemberData(nameof(WhereApForListsData))]
+        public async static void WhereApAsyncForLists(IEnumerable<int> input, IEnumerable<IEnumerable<int>> output)
+        {
+            var res = (await input.WhereApAsync<int, FuncList<bool>, FuncList<IEnumerable<int>>>(async _ => { await Task.Delay(500); return FuncList.Make(false, true); }))
+                .Select(x => string.Join(',', x)).ToHashSet();
+
+            var outputSet = output.Select(x => string.Join(',', x)).ToHashSet();
+
+            Assert.Equal(outputSet, res);
+        }
+
+        [Theory]
         [MemberData(nameof(SelectApForListsData))]
         public static void SelectApForLists(IEnumerable<int> input, IEnumerable<IEnumerable<int>> output)
         {
             var res = input.SelectAp<int, int, FuncList<IEnumerable<int>>>(x => FuncList.Make(x, x*(-1)))
+                .ToFuncList()
+                .Select(x => string.Join(',', x)).ToHashSet();
+
+            var outputSet = output.Select(x => string.Join(',', x)).ToHashSet();
+
+            Assert.Equal(outputSet, res);
+        }
+
+        [Theory]
+        [MemberData(nameof(SelectApForListsData))]
+        public async static void SelectApAsyncForLists(IEnumerable<int> input, IEnumerable<IEnumerable<int>> output)
+        {
+            var res = (await input.SelectApAsync<int, int, FuncList<IEnumerable<int>>>(async x => { await Task.Delay(500); return FuncList.Make(x, x * (-1)); }))
                 .ToFuncList()
                 .Select(x => string.Join(',', x)).ToHashSet();
 

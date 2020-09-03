@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Category
 {
@@ -182,7 +183,8 @@ namespace Nordril.Functional.Category
         /// <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
         /// <exception cref="NullReferenceException">If the applicative in question does not implement <see cref="Pure{TSource, TResult}(TSource)"/> correctly and uses the this-pointer.</exception>
         /// <exception cref="InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
-        public static TResult WhereAp<T, TPredicate, TResult>(this IEnumerable<T> xs, Func<T, TPredicate> f)
+        public static TResult WhereAp<T, TPredicate, TResult>(
+            this IEnumerable<T> xs, Func<T, TPredicate> f)
             where TPredicate : IApplicative<bool>
             where TResult : IApplicative<IEnumerable<T>>
         {
@@ -197,6 +199,35 @@ namespace Nordril.Functional.Category
             //Iterate through the sequence, unpacking, at each step, the accumulated list and the result of the predicate,
             //and either adding or not adding the current element.
             return xs.AggregateRight((x, acc) => (TResult)f(x).Ap(acc.Map(g(x)) as IApplicative<Func<bool, IEnumerable<T>>>), pure);
+        }
+
+        /// <summary>
+        /// The async-version of <see cref="WhereAp{T, TPredicate, TResult}(IEnumerable{T}, Func{T, TPredicate})"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TPredicate">The applicate-type of the predicate.</typeparam>
+        /// <typeparam name="TResult">The applicative-type of the result. This should agree with <typeparamref name="TPredicate"/>.</typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
+        /// <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
+        /// <exception cref="NullReferenceException">If the applicative in question does not implement <see cref="Pure{TSource, TResult}(TSource)"/> correctly and uses the this-pointer.</exception>
+        /// <exception cref="InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        public static async Task<TResult> WhereApAsync<T, TPredicate, TResult>(
+            this IEnumerable<T> xs, Func<T, Task<TPredicate>> f)
+            where TPredicate : IApplicative<bool>
+            where TResult : IApplicative<IEnumerable<T>>
+        {
+            var pure = new List<T>().PureUnsafe<IEnumerable<T>, TResult>();
+
+            Func<IEnumerable<T>, Func<bool, IEnumerable<T>>> g(T x) => acc => flag => flag ? acc.Prepend(x) : acc;
+
+            return await xs.AggregateRightAsync(async (x, acc) =>
+            {
+                var gacc = acc.Map(g(x)) as IApplicative<Func<bool, IEnumerable<T>>>;
+                var fRes = await f(x);
+
+                return (TResult)fRes.Ap(gacc);
+            }, pure);
         }
 
         /// <summary>
@@ -238,6 +269,38 @@ namespace Nordril.Functional.Category
             }
 
             return go(xs);
+        }
+
+        /// <summary>
+        /// The async-version of <see cref="SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the result-elements.</typeparam>
+        /// <typeparam name="TResultList">The applicative-type of the result. This should agree with <typeparamref name="TResult"/></typeparam>
+        /// <param name="xs">The sequence to filter.</param>
+        /// <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
+        /// <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
+        /// <exception cref="NullReferenceException">If the applicative in question does not implement <see cref="Pure{TSource, TResult}(TSource)"/> correctly and uses the this-pointer.</exception>
+        /// <exception cref="InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        public static async Task<IApplicative<IEnumerable<TResult>>> SelectApAsync<T, TResult, TResultList>(this IEnumerable<T> xs, Func<T, Task<IApplicative<TResult>>> f)
+            where TResultList : IApplicative<IEnumerable<TResult>>
+        {
+            //The empty list as the base case.
+            var pure = new List<TResult>().PureUnsafe<IEnumerable<TResult>, TResultList>();
+
+            //The applicative-lifted prepend-function.
+            Func<TResult, IEnumerable<TResult>, IEnumerable<TResult>> prepend = (a, b) => b.Prepend(a);
+            var prependAp = prepend.LiftA();
+
+            async Task<TResultList> go(IEnumerable<T> ys)
+            {
+                if (ys.Empty())
+                    return pure;
+                else
+                    return (TResultList)prependAp(await f(ys.First()), await go(ys.Skip(1)));
+            }
+
+            return await go(xs);
         }
     }
 }
