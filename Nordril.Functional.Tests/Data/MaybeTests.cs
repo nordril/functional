@@ -2,6 +2,7 @@
 using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Nordril.Functional.Tests.Data
@@ -213,6 +214,17 @@ namespace Nordril.Functional.Tests.Data
         }
 
         [Fact]
+        public static async Task MapAsyncTest()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = Maybe.Just(5);
+
+            Assert.True((await x.MapAsync(async i => await Task.FromResult(i * 2))).ToMaybe().IsNothing);
+            Assert.True((await y.MapAsync(async i => await Task.FromResult(i * 2))).ToMaybe().HasValue);
+            Assert.Equal(10, (await y.MapAsync(async i => await Task.FromResult(i * 2))).ToMaybe().Value());
+        }
+
+        [Fact]
         public static void PureWrapsValue()
         {
             var x = Maybe.Nothing<int>();
@@ -220,6 +232,51 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.False(x.HasValue);
             Assert.Equal(9, y.Value());
+        }
+
+        [Fact]
+        public static async Task PureAsyncWrapsValue()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = (await x.PureAsync(async () => await Task.FromResult(9))).ToMaybe();
+
+            Assert.False(x.HasValue);
+            Assert.Equal(9, y.Value());
+        }
+
+        [Fact]
+        public static async Task BindAsyncAppliesFunction()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = Maybe.Just(5);
+
+            async Task<IAsyncMonad<int>> f(int z) => await Task.FromResult(Maybe.Nothing<int>());
+            async Task<IAsyncMonad<int>> g(int z) => await Task.FromResult(Maybe.Just(z * 2));
+
+            Assert.True((await x.BindAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await y.BindAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await x.BindAsync(g)).ToMaybe().IsNothing);
+            Assert.True((await y.BindAsync(g)).ToMaybe().HasValue);
+            Assert.Equal(5, y.Value());
+            Assert.Equal(10, (await y.BindAsync(g)).ToMaybe().Value());
+        }
+
+        [Fact]
+        public static async Task ApAsyncAppliesFunction()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = Maybe.Just(5);
+
+            var f = Maybe.Nothing<Func<int, Task<bool>>>();
+            var g = Maybe.Just<Func<int, Task<bool>>>(async i => await Task.FromResult(i % 2 == 0));
+
+            Assert.True((await x.ApAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await x.ApAsync(g)).ToMaybe().IsNothing);
+            Assert.True((await y.ApAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await y.ApAsync(g)).ToMaybe().HasValue);
+
+            Assert.Equal(5, y.Value());
+            Assert.False((await y.ApAsync(g)).ToMaybe().Value());
         }
 
         [Theory]

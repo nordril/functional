@@ -3,6 +3,7 @@ using Nordril.Functional.Mapping;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
 {
@@ -10,7 +11,12 @@ namespace Nordril.Functional.Data
     /// An optional type that works for both reference and value types.
     /// Also known as "Option". Available as a data-source in LINQ-queries.
     /// </summary>
-    public struct Maybe<T> : IMonadPlus<T>, IAlternative<T>, IEquatable<Maybe<T>>, IEnumerable<T>
+    public struct Maybe<T>
+        : IMonadPlus<T>
+        , IAlternative<T>
+        , IEquatable<Maybe<T>>
+        , IEnumerable<T>
+        , IAsyncMonad<T>
     {
         private T value;
 
@@ -176,6 +182,29 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => HasValue ? Maybe<TResult>.Just(f(value)) : Maybe<TResult>.Nothing();
+
+        /// <inheritdoc />
+        public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
+            => HasValue? await f(value) : Maybe<TResult>.Nothing();
+
+        /// <inheritdoc />
+        public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
+            => Maybe<TResult>.Just(await x());
+
+        /// <inheritdoc />
+        public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
+        {
+            if (f == null || !(f is Maybe<Func<T, Task<TResult>>>))
+                throw new InvalidCastException();
+
+            var fMaybe = (Maybe<Func<T, Task<TResult>>>)f;
+
+            return (HasValue && fMaybe.HasValue) ? Maybe<TResult>.Just(await fMaybe.Value()(value)) : Maybe<TResult>.Nothing();
+        }
+
+        /// <inheritdoc />
+        public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
+            => HasValue ? Maybe<TResult>.Just(await f(value)) : Maybe<TResult>.Nothing();
 
         /// <summary>
         /// Returns <see cref="Maybe.Nothing{T}"/>.

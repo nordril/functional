@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
 {
@@ -13,7 +14,12 @@ namespace Nordril.Functional.Data
     /// </summary>
     /// <typeparam name="TLeft">The type of the left value in the either.</typeparam>
     /// <typeparam name="TRight">The type of the right value in the either.</typeparam>
-    public struct Either<TLeft, TRight> : IMonad<TRight>, IBifunctor<TLeft, TRight>, IEquatable<Either<TLeft, TRight>>, IEnumerable<TRight>
+    public struct Either<TLeft, TRight> 
+        : IMonad<TRight>
+        , IBifunctor<TLeft, TRight>
+        , IEquatable<Either<TLeft, TRight>>
+        , IEnumerable<TRight>
+        , IAsyncMonad<TRight>
     {
         private EitherTag discriminator;
         private TLeft left;
@@ -223,7 +229,34 @@ namespace Nordril.Functional.Data
             => IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left) : new Either<TLeft, TResult>(default, f(right), EitherTag.Right);
 
         /// <inheritdoc />
-        public IApplicative<TResult> Pure<TResult>(TResult x) => new Either<Unit, TResult>(new Unit(), x, EitherTag.Right);
+        public IApplicative<TResult> Pure<TResult>(TResult x) 
+            => new Either<Unit, TResult>(new Unit(), x, EitherTag.Right);
+
+        /// <inheritdoc />
+        public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<TRight, Task<IAsyncMonad<TResult>>> f)
+            => IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left)
+            : await f(right);
+
+        /// <inheritdoc />
+        public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
+            => new Either<Unit, TResult>(new Unit(), await x(), EitherTag.Right);
+
+        /// <inheritdoc />
+        public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<TRight, Task<TResult>>> f)
+        {
+            if (f == null || !(f is Either<TLeft, Func<TRight, Task<TResult>>>))
+                throw new InvalidCastException();
+
+            var fEither = (Either<TLeft, Func<TRight, Task<TResult>>>)f;
+
+            return IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left)
+                : fEither.IsLeft ? new Either<TLeft, TResult>(fEither.left, default, EitherTag.Left)
+                : new Either<TLeft, TResult>(default, await fEither.right(right), EitherTag.Right);
+        }
+
+        /// <inheritdoc />
+        public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<TRight, Task<TResult>> f)
+            => IsLeft ? new Either<TLeft, TResult>(left, default, EitherTag.Left) : new Either<TLeft, TResult>(default, await f(right), EitherTag.Right);
 
         /// <inheritdoc />
         public IEnumerator<TRight> GetEnumerator()
