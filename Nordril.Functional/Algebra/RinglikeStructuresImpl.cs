@@ -375,6 +375,11 @@ namespace Nordril.Functional.Algebra
         public static DoubleField Double = new DoubleField();
 
         /// <summary>
+        /// The decimal-field with addition and multiplication.
+        /// </summary>
+        public static DecimalField Decimal = new DecimalField();
+
+        /// <summary>
         /// The field of <see cref="double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="IEuclideanDomain{T, TFirst, TSecond}.EuclideanDivide(T, T)"/>-function may be numerically unstable.
         /// </summary>
         public class DoubleField : IField<double, Group.DoubleAddGroup, Group.DoubleMultGroup>
@@ -395,6 +400,73 @@ namespace Nordril.Functional.Algebra
 
             /// <inheritdoc />
             public bool IsZero(double x) => Equals(x, 0D);
+        }
+
+        /// <summary>
+        /// The field of <see cref="decimal"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="IEuclideanDomain{T, TFirst, TSecond}.EuclideanDivide(T, T)"/>-function may be numerically unstable.
+        /// </summary>
+        public class DecimalField : IField<decimal, Group.DecimalAddGroup, Group.DecimalMultGroup>
+        {
+            /// <inheritdoc />
+            public Group.DecimalAddGroup FirstGrouplike => Group.DecimalAdd;
+
+            /// <inheritdoc />
+            public Group.DecimalMultGroup SecondGrouplike => Group.DecimalMult;
+
+            /// <inheritdoc />
+            public (decimal quotient, decimal remainder) EuclideanDivide(decimal x, decimal y)
+            {
+                var q = Math.Floor(x / y);
+                var r = x - q * y;
+                return (q, r);
+            }
+
+            /// <inheritdoc />
+            public bool IsZero(decimal x) => Equals(x, 0M);
+        }
+
+        /// <summary>
+        /// Computes the average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="CollectionExtensions.AverageIterative(IEnumerable{double})"/>-family of functions. The average of the empty sequence is defined as <see cref="Ringlike.Zero{T, TFirst, TSecond}(IRinglike{T, TFirst, TSecond})"/>.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        /// <param name="field">The field whose operations to use.</param>
+        public static T Average<T, TFirst, TSecond>(this IEnumerable<T> xs, IField<T, TFirst, TSecond> field)
+            where TFirst : ICommutativeGroup<T>
+            where TSecond : ICommutativeGroup<T>
+        {
+            var avg = field.Zero();
+            var one = field.One();
+
+            foreach (var (x, i) in xs.ZipWithStream(one, i => field.Plus(i, one)))
+            {
+                avg = field.Plus(avg, field.Divide(field.Minus(x, avg), i));
+            }
+
+            return avg;
+        }
+
+        /// <summary>
+        /// Computes the weighted average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="CollectionExtensions.AverageIterative(IEnumerable{double})"/>-family of functions. The average of the empty sequence is defined as <see cref="Ringlike.Zero{T, TFirst, TSecond}(IRinglike{T, TFirst, TSecond})"/>.
+        /// </summary>
+        /// <param name="xs">The sequence to traverse.</param>
+        /// <param name="field">The field whose operations to use.</param>
+        public static T WeightedAverage<T, TFirst, TSecond>(this IEnumerable<(T elem, T weight)> xs, IField<T, TFirst, TSecond> field)
+            where TFirst : ICommutativeGroup<T>
+            where TSecond : ICommutativeGroup<T>
+        {
+            var avg = field.Zero();
+            var totalWeight = field.Zero();
+
+            foreach (var (x, weight) in xs)
+            {
+                var newWeight = field.Plus(totalWeight, weight);
+                var weighted = field.Mult(x, weight);
+
+                avg = field.Divide(field.Plus(field.Mult(avg, totalWeight), weighted), newWeight);
+                totalWeight = newWeight;
+            }
+
+            return avg;
         }
     }
     #endregion

@@ -2061,6 +2061,11 @@
             The double-field with addition and multiplication.
             </summary>
         </member>
+        <member name="F:Nordril.Functional.Algebra.Field.Decimal">
+            <summary>
+            The decimal-field with addition and multiplication.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Algebra.Field.DoubleField">
             <summary>
             The field of <see cref="T:System.Double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>-function may be numerically unstable.
@@ -2077,6 +2082,37 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.Field.DoubleField.IsZero(System.Double)">
             <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Field.DecimalField">
+            <summary>
+            The field of <see cref="T:System.Decimal"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>-function may be numerically unstable.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.FirstGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.SecondGrouplike">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.DecimalField.EuclideanDivide(System.Decimal,System.Decimal)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.DecimalField.IsZero(System.Decimal)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.Average``3(System.Collections.Generic.IEnumerable{``0},Nordril.Functional.Algebra.IField{``0,``1,``2})">
+            <summary>
+            Computes the average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})"/>.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+            <param name="field">The field whose operations to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.WeightedAverage``3(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``0}},Nordril.Functional.Algebra.IField{``0,``1,``2})">
+            <summary>
+            Computes the weighted average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})"/>.
+            </summary>
+            <param name="xs">The sequence to traverse.</param>
+            <param name="field">The field whose operations to use.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.Lattice">
             <summary>
