@@ -4199,6 +4199,52 @@
             The tag's singleton value.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Data.Eq">
+            <summary>
+            Lifting to structural equality.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq.Make``1(``0,System.Func{``0,``0,System.Boolean})">
+            <summary>
+            Creates an <see cref="T:System.IEquatable`1"/> out of a value and an equality comparison function.
+            </summary>
+            <typeparam name="T">The type of the value to wrap.</typeparam>
+            <param name="value">The value to wrap.</param>
+            <param name="equals">The equality comparison function.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Eq`1">
+            <summary>
+            An <see cref="T:System.IEquatable`1"/>-wrapper around a type.
+            </summary>
+            <typeparam name="T">The type of the wrapped element.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Eq`1.Value">
+            <summary>
+            Gets the underlying value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.#ctor(`0,System.Func{`0,`0,System.Boolean})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="value">The underlying value.</param>
+            <param name="equals">The equality comparison function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.Equals(Nordril.Functional.Data.Eq{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.op_Equality(Nordril.Functional.Data.Eq{`0},Nordril.Functional.Data.Eq{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.op_Inequality(Nordril.Functional.Data.Eq{`0},Nordril.Functional.Data.Eq{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Eq`1.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.FuncDictionary`2">
             <summary>
             A wrapper around an arbitrary <see cref="T:System.Collections.Generic.IDictionary`2"/> which can determine equality based on the contained keys and values instead of by reference, and which implements various functional interfaces. Two <see cref="T:Nordril.Functional.Data.FuncDictionary`2"/>-object are equal if they contain the same set of keys and, for every contained key, <see cref="M:System.Object.Equals(System.Object)"/> of the corresponding values returns true.
