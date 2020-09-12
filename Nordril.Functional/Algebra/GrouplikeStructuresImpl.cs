@@ -33,6 +33,21 @@ namespace Nordril.Functional.Algebra
         /// <inheritdoc />
         public T Op(T x, T y) => op(x, y);
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="IMagma{T}"/>.
+    /// </summary>
+    public static class Magma
+    {
+        /// <summary>
+        /// Turns an <see cref="IMagma{T}"/> into a binary relation which has a tuple of inputs on the left and an output on the right.
+        /// </summary>
+        /// <typeparam name="T">The type of element in this structure.</typeparam>
+        /// <param name="m">The magma.</param>
+        public static IFunctionRelation<(T, T), T> ToRelation<T>(this IMagma<T> m)
+            where T : IEquatable<T>
+            => new FunctionRelation<(T, T), T>(xy => m.Op(xy.Item1, xy.Item2));
+    }
     #endregion
 
     #region Semigroup

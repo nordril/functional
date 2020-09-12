@@ -215,6 +215,18 @@
         <member name="M:Nordril.Functional.Algebra.Magma`1.Op(`0,`0)">
             <inheritdoc />
         </member>
+        <member name="T:Nordril.Functional.Algebra.Magma">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Algebra.IMagma`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Magma.ToRelation``1(Nordril.Functional.Algebra.IMagma{``0})">
+            <summary>
+            Turns an <see cref="T:Nordril.Functional.Algebra.IMagma`1"/> into a binary relation which has a tuple of inputs on the left and an output on the right.
+            </summary>
+            <typeparam name="T">The type of element in this structure.</typeparam>
+            <param name="m">The magma.</param>
+        </member>
         <member name="T:Nordril.Functional.Algebra.Semigroup`1">
             <summary>
             A value-level semigroup.
