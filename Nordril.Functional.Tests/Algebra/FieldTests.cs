@@ -69,7 +69,7 @@ namespace Nordril.Functional.Tests.Algebra
             var rand = new System.Random();
             var weightedXs = xs.Select(x => (x, (double)rand.Next(0, 100))).ToList();
 
-            double weightedAverage(IEnumerable<(double elem, double weight)> ys)
+            static double weightedAverage(IEnumerable<(double elem, double weight)> ys)
             {
                 var num = ys.Select(y => y.elem * y.weight).Sum();
                 var denom = ys.Select(y => y.weight).Sum();
@@ -84,6 +84,21 @@ namespace Nordril.Functional.Tests.Algebra
             var fieldAvg = weightedXs.WeightedAverage(Field.Double);
 
             Assert.Equal(avg, fieldAvg, 5);
+        }
+
+        [Fact]
+        public static void FieldProductTest()
+        {
+            var f = Field.Double.AsProduct<double, Field.DoubleField, Group.DoubleAddGroup, Group.DoubleMultGroup>();
+
+            Assert.Equal(0D, f.Zero<double, Group.DoubleAddGroup>());
+            Assert.Equal(1D, f.One<double, Group.DoubleMultGroup>());
+            Assert.Equal(4D, f.Plus(1D, 3D), 5);
+            Assert.Equal(3D, f.Minus(7D, 4D));
+            Assert.Equal(6D, f.Mult(2D, 3D), 5);
+            Assert.Equal(-2D, f.Negate(2D), 5);
+            Assert.Equal(1D / 5D, f.Reciprocal(5D), 5);
+            Assert.Equal(3D / 5D, f.Divide(3D, 5D), 5);
         }
     }
 }

@@ -290,14 +290,26 @@ namespace Nordril.Functional.Algebra
             => new PartialOrder<T>(leqPartial);
 
         /// <summary>
-        /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the partial order <paramref name="order"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
-        /// <param name="order">The total order.</param>
+        /// <param name="order">The partial  order.</param>
         /// <param name="x">The first element to compare.</param>
         /// <param name="y">The second element to compare.</param>
         public static bool Leq<T>(this IPartialOrder<T> order, T x, T y)
             => order.Contains(x, y);
+
+        /// <summary>
+        /// Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the partial order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Leq<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : IPartialOrder<T>
+            => order.Order.Contains(x, y);
 
         /// <summary>
         /// Creates a partial order and an equivalence relation from an <see cref="IEquatable{T}"/> type.
@@ -326,6 +338,14 @@ namespace Nordril.Functional.Algebra
             => new TotalOrder<T>(comparison);
 
         /// <summary>
+        /// Creates a total order out of a comparison-function.
+        /// </summary>
+        /// <typeparam name="T">The type of elements to compare.</typeparam>
+        /// <param name="comparison">The comparison-function.</param>
+        public static ITotalOrder<T> Make<T>(Func<T, T, int> comparison)
+            => new TotalOrder<T>((x,y) => (short)comparison(x,y));
+
+        /// <summary>
         /// Creates a total order out of a "less than or equal to"-function.
         /// </summary>
         /// <typeparam name="T">The type of elements to compare.</typeparam>
@@ -344,6 +364,18 @@ namespace Nordril.Functional.Algebra
             => order.Compare(x, y) < 0;
 
         /// <summary>
+        /// Returns true iff <paramref name="x"/> is strictly smaller than <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Le<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : ITotalOrder<T>
+            => order.Order.Compare(x, y) < 0;
+
+        /// <summary>
         /// Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
@@ -352,6 +384,18 @@ namespace Nordril.Functional.Algebra
         /// <param name="y">The second element to compare.</param>
         public static bool Eq<T>(this ITotalOrder<T> order, T x, T y)
             => order.Compare(x, y) == 0;
+
+        /// <summary>
+        /// Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Eq<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : ITotalOrder<T>
+            => order.Order.Compare(x, y) == 0;
 
         /// <summary>
         /// Returns true iff <paramref name="x"/> is strictly not equal to <paramref name="y"/> in the total order <paramref name="order"/>.
@@ -364,6 +408,18 @@ namespace Nordril.Functional.Algebra
             => order.Compare(x, y) != 0;
 
         /// <summary>
+        /// Returns true iff <paramref name="x"/> is not equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Neq<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : ITotalOrder<T>
+            => order.Order.Compare(x, y) != 0;
+
+        /// <summary>
         /// Returns true iff <paramref name="x"/> is greater than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
@@ -374,6 +430,18 @@ namespace Nordril.Functional.Algebra
             => order.Compare(x, y) >= 0;
 
         /// <summary>
+        /// Returns true iff <paramref name="x"/> is greater than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Geq<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : ITotalOrder<T>
+            => order.Order.Compare(x, y) >= 0;
+
+        /// <summary>
         /// Returns true iff <paramref name="x"/> is strictly greater than <paramref name="y"/> in the total order <paramref name="order"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the relation.</typeparam>
@@ -382,6 +450,18 @@ namespace Nordril.Functional.Algebra
         /// <param name="y">The second element to compare.</param>
         public static bool Ge<T>(this ITotalOrder<T> order, T x, T y)
             => order.Compare(x, y) > 0;
+
+        /// <summary>
+        /// Returns true iff <paramref name="x"/> is stricle greater than <paramref name="y"/> in the total order <paramref name="order"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the relation.</typeparam>
+        /// <typeparam name="TOrder">The type of the order.</typeparam>
+        /// <param name="order">The structure which has a total order.</param>
+        /// <param name="x">The first element to compare.</param>
+        /// <param name="y">The second element to compare.</param>
+        public static bool Ge<T, TOrder>(this IContainsOrder<TOrder> order, T x, T y)
+            where TOrder : ITotalOrder<T>
+            => order.Order.Compare(x, y) > 0;
 
         /// <summary>
         /// Creates a total order from an <see cref="IComparable{T}"/> type.

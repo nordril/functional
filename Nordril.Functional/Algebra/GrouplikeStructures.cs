@@ -20,7 +20,6 @@ namespace Nordril.Functional.Algebra
         /// <param name="y">The second operand.</param>
         T Op(T x, T y);
     }
-
     #endregion
 
     #region Single properties
@@ -112,6 +111,14 @@ namespace Nordril.Functional.Algebra
     }
 
     /// <summary>
+    /// A commutative monoid.
+    /// </summary>
+    /// <typeparam name="T">The type of the carrier set.</typeparam>
+    public interface ICommutativeMonoid<T> : IMonoid<T>, ICommutative<T>
+    {
+    }
+
+    /// <summary>
     /// A monoid which supports a unary inversion operator with respect to the associative binary operation.
     /// </summary>
     /// <typeparam name="T">The type of the carrier set.</typeparam>
@@ -120,10 +127,10 @@ namespace Nordril.Functional.Algebra
     }
 
     /// <summary>
-    /// A monoid which supports a unary inversion operator with respect to the associative binary operation.
+    /// A commutative group.
     /// </summary>
     /// <typeparam name="T">The type of the carrier set.</typeparam>
-    public interface ICommutativeGroup<T> : IGroup<T>, ICommutative<T>
+    public interface ICommutativeGroup<T> : IGroup<T>, ICommutative<T>, ICommutativeMonoid<T>
     {
     }
 

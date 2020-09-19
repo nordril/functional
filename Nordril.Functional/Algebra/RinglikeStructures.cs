@@ -94,18 +94,23 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
     public interface IRinglike<T, out TFirst, out TSecond>
+        : IContainsFirst<TFirst>, IContainsSecond<TSecond>
         where TFirst : IMagma<T>
         where TSecond : IMagma<T>
     {
-        /// <summary>
-        /// Gets the first grouplike structure.
-        /// </summary>
-        TFirst FirstGrouplike { get; }
+    }
 
-        /// <summary>
-        /// Gets the second grouplike structure.
-        /// </summary>
-        TSecond SecondGrouplike { get; }
+    /// <summary>
+    /// A covariant wrapper around a ringlike structure.
+    /// </summary>
+    /// <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+    /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+    /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+    public interface IRinglikeWrapper<TRinglike, TFirst, TSecond>
+        : IContainsRinglike<TRinglike>
+        , IContainsFirst<TFirst>
+        , IContainsSecond<TSecond>
+    {
     }
 
     /// <summary>
@@ -260,7 +265,7 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IField<T, TFirst, TSecond> : IEuclideanDomain<T, TFirst, TSecond>
+    public interface IField<T, out TFirst, out TSecond> : IEuclideanDomain<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : ICommutativeGroup<T>
     {
@@ -272,7 +277,7 @@ namespace Nordril.Functional.Algebra
     /// <typeparam name="T">The type of the carrier set.</typeparam>
     /// <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
     /// <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
-    public interface IFiniteField<T, TFirst, TSecond> : IField<T, TFirst, TSecond>
+    public interface IFiniteField<T, out TFirst, out TSecond> : IField<T, TFirst, TSecond>
         where TFirst : ICommutativeGroup<T>
         where TSecond : ICommutativeGroup<T>
     {

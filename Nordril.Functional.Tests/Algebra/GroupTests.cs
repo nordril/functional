@@ -162,5 +162,19 @@ namespace Nordril.Functional.Tests.Algebra
             Assert.Equal(g.Neutral, g.Op(false, g.Inverse(false)));
             Assert.Equal(g.Neutral, g.Op(true, g.Inverse(true)));
         }
+
+        [Fact]
+        public static void GroupNamedOperationsTest()
+        {
+            var g = Group.IntAdd.AsProduct<int, Group.IntAddGroup>();
+
+            Assert.Equal(0, g.Zero<int, Group.IntAddGroup>());
+            Assert.Equal(9, g.Plus(4, 5));
+
+            var g2 = new Group<int>(0, (x, y) => x + y, x => -x).AsProduct<int, Group<int>>();
+
+            Assert.Equal(0, g2.Zero<int, Group<int>>());
+            Assert.Equal(9, g2.Plus(4, 5));
+        }
     }
 }

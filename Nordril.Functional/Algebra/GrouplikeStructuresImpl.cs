@@ -35,6 +35,25 @@ namespace Nordril.Functional.Algebra
     }
 
     /// <summary>
+    /// A covariant product-wrapper around a grouplike structure.
+    /// </summary>
+    /// <typeparam name="T">The type of the contained grouplike.</typeparam>
+    public struct ContainsGrouplike<T> : IContainsFirst<T>
+    {
+        /// <inheritdoc />
+        public T First { get; }
+
+        /// <summary>
+        /// Creates a new instance. See also <see cref="Magma.AsProduct{T, TGrouplike}(TGrouplike)"/>.
+        /// </summary>
+        /// <param name="first">The contained grouplike.</param>
+        public ContainsGrouplike(T first)
+        {
+            First = first;
+        }
+    }
+
+    /// <summary>
     /// Extension methods for <see cref="IMagma{T}"/>.
     /// </summary>
     public static class Magma
@@ -47,6 +66,16 @@ namespace Nordril.Functional.Algebra
         public static IFunctionRelation<(T, T), T> ToRelation<T>(this IMagma<T> m)
             where T : IEquatable<T>
             => new FunctionRelation<(T, T), T>(xy => m.Op(xy.Item1, xy.Item2));
+
+        /// <summary>
+        /// Wraps a grouplike structure in a single-element product so that it can be used in functions which expect products like <see cref="Ringlike.Zero{T, TFirst}(IContainsFirst{TFirst})"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the carrier set.</typeparam>
+        /// <typeparam name="TGrouplike">The type of the grouplike to wrap.</typeparam>
+        /// <param name="m">The grouplike to wrap.</param>
+        public static ContainsGrouplike<TGrouplike> AsProduct<T, TGrouplike>(this TGrouplike m)
+            where TGrouplike : IMagma<T>
+            => new ContainsGrouplike<TGrouplike>(m);
     }
     #endregion
 
@@ -619,6 +648,7 @@ namespace Nordril.Functional.Algebra
         {
             /// <inheritdoc />
             public decimal Neutral => 0;
+
 
             /// <inheritdoc />
             public decimal Inverse(decimal x) => x * -1m;

@@ -4,6 +4,50 @@
         <name>Nordril.Functional</name>
     </assembly>
     <members>
+        <member name="T:Nordril.Functional.Algebra.IContainsFirst`1">
+            <summary>
+            A product which contains a first grouplike structure.
+            </summary>
+            <typeparam name="T">The type of the grouplike.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IContainsFirst`1.First">
+            <summary>
+            Gets the first grouplike.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IContainsSecond`1">
+            <summary>
+            A product which contains a second grouplike structure.
+            </summary>
+            <typeparam name="T">The type of the grouplike.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IContainsSecond`1.Second">
+            <summary>
+            Gets the second grouplike.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IContainsRinglike`1">
+            <summary>
+            A product which contains a ringlike structure.
+            </summary>
+            <typeparam name="T">The type of the ringlike.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IContainsRinglike`1.Ringlike">
+            <summary>
+            Gets the second grouplike.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IContainsOrder`1">
+            <summary>
+            A product which contains an ordering like <see cref="T:Nordril.Functional.Algebra.ITotalOrder`1"/>.
+            </summary>
+            <typeparam name="T">The type of the ordering.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.IContainsOrder`1.Order">
+            <summary>
+            Gets the order.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Algebra.IHasMagma`1">
             <summary>
             An algebraic structure supporting a binary operation with no further guaranteed properties.
@@ -157,6 +201,12 @@
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Algebra.ICommutativeMonoid`1">
+            <summary>
+            A commutative monoid.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Algebra.IGroup`1">
             <summary>
             A monoid which supports a unary inversion operator with respect to the associative binary operation.
@@ -165,7 +215,7 @@
         </member>
         <member name="T:Nordril.Functional.Algebra.ICommutativeGroup`1">
             <summary>
-            A monoid which supports a unary inversion operator with respect to the associative binary operation.
+            A commutative group.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
         </member>
@@ -215,6 +265,21 @@
         <member name="M:Nordril.Functional.Algebra.Magma`1.Op(`0,`0)">
             <inheritdoc />
         </member>
+        <member name="T:Nordril.Functional.Algebra.ContainsGrouplike`1">
+            <summary>
+            A covariant product-wrapper around a grouplike structure.
+            </summary>
+            <typeparam name="T">The type of the contained grouplike.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ContainsGrouplike`1.First">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ContainsGrouplike`1.#ctor(`0)">
+            <summary>
+            Creates a new instance. See also <see cref="M:Nordril.Functional.Algebra.Magma.AsProduct``2(``1)"/>.
+            </summary>
+            <param name="first">The contained grouplike.</param>
+        </member>
         <member name="T:Nordril.Functional.Algebra.Magma">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Algebra.IMagma`1"/>.
@@ -226,6 +291,14 @@
             </summary>
             <typeparam name="T">The type of element in this structure.</typeparam>
             <param name="m">The magma.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Magma.AsProduct``2(``1)">
+            <summary>
+            Wraps a grouplike structure in a single-element product so that it can be used in functions which expect products like <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``2(Nordril.Functional.Algebra.IContainsFirst{``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TGrouplike">The type of the grouplike to wrap.</typeparam>
+            <param name="m">The grouplike to wrap.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.Semigroup`1">
             <summary>
@@ -798,6 +871,240 @@
             <param name="message">The error message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
+        <member name="T:Nordril.Functional.Algebra.IPartiallyOrderedGrouplike`3">
+            <summary>
+            A grouplike structure equipped with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.IPartiallyOrderedRinglike`5">
+            <summary>
+            A ringlike structure equipped with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotallyOrderedGrouplike`3">
+            <summary>
+            A rouplike structure equipped with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ITotallyOrderedRinglike`5">
+            <summary>
+            A ringlike structure equipped with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Ordered">
+            <summary>
+            Extension methods for ordered sets.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.WithPartialOrder``3(``1,``2)">
+            <summary>
+            Equips a grouplike structure with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="structure">The structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.WithPartialOrder``5(``1,``4)">
+            <summary>
+            Equips a ringlike structure with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="structure">The ringlike structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.WithTotalOrder``3(``1,``2)">
+            <summary>
+            Equips a grouplike structure with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="structure">The structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.WithTotalOrder``5(``1,``4)">
+            <summary>
+            Equips a ringlike structure with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="structure">The ringlike structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.Abs``3(``0,``2)">
+            <summary>
+            Returns the absolute value of an element <paramref name="x"/>, as defined via the piecewise function:
+            <code>
+            abs(x) = if x &lt; 0 then negate(x) else x
+            </code>
+            Where <c>&lt;</c> is defined by the total order, <c>0</c> is the neutral element of the first grouplike structure, and <c>negate</c> is the inverse-function of the first grouplike structure.
+            </summary>
+            <typeparam name="TStructure">The ringlike structure.</typeparam>
+            <typeparam name="TFirst">The first grouplike structure.</typeparam>
+            <typeparam name="T">The type of the elements.</typeparam>
+            <param name="st">The structure to use.</param>
+            <param name="x">The element whose absolute value to get.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.Abs``3(``1,Nordril.Functional.Algebra.ITotalOrder{``0},``0)">
+            <summary>
+            Returns the absolute value of an element <paramref name="x"/>, as defined via the piecewise function:
+            <code>
+            abs(x) = if x &lt; 0 then negate(x) else x
+            </code>
+            Where <c>&lt;</c> is defined by the total order, <c>0</c> is the neutral element of the first grouplike structure, and <c>negate</c> is the inverse-function of the first grouplike structure.
+            </summary>
+            <typeparam name="TStructure">The ringlike structure.</typeparam>
+            <typeparam name="TFirst">The first grouplike structure.</typeparam>
+            <typeparam name="T">The type of the elements.</typeparam>
+            <param name="st">The structure to use.</param>
+            <param name="order">The total order.</param>
+            <param name="x">The element whose absolute value to get.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.Signum``3(``1,``0)">
+            <summary>
+            Returns the sign (-1 for negative values, 0 for 0, 1 for positive values) of an element <paramref name="x"/>.
+            </summary>
+            <typeparam name="TStructure">The type of the algebraic structure to use.</typeparam>
+            <typeparam name="TFirst">The first grouplike structure.</typeparam>
+            <typeparam name="T">The type of the elements.</typeparam>
+            <param name="st">The algebraic structure to use</param>
+            <param name="x">The element whose sign to get.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ordered.Signum``2(``0,Nordril.Functional.Algebra.ITotalOrder{``1},``1)">
+            <summary>
+            Returns the sign (-1 for negative values, 0 for 0, 1 for positive values) of an element <paramref name="x"/>.
+            </summary>
+            <typeparam name="TStructure">The type of the algebraic structure to use.</typeparam>
+            <typeparam name="T">The type of the elements.</typeparam>
+            <param name="st">The algebraic structure to use</param>
+            <param name="order">The total order.</param>
+            <param name="x">The element whose sign to get.</param>
+        </member>
+        <member name="T:Nordril.Functional.Algebra.PartiallyOrderedGrouplike`3">
+            <summary>
+            A grouplike structure equipped with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartiallyOrderedGrouplike`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="structure">The structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedGrouplike`3.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedGrouplike`3.Order">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5">
+            <summary>
+            A ringlike structure equipped with a partial order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5.#ctor(`1,`4)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="ringlike">The ringlike structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5.Order">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.PartiallyOrderedRinglike`5.Ringlike">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotallyOrderedGrouplike`3">
+            <summary>
+            A grouplike structure equipped with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TStructure">The type of the grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedGrouplike`3.#ctor(`1,`2)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="structure">The structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedGrouplike`3.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedGrouplike`3.Order">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.TotallyOrderedRinglike`5">
+            <summary>
+            A ringlike structure equipped with a total order.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotallyOrderedRinglike`5.#ctor(`1,`4)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="ringlike">The ringlike structure.</param>
+            <param name="order">The order.</param>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedRinglike`5.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedRinglike`5.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedRinglike`5.Order">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.TotallyOrderedRinglike`5.Ringlike">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Algebra.IBinaryRelation`2">
             <summary>
             A binary relation that can decide whether it contains a pair of elements.
@@ -1254,10 +1561,20 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.PartialOrder.Leq``1(Nordril.Functional.Algebra.IPartialOrder{``0},``0,``0)">
             <summary>
-            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the partial order <paramref name="order"/>.
             </summary>
             <typeparam name="T">The type of the elements in the relation.</typeparam>
-            <param name="order">The total order.</param>
+            <param name="order">The partial  order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.PartialOrder.Leq``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is smaller than or equal to <paramref name="y"/> in the partial order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
@@ -1283,6 +1600,13 @@
             <typeparam name="T">The type of elements to compare.</typeparam>
             <param name="comparison">The comparison-function.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Make``1(System.Func{``0,``0,System.Int32})">
+            <summary>
+            Creates a total order out of a comparison-function.
+            </summary>
+            <typeparam name="T">The type of elements to compare.</typeparam>
+            <param name="comparison">The comparison-function.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.Make``1(System.Func{``0,``0,System.Boolean})">
             <summary>
             Creates a total order out of a "less than or equal to"-function.
@@ -1299,12 +1623,32 @@
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Le``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is strictly smaller than <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.Eq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
             Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
             <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Eq``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
@@ -1317,6 +1661,16 @@
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Neq``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is not equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.Geq``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
             Returns true iff <paramref name="x"/> is greater than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
@@ -1326,12 +1680,32 @@
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Geq``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is greater than or equal to <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.TotalOrder.Ge``1(Nordril.Functional.Algebra.ITotalOrder{``0},``0,``0)">
             <summary>
             Returns true iff <paramref name="x"/> is strictly greater than <paramref name="y"/> in the total order <paramref name="order"/>.
             </summary>
             <typeparam name="T">The type of the elements in the relation.</typeparam>
             <param name="order">The total order.</param>
+            <param name="x">The first element to compare.</param>
+            <param name="y">The second element to compare.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.TotalOrder.Ge``2(Nordril.Functional.Algebra.IContainsOrder{``1},``0,``0)">
+            <summary>
+            Returns true iff <paramref name="x"/> is stricle greater than <paramref name="y"/> in the total order <paramref name="order"/>.
+            </summary>
+            <typeparam name="T">The type of the elements in the relation.</typeparam>
+            <typeparam name="TOrder">The type of the order.</typeparam>
+            <param name="order">The structure which has a total order.</param>
             <param name="x">The first element to compare.</param>
             <param name="y">The second element to compare.</param>
         </member>
@@ -1649,15 +2023,13 @@
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Algebra.IRinglike`3.FirstGrouplike">
+        <member name="T:Nordril.Functional.Algebra.IRinglikeWrapper`3">
             <summary>
-            Gets the first grouplike structure.
+            A covariant wrapper around a ringlike structure.
             </summary>
-        </member>
-        <member name="P:Nordril.Functional.Algebra.IRinglike`3.SecondGrouplike">
-            <summary>
-            Gets the second grouplike structure.
-            </summary>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.ISemiring`3">
             <summary>
@@ -1822,34 +2194,65 @@
             <param name="first">The first grouplike structure.</param>
             <param name="second">The second grouplike structure.</param>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Ringlike`3.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Ringlike`3.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Ringlike`3.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Ringlike`3.Second">
             <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.ContainsRinglike`3">
+            <summary>
+            A covariant product-wrapper around a grouplike structure.
+            </summary>
+            <typeparam name="TRinglike">The type of the ringlike to wrap.</typeparam>
+            <typeparam name="TFirst">The type of first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of second grouplike structure.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ContainsRinglike`3.Ringlike">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ContainsRinglike`3.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Algebra.ContainsRinglike`3.Second">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.ContainsRinglike`3.#ctor(`0)">
+            <summary>
+            Creates a new instance. See also <see cref="M:Nordril.Functional.Algebra.Magma.AsProduct``2(``1)"/>.
+            </summary>
+            <param name="ringlike">The contained ringlike.</param>
         </member>
         <member name="T:Nordril.Functional.Algebra.Ringlike">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Algebra.IRinglike`3"/>s.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Plus``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.AsProduct``4(``1)">
+            <summary>
+            Wraps a grouplike structure in a single-element product so that it can be used in functions which expect products like <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``2(Nordril.Functional.Algebra.IContainsFirst{``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike to wrap.</typeparam>
+            <typeparam name="TFirst">The type of first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of second grouplike structure.</typeparam>
+            <param name="m">The grouplike to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Plus``2(Nordril.Functional.Algebra.IContainsFirst{``1},``0,``0)">
             <summary>
             Performs the operation of the first grouplike structure, commonly called "addition".
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
-            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The first element.</param>
             <param name="y">The second element.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Mult``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Mult``2(Nordril.Functional.Algebra.IContainsSecond{``1},``0,``0)">
             <summary>
             Performs the operation of the second grouplike structure, commonly called "multiplication".
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
-            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The first element.</param>
@@ -1861,6 +2264,22 @@
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Zero``2(Nordril.Functional.Algebra.IContainsFirst{``1})">
+            <summary>
+            Returns the neutral element of the first grouplike structure, commonly called "zero".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Ringlike.One``2(Nordril.Functional.Algebra.IContainsSecond{``1})">
+            <summary>
+            Returns the neutral element of the second grouplike structure, commonly called "zero".
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
         </member>
@@ -1869,47 +2288,43 @@
             Returns the neutral element of the second grouplike structure, commonly called "zero".
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
-            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TFirst">The type of the first groupike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Negate``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Negate``2(Nordril.Functional.Algebra.IContainsFirst{``1},``0)">
             <summary>
             Returns the inverse element with respect to the first grouplike structure, typically called the "negation" of the element (as in subtraction).
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
-            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The element whose inverse to return.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Minus``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Minus``2(Nordril.Functional.Algebra.IContainsFirst{``1},``0,``0)">
             <summary>
             Applies <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> of the first grouplike structure to the first element <paramref name="x"/> and the inverse of the second element <paramref name="y"/>, equivalent to "subtraction" in the case of addition.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
-            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The element.</param>
             <param name="y">The second element whose inverse to add to the first.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Reciprocal``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Reciprocal``2(Nordril.Functional.Algebra.IContainsSecond{``1},``0)">
             <summary>
             Returns the inverse element with respect to the second grouplike structure, typically called the "reciprocal" of the element (as in division).
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
-            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The element whose inverse to return.</param>
         </member>
-        <member name="M:Nordril.Functional.Algebra.Ringlike.Divide``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2},``0,``0)">
+        <member name="M:Nordril.Functional.Algebra.Ringlike.Divide``2(Nordril.Functional.Algebra.IContainsSecond{``1},``0,``0)">
             <summary>
             Applies <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> of the second grouplike structure to the first element <paramref name="x"/> and the inverse of the second element <paramref name="y"/>, equivalent to "division" in the case of multiplication.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
-            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
             <param name="x">The element.</param>
@@ -1930,10 +2345,10 @@
             <param name="first">The first grouplike structure.</param>
             <param name="second">The second grouplike structure.</param>
         </member>
-        <member name="P:Nordril.Functional.Algebra.NearRing`3.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.NearRing`3.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.NearRing`3.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.NearRing`3.Second">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Semiring`3">
@@ -1951,10 +2366,10 @@
             <param name="first">The first grouplike structure.</param>
             <param name="second">The second grouplike structure.</param>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Semiring`3.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Semiring`3.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Semiring`3.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Semiring`3.Second">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Ring`3">
@@ -1972,10 +2387,10 @@
             <param name="first">The first grouplike structure.</param>
             <param name="second">The second grouplike structure.</param>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Ring`3.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Ring`3.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Ring`3.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Ring`3.Second">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.BooleanRing">
@@ -1993,10 +2408,10 @@
             The boolean ring (B,XOR,&amp;&amp;,false,true).
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.BooleanRing.BoolXorRing.Second">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.EuclideanDomain">
@@ -2014,10 +2429,10 @@
             The Euclidean domain of integers.
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.Second">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.EuclideanDomain.IntegerEuclideanDomain.EuclideanDivide(System.Int32,System.Int32)">
@@ -2037,11 +2452,47 @@
             <param name="x">The first element.</param>
             <param name="y">The second element.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Mod``4(Nordril.Functional.Algebra.IContainsRinglike{``1},``0,``0)">
+            <summary>
+            Performs the modulus-operation on two elements, returning the remainder of <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.EuclideanDivide``4(Nordril.Functional.Algebra.IContainsRinglike{``1},``0,``0)">
+            <summary>
+            Performs Euclidean division on two elements <paramref name="x"/> and <paramref name="y"/> and returns a quotient <c>q</c> and a remainder <c>r</c>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike structure.</typeparam>
+            <typeparam name="TSecond">The type of the second grouplike structure.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The divident.</param>
+            <param name="y">The divisor.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Gcd``3(Nordril.Functional.Algebra.IEuclideanDomain{``0,``1,``2},``0,``0)">
             <summary>
             Gets the greatest common divisor of two elements in a <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/> via Euclid's algorithm. The GCD of two elements <c>X</c> and <c>Y</c> is the unique minimal principal ideal.
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Gcd``4(Nordril.Functional.Algebra.IContainsRinglike{``1},``0,``0)">
+            <summary>
+            Gets the greatest common divisor of two elements in a <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/> via Euclid's algorithm. The GCD of two elements <c>X</c> and <c>Y</c> is the unique minimal principal ideal.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
@@ -2056,6 +2507,22 @@
             </code>
             </summary>
             <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="r">The ringlike structure.</param>
+            <param name="x">The first element.</param>
+            <param name="y">The second element.</param>
+            <exception cref="T:System.DivideByZeroException">If <paramref name="x"/> or <paramref name="y"/> is zero.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.EuclideanDomain.Lcm``4(Nordril.Functional.Algebra.IContainsRinglike{``1},``0,``0)">
+            <summary>
+            Gets the least common multiple of two elements in a <see cref="T:Nordril.Functional.Algebra.IEuclideanDomain`3"/> via Euclid's algorithm. The LCDM is defined as:
+            <code>
+                r.Mult(r.Gcd(x,y), r.Lcm(x,y)) == r.Mult(x,y)
+            </code>
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
             <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
             <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="r">The ringlike structure.</param>
@@ -2083,10 +2550,10 @@
             The field of <see cref="T:System.Double"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>-function may be numerically unstable.
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Field.DoubleField.Second">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.Field.DoubleField.EuclideanDivide(System.Double,System.Double)">
@@ -2100,10 +2567,10 @@
             The field of <see cref="T:System.Decimal"/>s, which works the same way as the Euclidean domain of integers, though the <see cref="M:Nordril.Functional.Algebra.IEuclideanDomain`3.EuclideanDivide(`0,`0)"/>-function may be numerically unstable.
             </summary>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Field.DecimalField.Second">
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.Field.DecimalField.EuclideanDivide(System.Decimal,System.Decimal)">
@@ -2119,10 +2586,32 @@
             <param name="xs">The sequence to traverse.</param>
             <param name="field">The field whose operations to use.</param>
         </member>
+        <member name="M:Nordril.Functional.Algebra.Field.Average``4(System.Collections.Generic.IEnumerable{``0},Nordril.Functional.Algebra.IContainsRinglike{``1})">
+            <summary>
+            Computes the average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
+            <param name="xs">The sequence to traverse.</param>
+            <param name="field">The field whose operations to use.</param>
+        </member>
         <member name="M:Nordril.Functional.Algebra.Field.WeightedAverage``3(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``0}},Nordril.Functional.Algebra.IField{``0,``1,``2})">
             <summary>
-            Computes the weighted average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``3(Nordril.Functional.Algebra.IRinglike{``0,``1,``2})"/>.
+            Computes the weighted average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``2(Nordril.Functional.Algebra.IContainsFirst{``1})"/>.
             </summary>
+            <param name="xs">The sequence to traverse.</param>
+            <param name="field">The field whose operations to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Field.WeightedAverage``4(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``0}},Nordril.Functional.Algebra.IContainsRinglike{``1})">
+            <summary>
+            Computes the weighted average value of a sequence iteratively using the operations of the field <paramref name="field"/>. See the <see cref="M:Nordril.Functional.CollectionExtensions.AverageIterative(System.Collections.Generic.IEnumerable{System.Double})"/>-family of functions. The average of the empty sequence is defined as <see cref="M:Nordril.Functional.Algebra.Ringlike.Zero``2(Nordril.Functional.Algebra.IContainsFirst{``1})"/>.
+            </summary>
+            <typeparam name="T">The type of the carrier set.</typeparam>
+            <typeparam name="TRinglike">The type of the ringlike structure.</typeparam>
+            <typeparam name="TFirst">The type of the first grouplike operation.</typeparam>
+            <typeparam name="TSecond">The type of the second groupike operation.</typeparam>
             <param name="xs">The sequence to traverse.</param>
             <param name="field">The field whose operations to use.</param>
         </member>
@@ -2137,10 +2626,13 @@
             </summary>
             <typeparam name="T">The type of elements in the sets.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.FirstGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.First">
             <inheritdoc />
         </member>
-        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.SecondGrouplike">
+        <member name="P:Nordril.Functional.Algebra.Lattice.SetLattice`1.Second">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Lattice.SetLattice`1.Op(System.Collections.Generic.ISet{`0},System.Collections.Generic.ISet{`0})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.IHasUnary`1">
