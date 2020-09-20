@@ -9,8 +9,118 @@ This library brings functional programming to C#. It contains the following:
 * Pattern-matching.
 
 ## Algebra
-  Algebraic structures like Monoids, Semigroups, Groups, etc.
+  There are three kinds of structures:
+  * Grouplike structures, which consist of a carrier-set and one binary operation, e.g. integers with addition,
+  * Ringlike structures, which consist of a carrier-set and two binary operations, e.g. integers with addition and multiplication, and
+  * Binary relations, which can determine whether any two elements are part of the relation, e.g. the "less then or equal"-relation over integers.
   
+Each of these may posess additional properties like the existence of a neutral element or commutativity. These are modeled via interfaces, with the following named structures existing:
+* Magma: the base-interface for all grouplike structures, with one binary operation,
+* Semigroup: an associative magma,
+* Monoid: a semigroup with a neutral element,
+* Commutative monoid: a monoid whose operation is commutative,
+* Group: a monoid where each element has an inverse element,
+* Commutative group: a group whose operation is commutative,
+* Semilattice: the operation is commutative, associative, and idempotent.
+
+Ringlike structures have the following hierarchy:
+* Ringlike: the base-interface for all ringlike structures, with two binary operations,
+* Semiring: the first operation forms a commutative monoid, the second a monoid. The second operation distributes over the first and the neutral element of the second operation annihilates the first (i.e. 0 * a = a * 0 = 0),
+* Near-ring: the first operation forms a group and the second a semigroup,
+* Ring: a semiring where the first operation forms a commutative group,
+* Boolean ring: a ring where the first operation forms a commutative group and where the second operation is an idempotent monoid.
+* Commutative ring: a ring where both operations are commutative,
+* Integral domain: a commutative ring where the product of two non-zero elements is always non-zero. It can be determined whether an element is zero,
+* GCD-domain: an integral domain where each pair of elements has a (not necessarily easily computable) greatest common divisor,
+* Unique factorization domain: a GCD-domain where every element can be factored into a product of finitely many prime elements,
+* Euclidean domain: a unique factorization domain which supports Euclidean division of two elements into a quotient and a remainder,
+* Field: a Euclidean domain where both operations form commutative groups (e.g. the real numbers under addition/subtraction and multiplication/division),
+* Finite field: a field with finitely many, enumerable elements,
+* Lattice: a ringlike structure composed of two semilattices, with the operations obeying the absorption law,
+* Bounded lattice: a lattice where both semilattices have neutral elements (i.e. the greatest/smallest element of the lattice),
+* Distributed lattice: a lattice where the two operations distribute over each other.
+
+Relations are read-only and have the following structure:
+* Binary relation: the base-interface for all binary relations, which can determine whether any two elements are contained in the relation,
+* Extensible binary relation: a binary relation whose elements can be enumerated,
+* Functional relation: if (X,Y) and (X,Z) are contained, then Y=Z holds. Y/Z can be interpreted as the "result" of X.
+* One-to-one relation: a mapping between two sets, where each left/right-element has one corresponding right/left-element,
+* Bijective relation: a mapping between two sets, where each left/right-element has one corresponding right/left-element, and all elements are present (e.g. the function f(x) = 2*x),
+* Functional relation: a relation which has one right-element for each possible left-element; equivalent to a total function,
+* Dictionary relation: a functional, extensible relation, semantically equivalent to a (read-only) dictionary,
+* Partial order: a reflexive, transitive, and anti-symmetric relation (e.g. "x is divisible by y"), supporting the "less then or equal to"-method, 
+* Total order: a partial order where each two possible elements are present (e.g. "x <= y"), supporting the usual comparison operations (<,<=,==,!=,>=,>, in the form of the extension methods Le, Leq, Eq, Neq, Geq, Ge).
+
+### Detached and attached structures
+
+All of the above structures can be created stand-alone, as objects separate from the types on which they operate, via constructor methods, e.g.
+
+```c#
+var m = Monoid.IntAdd;
+var m2 = new Monoid<int>(0, (x,y) => x+y);
+```
+
+or, if one has control over the types, one can implement the interface on them directly:
+
+```c#
+public class MyInt : IHasMonoid<MyInt>
+{
+   public int Value { get; }
+   public MyInt(int value) { Value = value; }
+   
+   //Monoid implementation
+   public MyInt Neutral => new MyInt(0);
+   public MyInt Op(MyInt x, MyInt y) => new MyInt(x.Value + y.Value);
+}
+```
+An interface "I[structure]<T>" always denotes a standalone algebraic structure with the carrier-set T, whereas "IHas[Structure]<T>" is implemented by T itself.
+  
+### Composing structures
+
+Grouplike structures can be created directly, and ringlike structures, containing two operations, can be composed of two grouplike structures. Certain common ringlike structures are predefined (e.g. Field.Double), or one can create them directly, e.g.
+
+```c#
+public class MyIntAdd : ICommutativeGroup<MyInt> {...}
+public class MyIntMult : ICommutativeGroup<MyInt> {...}
+
+public class MyIntField : IField<MyInt, MyIntAdd, MyIntMult>
+{
+   //We delegate most of the work to the constituent grouplike structures.
+   public MyIntAdd First => new MyIntAdd();
+   public MyIntAdd Second => new MyIntAdd();
+   
+   public (MyInt quotient, MyInt remainder) EuclideanDivide(MyInt x, MyInt y)
+   {
+      var q = x.Value / y.Value;
+      var r = x.Value - q * y.Value;
+      return (new MyInt(q), new MyInt(r));
+   }
+   
+   public IsZero(MyInt x) => x.Value == 0;
+}
+```
+
+For convenience, extension methods are provided for common operations: Zero, One, Plus, Mult, Negate, Divide, Reciprocal, with their usual meanings.
+
+One can also attach an ordering to grouplike/ringlike structures:
+
+```c#
+var orderedDoubles = Field.Double.WithTotalOrder<double, Field.DoubleField, Group.DoubleAddGroup, Group.DoubleMultGroup, ITotalOrder<double>>(TotalOrder.Make<double>((x,y) => x.CompareTo(y)));
+
+//Usage
+//if x > 10 then z = 3+x else z = x
+var x = 14D;
+var z = orderedDoubles.Ge(10, x) ? orderedDoubles.Plus(3, x) : x;
+```
+
+Composition works via structural subtyping, implemented via the following "IContains[X]"-interfaces:
+* IContainsFirst: the structure contains a "first" grouplike operation,
+* IContainsSecond: the structure contains a "second" grouplike operation,
+* IContainsRinglike: the structure contains a ringlike operation (e.g. an ordered field of doubles contains the field itself, without the ordering),
+* IContainsOrder: the structure contains a partial/total order.
+
+The contains-subtyping-relation is transitive, i.e. an ordered field of doubles contains the first operation, the second operation, the field, and the ordering.
+
 ## Utility classes
 
 ### Maybe
