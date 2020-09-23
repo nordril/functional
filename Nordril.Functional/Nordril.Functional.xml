@@ -3387,6 +3387,117 @@
             </summary>
             <param name="that">The second argument.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.IMonadTransformer`4">
+            <summary>
+            A monad transformer which wraps an inner monad (<typeparamref name="TInner"/>) in an outer monad (<typeparamref name="TLifted"/>), combining their semantics.
+            Monad transformers are, here, also monads, enabling the usage of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>, and <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>, though they also provide monad-transformer-versions of these functions suffixed with "T". The only unique method of a monad transformer is <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)"/>, which takes a value from the unlifted monad and lifts it.
+            </summary>
+            <remarks>
+            Monad transformers allow one to combine the functionality of a whole list/stack of monads, e.g. <see cref="T:Nordril.Functional.Data.Reader`2"/>, <see cref="T:Nordril.Functional.Data.Writer`3"/>, and <see cref="T:Nordril.Functional.Data.State`2"/> in a single computation, though, in general, the order of wrapping matters, meaning <c>OuterT&lt;InnerT&lt;A&gt;&gt;</c> might have different semantics than <c>InnerT&lt;OuterT&lt;A&gt;&gt;</c>. Since monad transformers require higher-kinded types, the type parameters one has to specify are somewhat cumbersome due to CLR-limitations.
+            </remarks>
+            <typeparam name="TUnlifted">The unlifted monadic value (e.g. <c>IO&lt;int&gt;</c>). This is used only by <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)"/>.</typeparam>
+            <typeparam name="TLifted">The type of the overall monadic value, e.g. <c>IO&lt;Maybe&lt;int&gt;&gt;</c>.</typeparam>
+            <typeparam name="TInner">The inner monadic value, e.g. <c>Maybe&lt;int&gt;</c>.</typeparam>
+            <typeparam name="TSource">The innermost source-type.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonadTransformer`4.PureT``4(``3)">
+            <summary>
+            The monad-transformer-version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
+            </summary>
+            <typeparam name="TUnliftedResult">The unlifted type of the result.</typeparam>
+            <typeparam name="TLiftedResult">The lifted type of the result.</typeparam>
+            <typeparam name="TInnerResult">The inner type of the result.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonadTransformer`4.MapT``4(System.Func{`3,``3})">
+            <summary>
+            The monad-transformer-version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            </summary>
+            <typeparam name="TUnliftedResult">The unlifted type of the result.</typeparam>
+            <typeparam name="TLiftedResult">The lifted type of the result.</typeparam>
+            <typeparam name="TInnerResult">The inner type of the result.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The pure function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonadTransformer`4.ApT``7(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,System.Func{`3,``6}})">
+            <summary>
+            The monad-transformer-version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
+            </summary>
+            <typeparam name="TUnliftedFunc">The unlifted type of the function.</typeparam>
+            <typeparam name="TLiftedFunc">The lifted type of the function.</typeparam>
+            <typeparam name="TInnerFunc">The inner type of the function.</typeparam>
+            <typeparam name="TUnliftedResult">The unlifted type of the result.</typeparam>
+            <typeparam name="TLiftedResult">The lifted type of the result.</typeparam>
+            <typeparam name="TInnerResult">The inner type of the result.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The monadic value containing the function to apply to this monadic value.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonadTransformer`4.BindT``4(System.Func{`3,Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3}})">
+            <summary>
+            The monad-transformer-version of <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>.
+            </summary>
+            <typeparam name="TUnliftedResult">The unlifted type of the result.</typeparam>
+            <typeparam name="TLiftedResult">The lifted type of the result.</typeparam>
+            <typeparam name="TInnerResult">The inner type of the result.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The monadic function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)">
+            <summary>
+            Lifts a value from an inner monad into this monad transformer, wrapping it, effectively, in a second monad.
+            </summary>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.MonadTransformer">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IMonadTransformer`4"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonadTransformer.MakeMap``5(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3})">
+            <summary>
+            Creates a <see cref="T:System.Func`3"/> which runs <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.MapT``4(System.Func{`3,``3})"/>, doing the type variable replacement at runtime.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted value.</typeparam>
+            <typeparam name="TLifted">The lifted value, containing the inner value.</typeparam>
+            <typeparam name="TInner">The inner value.</typeparam>
+            <typeparam name="TSource">The raw value.</typeparam>
+            <typeparam name="TResult">The result-type.</typeparam>
+            <param name="transformer">The transformer whose <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.MapT``4(System.Func{`3,``3})"/>-function to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonadTransformer.MakePure``5(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3})">
+            <summary>
+            Creates a <see cref="T:System.Func`3"/> which runs <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.PureT``4(``3)"/>, doing the type variable replacement at runtime.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted value.</typeparam>
+            <typeparam name="TLifted">The lifted value, containing the inner value.</typeparam>
+            <typeparam name="TInner">The inner value.</typeparam>
+            <typeparam name="TSource">The raw value.</typeparam>
+            <typeparam name="TResult">The result-type.</typeparam>
+            <param name="transformer">The transformer whose <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.PureT``4(``3)"/>-function to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonadTransformer.MakeAp``5(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3})">
+            <summary>
+            Creates a <see cref="T:System.Func`3"/> which runs <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.ApT``7(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,System.Func{`3,``6}})"/>, doing the type variable replacement at runtime.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted value.</typeparam>
+            <typeparam name="TLifted">The lifted value, containing the inner value.</typeparam>
+            <typeparam name="TInner">The inner value.</typeparam>
+            <typeparam name="TSource">The raw value.</typeparam>
+            <typeparam name="TResult">The result-type.</typeparam>
+            <param name="transformer">The transformer whose <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.ApT``7(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,System.Func{`3,``6}})"/>-function to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonadTransformer.MakeBind``5(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3})">
+            <summary>
+            Creates a <see cref="T:System.Func`3"/> which runs <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.BindT``4(System.Func{`3,Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3}})"/>, doing the type variable replacement at runtime.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted value.</typeparam>
+            <typeparam name="TLifted">The lifted value, containing the inner value.</typeparam>
+            <typeparam name="TInner">The inner value.</typeparam>
+            <typeparam name="TSource">The raw value.</typeparam>
+            <typeparam name="TResult">The result-type.</typeparam>
+            <param name="transformer">The transformer whose <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.BindT``4(System.Func{`3,Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3}})"/>-function to use.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IMonadZero`1">
             <summary>
             A monad with a zero, which corresponds to the zero of an algebraic ring,
@@ -6152,6 +6263,102 @@
             <param name="key">The key whose corresponding value to get.</param>
             <param name="f">The function to apply to the key's value if the key is present.</param>
             <param name="alternative">The alternative value to return if the key is not present.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.MaybeT`4">
+            <summary>
+            The <see cref="T:Nordril.Functional.Data.Maybe`1"/> monad transformer which models a <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value being contained in a monad, e.g. <c>IO&lt;Maybe&lt;T&gt;&gt;</c>.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted monadic value (e.g. <c>IO&lt;T&gt;</c>).</typeparam>
+            <typeparam name="TLifted">The monadic type of the inner monad, containing, in turn, a <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value.</typeparam>
+            <typeparam name="TInner">The <see cref="T:Nordril.Functional.Data.Maybe`1"/>-type.</typeparam>
+            <typeparam name="TSource">The innermost source-type.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.MaybeT`4.Run">
+            <summary>
+            The inner value of type <c>m (Maybe a)</c>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.#ctor(`1)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="run">The contained monadic value with the <see cref="T:Nordril.Functional.Data.Maybe`1"/>-instance as the base value.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Nothing">
+            <summary>
+            Creates a Nothing-instance of <see cref="T:Nordril.Functional.Data.MaybeT"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.BindT``4(System.Func{`3,Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,``3}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.ApT``7(Nordril.Functional.Category.IMonadTransformer{``0,``1,``2,System.Func{`3,``6}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Lift(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.PureT``4(``3)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.MapT``4(System.Func{`3,``3})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Map``1(System.Func{`3,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Bind``1(System.Func{`3,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT`4.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`3,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.MaybeT">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.MaybeT`4"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT.ReplaceTypeVariable(System.Type,System.Type,System.Type)">
+            <summary>
+            Replaces an occurrence of a generic argument <paramref name="original"/> in a (generic or non-generic) type with <paramref name="replacement"/> and returns the result.
+            </summary>
+            <param name="t">The type in which to replace the argument.</param>
+            <param name="original">The argument to search for (which can also be <paramref name="t"/> itself).</param>
+            <param name="replacement">The argument with which to replace <paramref name="replacement"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT.Just``3(``2)">
+            <summary>
+            Creates a <see cref="T:Nordril.Functional.Data.MaybeT`4"/> out of a pure value.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted monadic value (e.g. <c>IO&lt;T&gt;</c>).</typeparam>
+            <typeparam name="TLifted">The monadic type of the inner monad, containing, in turn, a <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value.</typeparam>
+            <typeparam name="TSource">The innermost source-type.</typeparam>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT.Just``3(``0)">
+            <summary>
+            Creates a <see cref="T:Nordril.Functional.Data.MaybeT`4"/> out of a outer monadic value (e.g. <see cref="T:Nordril.Functional.Data.Io`1"/>).
+            </summary>
+            <typeparam name="TUnlifted">The unlifted monadic value (e.g. <c>IO&lt;T&gt;</c>).</typeparam>
+            <typeparam name="TLifted">The monadic type of the inner monad, containing, in turn, a <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value.</typeparam>
+            <typeparam name="TSource">The innermost source-type.</typeparam>
+            <param name="x">The value to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.MaybeT.ValueOr``4(Nordril.Functional.Data.MaybeT{``0,``1,Nordril.Functional.Data.Maybe{``2},``2},System.Func{``2,``3},System.Func{``3})">
+            <summary>
+            Flattens the structure of a <see cref="T:Nordril.Functional.Data.MaybeT`4"/> by erasing the innermost <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value.
+            </summary>
+            <typeparam name="TUnlifted">The unlifted monadic value (e.g. <c>IO&lt;T&gt;</c>).</typeparam>
+            <typeparam name="TLifted">The monadic type of the inner monad, containing, in turn, a <see cref="T:Nordril.Functional.Data.Maybe`1"/>-value.</typeparam>
+            <typeparam name="TSource">The innermost source-type.</typeparam>
+            <typeparam name="TResult">The innermost result-type.</typeparam>
+            <param name="maybe">The <see cref="T:Nordril.Functional.Data.MaybeT`4"/> to flatten.</param>
+            <param name="f">The function to apply to the innermost value, if present.</param>
+            <param name="alternative">The function which produces an alternative innermost alternative value, if the value is missing.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Memo`3">
             <summary>
