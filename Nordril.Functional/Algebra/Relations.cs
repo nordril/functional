@@ -233,6 +233,7 @@ namespace Nordril.Functional.Algebra
         : IFunctionalRelation<T1, T2>
         , IExtensionalBinaryRelation<T1, T2>
         , IReadOnlyDictionary<T1, T2>
+        , IEquatable<IDictionaryRelation<T1, T2>>
     {
     }
 

@@ -327,5 +327,62 @@ namespace Nordril.Functional.Tests.Algebra
             Assert.Throws<KeyNotFoundException>(() => r["xxx"]);
             Assert.Equal(3, r["xyz"]);
         }
+
+        [Fact]
+        public static void DictionaryRelationEqualsTest()
+        {
+            var d1 = Relations.AsRelation(new Dictionary<string, int> { });
+            var d2 = Relations.AsRelation(new Dictionary<string, int> { });
+
+            Assert.True(d1.Equals(d2));
+
+            d1 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                { "x", 1 }
+            });
+            d2 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                {"x", 1 }
+            });
+
+            Assert.True(d1.Equals(d2));
+
+            d1 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                { "x", 1 },
+                { "y", 2 }
+            });
+            d2 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                {"x", 1 }
+            });
+
+            Assert.False(d1.Equals(d2));
+
+            d1 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                { "x", 1 },
+            });
+            d2 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                {"x", 1 },
+                {"y", 2 }
+            });
+
+            Assert.False(d1.Equals(d2));
+
+            d1 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                { "x", 1 },
+                { "y", 3 }
+            });
+            d2 = Relations.AsRelation(new Dictionary<string, int>
+            {
+                {"x", 1 },
+                {"y", 2 }
+            });
+
+            Assert.False(d1.Equals(d2));
+        }
     }
 }

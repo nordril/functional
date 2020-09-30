@@ -271,6 +271,26 @@ namespace Nordril.Functional.Algebra
         IEnumerator IEnumerable.GetEnumerator()
             => dict.GetEnumerator();
 
+        public bool Equals([AllowNull] IDictionaryRelation<T1, T2> other)
+        {
+            if (other is null || dict is null)
+                return false;
+
+            foreach (var (k,v) in dict)
+            {
+                if (!other.TryGetValue(k, out var vOther) || !v.Equals(vOther))
+                    return false;
+            }
+
+            foreach (var (k, vOther) in other)
+            {
+                if (!dict.TryGetValue(k, out var v) || !v.Equals(vOther))
+                    return false;
+            }
+
+            return true;
+        }
+
         /// <inheritdoc />
         public IEnumerable<(T1, T2)> Elements
             => dict.Select(kv => (kv.Key, kv.Value));

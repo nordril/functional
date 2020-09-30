@@ -69,7 +69,7 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.Equal(3+4+8, bound.Run.Value.Value());
 
-            var nothing = new M(new Identity<Maybe<int>>(Maybe.Nothing<int>()));
+            nothing = new M(new Identity<Maybe<int>>(Maybe.Nothing<int>()));
             bound = (M)nothing
                 .BindT(x => new M(new Identity<Maybe<int>>(Maybe.Just(x + 4))))
                 .BindT(x => new M(new Identity<Maybe<int>>(Maybe.Just(x + 8))));
