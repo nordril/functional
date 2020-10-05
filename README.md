@@ -6,7 +6,8 @@ This library brings functional programming to C#. It contains the following:
 * Utility classes,
 * Category theory,
 * Enumerable-extensions,
-* Pattern-matching.
+* Pattern-matching,
+* Monad transformers.
 
 ## Algebra
   There are three kinds of structures:
