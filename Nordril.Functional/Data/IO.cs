@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
 {
@@ -29,15 +30,24 @@ namespace Nordril.Functional.Data
     /// </code>
     /// </example>
     /// <typeparam name="T">The type of the result.</typeparam>
-    public struct Io<T> : IMonad<T>, IEnumerable<T>
+    public struct Io<T> : IMonad<T>, IAsyncMonad<T>
     {
-        private readonly Func<T> value;
+        private readonly Func<Task<T>> value;
 
         /// <summary>
         /// Creates a new <see cref="Io{T}"/> out of a <see cref="Func{TResult}"/>.
         /// </summary>
-        /// <param name="value">The function which constitutes this computation.</param>
+        /// <param name="value">The synchronous function which constitutes this computation.</param>
         public Io(Func<T> value)
+        {
+            this.value = () => Task.FromResult(value());
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Io{T}"/> out of a <see cref="Func{TResult}"/>.
+        /// </summary>
+        /// <param name="value">The asynchronous function which constitutes this computation.</param>
+        public Io(Func<Task<T>> value)
         {
             this.value = value;
         }
@@ -45,7 +55,7 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Returns the result of the computation, while also performing the side-effect.
         /// </summary>
-        public T Run() => value();
+        public Task<T> Run() => value();
 
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<T, TResult>> f)
@@ -55,7 +65,7 @@ namespace Nordril.Functional.Data
 
             var valueThis = value;
 
-            return new Io<TResult>(() => fIo.Run()(valueThis()));
+            return new Io<TResult>(async () => (await fIo.Run())(await valueThis()));
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace Nordril.Functional.Data
         {
             var valueThis = value;
 
-            return new Io<TResult>(() => ((Io<TResult>)f(valueThis())).Run());
+            return new Io<TResult>(async () => await ((Io<TResult>)f(await valueThis())).Run());
         }
 
         /// <summary>
@@ -79,7 +89,7 @@ namespace Nordril.Functional.Data
         public Io<TResult> BindFunc<TResult>(Func<T, TResult> f)
         {
             var valueThis = value;
-            return new Io<TResult>(() => f(valueThis()));
+            return new Io<TResult>(async () => f(await valueThis()));
         }
 
         /// <summary>
@@ -89,30 +99,50 @@ namespace Nordril.Functional.Data
         public Io<Unit> BindAction(Action<T> f)
         {
             var valueThis = value;
-            return new Io<Unit>(() => { f(valueThis()); return new Unit(); });
+            return new Io<Unit>(async () => { f(await valueThis()); return new Unit(); });
         }
-
-        /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator()
-        {
-            yield return value();
-        }
-
         /// <inheritdoc />
         public IFunctor<TResult> Map<TResult>(Func<T, TResult> f)
         {
             var valueThis = value;
-            return new Io<TResult>(() => f(valueThis()));
+            return new Io<TResult>(async () => f(await valueThis()));
         }
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) => new Io<TResult>(() => x);
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator()
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
         {
-            yield return value();
+            var valueThis = value;
+
+            return new Io<TResult>(
+                async () => await ((Io<TResult>)await f(await valueThis())).Run());
         }
+
+        /// <inheritdoc />
+        public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
+            => Pure(await x());
+
+        /// <inheritdoc />
+        public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
+        {
+            if (!(f is Io<Func<T, Task<TResult>>> fIo))
+                throw new InvalidCastException();
+
+            var valueThis = value;
+
+            return new Io<TResult>(async () => await (await fIo.Run())(await valueThis()));
+        }
+
+        /// <inheritdoc />
+        public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
+        {
+            var valueThis = value;
+            return new Io<TResult>(async () => await f(await valueThis()));
+        }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 
     /// <summary>
@@ -144,18 +174,49 @@ namespace Nordril.Functional.Data
              Func<TSource, Io<TMiddle>> f,
              Func<TSource, TMiddle, TResult> resultSelector)
         {
-            return new Io<TResult>(() => { var sourceRes = source.Run(); var middleRes = f(sourceRes).Run(); return resultSelector(sourceRes, middleRes); });
+            return new Io<TResult>(async () =>
+            {
+                var sourceRes = await source.Run();
+                var middleRes = await f(sourceRes).Run();
+                return resultSelector(sourceRes, middleRes);
+            });
         }
+
+        /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="Io{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static async Task<Io<TResult>> Select<TSource, TResult>(
+            this Task<Io<TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to asynchronous <see cref="Io{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static async Task<Io<TResult>> SelectMany<TSource, TMiddle, TResult>
+            (this Task<Io<TSource>> source,
+             Func<TSource, Task<Io<TMiddle>>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => (Io<TResult>)(await (await source).BindAsync(async x => (IAsyncMonad<TResult>)(await f(x)).Map(y => resultSelector(x, y))));
 
         /// <summary>
         /// An isomorphism between <see cref="Io{T}"/> and <see cref="Func{T, TResult}"/>.
         /// </summary>
         /// <typeparam name="T">The underlying type to wrap.</typeparam>
-        private class IoIso<T> : IIsomorphism<Func<T>, Io<T>>
+        private class IoIso<T> : IIsomorphism<Func<Task<T>>, Io<T>>
         {
-            public Func<T> ConvertBackWith(Unit _, Io<T> from) => () => from.Run();
+            public Func<Task<T>> ConvertBackWith(Unit _, Io<T> from) => () => from.Run();
 
-            public Io<T> ConvertWith(Unit _, Func<T> from) => new Io<T>(from);
+            public Io<T> ConvertWith(Unit _, Func<Task<T>> from) => new Io<T>(from);
         }
 
         /// <summary>
@@ -171,6 +232,13 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of the result.</typeparam>
         /// <param name="f">The function to wrap.</param>
         public static Io<T> AsIo<T>(this Func<T> f) => new Io<T>(f);
+
+        /// <summary>
+        /// Wraps an asynchronous function into an <see cref="Io{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="f">The function to wrap.</param>
+        public static Io<T> AsIo<T>(this Func<Task<T>> f) => new Io<T>(f);
 
         /// <summary>
         /// Lifts a <see cref="Func{T, TResult}"/> into a function which takes a value of type <typeparamref name="T"/> and returns a value of type <typeparamref name="TResult"/> into a function which takes a value of type <typeparamref name="T"/> and returns an <see cref="Io{T}"/>. Useful for <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/> on <see cref="Io{T}"/>-computations.
@@ -200,13 +268,13 @@ namespace Nordril.Functional.Data
         /// Returns an isomorphism between <see cref="Func{TResult}"/> and <see cref="Io{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the result of computation.</typeparam>
-        public static IIsomorphism<Func<T>, Io<T>> Iso<T>() => new IoIso<T>();
+        public static IIsomorphism<Func<Task<T>>, Io<T>> Iso<T>() => new IoIso<T>();
         
         /// <summary>
         /// Unwraps an <see cref="Io{T}"/> into a <see cref="Func{TResult}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the result of the computation.</typeparam>
         /// <param name="io">The computation to unwrap.</param>
-        public static Func<T> Unwrap<T>(this Io<T> io) => () => io.Run();
+        public static Func<Task<T>> Unwrap<T>(this Io<T> io) => () => io.Run();
     }
 }

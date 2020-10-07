@@ -28,15 +28,33 @@ namespace Nordril.Functional.Tests.Data
         {
             var w = new Writer<IList<int>, int, Monoid.ListAppendImmutableMonoid<int>>(7);
 
-            var actual1 = w.Tell(new int[] { 2, 3 });
-            var actual2 = actual1.Tell(new int[] { 4 });
-            var actual3 = (Writer<IList<int>, int, Monoid.ListAppendImmutableMonoid<int>>)actual2.Map(x => x + 5);
+            var actual1 =
+                from x in w
+                from a in Writer.Tell<IList<int>, Monoid.ListAppendImmutableMonoid<int>>(new int[] { 2, 3 })
+                select x;
 
+            var actual2 =
+                from x in w
+                from a in actual1
+                from b in Writer.Tell<IList<int>, Monoid.ListAppendImmutableMonoid<int>>(new int[] { 4 })
+                select x;
+
+            var actual3 =
+                from x in w
+                from a in actual2
+                select x + 5;
+
+            //var actual1 = w.Tell(new int[] { 2, 3 });
+            //var actual2 = actual1.Tell(new int[] { 4 });
+            //var actual3 = (Writer<IList<int>, int, Monoid.ListAppendImmutableMonoid<int>>)actual2.Map(x => x + 5);
+
+            Assert.Equal(7, actual1.Result);
             Assert.Equal(7, actual2.Result);
             Assert.Equal(12, actual3.Result);
             Assert.Equal(new int[0], w.State);
             Assert.Equal(new int[] { 2, 3 }, actual1.State);
             Assert.Equal(new int[] { 2, 3, 4 }, actual2.State);
+            Assert.Equal(new int[] { 2, 3, 4 }, actual3.State);
         }
 
         [Fact]

@@ -864,6 +864,13 @@ namespace Nordril.Functional
         public static IFuncList<T> MakeFuncList<T>(this IEnumerable<T> xs) => new FuncList<T>(xs);
 
         /// <summary>
+        /// Creates an <see cref="IFuncSet{T}"/> out of a sequence of elements.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence to turn into a set.</param>
+        public static IFuncSet<T> MakeFuncSet<T>(this IEnumerable<T> xs) => new FuncSet<T>(xs);
+
+        /// <summary>
         /// Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.
         /// </summary>
         /// <typeparam name="TSeed">The type of the seed value.</typeparam>

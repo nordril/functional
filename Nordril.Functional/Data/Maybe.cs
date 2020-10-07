@@ -302,6 +302,32 @@ namespace Nordril.Functional.Data
             => source.ValueOr(s => f(s).ValueOr(m => Just(resultSelector(s, m)), Nothing<TResult>()), Nothing<TResult>());
 
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="Maybe{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static async Task<Maybe<TResult>> Select<TSource, TResult>(
+            this Task<Maybe<TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to asynchronous <see cref="Maybe{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static async Task<Maybe<TResult>> SelectMany<TSource, TMiddle, TResult>
+            (this Task<Maybe<TSource>> source,
+             Func<TSource, Task<Maybe<TMiddle>>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => (Maybe<TResult>)(await (await source).BindAsync(async x => (IAsyncMonad<TResult>)(await f(x)).Map(y => resultSelector(x, y))));
+
+        /// <summary>
         /// An isomorphism between <see cref="Maybe{T}"/> and reference types, where <c>default</c> is mapped to <see cref="Maybe.Nothing{T}"/> and all other values to <see cref="Maybe.Just{T}(T)"/>.
         /// </summary>
         /// <typeparam name="T">The underlying type to wrap.</typeparam>

@@ -2,6 +2,7 @@
 using Nordril.Functional.Category;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace Nordril.Functional.Data
 {
     /// <summary>
     /// A fusing of <see cref="Reader{TState, TValue}"/>, <see cref="Writer{TState, TValue, TMonoid}"/>, and <see cref="State{TState, TValue}"/>, where computations can read from an environment <typeparamref name="TEnvironment"/>, write to an output <typeparamref name="TOutput"/>, and modify a state <typeparamref name="TState"/>.
+    /// <br />
+    /// See also <see cref="RwsCxt{TEnvironment, TOutput, TMonoid, TState}"/> on how to make usage more convenient by being able to omit type parameter.
     /// </summary>
     /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
     /// <typeparam name="TOutput">The type of the output.</typeparam>
@@ -67,7 +70,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="environment">The read-only environment.</param>
         /// <param name="state">The mutable state.</param>
-        public (TValue, TState, TOutput) Run(TEnvironment environment, TState state) => runRws(environment, state);
+        public (TValue value, TState state, TOutput output) Run(TEnvironment environment, TState state) => runRws(environment, state);
 
         /// <inheritdoc />
         public IMonad<TResult> Bind<TResult>(Func<TValue, IMonad<TResult>> f)
@@ -161,6 +164,21 @@ namespace Nordril.Functional.Data
             => new Rws<TEnvironment, TOutput, TMonoid, TState, TState>((e,s) => (s,s,Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
+        /// Returns the current state.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, TState> Get<TEnvironment, TOutput, TMonoid, TState>(
+            this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt)
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, TState>((e, s) => (s, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+
+        /// <summary>
         /// Replaces the current state with a new one.
         /// </summary>
         /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
@@ -169,6 +187,22 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="value">The new state.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Put<TEnvironment, TOutput, TMonoid, TState>(TState value)
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+
+        /// <summary>
+        /// Replaces the current state with a new one.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="value">The new state.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Put<TEnvironment, TOutput, TMonoid, TState>(
+            this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt, TState value)
             where TMonoid : IMonoid<TOutput>
             => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
@@ -185,6 +219,23 @@ namespace Nordril.Functional.Data
             => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
+        /// Modifies the current state by running a function on it.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="f">The function to apply to the state.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Modify<TEnvironment, TOutput, TMonoid, TState>(
+            this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt,
+            Func<TState, TState> f)
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+
+        /// <summary>
         /// Returns the current environment.
         /// </summary>
         /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
@@ -192,6 +243,21 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
         /// <typeparam name="TState">The type of the state.</typeparam>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment> GetEnvironment<TEnvironment, TOutput, TMonoid, TState>()
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment>((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+
+        /// <summary>
+        /// Returns the current environment.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment> GetEnvironment<TEnvironment, TOutput, TMonoid, TState>(
+            this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt)
             where TMonoid : IMonoid<TOutput>
             => new Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment>((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
@@ -223,28 +289,45 @@ namespace Nordril.Functional.Data
             => new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e,s) => r.Run(f(e), s));
 
         /// <summary>
-        /// Stores a new output and returns it.
+        /// Stores a new output.
         /// </summary>
         /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
         /// <typeparam name="TOutput">The type of the output.</typeparam>
         /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
         /// <typeparam name="TState">The type of the state.</typeparam>
-        /// <param name="state">The output to store and return.</param>
-        public static Rws<TEnvironment, TOutput, TMonoid, TState, TOutput> Listen<TEnvironment, TOutput, TMonoid, TState>(TOutput state)
+        /// <param name = "output" > The output to store and return.</param>
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Tell<TEnvironment, TOutput, TMonoid, TState>(TOutput output)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TOutput>((e,s) => (state, s, state));
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e,s) => (new Unit(), s, output));
+
 
         /// <summary>
-        /// Returns a new <see cref="Rws{TEnvironment, TOutput, TMonoid, TState, TValue}"/> which stores a new ouput <paramref name="state"/>.
+        /// Stores a new output.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the environment.</typeparam>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The type of the monoid used to combine outputs.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="output"> The output to store and return.</param>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Tell<TEnvironment, TOutput, TMonoid, TState>(
+            this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt,
+            TOutput output)
+            where TMonoid : IMonoid<TOutput>
+            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), s, output));
+
+        /// <summary>
+        /// Returns the result of the computation as well as the write-output.
         /// </summary>
         /// <param name="rws">The RWS to which to tell the output.</param>
-        /// <param name="state">The new output to store.</param>
-        public static Rws<TEnvironment, TOutput, TMonoid, TState, TValue> Tell<TEnvironment, TOutput, TMonoid, TState, TValue>(this Rws<TEnvironment, TOutput, TMonoid, TState, TValue> rws, TOutput state)
+        public static Rws<TEnvironment, TOutput, TMonoid, TState, (TValue, TOutput)> Listen<TEnvironment, TOutput, TMonoid, TState, TValue>(this Rws<TEnvironment, TOutput, TMonoid, TState, TValue> rws)
             where TMonoid : IMonoid<TOutput>
         {
-            return new Rws<TEnvironment, TOutput, TMonoid, TState, TValue>((e, s) => {
+            return new Rws<TEnvironment, TOutput, TMonoid, TState, (TValue, TOutput)>((e, s) => {
                 var (a1, s1, w1) = rws.Run(e, s);
-                return (a1, s1, rws.Monoid.Op(w1, state));
+                return ((a1,w1), s1, w1);
             });
         }
     }

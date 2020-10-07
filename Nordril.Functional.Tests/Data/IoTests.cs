@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Nordril.Functional.Tests.Data
@@ -9,7 +10,7 @@ namespace Nordril.Functional.Tests.Data
     public class IoTests
     {
         [Fact]
-        public void BindEffectsTest()
+        public async Task BindEffectsTest()
         {
             var output = new List<string>();
 
@@ -30,7 +31,7 @@ namespace Nordril.Functional.Tests.Data
                 "out: second, 9",
                 "out: third, 14"
             }, output);
-            Assert.Equal(15, actual);
+            Assert.Equal(15, await actual);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Nordril.Functional.Algebra;
 using Nordril.Functional.Category;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nordril.Functional.Data
 {
@@ -13,7 +14,7 @@ namespace Nordril.Functional.Data
     /// <typeparam name="TMonoid">The monoid on <typeparamref name="TOutput"/> used to combine the outputs. This MUST be a type whose <see cref="IMagma{T}.Op(T, T)"/>- and <see cref="INeutralElement{T}.Neutral"/>-operations DO NOT use the this-pointer, i.e. NOT a generic <see cref="Monoid{T}"/>-instance, but some user-made <see cref="IMonoid{T}"/>-instance.</typeparam>
     /// <remarks>
     /// The two main functions one can use with a writer are tell (which stores a new output in the state of the writer) and listen (which stores a new output in the state of the writer and also returns it as the writer's result).
-    /// Due to limits of type-inference, using <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/> and <see cref="IFunctor{T}.Map{TResult}(Func{T, TResult})"/> are quite cumbersome; for this reason, specialized versions are provided in the form of <see cref="Writer.BindTell{TState, TValue, TMonoid}(Writer{TState, TValue, TMonoid}, Func{TValue, TState})"/> and <see cref="Writer.BindListen{TState, TValue, TMonoid}(Writer{TState, TValue, TMonoid}, Func{TValue, TState})"/> (as a specialized replacement for <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/>; and <see cref="Writer{TState, TValue, TMonoid}.MapWriter{TResult}(Func{TValue, TResult})"/> (as a specialized replacement for <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>).
+    /// Due to limits of type-inference, using <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/> and <see cref="IFunctor{T}.Map{TResult}(Func{T, TResult})"/> are quite cumbersome; for this reason, specialized versions are provided in the form of <see cref="Writer.BindTell{TState, TValue, TMonoid}(Writer{TState, TValue, TMonoid}, Func{TValue, TState})"/> (as a specialized replacement for <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/>; and <see cref="Writer{TState, TValue, TMonoid}.MapWriter{TResult}(Func{TValue, TResult})"/> (as a specialized replacement for <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>).
     /// </remarks>
     public class Writer<TOutput, TValue, TMonoid> : IMonad<TValue>
         where TMonoid : IMonoid<TOutput>
@@ -70,12 +71,14 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
-        /// Returns a new writer which stores a new ouput <paramref name="state"/>.
+        /// Creates a new writer from a result, an initial output, and a monoid to combine successive outputs.
         /// </summary>
-        /// <param name="state">The new output to store.</param>
-        public Writer<TOutput, TValue, TMonoid> Tell(TOutput state)
+        /// <param name="args">The initial state of the writer, the result to produce, and the monoid on <typeparamref name="TOutput"/>.</param>
+        public Writer((TValue result, TOutput state, IMonoid<TOutput> monoid) args)
         {
-            return new Writer<TOutput, TValue, TMonoid>(Result, Monoid.Op(State, state));
+            State = args.state;
+            Result = args.result;
+            Monoid = args.monoid;
         }
 
         /// <inheritdoc />
@@ -129,7 +132,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TResult">The type of the result's value.</typeparam>
         /// <param name="source">The source.</param>
         /// <param name="f">The function to apply.</param>
-        public static Writer<TOutput, TResult, TMonoid> Select<TOutput, TMonoid, TSource, TResult>(this State<TOutput, TSource> source, Func<TSource, TResult> f)
+        public static Writer<TOutput, TResult, TMonoid> Select<TOutput, TMonoid, TSource, TResult>(this Writer<TOutput, TSource, TMonoid> source, Func<TSource, TResult> f)
             where TMonoid : IMonoid<TOutput>
             => (Writer<TOutput, TResult, TMonoid>)source.Map(f);
 
@@ -163,7 +166,20 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TOutput">The type of the output.</typeparam>
         /// <typeparam name="TMonoid">The <see cref="IMonoid{T}"/> on <typeparamref name="TOutput"/>.</typeparam>
         /// <param name="state">The output to store.</param>
-        public static Writer<TOutput, Unit, TMonoid> TellUnit<TOutput, TMonoid>(TOutput state)
+        public static Writer<TOutput, Unit, TMonoid> Tell<TOutput, TMonoid>(TOutput state)
+            where TMonoid : IMonoid<TOutput>
+            => new Writer<TOutput, Unit, TMonoid>(new Unit(), state);
+
+        /// <summary>
+        /// Stores a new output in the writer and returns no result.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TOutput">The type of the output.</typeparam>
+        /// <typeparam name="TMonoid">The <see cref="IMonoid{T}"/> on <typeparamref name="TOutput"/>.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="state">The output to store.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Writer<TOutput, Unit, TMonoid> Tell<TOutput, TMonoid>(this WriterCxt<TOutput, TMonoid> _cxt, TOutput state)
             where TMonoid : IMonoid<TOutput>
             => new Writer<TOutput, Unit, TMonoid>(new Unit(), state);
 
@@ -178,46 +194,20 @@ namespace Nordril.Functional.Data
         public static Writer<TOutput, TValue, TMonoid> BindTell<TOutput, TValue, TMonoid>(this Writer<TOutput, TValue, TMonoid> w, Func<TValue, TOutput> f)
             where TMonoid : IMonoid<TOutput>
         {
-            return w.Tell(f(w.Result));
+            return (Writer<TOutput, TValue, TMonoid>)w.Bind(x => (Writer<TOutput, TValue, TMonoid>)Tell<TOutput, TMonoid>(f(x)).Map(_ => x));
         }
 
         /// <summary>
-        /// Stores a new output in the writer and returns it.
+        /// Returns the result of the computation as well as the write-output.
         /// </summary>
+        /// <typeparam name="TValue">The result of the original writer.</typeparam>
         /// <typeparam name="TOutput">The type of the output.</typeparam>
-        /// <typeparam name="TValue">The result of the writer.</typeparam>
         /// <typeparam name="TMonoid">The <see cref="IMonoid{T}"/> on <typeparamref name="TOutput"/>.</typeparam>
         /// <param name="w">The writer.</param>
-        /// <param name="f">The function which takes the writer's result and returns the output to store.</param>
-        public static Writer<TOutput, Unit, TMonoid> BindTellUnit<TOutput, TValue, TMonoid>(this Writer<TOutput, TValue, TMonoid> w, Func<TValue, TOutput> f)
+        public static Writer<TOutput, (TValue, TOutput), TMonoid> Listen<TValue, TOutput, TMonoid>(this Writer<TOutput, TValue, TMonoid> w)
             where TMonoid : IMonoid<TOutput>
         {
-            return w.Tell(f(w.Result)).Map(_ => new Unit()).ToWriter<TOutput, Unit, TMonoid>();
-        }
-
-        /// <summary>
-        /// Stores a new output and returns it.
-        /// </summary>
-        /// <typeparam name="TOutput">The type of the output.</typeparam>
-        /// <typeparam name="TMonoid">The <see cref="IMonoid{T}"/> on <typeparamref name="TOutput"/>.</typeparam>
-        /// <param name="state">The output to store and return.</param>
-        public static Writer<TOutput, TOutput, TMonoid> Listen<TOutput, TMonoid>(TOutput state)
-            where TMonoid : IMonoid<TOutput>
-            => new Writer<TOutput, TOutput, TMonoid>(state, state);
-
-        /// <summary>
-        /// Stores a new output and returns it.
-        /// </summary>
-        /// <typeparam name="TOutput">The type of the output.</typeparam>
-        /// <typeparam name="TValue">The result of the writer.</typeparam>
-        /// <typeparam name="TMonoid">The <see cref="IMonoid{T}"/> on <typeparamref name="TOutput"/>.</typeparam>
-        /// <param name="w">The writer.</param>
-        /// <param name="f">The output to store and return.</param>
-        public static Writer<TOutput, TOutput, TMonoid> BindListen<TOutput, TValue, TMonoid>(this Writer<TOutput, TValue, TMonoid> w, Func<TValue, TOutput> f)
-            where TMonoid : IMonoid<TOutput>
-        {
-            var outputValue = f(w.Result);
-            return w.Tell(outputValue).MapWriter(_ => outputValue);
+            return new Writer<TOutput, (TValue, TOutput), TMonoid>((w.Result, w.State), w.State, w.Monoid);
         }
 
         /// <summary>

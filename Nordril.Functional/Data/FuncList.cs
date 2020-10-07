@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
 {
@@ -27,6 +28,17 @@ namespace Nordril.Functional.Data
         {
             list = xs == null ? new List<T>() : new List<T>(xs);
             comparer = new ListEqualityComparer<T>((x, y) => x.Equals(y));
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="FuncList{T}"/> with an initial capacity of <paramref name="capacity"/>, using <paramref name="comparer"/> for equality-comparisons among elements, or <see cref="object.Equals(object)"/> is <paramref name="comparer"/> is null.
+        /// </summary>
+        /// <param name="capacity">The initial capacity of the list.</param>
+        /// <param name="comparer">The equality comparer for the list's elements.</param>
+        public FuncList(int capacity, IEqualityComparer<T> comparer = null)
+        {
+            list = new List<T>(capacity);
+            this.comparer = comparer != null ? new ListEqualityComparer<T>((x, y) => comparer.Equals(x, y)) : new ListEqualityComparer<T>((x, y) => x.Equals(y));
         }
 
         /// <summary>
@@ -226,6 +238,28 @@ namespace Nordril.Functional.Data
                 comparer = new ListEqualityComparer<T>((x, y) => x.Equals(y));
             return comparer;
         }
+
+        /// <inheritdoc />
+        public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
+            => new FuncList<TResult>(((IEnumerable<TResult>[])(await Task.WhenAll(ListCoalesce().Select(x => f(x))))).SelectMany(xs => xs));
+
+        /// <inheritdoc />
+        public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
+            => Pure(await x());
+
+        /// <inheritdoc />
+        public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
+        {
+            if (f == null || !(f is IEnumerable<Func<T, Task<TResult>>> functions))
+                throw new InvalidCastException();
+
+            var ys = ListCoalesce();
+            return new FuncList<TResult>(await Task.WhenAll(functions.SelectMany(fx => ys.Select(y => fx(y)))));
+        }
+
+        /// <inheritdoc />
+        public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
+            => new FuncList<TResult>(await Task.WhenAll(ListCoalesce().Select(x => f(x))));
     }
 
     /// <summary>
@@ -260,6 +294,32 @@ namespace Nordril.Functional.Data
             var enumSource = ((IEnumerable<TSource>)source);
             return new FuncList<TResult>(enumSource.SelectMany(x => f(x), resultSelector));
         }
+
+        /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="FuncList{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static async Task<FuncList<TResult>> Select<TSource, TResult>(
+            this Task<FuncList<TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to asynchronous <see cref="FuncList{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static async Task<FuncList<TResult>> SelectMany<TSource, TMiddle, TResult>
+            (this Task<FuncList<TSource>> source,
+             Func<TSource, Task<FuncList<TMiddle>>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => (FuncList<TResult>)(await (await source).BindAsync(async x => (IAsyncMonad<TResult>)(await f(x)).Map(y => resultSelector(x, y))));
 
         /// <summary>
         /// Creates a new <see cref="FuncList{T}"/>.

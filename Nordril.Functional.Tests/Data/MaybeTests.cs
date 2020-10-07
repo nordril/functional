@@ -262,6 +262,24 @@ namespace Nordril.Functional.Tests.Data
         }
 
         [Fact]
+        public static async Task ExtensionBindAsyncAppliesFunction()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = Maybe.Just(5);
+
+            async Task<IAsyncMonad<int>> f(int z) => await Task.FromResult(Maybe.Nothing<int>());
+            async Task<IAsyncMonad<int>> g(int z) => await Task.FromResult(Maybe.Just(z * 2));
+            Task<IAsyncMonad<int>> getInt = Task.FromResult((IAsyncMonad<int>)Maybe.Just(5));
+
+            Assert.True((await x.BindAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await y.BindAsync(f)).ToMaybe().IsNothing);
+            Assert.True((await x.BindAsync(g)).ToMaybe().IsNothing);
+            Assert.True((await y.BindAsync(g)).ToMaybe().HasValue);
+            Assert.Equal(5, y.Value());
+            Assert.Equal(10, (await y.BindAsync(g)).ToMaybe().Value());
+        }
+
+        [Fact]
         public static async Task ApAsyncAppliesFunction()
         {
             var x = Maybe.Nothing<int>();

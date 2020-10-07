@@ -2,6 +2,7 @@
 using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -146,6 +147,7 @@ namespace Nordril.Functional.Tests.Algebra
             var zs = new List<int> { 4, 1, 2 };
 
             Assert.Empty(m.Neutral);
+            Assert.Empty(Monoid.NeutralUnsafe<IList<int>, Monoid.ListAppendImmutableMonoid<int>>());
             Assert.Equal(new int[] { 1, 2, 3 }, m.Op(xs, ys));
             Assert.Equal(new int[] { 1, 2, 3 }, m.Op(ys, xs));
             Assert.Equal(new int[] { 1, 2, 3, 4, 1, 2 }, m.Op(ys, zs));
@@ -156,6 +158,27 @@ namespace Nordril.Functional.Tests.Algebra
         }
 
         [Fact]
+        public static void ImmutableListAppendMonoidTest_String()
+        {
+            var m = Monoid.ImmutableListAppend<string>();
+
+            var xs = new List<string> { };
+            var ys = new List<string> { "a", "b", "c" };
+            var zs = new List<string> { "d", "a", "b" };
+
+            Assert.Empty(m.Neutral);
+            Assert.Empty(Monoid.NeutralUnsafe<IList<string>, Monoid.ListAppendImmutableMonoid<string>>());
+            Assert.Equal(new string[] { "a", "b", "c", "d", "a", "b" }, Monoid.OpUnsafe<IList<string>, Monoid.ListAppendImmutableMonoid<string>>()(ys, zs));
+            Assert.Equal(new string[] { "a", "b", "c" }, m.Op(xs, ys));
+            Assert.Equal(new string[] { "a", "b", "c" }, m.Op(ys, xs));
+            Assert.Equal(new string[] { "a", "b", "c", "d", "a", "b" }, m.Op(ys, zs));
+
+            Assert.Empty(xs);
+            Assert.Equal(new string[] { "a", "b", "c" }, ys);
+            Assert.Equal(new string[] { "d", "a", "b" }, zs);
+        }
+
+        [Fact]
         public static void UnsafeTest()
         {
             var x = new IntWithAddMonoid(5);
@@ -163,6 +186,54 @@ namespace Nordril.Functional.Tests.Algebra
 
             Assert.Equal(0, Monoid.NeutralUnsafe<IntWithAddMonoid, IntWithAddMonoid>().Value);
             Assert.Equal(12, Monoid.OpUnsafe<IntWithAddMonoid, IntWithAddMonoid>()(x,y).Value);
+
+            Assert.Equal(new GenericPerson<Info>("", new Info()), Monoid.NeutralUnsafe<GenericPerson<Info>, PersonMonoid<Info>>());
+        }
+
+        private class PersonMonoid<T> : IMonoid<GenericPerson<T>>
+            where T : IEquatable<T>, new ()
+        {
+            public GenericPerson<T> Neutral => new GenericPerson<T>("", new T());
+
+            public GenericPerson<T> Op(GenericPerson<T> x, GenericPerson<T> y)
+            {
+                return new GenericPerson<T>(x.Name + y.Name, x.Infos);
+            }
+        }
+
+        public class GenericPerson<T> : IEquatable<GenericPerson<T>>
+            where T : IEquatable<T>, new()
+        {
+            public string Name { get; }
+
+            public T Infos { get; }
+
+            public GenericPerson(string name, T infos)
+            {
+                Name = name;
+                Infos = infos;
+            }
+
+            public bool Equals([AllowNull] GenericPerson<T> other)
+            {
+                if (other is null)
+                    return false;
+
+                return Name == other.Name && Infos.Equals(other.Infos);
+            }
+        }
+
+        public class Info : IEquatable<Info>
+        {
+            public string Content { get; set; }
+
+            public bool Equals([AllowNull] Info other)
+            {
+                if (other is null)
+                    return false;
+
+                return Content == other.Content;
+            }
         }
 
         private class IntWithAddMonoid : IHasMonoid<IntWithAddMonoid>

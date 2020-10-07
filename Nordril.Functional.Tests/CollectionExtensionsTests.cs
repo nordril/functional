@@ -13,7 +13,7 @@ namespace Nordril.Functional.Tests
         [MemberData(nameof(Aggregate2Data))]
         public static void Aggregate2Test(IEnumerable<int> xs, int expected)
         {
-            int sumUp(int acc, int outer, int inner)
+            static int sumUp(int acc, int outer, int inner)
             {
                 return acc + outer + inner;
             }

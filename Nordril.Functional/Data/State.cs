@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Nordril.Functional.Data
 {
@@ -118,6 +119,16 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         public static State<TState, TState> Get<TState>() => new State<TState, TState>(s => (s, s));
 
+
+        /// <summary>
+        /// Returns the current state.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static State<TState, TState> Get<TState>(this StateCxt<TState> _cxt) => new State<TState, TState>(s => (s, s));
+
         /// <summary>
         /// Replaces the current state with a new one.
         /// </summary>
@@ -126,11 +137,31 @@ namespace Nordril.Functional.Data
         public static State<TState, Unit> Put<TState>(TState value) => new State<TState, Unit>(_ => (new Unit(), value));
 
         /// <summary>
+        /// Replaces the current state with a new one.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="value">The new state.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static State<TState, Unit> Put<TState>(this StateCxt<TState> _cxt, TState value) => new State<TState, Unit>(_ => (new Unit(), value));
+
+        /// <summary>
         /// Modifies the current state by running a function on it.
         /// </summary>
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="f">The function to apply to the state.</param>
         public static State<TState, Unit> Modify<TState>(Func<TState, TState> f) => new State<TState, Unit>(s => (new Unit(), f(s)));
+
+        /// <summary>
+        /// Modifies the current state by running a function on it.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="f">The function to apply to the state.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static State<TState, Unit> Modify<TState>(this StateCxt<TState> _cxt, Func<TState, TState> f) => new State<TState, Unit>(s => (new Unit(), f(s)));
 
         /// <summary>
         /// Runs the state function with an initial state and returns the result, discarding the final state.

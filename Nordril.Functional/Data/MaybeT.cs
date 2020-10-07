@@ -1,6 +1,8 @@
-﻿using Nordril.Functional.Category;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Category;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Nordril.Functional.Data
@@ -12,7 +14,7 @@ namespace Nordril.Functional.Data
     /// <typeparam name="TLifted">The monadic type of the inner monad, containing, in turn, a <see cref="Maybe{T}"/>-value.</typeparam>
     /// <typeparam name="TInner">The <see cref="Maybe{T}"/>-type.</typeparam>
     /// <typeparam name="TSource">The innermost source-type.</typeparam>
-    public struct MaybeT<TUnlifted, TLifted, TInner, TSource> : IMonadTransformer<TUnlifted, TLifted, TInner, TSource>
+    public struct MaybeT<TUnlifted, TLifted, TInner, TSource> : IMonadMorph<TUnlifted, TLifted, TInner, TSource>
         where TUnlifted : IMonad<TSource>
         where TLifted : IMonad<TInner>
         where TInner : IMonad<TSource>
@@ -83,6 +85,13 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
+        public IMonadTransformer<TUnlifted, TLifted, TInner, TSource> Hoist(TInner inner)
+        {
+            var z = new MaybeT<TUnlifted, TLifted, TInner, TSource>(((TInner)(object)inner).PureUnsafe<TInner, TLifted>());
+            return z;
+        }
+
+        /// <inheritdoc />
         public IMonadTransformer<TUnliftedResult, TLiftedResult, TInnerResult, TResult> PureT<TUnliftedResult, TLiftedResult, TInnerResult, TResult>(TResult x)
             where TUnliftedResult : IMonad<TResult>
             where TLiftedResult : IMonad<TInnerResult>
@@ -135,7 +144,7 @@ namespace Nordril.Functional.Data
     /// <summary>
     /// Extension methods for <see cref="MaybeT{TUnlifted, TLifted, TInner, TSource}"/>.
     /// </summary>
-    public static class MaybeT
+    public static partial class MaybeT
     {
         /// <summary>
         /// Replaces an occurrence of a generic argument <paramref name="original"/> in a (generic or non-generic) type with <paramref name="replacement"/> and returns the result.
@@ -205,8 +214,8 @@ namespace Nordril.Functional.Data
             this MaybeT<TUnlifted, TLifted, Maybe<TSource>, TSource> maybe,
             Func<TSource, TResult> f,
             Func<TResult> alternative)
-            where TUnlifted : IMonad<TSource> //m a
-            where TLifted : IMonad<Maybe<TSource>> //m (Maybe a)
+            where TUnlifted : IMonad<TSource>
+            where TLifted : IMonad<Maybe<TSource>>
         {
             return (TUnlifted)maybe.Run.Map(m => m.ValueOrLazy(f, alternative));
         }

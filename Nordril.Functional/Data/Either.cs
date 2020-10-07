@@ -230,7 +230,7 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x) 
-            => new Either<Unit, TResult>(new Unit(), x, EitherTag.Right);
+            => new Either<TLeft, TResult>(default, x, EitherTag.Right);
 
         /// <inheritdoc />
         public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<TRight, Task<IAsyncMonad<TResult>>> f)
@@ -318,6 +318,34 @@ namespace Nordril.Functional.Data
         }
 
         /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="Either{TLeft, TRight}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static async Task<Either<TLeft, TResult>> Select<TLeft, TSource, TResult>(
+            this Task<Either<TLeft, TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to asynchronous <see cref="Either{TLeft, TRight}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static async Task<Either<TLeft, TResult>> SelectMany<TLeft, TSource, TMiddle, TResult>
+            (this Task<Either<TLeft, TSource>> source,
+             Func<TSource, Task<Either<TLeft, TMiddle>>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => (Either<TLeft, TResult>)(await (await source).BindAsync(async x => (IAsyncMonad<TResult>)(await f(x)).Map(y => resultSelector(x, y))));
+
+        /// <summary>
         /// Creates a left-either from a value.
         /// </summary>
         /// <typeparam name="TLeft">The type of the left-value.</typeparam>
@@ -332,6 +360,17 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TRight">The type of the right-value.</typeparam>
         /// <param name="value">The value to store in the either.</param>
         public static Either<TLeft, TRight> FromRight<TLeft, TRight>(TRight value) => Either<TLeft, TRight>.FromRight(value);
+
+        /// <summary>
+        /// Creates a right-either from a value.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TLeft">The type of the left-value.</typeparam>
+        /// <typeparam name="TRight">The type of the right-value.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="value">The value to store in the either.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Either<TLeft, TRight> FromRight<TLeft, TRight>(this EitherCxt<TLeft> _cxt, TRight value) => Either<TLeft, TRight>.FromRight(value);
 
         /// <summary>
         /// Creates a right-either from a value.

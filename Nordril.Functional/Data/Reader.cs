@@ -1,6 +1,7 @@
 ﻿using Nordril.Functional.Category;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -119,12 +120,34 @@ namespace Nordril.Functional.Data
         public static Reader<TEnvironment, TEnvironment> Get<TEnvironment>() => new Reader<TEnvironment, TEnvironment>(s => s);
 
         /// <summary>
+        /// Returns the current state. Also known as <em>ask</em>.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the state.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Reader<TEnvironment, TEnvironment> Get<TEnvironment>(this ReaderCxt<TEnvironment> _cxt) => new Reader<TEnvironment, TEnvironment>(s => s);
+
+        /// <summary>
         /// Returns the result to of a function which takes the state as an input. Also known as <em>reader</em>.
         /// </summary>
         /// <typeparam name="TEnvironment">The type of the state.</typeparam>
         /// <typeparam name="TResult">The type of the function's result.</typeparam>
         /// <param name="f">The function to run.</param>
         public static Reader<TEnvironment, TResult> With<TEnvironment, TResult>(Func<TEnvironment, TResult> f) => new Reader<TEnvironment, TResult>(s => f(s));
+
+        /// <summary>
+        /// Returns the result to of a function which takes the state as an input. Also known as <em>reader</em>.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the state.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="f">The function to run.</param>
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
+        public static Reader<TEnvironment, TResult> With<TEnvironment, TResult>(
+            this ReaderCxt<TEnvironment> _cxt,
+            Func<TEnvironment, TResult> f) => new Reader<TEnvironment, TResult>(s => f(s));
 
         /// <summary>
         /// Returns a <see cref="Reader{TEnvironment, TValue}"/> which runs <paramref name="r"/>, but first applies <paramref name="f"/> to the environment, effectively running a <see cref="Reader"/> in a modified environment.
@@ -134,6 +157,21 @@ namespace Nordril.Functional.Data
         /// <param name="f">The function which modifies the environment.</param>
         /// <param name="r">The <see cref="Reader"/> to run in the modified environment.</param>
         public static Reader<TEnvironment, TResult> Local<TEnvironment, TResult>(Func<TEnvironment, TEnvironment> f, Reader<TEnvironment, TResult> r)
+            => new Reader<TEnvironment, TResult>(s => r.Run(f(s)));
+
+        /// <summary>
+        /// Returns a <see cref="Reader{TEnvironment, TValue}"/> which runs <paramref name="r"/>, but first applies <paramref name="f"/> to the environment, effectively running a <see cref="Reader"/> in a modified environment.
+        /// This is a convenience-method which does not require explicitly specifying the type arguments.
+        /// </summary>
+        /// <typeparam name="TEnvironment">The type of the state.</typeparam>
+        /// <typeparam name="TResult">The type of the function's result.</typeparam>
+        /// <param name="_cxt">The context to fix the type variables.</param>
+        /// <param name="f">The function which modifies the environment.</param>
+        /// <param name="r">The <see cref="Reader"/> to run in the modified environment.</param>
+        public static Reader<TEnvironment, TResult> Local<TEnvironment, TResult>(
+            this ReaderCxt<TEnvironment> _cxt,
+            Func<TEnvironment, TEnvironment> f,
+            Reader<TEnvironment, TResult> r)
             => new Reader<TEnvironment, TResult>(s => r.Run(f(s)));
 
         /// <summary>

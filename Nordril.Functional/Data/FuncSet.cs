@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Nordril.Functional.Algebra;
 using Nordril.Functional.Category;
 
@@ -44,7 +45,7 @@ namespace Nordril.Functional.Data
         /// <param name="comparer">The equality comparer for the list's elements.</param>
         public FuncSet(IEqualityComparer<T> comparer, IEnumerable<T> xs = null)
         {
-            comparer = comparer ?? new FuncEqualityComparer<T>((x, y) => x.Equals(y));
+            comparer ??= new FuncEqualityComparer<T>((x, y) => x.Equals(y));
             set = xs == null ? new HashSet<T>(comparer) : new HashSet<T>(xs, comparer);
         }
 
@@ -57,10 +58,8 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<T, TResult>> f)
         {
-            if (f == null || !(f is IEnumerable<Func<T, TResult>>))
+            if (f == null || !(f is IEnumerable<Func<T, TResult>> functions))
                 throw new InvalidCastException();
-
-            var functions = (IEnumerable<Func<T, TResult>>)f;
 
             var ys = SetCoalesce();
             return new FuncSet<TResult>(functions.SelectMany(fx => ys.Select(y => fx(y))));
@@ -136,7 +135,8 @@ namespace Nordril.Functional.Data
         public bool IsSupersetOf(IEnumerable<T> other) => SetCoalesce().IsSupersetOf(ReplaceEqualityComparer(other));
 
         /// <inheritdoc />
-        public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => new FuncSet<TResult>(SetCoalesce().Select(f));
+        public IFunctor<TResult> Map<TResult>(Func<T, TResult> f)
+            => new FuncSet<TResult>(SetCoalesce().Select(f));
 
         /// <inheritdoc />
         public bool Overlaps(IEnumerable<T> other) => SetCoalesce().Overlaps(ReplaceEqualityComparer(other));
@@ -191,7 +191,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IComparer<ISet<T1>> GetComparer<T1>() where T1 : IComparable<T1>
         {
-            int f(ISet<T1> xs, ISet<T1> ys)
+            static int f(ISet<T1> xs, ISet<T1> ys)
             {
                 var lexicographicalComparer = new LexicographicalComparer<T1>((x, y) => x.CompareTo(y));
                 var xsOrd = xs.OrderBy(x => x);
@@ -273,6 +273,28 @@ namespace Nordril.Functional.Data
                 return new FuncSet<T>(set.Comparer, that);
             }
         }
+
+        /// <inheritdoc />
+        public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
+            => new FuncList<TResult>(((IEnumerable<TResult>[])(await Task.WhenAll(SetCoalesce().Select(x => f(x))))).SelectMany(xs => xs));
+
+        /// <inheritdoc />
+        public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
+            => Pure(await x());
+
+        /// <inheritdoc />
+        public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
+        {
+            if (f == null || !(f is IEnumerable<Func<T, Task<TResult>>> functions))
+                throw new InvalidCastException();
+
+            var ys = SetCoalesce();
+            return new FuncSet<TResult>(await Task.WhenAll(functions.SelectMany(fx => ys.Select(y => fx(y)))));
+        }
+
+        /// <inheritdoc />
+        public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
+            => new FuncSet<TResult>(await Task.WhenAll(SetCoalesce().Select(f)));
     }
 
     /// <summary>
@@ -307,6 +329,32 @@ namespace Nordril.Functional.Data
             var enumSource = ((IEnumerable<TSource>)source);
             return new FuncSet<TResult>(enumSource.SelectMany(x => f(x), resultSelector));
         }
+
+        /// <summary>
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="FuncSet{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        public static async Task<FuncSet<TResult>> Select<TSource, TResult>(
+            this Task<FuncSet<TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
+
+        /// <summary>
+        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to asynchronous <see cref="FuncSet{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source's value.</typeparam>
+        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+        /// <typeparam name="TResult">The type of the result's value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="resultSelector">The result-selector.</param>
+        public static async Task<FuncSet<TResult>> SelectMany<TSource, TMiddle, TResult>
+            (this Task<FuncSet<TSource>> source,
+             Func<TSource, Task<FuncSet<TMiddle>>> f,
+             Func<TSource, TMiddle, TResult> resultSelector)
+            => (FuncSet<TResult>)(await (await source).BindAsync(async x => (IAsyncMonad<TResult>)(await f(x)).Map(y => resultSelector(x, y))));
 
         /// <summary>
         /// Creates a new <see cref="FuncSet{T}"/>.

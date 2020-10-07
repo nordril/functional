@@ -1,5 +1,6 @@
 ﻿using Nordril.Functional.Category;
 using System;
+using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
 {
@@ -16,7 +17,7 @@ namespace Nordril.Functional.Data
         public IFunctor<TResult> Map<TResult>(Func<T, TResult> f) => new Const<TResult>();
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => (obj != null && (obj is Const<T>));
+        public override bool Equals(object obj) => (!(obj is null) && (obj is Const<T>));
 
         /// <inheritdoc />
         public override int GetHashCode() => this.DefaultHash();
@@ -51,7 +52,7 @@ namespace Nordril.Functional.Data
     /// </summary>
     /// <typeparam name="TReal">The actual value contained in the functor.</typeparam>
     /// <typeparam name="TPhantom">The value which is only present as a phantom.</typeparam>
-    public struct Const<TReal, TPhantom> : IPhantomFunctor<TPhantom>, IEquatable<Const<TReal, TPhantom>>, IMonad<TPhantom>
+    public struct Const<TReal, TPhantom> : IPhantomFunctor<TPhantom>, IEquatable<Const<TReal, TPhantom>>
     {
         /// <summary>
         /// The value contained in the functor.
@@ -88,18 +89,6 @@ namespace Nordril.Functional.Data
         }
 
         /// <inheritdoc />
-        public IMonad<TResult> Bind<TResult>(Func<TPhantom, IMonad<TResult>> f)
-            => new Const<TReal, TResult>();
-
-        /// <inheritdoc />
-        public IApplicative<TResult> Pure<TResult>(TResult x)
-           => new Const<TReal, TResult>();
-
-        /// <inheritdoc />
-        public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TPhantom, TResult>> f)
-            => new Const<TReal, TResult>();
-
-        /// <inheritdoc />
         public override int GetHashCode() => this.DefaultHash(RealValue);
 
         /// <inheritdoc />
@@ -128,19 +117,15 @@ namespace Nordril.Functional.Data
             => (Const<TResult>)source.Map(f);
 
         /// <summary>
-        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Const{T}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="Const{T}"/>. Offers LINQ query support with one <c>from</c>-clause.
         /// </summary>
         /// <typeparam name="TSource">The type of the source's value.</typeparam>
-        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
         /// <typeparam name="TResult">The type of the result's value.</typeparam>
         /// <param name="source">The source.</param>
         /// <param name="f">The function to apply.</param>
-        /// <param name="resultSelector">The result-selector.</param>
-        public static Const<TResult> SelectMany<TSource, TMiddle, TResult>
-            (this Const<TSource> source,
-             Func<TSource, Const<TMiddle>> f,
-             Func<TSource, TMiddle, TResult> resultSelector) =>
-            new Const<TResult>();
+        public static async Task<Const<TResult>> Select<TSource, TResult>(
+            this Task<Const<TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
 
         /// <summary>
         /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to <see cref="Const{TReal, TPhantom}"/>. Offers LINQ query support with one <c>from</c>-clause.

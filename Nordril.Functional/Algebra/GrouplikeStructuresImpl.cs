@@ -1,5 +1,7 @@
 ﻿using Nordril.Functional.Category;
 using Nordril.Functional.Data;
+using Sigil;
+using Sigil.NonGeneric;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,7 +188,8 @@ namespace Nordril.Functional.Algebra
         public static T NeutralUnsafe<T, TNeutralElement>()
             where TNeutralElement : INeutralElement<T>
         {
-            return GetNeutralUnsafe<T, TNeutralElement>()();
+            var ret = GetNeutralUnsafe<T, TNeutralElement>()();
+            return ret;
         }
 
         /// <summary>
@@ -199,18 +202,32 @@ namespace Nordril.Functional.Algebra
         {
             var instanceNeutral = typeof(TNeutralElement).GetProperty(nameof(INeutralElement<object>.Neutral)).GetMethod;
 
-            var neutral = new DynamicMethod("neutral", typeof(T), Array.Empty<Type>());
-            var generator = neutral.GetILGenerator();
+            var n = Emit<Func<T>>.NewDynamicMethod("neutral");
+            var mthis = n.DeclareLocal<TNeutralElement>("monoidThis");
+            if (typeof(TNeutralElement).IsValueType)
+            {
+                n.LoadLocalAddress(mthis);
+                n.InitializeObject<TNeutralElement>();
+                n.LoadLocalAddress(mthis);
+            }
+            else if (!typeof(TNeutralElement).IsConstructedGenericType)
+            {
+                n.LoadNull();
+                n.StoreLocal(mthis);
+                n.LoadLocal(mthis);
+            }
+            else
+            {
+                n.NewObject<TNeutralElement>();
+                n.StoreLocal(mthis);
+                n.LoadLocal(mthis);
+            }
 
-            _ = generator.DeclareLocal(typeof(TNeutralElement));
-            generator.Emit(OpCodes.Ldloca_S, 0); //push monoidThis (index 0) onto the stack: [] -> [mt]
-            generator.Emit(OpCodes.Initobj, typeof(TNeutralElement)); //initialize mt to null: mt -> []
-            generator.Emit(OpCodes.Ldloc_0); //put local variable 0 to the stack again: [] -> mt
-            generator.Emit(OpCodes.Box, typeof(TNeutralElement)); //box the value: [mt:stack] -> [mt:heap]
-            generator.EmitCall(OpCodes.Call, instanceNeutral, null); //call neutral without null-checking: [mt:heap] -> [ret]
-            generator.Emit(OpCodes.Ret); //return: []
+            n.Call(instanceNeutral);
+            n.Return();
 
-            return (Func<T>)neutral.CreateDelegate(typeof(Func<T>));
+            var ret = n.CreateDelegate();
+            return ret;
         }
 
         /// <summary>
@@ -236,7 +253,36 @@ namespace Nordril.Functional.Algebra
                 && pars[1].ParameterType == typeof(T);
             });
 
-            var op = new DynamicMethod("op", typeof(T), new Type[] { typeof(T), typeof(T) });
+            var op = Emit<Func<T, T, T>>.NewDynamicMethod("op");
+            var mthis = op.DeclareLocal<TMagma>();
+
+            if (typeof(TMagma).IsValueType)
+            {
+                op.LoadLocalAddress(mthis);
+                op.InitializeObject<TMagma>();
+                op.LoadLocalAddress(mthis);
+            }
+            else if (!typeof(TMagma).IsConstructedGenericType)
+            {
+                op.LoadNull();
+                op.StoreLocal(mthis);
+                op.LoadLocal(mthis);
+            }
+            else
+            {
+                op.NewObject<TMagma>();
+                op.StoreLocal(mthis);
+                op.LoadLocal(mthis);
+            }
+
+            op.LoadArgument(0);
+            op.LoadArgument(1);
+            op.Call(instanceOp);
+            op.Return();
+
+            return op.CreateDelegate();
+
+            /*var op = new DynamicMethod("op", typeof(T), new Type[] { typeof(T), typeof(T) });
             var generator = op.GetILGenerator();
 
             var monoidThis = generator.DeclareLocal(typeof(TMagma));
@@ -249,9 +295,9 @@ namespace Nordril.Functional.Algebra
             generator.EmitCall(OpCodes.Call, instanceOp, null); //call op without null-checking: [mt:heap, x, y] -> [ret]
             generator.Emit(OpCodes.Ret); //return: []
 
-            var res = (Func<T, T, T>)op.CreateDelegate(typeof(Func<T, T, T>));
+            var res = (Func<T, T, T>)op.CreateDelegate(typeof(Func<T, T, T>));*/
 
-            return res;
+            //return res;
         }
 
         /// <summary>
@@ -359,7 +405,7 @@ namespace Nordril.Functional.Algebra
         public class ListAppendImmutableMonoid<T> : IMonoid<IList<T>>
         {
             /// <inheritdoc />
-            public IList<T> Neutral => new FuncList<T>();
+            public IList<T> Neutral => new FuncList<T>(null);
 
             /// <inheritdoc />
             public IList<T> Op(IList<T> x, IList<T> y) => new FuncList<T>(x.Concat(y));

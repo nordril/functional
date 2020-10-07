@@ -8,7 +8,15 @@ namespace Nordril.Functional.Data
     /// A "functional list" which, in addition to supporting the operations <see cref="IList{T}"/>, implements <see cref="IMonadPlus{T}"/> (and parent interfaces), <see cref="IAlternative{TSource}"/>, and <see cref="IFoldable{TSource}"/>.
     /// </summary>
     /// <typeparam name="T">The type of elements in the list.</typeparam>
-    public interface IFuncList<T> : IList<T>, IMonadPlus<T>, IFilterable<IFuncList<T>, T>, IKeyedFunctor<int, T>, IAlternative<T>, IEquatable<IList<T>>, ICopyable<IFuncList<T>>
+    public interface IFuncList<T>
+        : IList<T>
+        , IMonadPlus<T>
+        , IAsyncMonad<T>
+        , IFilterable<IFuncList<T>, T>
+        , IKeyedFunctor<int, T>
+        , IAlternative<T>
+        , IEquatable<IList<T>>
+        , ICopyable<IFuncList<T>>
     {
     }
 }
