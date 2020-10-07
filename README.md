@@ -6,7 +6,8 @@ This library brings functional programming to C#. It contains the following:
 * Utility classes,
 * Category theory,
 * Enumerable-extensions,
-* Pattern-matching.
+* Pattern-matching,
+* Monad transformers.
 
 ## Algebra
   There are three kinds of structures:
@@ -363,3 +364,39 @@ public int Collatz(int n)
 ```
 
 `MatchTailRec` is a special match which returns a value of the same type of the input and recursively executes the pattern-match with that result as its new input, but without using up stack-space.
+
+## Monad transformers
+
+A monad transformer is a special kind of monad that wraps another monad, combining their functionalities. Suppose you have a computation in the RWS-monad (reader, writer, state), but each function can also fail (Maybe). One can check at each step whether the computation failed, but the alternative is to use the MaybeT-transformer, which is the transformer-version of Maybe. Monad transformers offer the additional method
+
+```
+Lift(TUnlifted x);
+```
+This method lifts a value in the inner monad (RWS) into the monad transformer (MaybeT<RWS>). Additionally, a monad transformer may also be a monad morphism, which offers the method
+  
+```
+Hoist(TInner x)
+```
+This method is the counterpart of Lift and lifts a value from the base monad (Maybe) into the monad transformer (MaybeT). While it is possible to write fully polymorphic code this way, it is highly inconvenient, as it requires an onerous amount of casts and type variables to be specified, therefore specialized Select/SelectMany/Lift/Hoist-methods are provided for all monads in the library, enabling us to write LINQ-queries. For instance, the following query runs in MaybeT<RWS> and accesses the state, writes to the output, reads from the environment, and may fail part of the way through, in which case subsequent functions will not be executed, as with Maybe:
+  
+```
+    var cxt = new RwsCxt<Dictionary<int, int>, IList<string>, Monoid.ListAppendImmutableMonoid<string>, int>();
+
+    var computation =
+        from x in MaybeT.Lift(cxt.Get())
+        from _1 in MaybeT.Lift(cxt.Tell(FuncList.Make("function call 1")))
+        from _2 in MaybeT.Lift(cxt.Put(x + 3))
+        from env in MaybeT.Lift(cxt.GetEnvironment())
+        from _3 in MaybeT.Lift(cxt.Tell(FuncList.Make("function call 2")))
+        from twice in cxt.Hoist(Maybe.JustIf(env.ContainsKey(x), () => env[x]))
+        from _4 in MaybeT.Lift(cxt.Tell(FuncList.Make("function call 3")))
+        from _5 in MaybeT.Lift(cxt.Put(x + 10))
+        from y in MaybeT.Lift(cxt.Get())
+        from _6 in MaybeT.Lift(cxt.Put(y + x))
+        from _7 in cxt.Hoist(Maybe.Just(1))
+        select x + twice;
+
+    var (value, state, output) = computation.Run.Run(new Dictionary<int, int> { { 1, 2 }, { 4, 8 }, { 16, 32 } }, 16);
+```
+
+We did not need to specify any type variables because we created a context-object (cxt) that encodes all the type-variables of the RWS-computation which stay constant during the query. The Tell/Get/Put/GetEnvironment-methods are specific to the RWS-monad, but we lift them into MaybeT via the specialized Lift-function. Lastly, we use Hoist to turn Maybe-valued functions into MaybeT-valued ones.
