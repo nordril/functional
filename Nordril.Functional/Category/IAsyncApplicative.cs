@@ -25,4 +25,23 @@ namespace Nordril.Functional.Category
         /// <param name="f">The function to apply to the applicative.</param>
         Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<TSource, Task<TResult>>> f);
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="IAsyncApplicative{TSource}"/>.
+    /// </summary>
+    public static class AsyncApplicative
+    {
+        /// <summary>
+        /// The asynchronous version of <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="x">The task which returns the source-applicative.</param>
+        /// <param name="f">The function to apply to the applicative.</param>
+        public static async Task<IAsyncApplicative<TResult>> ApAsync<TSource, TResult>(this Task<IAsyncApplicative<TSource>> x, IApplicative<Func<TSource, Task<TResult>>> f)
+        {
+            var m = await x;
+            return await m.ApAsync(f);
+        }
+    }
 }

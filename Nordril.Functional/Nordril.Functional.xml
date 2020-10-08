@@ -2932,6 +2932,20 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to apply to the applicative.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.AsyncApplicative">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IAsyncApplicative`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncApplicative.ApAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncApplicative{``0}},Nordril.Functional.Category.IApplicative{System.Func{``0,System.Threading.Tasks.Task{``1}}})">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="x">The task which returns the source-applicative.</param>
+            <param name="f">The function to apply to the applicative.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IAsyncFunctor`1">
             <summary>
             An <see cref="T:Nordril.Functional.Category.IFunctor`1"/> which supports asynchronous operations.
@@ -2944,6 +2958,20 @@
             </summary>
             <typeparam name="TResult">The type of the result</typeparam>
             <param name="f">The function to apply to the function.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.AsyncFunctor">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IAsyncFunctor`1"/>
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncFunctor.MapAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncFunctor{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            </summary>
+            <typeparam name="TSource">The type of the source value.</typeparam>
+            <typeparam name="TResult">The type of the result value.</typeparam>
+            <param name="task">The source on whose result to run <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>.</param>
+            <param name="f">The function to apply.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IAsyncMonad`1">
             <summary>
