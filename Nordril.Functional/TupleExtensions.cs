@@ -820,5 +820,180 @@ namespace Nordril.Functional
             this (T1, T2, T3, T4, T5, T6, T7, T8) t,
             Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> f)
             => (f(t.Item1, t.Item2, t.Item3, t.Item4, t.Item5, t.Item6, t.Item7, t.Item8));
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, TNew) Extend<T1, TNew>(this ValueTuple<T1> tuple, TNew x)
+            => (tuple.Item1, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, TNew) Extend<T1, T2, TNew>(this (T1, T2) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, T3, TNew) Extend<T1, T2, T3, TNew>(this (T1, T2, T3) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, T3, T4, TNew) Extend<T1, T2, T3, T4, TNew>(this (T1, T2, T3, T4) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, T3, T4, T5, TNew) Extend<T1, T2, T3, T4, T5, TNew>(this (T1, T2, T3, T4, T5) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="T6">The type of the sixth element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, T3, T4, T5, T6, TNew) Extend<T1, T2, T3, T4, T5, T6, TNew>(this (T1, T2, T3, T4, T5, T6) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6, x);
+
+        /// <summary>
+        /// Adds another element to a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="T6">The type of the sixth element.</typeparam>
+        /// <typeparam name="T7">The type of the seventh element.</typeparam>
+        /// <typeparam name="TNew">The type of the element to add.</typeparam>
+        /// <param name="tuple">The tuple to extend.</param>
+        /// <param name="x">The element to add to the tuple.</param>
+        public static (T1, T2, T3, T4, T5, T6, T7, TNew) Extend<T1, T2, T3, T4, T5, T6, T7, TNew>(this (T1, T2, T3, T4, T5, T6, T7) tuple, TNew x)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6, tuple.Item7, x);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static ValueTuple<T1> Contract<T1, T2>(this (T1, T2) tuple)
+            => new ValueTuple<T1>(tuple.Item1);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2) Contract<T1, T2, T3>(this (T1, T2, T3) tuple)
+            => (tuple.Item1, tuple.Item2);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2, T3) Contract<T1, T2, T3, T4>(this (T1, T2, T3, T4) tuple)
+            => (tuple.Item1, tuple.Item2, tuple.Item3);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2, T3, T4) Contract<T1, T2, T3, T4, T5>(this (T1, T2, T3, T4, T5) tuple)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="T6">The type of the sixth element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2, T3, T4, T5) Contract<T1, T2, T3, T4, T5, T6>(this (T1, T2, T3, T4, T5, T6) tuple)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="T6">The type of the sixth element.</typeparam>
+        /// <typeparam name="T7">The type of the seventh element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2, T3, T4, T5, T6) Contract<T1, T2, T3, T4, T5, T6, T7>(this (T1, T2, T3, T4, T5, T6, T7) tuple)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6);
+
+        /// <summary>
+        /// Removes the last element of a tuple.
+        /// </summary>
+        /// <typeparam name="T1">The type of the first element.</typeparam>
+        /// <typeparam name="T2">The type of the second element.</typeparam>
+        /// <typeparam name="T3">The type of the third element.</typeparam>
+        /// <typeparam name="T4">The type of the fourth element.</typeparam>
+        /// <typeparam name="T5">The type of the fifth element.</typeparam>
+        /// <typeparam name="T6">The type of the sixth element.</typeparam>
+        /// <typeparam name="T7">The type of the seventh element.</typeparam>
+        /// <typeparam name="T8">The type of the eigth element.</typeparam>
+        /// <param name="tuple">The tuple to contract.</param>
+        public static (T1, T2, T3, T4, T5, T6, T7) Contract<T1, T2, T3, T4, T5, T6, T7, T8>(this (T1, T2, T3, T4, T5, T6, T7, T8) tuple)
+            => (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6, tuple.Item7);
     }
 }

@@ -3139,6 +3139,134 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to apply to the functor.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.ICoproductFirst`1">
+            <summary>
+            A coproduct having a first component.
+            </summary>
+            <typeparam name="T1">The type of the first component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFirst`1.IsFirst">
+            <summary>
+            Returns true iff the coproduct contains the first component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFirst`1.First">
+            <summary>
+            Returns the first component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductSecond`1">
+            <summary>
+            A coproduct having a second component.
+            </summary>
+            <typeparam name="T2">The type of the second component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSecond`1.IsSecond">
+            <summary>
+            Returns true iff the coproduct contains the second component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSecond`1.Second">
+            <summary>
+            Returns the second component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductThird`1">
+            <summary>
+            A coproduct having a third component.
+            </summary>
+            <typeparam name="T3">The type of the third component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductThird`1.IsThird">
+            <summary>
+            Returns true iff the coproduct contains the third component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductThird`1.Third">
+            <summary>
+            Returns the third component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductFourth`1">
+            <summary>
+            A coproduct having a fourth component.
+            </summary>
+            <typeparam name="T4">The type of the fourth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFourth`1.IsFourth">
+            <summary>
+            Returns true iff the coproduct contains the fourth component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFourth`1.Fourth">
+            <summary>
+            Returns the fourth component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductFifth`1">
+            <summary>
+            A coproduct having a fifth component.
+            </summary>
+            <typeparam name="T5">The type of the fifth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFifth`1.IsFifth">
+            <summary>
+            Returns true iff the coproduct contains the fifth component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductFifth`1.Fifth">
+            <summary>
+            Returns the fifth component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductSixth`1">
+            <summary>
+            A coproduct having a sixth component.
+            </summary>
+            <typeparam name="T6">The type of the sixth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSixth`1.IsSixth">
+            <summary>
+            Returns true iff the coproduct contains the sixth component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSixth`1.Sixth">
+            <summary>
+            Returns the sixth component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductSeventh`1">
+            <summary>
+            A coproduct having a seventh component.
+            </summary>
+            <typeparam name="T7">The type of the seventh component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSeventh`1.IsSeventh">
+            <summary>
+            Returns true iff the coproduct contains the seventh component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductSeventh`1.Seventh">
+            <summary>
+            Returns the seventh component.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICoproductEigth`1">
+            <summary>
+            A coproduct having an eigth component.
+            </summary>
+            <typeparam name="T8">The type of the eigth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductEigth`1.IsEigth">
+            <summary>
+            Returns true iff the coproduct contains the eigth component.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Category.ICoproductEigth`1.Eigth">
+            <summary>
+            Returns the eigth component.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Category.IEvaluator`3">
             <summary>
             An evaluator which can run an evaluation on a value of type <typeparamref name="TSource"/> and return a result
@@ -4633,6 +4761,447 @@
         <member name="M:Nordril.Functional.Data.DictionaryEqualityComparer`2.GetHashCode(System.Collections.Generic.IDictionary{`0,`1})">
             <inheritdoc />
         </member>
+        <member name="T:Nordril.Functional.Data.Either">
+            <summary>
+            Static methods for <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``3(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``4(Nordril.Functional.Data.Either{``0,``1,``2},System.Func{``2,``3})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`3"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``5(Nordril.Functional.Data.Either{``0,``1,``2,``3},System.Func{``3,``4})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`4"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``6(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4},System.Func{``4,``5})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`5"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``7(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5},System.Func{``5,``6})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`6"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``8(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6},System.Func{``6,``7})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`7"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``9(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``7},System.Func{``7,``8})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`8"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="T7">The type of the seventh value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``4(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,Nordril.Functional.Data.Either{``0,``2}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``5(Nordril.Functional.Data.Either{``0,``1,``2},System.Func{``2,Nordril.Functional.Data.Either{``0,``1,``3}},System.Func{``2,``3,``4})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`3"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``6(Nordril.Functional.Data.Either{``0,``1,``2,``3},System.Func{``3,Nordril.Functional.Data.Either{``0,``1,``2,``4}},System.Func{``3,``4,``5})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`4"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``7(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4},System.Func{``4,Nordril.Functional.Data.Either{``0,``1,``2,``3,``5}},System.Func{``4,``5,``6})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`5"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``8(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5},System.Func{``5,Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``6}},System.Func{``5,``6,``7})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`6"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``9(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6},System.Func{``6,Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``7}},System.Func{``6,``7,``8})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`7"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``10(Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``7},System.Func{``7,Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``8}},System.Func{``7,``8,``9})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`8"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="T7">The type of the seventh value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``3(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1}},System.Func{``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``4(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2}},System.Func{``2,``3})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`3"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``5(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3}},System.Func{``3,``4})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`4"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``6(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4}},System.Func{``4,``5})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`5"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``7(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5}},System.Func{``5,``6})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`6"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``8(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6}},System.Func{``6,``7})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`7"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.Select``9(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``7}},System.Func{``7,``8})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`8"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="T7">The type of the seventh value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``4(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1}},System.Func{``1,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``2}}},System.Func{``1,``2,``3})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``5(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2}},System.Func{``2,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``3}}},System.Func{``2,``3,``4})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`3"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``6(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3}},System.Func{``3,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``4}}},System.Func{``3,``4,``5})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`4"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``7(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4}},System.Func{``4,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``5}}},System.Func{``4,``5,``6})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`5"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``8(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5}},System.Func{``5,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``6}}},System.Func{``5,``6,``7})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`6"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``9(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6}},System.Func{``6,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``7}}},System.Func{``6,``7,``8})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`7"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.SelectMany``10(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``7}},System.Func{``7,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1,``2,``3,``4,``5,``6,``8}}},System.Func{``7,``8,``9})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`8"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="T1">The type of the first value.</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+            <typeparam name="T3">The type of the third value.</typeparam>
+            <typeparam name="T4">The type of the fourth value.</typeparam>
+            <typeparam name="T5">The type of the fifth value.</typeparam>
+            <typeparam name="T6">The type of the sixth value.</typeparam>
+            <typeparam name="T7">The type of the seventh value.</typeparam>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.FromLeft``2(``0)">
+            <summary>
+            Creates a left-either from a value.
+            </summary>
+            <typeparam name="TLeft">The type of the left-value.</typeparam>
+            <typeparam name="TRight">The type of the right-value.</typeparam>
+            <param name="value">The value to store in the either.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.FromRight``2(``1)">
+            <summary>
+            Creates a right-either from a value.
+            </summary>
+            <typeparam name="TLeft">The type of the left-value.</typeparam>
+            <typeparam name="TRight">The type of the right-value.</typeparam>
+            <param name="value">The value to store in the either.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.FromRight``2(Nordril.Functional.Data.EitherCxt{``0},``1)">
+            <summary>
+            Creates a right-either from a value.
+            This is a convenience-method which does not require explicitly specifying the type arguments.
+            </summary>
+            <typeparam name="TLeft">The type of the left-value.</typeparam>
+            <typeparam name="TRight">The type of the right-value.</typeparam>
+            <param name="_cxt">The context to fix the type variables.</param>
+            <param name="value">The value to store in the either.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.EitherIf``2(System.Boolean,System.Func{``0},System.Func{``1})">
+            <summary>
+            Creates a right-either from a value.
+            </summary>
+            <typeparam name="TLeft">The type of the left-value.</typeparam>
+            <typeparam name="TRight">The type of the right-value.</typeparam>
+            <param name="isRight">If true, an <see cref="M:Nordril.Functional.Data.Either.FromRight``2(``1)"/> will be created, and if false, an <see cref="M:Nordril.Functional.Data.Either.FromLeft``2(``0)"/>.</param>
+            <param name="leftFactory">The left-value to store in the either.</param>
+            <param name="rightFactory">The right-value to store in the either.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either.ToEither``2(Nordril.Functional.Category.IBifunctor{``0,``1})">
+            <summary>
+            Tries to cast a generic bifunctor to an either via an explicit cast. Provided for convenience.
+            </summary>
+            <typeparam name="TLeft">The type of the left-value.</typeparam>
+            <typeparam name="TRight">The type of the right-value.</typeparam>
+            <param name="f">The bifunctor.</param>
+        </member>
         <member name="T:Nordril.Functional.Data.Either`2">
             <summary>
             A sum type that can either be a left or a right, but not both. While left and right have no special semantics, per convention,
@@ -4662,6 +5231,25 @@
             Tries to get the right value in an either and throws an <see cref="T:Nordril.Functional.PatternMatchException"/> if the either is a left.
             </summary>
         </member>
+        <member name="P:Nordril.Functional.Data.Either`2.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`2.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`2.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`2.Second">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`2.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
         <member name="M:Nordril.Functional.Data.Either`2.#ctor(`0,Nordril.Functional.Data.TagLeft)">
             <summary>
             Creates a new left-<see cref="T:Nordril.Functional.Data.Either`2"/> from a value. The type-level tag is required to disambiguate between constructors.
@@ -4675,6 +5263,18 @@
             </summary>
             <param name="value">The value to store in the either.</param>
             <param name="discriminator">The discriminator tag.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`2.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`2"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`2.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`2"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
         </member>
         <member name="M:Nordril.Functional.Data.Either`2.FromLeft(`0)">
             <summary>
@@ -4794,98 +5394,839 @@
         <member name="M:Nordril.Functional.Data.Either`2.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc />
         </member>
-        <member name="T:Nordril.Functional.Data.Either">
+        <member name="T:Nordril.Functional.Data.Either`3">
             <summary>
-            Static methods for <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            A three-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`3.Third">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`3"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`3"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`3"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`3"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Equals(Nordril.Functional.Data.Either{`0,`1,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.BindAsync``1(System.Func{`2,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Bind``1(System.Func{`2,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`2,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`2,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.MapAsync``1(System.Func{`2,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.Map``1(System.Func{`2,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either`4">
+            <summary>
+            A four-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+            <typeparam name="T4">The fourth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.IsFourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.Third">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`4.Fourth">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`4"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`4"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`4"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.#ctor(Nordril.Functional.Data.Either4{`3})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`4"/>-coproduct out of a fourth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`4"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.BindAsync``1(System.Func{`3,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Bind``1(System.Func{`3,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`3,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`3,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.MapAsync``1(System.Func{`3,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.Map``1(System.Func{`3,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either`5">
+            <summary>
+            A five-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+            <typeparam name="T4">The fourth component.</typeparam>
+            <typeparam name="T5">The fifth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.IsFourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.IsFifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.Third">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.Fourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`5.Fifth">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`5"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`5"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`5"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.#ctor(Nordril.Functional.Data.Either4{`3})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`5"/>-coproduct out of a fourth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.#ctor(Nordril.Functional.Data.Either5{`4})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`5"/>-coproduct out of a fifth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`5"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.BindAsync``1(System.Func{`4,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Bind``1(System.Func{`4,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`4,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`4,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.MapAsync``1(System.Func{`4,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.Map``1(System.Func{`4,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either`6">
+            <summary>
+            A six-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+            <typeparam name="T4">The fourth component.</typeparam>
+            <typeparam name="T5">The fifth component.</typeparam>
+            <typeparam name="T6">The sixth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsFourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsFifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.IsSixth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.Third">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.Fourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.Fifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`6.Sixth">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`6"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`6"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either4{`3})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`6"/>-coproduct out of a fourth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either5{`4})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`6"/>-coproduct out of a fifth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.#ctor(Nordril.Functional.Data.Either6{`5})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`6"/>-coproduct out of a sixth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`6"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.BindAsync``1(System.Func{`5,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Bind``1(System.Func{`5,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`5,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`5,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.MapAsync``1(System.Func{`5,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.Map``1(System.Func{`5,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either`7">
+            <summary>
+            A seven-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+            <typeparam name="T4">The fourth component.</typeparam>
+            <typeparam name="T5">The fifth component.</typeparam>
+            <typeparam name="T6">The sixth component.</typeparam>
+            <typeparam name="T7">The seventh component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsFourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsFifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsSixth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.IsSeventh">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Third">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Fourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Fifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Sixth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`7.Seventh">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either4{`3})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a fourth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either5{`4})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a fifth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either6{`5})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a sixth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.#ctor(Nordril.Functional.Data.Either7{`6})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`7"/>-coproduct out of a seventh value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`7"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.BindAsync``1(System.Func{`6,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Bind``1(System.Func{`6,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`6,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`6,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.MapAsync``1(System.Func{`6,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.Map``1(System.Func{`6,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either`8">
+            <summary>
+            An eight-component <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            </summary>
+            <typeparam name="T1">The first component.</typeparam>
+            <typeparam name="T2">The second component.</typeparam>
+            <typeparam name="T3">The third component.</typeparam>
+            <typeparam name="T4">The fourth component.</typeparam>
+            <typeparam name="T5">The fifth component.</typeparam>
+            <typeparam name="T6">The sixth component.</typeparam>
+            <typeparam name="T7">The seventh component.</typeparam>
+            <typeparam name="T8">The eigth component.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsSecond">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsThird">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsFourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsFifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsSixth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsSeventh">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.IsEigth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.First">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Second">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Third">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Fourth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Fifth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Sixth">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Seventh">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Either`8.Eigth">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either1{`0})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a first value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either2{`1})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a second value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either3{`2})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a third value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either4{`3})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a fourth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either5{`4})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a fifth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either6{`5})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a sixth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either7{`6})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a seventh value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.#ctor(Nordril.Functional.Data.Either8{`7})">
+            <summary>
+            Constructors an <see cref="T:Nordril.Functional.Data.Either`8"/>-coproduct out of a eigth value.
+            </summary>
+            <param name="either">The value to wrap</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Nordril.Functional.Data.Either`8"/>-objects based on their underlying values.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.BindAsync``1(System.Func{`7,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Bind``1(System.Func{`7,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`7,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`7,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.MapAsync``1(System.Func{`7,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.Map``1(System.Func{`7,``0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Either1`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductFirst`1"/>.
+            </summary>
+            <typeparam name="T1">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either1`1.Value">
+            <summary>
+            Gets the value.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.Select``3(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,``2})">
+        <member name="M:Nordril.Functional.Data.Either1`1.#ctor(`0)">
             <summary>
-            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            Wraps a new value.
             </summary>
-            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
-            <typeparam name="TSource">The type of the source's value.</typeparam>
-            <typeparam name="TResult">The type of the result's value.</typeparam>
-            <param name="source">The source.</param>
-            <param name="f">The function to apply.</param>
+            <param name="value">The value to wrap.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.SelectMany``4(Nordril.Functional.Data.Either{``0,``1},System.Func{``1,Nordril.Functional.Data.Either{``0,``2}},System.Func{``1,``2,``3})">
+        <member name="T:Nordril.Functional.Data.Either2`1">
             <summary>
-            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductSecond`1"/>.
             </summary>
-            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
-            <typeparam name="TSource">The type of the source's value.</typeparam>
-            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
-            <typeparam name="TResult">The type of the result's value.</typeparam>
-            <param name="source">The source.</param>
-            <param name="f">The function to apply.</param>
-            <param name="resultSelector">The result-selector.</param>
+            <typeparam name="T2">The type of the value.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.Select``3(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1}},System.Func{``1,``2})">
+        <member name="P:Nordril.Functional.Data.Either2`1.Value">
             <summary>
-            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with one <c>from</c>-clause.
+            Gets the value.
             </summary>
-            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
-            <typeparam name="TSource">The type of the source's value.</typeparam>
-            <typeparam name="TResult">The type of the result's value.</typeparam>
-            <param name="source">The source.</param>
-            <param name="f">The function to apply.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.SelectMany``4(System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``1}},System.Func{``1,System.Threading.Tasks.Task{Nordril.Functional.Data.Either{``0,``2}}},System.Func{``1,``2,``3})">
+        <member name="M:Nordril.Functional.Data.Either2`1.#ctor(`0)">
             <summary>
-            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Either`2"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            Wraps a new value.
             </summary>
-            <typeparam name="TLeft">The type of the either's left-value.</typeparam>
-            <typeparam name="TSource">The type of the source's value.</typeparam>
-            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
-            <typeparam name="TResult">The type of the result's value.</typeparam>
-            <param name="source">The source.</param>
-            <param name="f">The function to apply.</param>
-            <param name="resultSelector">The result-selector.</param>
+            <param name="value">The value to wrap.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.Either.FromLeft``2(``0)">
+        <member name="T:Nordril.Functional.Data.Either3`1">
             <summary>
-            Creates a left-either from a value.
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductThird`1"/>.
+            </summary>
+            <typeparam name="T3">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either3`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either3`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Either4`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductFourth`1"/>.
+            </summary>
+            <typeparam name="T4">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either4`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either4`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Either5`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductFifth`1"/>.
+            </summary>
+            <typeparam name="T5">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either5`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either5`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Either6`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductSixth`1"/>.
+            </summary>
+            <typeparam name="T6">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either6`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either6`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Either7`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductSeventh`1"/>.
+            </summary>
+            <typeparam name="T7">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either7`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either7`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Either8`1">
+            <summary>
+            The Either-constructor for <see cref="T:Nordril.Functional.Category.ICoproductEigth`1"/>.
+            </summary>
+            <typeparam name="T8">The type of the value.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Either8`1.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Either8`1.#ctor(`0)">
+            <summary>
+            Wraps a new value.
+            </summary>
+            <param name="value">The value to wrap.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.EitherCxt`1">
+            <summary>
+            A type-tag for the <see cref="T:Nordril.Functional.Data.Either`2"/>-monad. This class contains no data; it just supplies the type-arguments which do not vary inside a single monadic computation and thus eliminates the need to explicitly supply the type arguments to methods. See <see cref="T:Nordril.Functional.Data.RwsCxt`4"/> for examples
             </summary>
             <typeparam name="TLeft">The type of the left-value.</typeparam>
-            <typeparam name="TRight">The type of the right-value.</typeparam>
-            <param name="value">The value to store in the either.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Either.FromRight``2(``1)">
-            <summary>
-            Creates a right-either from a value.
-            </summary>
-            <typeparam name="TLeft">The type of the left-value.</typeparam>
-            <typeparam name="TRight">The type of the right-value.</typeparam>
-            <param name="value">The value to store in the either.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Either.FromRight``2(Nordril.Functional.Data.EitherCxt{``0},``1)">
-            <summary>
-            Creates a right-either from a value.
-            This is a convenience-method which does not require explicitly specifying the type arguments.
-            </summary>
-            <typeparam name="TLeft">The type of the left-value.</typeparam>
-            <typeparam name="TRight">The type of the right-value.</typeparam>
-            <param name="_cxt">The context to fix the type variables.</param>
-            <param name="value">The value to store in the either.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Either.EitherIf``2(System.Boolean,System.Func{``0},System.Func{``1})">
-            <summary>
-            Creates a right-either from a value.
-            </summary>
-            <typeparam name="TLeft">The type of the left-value.</typeparam>
-            <typeparam name="TRight">The type of the right-value.</typeparam>
-            <param name="isRight">If true, an <see cref="M:Nordril.Functional.Data.Either.FromRight``2(``1)"/> will be created, and if false, an <see cref="M:Nordril.Functional.Data.Either.FromLeft``2(``0)"/>.</param>
-            <param name="leftFactory">The left-value to store in the either.</param>
-            <param name="rightFactory">The right-value to store in the either.</param>
-        </member>
-        <member name="M:Nordril.Functional.Data.Either.ToEither``2(Nordril.Functional.Category.IBifunctor{``0,``1})">
-            <summary>
-            Tries to cast a generic bifunctor to an either via an explicit cast. Provided for convenience.
-            </summary>
-            <typeparam name="TLeft">The type of the left-value.</typeparam>
-            <typeparam name="TRight">The type of the right-value.</typeparam>
-            <param name="f">The bifunctor.</param>
         </member>
         <member name="T:Nordril.Functional.Data.EitherTag">
             <summary>
@@ -4900,6 +6241,11 @@
         <member name="F:Nordril.Functional.Data.EitherTag.Right">
             <summary>
             Indicates that the either is a right.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Data.EitherTag8">
+            <summary>
+            The 8-valued either-tag.
             </summary>
         </member>
         <member name="T:Nordril.Functional.Data.TagLeftRight">
@@ -4931,12 +6277,6 @@
             <summary>
             The tag's singleton value.
             </summary>
-        </member>
-        <member name="T:Nordril.Functional.Data.EitherCxt`1">
-            <summary>
-            A type-tag for the <see cref="T:Nordril.Functional.Data.Either`2"/>-monad. This class contains no data; it just supplies the type-arguments which do not vary inside a single monadic computation and thus eliminates the need to explicitly supply the type arguments to methods. See <see cref="T:Nordril.Functional.Data.RwsCxt`4"/> for examples
-            </summary>
-            <typeparam name="TLeft">The type of the left-value.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.Eq">
             <summary>
@@ -5623,6 +6963,7 @@
         <member name="T:Nordril.Functional.Data.Identity`1">
             <summary>
             The identity functor which does nothing but wrap a value.
+            This is equivalent to a one-value <see cref="T:Nordril.Functional.Data.Either`2"/>.
             Available as a data-source in LINQ-queries.
             </summary>
             <typeparam name="T">The type of the value being wrapped.</typeparam>
@@ -5631,6 +6972,12 @@
             <summary>
             Gets or sets the wrapped value.
             </summary>
+        </member>
+        <member name="P:Nordril.Functional.Data.Identity`1.IsFirst">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Data.Identity`1.First">
+            <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Identity`1.#ctor(`0)">
             <summary>
@@ -5667,6 +7014,13 @@
         </member>
         <member name="M:Nordril.Functional.Data.Identity`1.Equals(Nordril.Functional.Data.Identity{`0})">
             <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.Extend``1(Nordril.Functional.Data.Maybe{``0})">
+            <summary>
+            Extends this 1-elementcoproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
+            </summary>
+            <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+            <param name="value">The optional value by which to extend this coproduct.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Identity`1.GetEnumerator">
             <inheritdoc />
@@ -9866,6 +11220,167 @@
             <typeparam name="TResult">The result of the function.</typeparam>
             <param name="t">The tuple to which to apply the function.</param>
             <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``2(System.ValueTuple{``0},``1)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``3(System.ValueTuple{``0,``1},``2)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``4(System.ValueTuple{``0,``1,``2},``3)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``5(System.ValueTuple{``0,``1,``2,``3},``4)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``6(System.ValueTuple{``0,``1,``2,``3,``4},``5)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``7(System.ValueTuple{``0,``1,``2,``3,``4,``5},``6)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Extend``8(System.ValueTuple{``0,``1,``2,``3,``4,``5,``6},``7)">
+            <summary>
+            Adds another element to a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TNew">The type of the element to add.</typeparam>
+            <param name="tuple">The tuple to extend.</param>
+            <param name="x">The element to add to the tuple.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``2(System.ValueTuple{``0,``1})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``3(System.ValueTuple{``0,``1,``2})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``4(System.ValueTuple{``0,``1,``2,``3})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``5(System.ValueTuple{``0,``1,``2,``3,``4})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``6(System.ValueTuple{``0,``1,``2,``3,``4,``5})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``7(System.ValueTuple{``0,``1,``2,``3,``4,``5,``6})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="M:Nordril.Functional.TupleExtensions.Contract``8(System.ValueTuple{``0,``1,``2,``3,``4,``5,``6,System.ValueTuple{``7}})">
+            <summary>
+            Removes the last element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="T8">The type of the eigth element.</typeparam>
+            <param name="tuple">The tuple to contract.</param>
         </member>
     </members>
 </doc>

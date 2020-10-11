@@ -9,15 +9,27 @@ namespace Nordril.Functional.Data
 {
     /// <summary>
     /// The identity functor which does nothing but wrap a value.
+    /// This is equivalent to a one-value <see cref="Either{TLeft, TRight}"/>.
     /// Available as a data-source in LINQ-queries.
     /// </summary>
     /// <typeparam name="T">The type of the value being wrapped.</typeparam>
-    public struct Identity<T> : IMonad<T>, IAsyncMonad<T>, IEquatable<Identity<T>>, IEnumerable<T>
+    public struct Identity<T>
+        : IMonad<T>
+        , IAsyncMonad<T>
+        , IEquatable<Identity<T>>
+        , ICoproductFirst<T>
+        , IEnumerable<T>
     {
         /// <summary>
         /// Gets or sets the wrapped value.
         /// </summary>
         public T Value { get; set; }
+
+        /// <inheritdoc />
+        public bool IsFirst => true;
+
+        /// <inheritdoc />
+        public Maybe<T> First => Maybe.Just(Value);
 
         /// <summary>
         /// Creates a new identity.
@@ -71,6 +83,20 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Identity<T> other) => Equals((object)other);
+
+        /// <summary>
+        /// Extends this 1-elementcoproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="Maybe.Nothing{T}"/> and a coproduct containing <paramref name="value"/> if it is <see cref="Maybe.Just{T}(T)"/>.
+        /// </summary>
+        /// <typeparam name="TNew">The type by which to extend this coproduct.</typeparam>
+        /// <param name="value">The optional value by which to extend this coproduct.</param>
+        public Either<T, TNew> Extend<TNew>(Maybe<TNew> value)
+        {
+            var y = Value;
+
+            return value.ValueOrLazy(
+                  x => new Either<T, TNew>(new Either2<TNew>(x)),
+                  () => new Either<T, TNew>(new Either1<T>(y)));
+        }
 
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
