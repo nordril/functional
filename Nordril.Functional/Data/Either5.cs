@@ -138,7 +138,7 @@ namespace Nordril.Functional.Data
             if (obj == null || !(obj is Either<T1, T2, T3, T4, T5>))
                 return false;
 
-            var thatEither = (Either<T1, T2, T2, T4, T5>)obj;
+            var thatEither = (Either<T1, T2, T3, T4, T5>)obj;
 
             if (discriminator != thatEither.discriminator)
                 return false;

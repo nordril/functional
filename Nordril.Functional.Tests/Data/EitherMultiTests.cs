@@ -1768,5 +1768,333 @@ namespace Nordril.Functional.Tests.Data
             Assert.True(e8.IsEigth);
             Assert.Equal('g', e8.Eigth.Value());
         }
+
+        [Fact]
+        public static void Equals3Test()
+        {
+            var x = Either.EitherWith<int, string, bool>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.One(5));
+            y = Either.EitherWith<int, string, bool>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool>(Either.One(5));
+            y = Either.EitherWith<int, string, bool>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+        }
+
+        [Fact]
+        public static void Equals4Test()
+        {
+            var x = Either.EitherWith<int, string, bool, float>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool, float>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.Four(3.2f));
+            y = Either.EitherWith<int, string, bool, float>(Either.Four(3.1f));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+        }
+
+        [Fact]
+        public static void Equals5Test()
+        {
+            var x = Either.EitherWith<int, string, bool, float, Type>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool, float, Type>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Five(typeof(bool)));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Five(typeof(bool)));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.2f));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3.1f));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type>(Either.Five(typeof(int)));
+            y = Either.EitherWith<int, string, bool, float, Type>(Either.Five(typeof(bool)));
+            Assert.NotEqual(x, y);
+        }
+
+        [Fact]
+        public static void Equals6Test()
+        {
+            var x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Five(typeof(bool)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Five(typeof(bool)));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Six((byte)43));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.2f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3.1f));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Five(typeof(int)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Five(typeof(bool)));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Six((byte)42));
+            Assert.NotEqual(x, y);
+        }
+
+        [Fact]
+        public static void Equals7Test()
+        {
+            var x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Five(typeof(bool)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Five(typeof(bool)));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Six((byte)43));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Seven((sbyte)48));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Seven((sbyte)48));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.2f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3.1f));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Five(typeof(int)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Five(typeof(bool)));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Six((byte)42));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Seven((sbyte)48));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Seven((sbyte)32));
+            Assert.NotEqual(x, y);
+        }
+
+        [Fact]
+        public static void Equals8Test()
+        {
+            var x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(5));
+            var y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(5));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("a"));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Three(false));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.1f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.1f));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Five(typeof(bool)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Five(typeof(bool)));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Six((byte)43));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Seven((sbyte)48));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Seven((sbyte)48));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(48L));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(48L));
+            Assert.Equal(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(7));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("a"));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("b"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Three(false));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Three(true));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.2f));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3.1f));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(5));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("abc"));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Five(typeof(int)));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Five(typeof(bool)));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Six((byte)43));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Six((byte)42));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Seven((sbyte)48));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Seven((sbyte)32));
+            Assert.NotEqual(x, y);
+
+            x = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(48L));
+            y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(47L));
+            Assert.NotEqual(x, y);
+        }
     }
 }
