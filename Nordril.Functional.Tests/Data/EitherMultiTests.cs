@@ -2096,5 +2096,132 @@ namespace Nordril.Functional.Tests.Data
             y = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(47L));
             Assert.NotEqual(x, y);
         }
+
+        [Fact]
+        public static void CoalesceTest()
+        {
+            Func<int, string> f1 = x => x.ToString() + "__";
+            Func<string, string> f2 = x => x + "__";
+            Func<bool, string> f3 = x => x.ToString() + "__";
+            Func<float, string> f4 = x => x.ToString() + "__";
+            Func<Type, string> f5 = x => x.GetGenericName() + "__";
+            Func<byte, string> f6 = x => x.ToString() + "__";
+            Func<sbyte, string> f7 = x => x.ToString() + "__";
+            Func<long, string> f8 = x => x.ToString() + "__";
+
+            var res = "";
+
+            //Two
+            res = Either.EitherWith<int, string>(Either.One(4)).Coalesce(f1, f2);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string>(Either.Two("abc")).Coalesce(f1, f2);
+            Assert.Equal("abc__", res);
+
+            //Three
+            res = Either.EitherWith<int, string, bool>(Either.One(4)).Coalesce(f1, f2, f3);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool>(Either.Two("abc")).Coalesce(f1, f2, f3);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool>(Either.Three(true)).Coalesce(f1, f2, f3);
+            Assert.Equal("True__", res);
+
+            //Four
+            res = Either.EitherWith<int, string, bool, float>(Either.One(4)).Coalesce(f1, f2, f3, f4);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool, float>(Either.Two("abc")).Coalesce(f1, f2, f3, f4);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool, float>(Either.Three(true)).Coalesce(f1, f2, f3, f4);
+            Assert.Equal("True__", res);
+
+            res = Either.EitherWith<int, string, bool, float>(Either.Four(3F)).Coalesce(f1, f2, f3, f4);
+            Assert.Equal("3__", res);
+
+            //Five
+            res = Either.EitherWith<int, string, bool, float, Type>(Either.One(4)).Coalesce(f1, f2, f3, f4, f5);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type>(Either.Two("abc")).Coalesce(f1, f2, f3, f4, f5);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type>(Either.Three(true)).Coalesce(f1, f2, f3, f4, f5);
+            Assert.Equal("True__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type>(Either.Four(3F)).Coalesce(f1, f2, f3, f4, f5);
+            Assert.Equal("3__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type>(Either.Five(typeof(int))).Coalesce(f1, f2, f3, f4, f5);
+            Assert.Equal("Int32__", res);
+
+            //Six
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.One(4)).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Two("abc")).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Three(true)).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("True__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Four(3F)).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("3__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Five(typeof(int))).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("Int32__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte>(Either.Six((byte)34)).Coalesce(f1, f2, f3, f4, f5, f6);
+            Assert.Equal("34__", res);
+
+            //Seven
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.One(4)).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Two("abc")).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Three(true)).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("True__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Four(3F)).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("3__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Five(typeof(int))).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("Int32__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Six((byte)34)).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("34__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte>(Either.Seven((sbyte)35)).Coalesce(f1, f2, f3, f4, f5, f6, f7);
+            Assert.Equal("35__", res);
+
+            //Eight
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.One(4)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("4__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Two("abc")).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("abc__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Three(true)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("True__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Four(3F)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("3__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Five(typeof(int))).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("Int32__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Six((byte)34)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("34__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Seven((sbyte)35)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("35__", res);
+
+            res = Either.EitherWith<int, string, bool, float, Type, byte, sbyte, long>(Either.Eight(500L)).Coalesce(f1, f2, f3, f4, f5, f6, f7, f8);
+            Assert.Equal("500__", res);
+        }
     }
 }
