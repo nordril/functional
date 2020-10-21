@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Nordril.Functional.Data;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -169,6 +171,51 @@ namespace Nordril.Functional.Tests
                 throw new TimeoutException();
 
             Assert.Equal(expected, task.Result);
+        }
+
+        [Theory]
+        [InlineData(new int[0], new int[0])]
+        [InlineData(new int[] { 3, }, new int[] { 6 })]
+        [InlineData(new int[] { 4, 3 }, new int[] { 8, 6 })]
+        [InlineData(new int[] { 4, 3, 6, 8, 1, 0, 3 }, new int[] { 8, 6, 12, 16, 2, 0, 6 })]
+        public void TailRecModuloConsMapTest(int[] xs, int[] expected)
+        {
+            var p = Pattern
+                .Match((FuncList<int> zs) => zs.Count == 0, zs => zs)
+                .MatchTailRecModuloCons(xs => xs.Count > 0, xs => 2*xs[0], xs => xs.GetRange(1, xs.Count - 1));
+
+            var actual = p.Run(new FuncList<int>(xs));
+
+            Assert.Equal(expected, actual);
+
+            p = Pattern
+                .Match((FuncList<int> zs) => zs.Count() < 0, zs => zs)
+                .MatchTailRecModuloCons(xs => xs.Count > 0, xs => 2 * xs[0], xs => xs.GetRange(1, xs.Count - 1))
+                .WithDefault(xs => xs);
+
+            actual = p.Run(new FuncList<int>(xs));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        [InlineData(1_000)]
+        [InlineData(10_000)]
+        [InlineData(100_000)]
+        public void TailRecModuloConsSumTest(int count)
+        {
+            var p = Pattern
+                .Match((List<int> zs) => zs.Count == 0, zs => 0)
+                .MatchTailRecModuloCons(zs => zs.Count > 0, zs => zs[0], zs => zs.GetRange(1, zs.Count - 1), x => x, (x, y) => x + y, (x, y) => x + y);
+
+            var xs = Enumerable.Repeat(1, count).ToList();
+
+            var actual = p.Run(xs);
+
+            Assert.Equal(count, actual);
         }
     }
 }

@@ -67,6 +67,27 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public void Add(T item) => ListCoalesce().Add(item);
 
+        /// <summary>
+        /// Adds a sequence of elements in order to this list.
+        /// </summary>
+        /// <param name="xs">The elements to add.</param>
+        public FuncList<T> AddRange(IEnumerable<T> xs)
+        {
+            ListCoalesce().AddRange(xs);
+            return this;
+        }
+
+        /// <summary>
+        /// Gets a shallow copy of a range of elements from this list.
+        /// </summary>
+        /// <param name="index">The index from which to start the range.</param>
+        /// <param name="count">The number of elements to get, starting from <paramref name="index"/>.</param>
+        public FuncList<T> GetRange(int index, int count)
+        {
+            var range = ListCoalesce().GetRange(index, count);
+            return new FuncList<T>(range);
+        }
+
         /// <inheritdoc />
         public void Clear() => ListCoalesce().Clear();
 

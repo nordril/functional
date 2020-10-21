@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nordril.Functional.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,7 +72,7 @@ namespace Nordril.Functional
     /// </code>
     /// Here, we pass a tuple consisting of the current number (n) and the sum so far (sum) into the pattern-match, and in the second case, we decrement n while multiplying the previous sum with n. We get the final number instead of the tuple because the terminating, first case discards the tuple and just returns the sum.
     /// </example>
-    public class Pattern
+    public static class Pattern
     {
         /// <summary>
         /// Creates a pattern-match on an input object <typeparamref name="TIn"/>, starting with a single case.
@@ -83,10 +84,6 @@ namespace Nordril.Functional
         public static Pattern<TIn, TOut> Match<TIn, TOut>(Func<TIn, bool> predicate, Func<TIn, TOut> action)
             => Pattern<TIn, TOut>.StartMatch(predicate, action);
 
-        /*public static Pattern<TIn, TOut> MatchEnum<TIn, TOut>(TIn match, Func<TIn, TOut> action)
-            where TIn : Enum
-            => Pattern<TIn, TOut>.StartMatch(x => x.to == match, action);*/
-
         /// <summary>
         /// Creates a pattern-match on an input object <typeparamref name="TIn"/>, starting with a list of cases.
         /// </summary>
@@ -95,6 +92,46 @@ namespace Nordril.Functional
         /// <param name="cases">The list of cases, consisting of predicates and functions to be applied to the input if the case applies.</param>
         public static Pattern<TIn, TOut> MatchMany<TIn, TOut>(IEnumerable<(Func<TIn, bool> predicate, Func<TIn, TOut> action)> cases)
             => Pattern<TIn, TOut>.StartMatch(cases);
+
+        /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input object.</typeparam>
+        /// <typeparam name="TOut">The type of the output object.</typeparam>
+        /// <param name="p">The pattern to which to append.</param>
+        /// <param name="predicate">The predicate which returns true if the case applies.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        /// <param name="tail">The function which iterates through the output.</param>
+        public static Pattern<TIn, FuncList<TOut>> MatchTailRecModuloCons<TIn, TOut>(
+            this Pattern<TIn, FuncList<TOut>> p,
+            Func<TIn, bool> predicate,
+            Func<TIn, TOut> head,
+            Func<TIn, TIn> tail)
+            => Pattern<TIn, TOut>.MatchTailRec(p, predicate, x => new FuncList<TOut> { x }, (x, xs) => { xs.Add(x); return xs; }, (xs, ys) => { xs.AddRange(ys); return xs; }, head, tail);
+
+        /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
+        /// The returned structure <typeparamref name="TOutSemi"/> must form a semigroup under <paramref name="combineResults"/>.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input object.</typeparam>
+        /// <typeparam name="TOut">The type of the output object.</typeparam>
+        /// <typeparam name="TOutSemi">The type of the result of the <paramref name="head"/>-function.</typeparam>
+        /// <param name="p">The pattern to which to append.</param>
+        /// <param name="predicate">The predicate which returns true if the case applies.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        /// <param name="tail">The function which iterates through the output.</param>
+        /// <param name="addResult">The function to append a single result to the previously generated ones.</param>
+        /// <param name="mkResult">The function to create a single result.</param>
+        /// <param name="combineResults">The function to append new results to the previously generated ones.</param>
+        public static Pattern<TIn, TOutSemi> MatchTailRecModuloCons<TIn, TOut, TOutSemi>(
+            this Pattern<TIn, TOutSemi> p,
+            Func<TIn, bool> predicate,
+            Func<TIn, TOut> head,
+            Func<TIn, TIn> tail,
+            Func<TOut, TOutSemi> mkResult,
+            Func<TOut, TOutSemi, TOutSemi> addResult,
+            Func<TOutSemi, TOutSemi, TOutSemi> combineResults)
+            => Pattern<TIn, TOut>.MatchTailRec(p, predicate, mkResult, addResult, combineResults, head, tail);
     }
 
     /// <summary>
@@ -171,7 +208,7 @@ namespace Nordril.Functional
 
             this.predicates.AddRange(predicates);
             this.actions.AddRange(actions);
-            tailRecActions.Add(null);
+            tailRecActions.AddRange(Enumerable.Repeat<Func<TIn, TIn>>(null, cases.Count()));
             return this;
         }
 
@@ -226,6 +263,83 @@ namespace Nordril.Functional
             tailRecActions.Add(action);
             actions.Add(tailRecCall);
             return this;
+        }
+
+
+        /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
+        /// The returned structure <typeparamref name="TOutSemi"/> must form a semigroup under <paramref name="combineResults"/>.
+        /// </summary>
+        /// <typeparam name="TOutSemi">The type of the result of the <paramref name="head"/>-function.</typeparam>
+        /// <param name="pattern">The pattern to which to append.</param>
+        /// <param name="predicate">The predicate which returns true if the case applies.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        /// <param name="tail">The function which iterates through the output.</param>
+        /// <param name="addResult">The function to append a single result to the previously generated ones.</param>
+        /// <param name="mkResult">The function to create a single result.</param>
+        /// <param name="combineResults">The function to append new results to the previously generated ones.</param>
+        public static Pattern<TIn, TOutSemi> MatchTailRec<TOutSemi>(
+            Pattern<TIn, TOutSemi> pattern,
+            Func<TIn, bool> predicate,
+            Func<TOut, TOutSemi> mkResult,
+            Func<TOut, TOutSemi, TOutSemi> addResult,
+            Func<TOutSemi, TOutSemi, TOutSemi> combineResults,
+            Func<TIn, TOut> head,
+            Func<TIn, TIn> tail)
+        {
+            TOutSemi tailRecCall(TIn input)
+            {
+                var caseMatched = false;
+
+                var h = head(input);
+                input = tail(input);
+
+                var results = mkResult(h);
+
+                while (true)
+                {
+
+                    using (var predEnum = pattern.predicates.GetEnumerator())
+                    using (var actionEnum = pattern.actions.GetEnumerator())
+                    using (var tailRecEnum = pattern.tailRecActions.GetEnumerator())
+                    {
+                        caseMatched = false;
+
+                        //Go through all cases with the current input.
+                        while (!caseMatched && predEnum.MoveNext() && actionEnum.MoveNext() && tailRecEnum.MoveNext())
+                            if (predEnum.Current(input))
+                            {
+                                //We matched a tail-recursive case -> call the tail recursive action and continue.
+                                if (tailRecEnum.Current != null)
+                                {
+                                    h = head(input);
+                                    results = addResult(h, results);
+                                    input = tailRecEnum.Current(input);
+
+                                    caseMatched = true;
+                                }
+                                //We matched a non-recursive case -> return immediately.
+                                else
+                                {
+                                    results = combineResults(results, actionEnum.Current(input));
+                                    return results;
+                                }
+                            }
+                    }
+
+                    //If we haven't matched any case, we return with the default pattern.
+                    if (!caseMatched)
+                    {
+                        results = combineResults(results, pattern.defaultPattern(input));
+                        return results;
+                    }
+                }
+            };
+
+            pattern.predicates.Add(predicate);
+            pattern.tailRecActions.Add(tail);
+            pattern.actions.Add(tailRecCall);
+            return pattern;
         }
 
         /// <summary>
