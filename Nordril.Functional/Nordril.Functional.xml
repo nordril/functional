@@ -6031,6 +6031,9 @@
         <member name="M:Nordril.Functional.Data.Either`3.Equals(Nordril.Functional.Data.Either{`0,`1,`2})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`3.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`3.Extend``1(Nordril.Functional.Data.Maybe{``0})">
             <summary>
             Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -6060,6 +6063,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`3.Map``1(System.Func{`2,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2},Nordril.Functional.Data.Either{`0,`1,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`3.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2},Nordril.Functional.Data.Either{`0,`1,`2})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`4">
@@ -6128,6 +6137,9 @@
         <member name="M:Nordril.Functional.Data.Either`4.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`4.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`4.Extend``1(Nordril.Functional.Data.Maybe{``0})">
             <summary>
             Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -6157,6 +6169,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`4.Map``1(System.Func{`3,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2,`3},Nordril.Functional.Data.Either{`0,`1,`2,`3})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`4.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2,`3},Nordril.Functional.Data.Either{`0,`1,`2,`3})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`5">
@@ -6238,6 +6256,9 @@
         <member name="M:Nordril.Functional.Data.Either`5.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`5.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`5.Extend``1(Nordril.Functional.Data.Maybe{``0})">
             <summary>
             Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -6267,6 +6288,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`5.Map``1(System.Func{`4,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`5.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`6">
@@ -6361,6 +6388,9 @@
         <member name="M:Nordril.Functional.Data.Either`6.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`6.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`6.Extend``1(Nordril.Functional.Data.Maybe{``0})">
             <summary>
             Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -6390,6 +6420,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`6.Map``1(System.Func{`5,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`6.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`7">
@@ -6497,6 +6533,9 @@
         <member name="M:Nordril.Functional.Data.Either`7.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`7.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`7.Extend``1(Nordril.Functional.Data.Maybe{``0})">
             <summary>
             Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and a coproduct containing <paramref name="value"/> if it is <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.
@@ -6526,6 +6565,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`7.Map``1(System.Func{`6,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`7.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either`8">
@@ -6646,6 +6691,9 @@
         <member name="M:Nordril.Functional.Data.Either`8.Equals(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Either`8.GetHashCode">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.Either`8.BindAsync``1(System.Func{`7,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
             <inheritdoc />
         </member>
@@ -6668,6 +6716,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Either`8.Map``1(System.Func{`7,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.op_Equality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Either`8.op_Inequality(Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7},Nordril.Functional.Data.Either{`0,`1,`2,`3,`4,`5,`6,`7})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Either1`1">
@@ -7269,6 +7323,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.op_Equality(Nordril.Functional.Data.FuncList{`0},Nordril.Functional.Data.FuncList{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.op_Inequality(Nordril.Functional.Data.FuncList{`0},Nordril.Functional.Data.FuncList{`0})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.FuncList">
@@ -7998,6 +8058,27 @@
             <typeparam name="T">The type of the result of the computation.</typeparam>
             <param name="io">The computation to unwrap.</param>
         </member>
+        <member name="T:Nordril.Functional.Data.ISliceable`1">
+            <summary>
+            Data structures which can be cheaply sliced into sub-data-structures.
+            </summary>
+            <typeparam name="T">The type of the implementor.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.ISliceable`1.Slice(System.Int32)">
+            <summary>
+            Gets a slice of the data structure, starting with the index <paramref name="index"/>.
+            </summary>
+            <param name="index">The first index which should be included in the slice.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.Data.ISliceable`1.Slice(System.Int32,System.Int32)">
+            <summary>
+            Gets a slice of the data structure, starting with the index <paramref name="index"/> and containing <paramref name="count"/> elements.
+            </summary>
+            <param name="index">The first index which should be included in the slice.</param>
+            <param name="count">The number of elements, starting from <paramref name="index"/>, to include.</param>
+            <exception cref="T:System.IndexOutOfRangeException">If the data structure does not contain enough elements.</exception>
+        </member>
         <member name="T:Nordril.Functional.Data.IVisitable`2">
             <summary>
             Visitable structures which allow traversal of their elements, and the calling of a visit-function at each.
@@ -8236,6 +8317,236 @@
         </member>
         <member name="M:Nordril.Functional.Data.ListEqualityComparer`1.GetHashCode(System.Collections.Generic.IEnumerable{`0})">
             <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Lst`1">
+            <summary>
+            A thread-safe, immutable list supporting cheap deconstruction/slicing/appending.
+            </summary>
+            <typeparam name="T">The type of the contents.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Creates a new, immutable list from a shallow copy of <paramref name="xs"/>, using the comparer <paramref name="comparer"/>.
+            </summary>
+            <param name="xs">The items to shallowly copy.</param>
+            <param name="comparer">The comparer. If null, <see cref="M:System.Object.Equals(System.Object,System.Object)"/> will be used for element-comparison.</param>
+        </member>
+        <member name="P:Nordril.Functional.Data.Lst`1.Head">
+            <summary>
+            Gets the first element of the list, if it exists.
+            O(1).
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Data.Lst`1.Tail">
+            <summary>
+            Gets the list excluding its first element, if it has at least one element.
+            O(1).
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Data.Lst`1.HeadUnsafe">
+            <summary>
+            Unsafely gets the first element of a list.
+            O(1).
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the list if empty.</exception>
+        </member>
+        <member name="P:Nordril.Functional.Data.Lst`1.TailUnsafe">
+            <summary>
+            Unsafely gets the list excluding its first element, if it has at least one element.
+            O(1).
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">If the list if empty.</exception>
+        </member>
+        <member name="P:Nordril.Functional.Data.Lst`1.Count">
+            <summary>
+            Gets the number of elements in the list.
+            O(1).
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.ElementAt(System.Int32)">
+            <summary>
+            Gets the element at the index <paramref name="index"/>, if it exists.
+            O(1).
+            </summary>
+            <param name="index">The index of the element to get.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Append(`0)">
+            <summary>
+            Appends an element at the end of the list.
+            O(1).
+            </summary>
+            <param name="item">The item to append.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.AppendRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Appends a sequence of elements at the end of the list.
+            O(m) where m is the number of elements to append.
+            </summary>
+            <param name="item">The elements to append.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Prepend(`0)">
+            <summary>
+            Prepends an element to the beginning of the list.
+            O(n).
+            </summary>
+            <param name="item">The element to prepend.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.PrependRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Prepends an element to the beginning of the list.
+            O(n+m), where m is the number of elements to prepend.
+            </summary>
+            <param name="item">The element to prepend.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Slice(System.Int32)">
+            <summary>
+            Gets the list starting with the index <paramref name="index"/>.
+            O(1).
+            </summary>
+            <param name="index">The index of the first element to get.</param>
+            <exception cref="T:System.IndexOutOfRangeException">If <paramref name="index"/> lies outside of the list.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Slice(System.Int32,System.Int32)">
+            <summary>
+            Gets the list starting with the index <paramref name="index"/>, containing <paramref name="count"/> elements.
+            O(1).
+            </summary>
+            <param name="index">The index of the first element to get.</param>
+            <param name="count">The number of elements, starting with the element at index <paramref name="index"/>, to include.</param>
+            <exception cref="T:System.IndexOutOfRangeException">If <paramref name="index"/> lies outside of the list or if the list does not have <paramref name="count"/> elements started from <paramref name="index"/>.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Mzero">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Map``1(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.MapWithKey``1(System.Func{System.Int32,`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Filter(System.Func{`0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Semifilter(System.Func{`0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Empty">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Alt(Nordril.Functional.Category.IAlternative{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Foldr``1(System.Func{`0,``0,``0},``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.BindAsync``1(System.Func{`0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`0,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Equals(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Lst">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Data.Lst`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.Select``2(Nordril.Functional.Data.Lst{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Data.Lst`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.SelectMany``3(Nordril.Functional.Data.Lst{``0},System.Func{``0,Nordril.Functional.Data.Lst{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Data.Lst`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.Select``2(System.Threading.Tasks.Task{Nordril.Functional.Data.Lst{``0}},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Lst`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.SelectMany``3(System.Threading.Tasks.Task{Nordril.Functional.Data.Lst{``0}},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Data.Lst{``1}}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Data.Lst`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.MakeLst``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Lst`1"/> out of a sequence.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence.</typeparam>
+            <param name="xs">The elements of the sequence.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.MakeLst``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Lst`1"/> out of a sequence, with a custom <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> for equality-checking.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence.</typeparam>
+            <param name="xs">The elements of the sequence.</param>
+            <param name="comparer">The comparer to use.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst.Make``1(``0[])">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Lst`1"/> out of a sequence.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence.</typeparam>
+            <param name="xs">The elements of the sequence.</param>
         </member>
         <member name="T:Nordril.Functional.Data.Maybe`1">
             <summary>
@@ -11001,6 +11312,21 @@
             <param name="predicate">The predicate which returns true if the case applies.</param>
             <param name="head">The function which is applied to each element created by this pattern.</param>
             <param name="tail">The function which iterates through the output.</param>
+        </member>
+        <member name="M:Nordril.Functional.Pattern.MatchTailRecModuloCons``3(Nordril.Functional.Pattern{Nordril.Functional.Data.Lst{``0},``2},System.Func{Nordril.Functional.Data.Lst{``0},System.Boolean},System.Func{``0,``1},System.Func{Nordril.Functional.Data.Lst{``0},Nordril.Functional.Data.Lst{``0}},System.Func{``1,``2},System.Func{``1,``2,``2},System.Func{``2,``2,``2})">
+            <summary>
+            Appends a new, tail-recursive case modulo cons to the end of a <see cref="T:Nordril.Functional.Pattern`2"/>. The calling object will be modified and <c>this</c> will be returned. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="M:System.Collections.Generic.List`1.GetRange(System.Int32,System.Int32)"/>, since it doesn't create shallow copies of the whole list each iteration.
+            </summary>
+            <typeparam name="TIn">The type of the input object.</typeparam>
+            <typeparam name="TOut">The type of the output object.</typeparam>
+            <typeparam name="TOutSemi">The type of the result of the <paramref name="head"/>-function.</typeparam>
+            <param name="p">The pattern to which to append.</param>
+            <param name="predicate">The predicate which returns true if the case applies.</param>
+            <param name="head">The function which is applied to each element created by this pattern.</param>
+            <param name="tail">The function which should be applied to the tail of the output.</param>
+            <param name="addResult">The function to append a single result to the previously generated ones.</param>
+            <param name="mkResult">The function to create a single result.</param>
+            <param name="combineResults">The function to append new results to the previously generated ones.</param>
         </member>
         <member name="M:Nordril.Functional.Pattern.MatchTailRecModuloCons``3(Nordril.Functional.Pattern{``0,``2},System.Func{``0,System.Boolean},System.Func{``0,``1},System.Func{``0,``0},System.Func{``1,``2},System.Func{``1,``2,``2},System.Func{``2,``2,``2})">
             <summary>

@@ -230,6 +230,9 @@ namespace Nordril.Functional.Data
         public bool Equals(Either<T1, T2, T3, T4, T5, T6, T7, T8> other) => Equals((object)other);
 
         /// <inheritdoc />
+        public override int GetHashCode() => this.DefaultHash(discriminator, Value);
+
+        /// <inheritdoc />
         public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T8, Task<IAsyncMonad<TResult>>> f)
             => !IsEigth ? CopyError<TResult>() : await f((T8)Value);
 
@@ -282,5 +285,17 @@ namespace Nordril.Functional.Data
         public IFunctor<TResult> Map<TResult>(Func<T8, TResult> f)
             => !IsEigth ? CopyError<TResult>()
             : new Either<T1, T2, T3, T4, T5, T6, T7, TResult>(new Either8<TResult>(f((T8)Value)));
+
+        /// <inheritdoc />
+        public static bool operator ==(Either<T1, T2, T3, T4, T5, T6, T7, T8> left, Either<T1, T2, T3, T4, T5, T6, T7, T8> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public static bool operator !=(Either<T1, T2, T3, T4, T5, T6, T7, T8> left, Either<T1, T2, T3, T4, T5, T6, T7, T8> right)
+        {
+            return !(left == right);
+        }
     }
 }

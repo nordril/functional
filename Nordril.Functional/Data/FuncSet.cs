@@ -276,7 +276,7 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
-            => new FuncList<TResult>(((IEnumerable<TResult>[])(await Task.WhenAll(SetCoalesce().Select(x => f(x))))).SelectMany(xs => xs));
+            => new FuncList<TResult>(((await Task.WhenAll(SetCoalesce().Select(x => f(x)))).Select(x => (IEnumerable<TResult>)x)).SelectMany(xs => xs));
 
         /// <inheritdoc />
         public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)

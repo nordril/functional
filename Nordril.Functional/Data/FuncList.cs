@@ -262,7 +262,7 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public async Task<IAsyncMonad<TResult>> BindAsync<TResult>(Func<T, Task<IAsyncMonad<TResult>>> f)
-            => new FuncList<TResult>(((IEnumerable<TResult>[])(await Task.WhenAll(ListCoalesce().Select(x => f(x))))).SelectMany(xs => xs));
+            => new FuncList<TResult>(((await Task.WhenAll(ListCoalesce().Select(x => f(x)))).Select(x => (IEnumerable<TResult>)x)).SelectMany(xs => xs));
 
         /// <inheritdoc />
         public async Task<IApplicative<TResult>> PureAsync<TResult>(Func<Task<TResult>> x)
@@ -281,6 +281,18 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
             => new FuncList<TResult>(await Task.WhenAll(ListCoalesce().Select(x => f(x))));
+
+        /// <inheritdoc />
+        public static bool operator ==(FuncList<T> left, FuncList<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public static bool operator !=(FuncList<T> left, FuncList<T> right)
+        {
+            return !(left == right);
+        }
     }
 
     /// <summary>
@@ -311,10 +323,7 @@ namespace Nordril.Functional.Data
             (this FuncList<TSource> source,
              Func<TSource, FuncList<TMiddle>> f,
              Func<TSource, TMiddle, TResult> resultSelector)
-        {
-            var enumSource = ((IEnumerable<TSource>)source);
-            return new FuncList<TResult>(enumSource.SelectMany(x => f(x), resultSelector));
-        }
+            => (FuncList<TResult>)source.Bind(x => (FuncList<TResult>)f(x).Map(y => resultSelector(x, y)));
 
         /// <summary>
         /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="FuncList{T}"/>. Offers LINQ query support with one <c>from</c>-clause.

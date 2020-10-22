@@ -3,6 +3,7 @@ using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Nordril.Functional.Tests.Data
@@ -278,6 +279,48 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.Equal(expected, actual);
 
+        }
+
+        [Fact]
+        public static void LinqSelectTest()
+        {
+            var res =
+                from x in FuncList.Make(4, 3, 2)
+                select x * 2;
+
+            Assert.Equal(new int[] { 8, 6, 4 }, res);
+        }
+
+        [Fact]
+        public static void LinqSelectManyTest()
+        {
+            var res =
+                from x in FuncList.Make(2, 3, 5)
+                from y in FuncList.Make(7, 11, 13)
+                select x * y;
+
+            Assert.Equal(new int[] { 14, 22, 26, 21, 33, 39, 35, 55, 65 }, res);
+        }
+
+        [Fact]
+        public static async Task LinqSelectAsyncTest()
+        {
+            var res =
+                from x in Task.FromResult(FuncList.Make(4, 3, 2))
+                select x * 2;
+
+            Assert.Equal(new int[] { 8, 6, 4 }, await res);
+        }
+
+        [Fact]
+        public static async Task LinqSelectManyAsyncTest()
+        {
+            var res =
+                from x in Task.FromResult(FuncList.Make(2, 3, 5))
+                from y in Task.FromResult(FuncList.Make(7, 11, 13))
+                select x * y;
+
+            Assert.Equal(new int[] { 14, 22, 26, 21, 33, 39, 35, 55, 65 }, await res);
         }
     }
 }

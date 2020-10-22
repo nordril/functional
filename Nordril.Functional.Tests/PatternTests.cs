@@ -205,6 +205,7 @@ namespace Nordril.Functional.Tests
         [InlineData(1_000)]
         [InlineData(10_000)]
         [InlineData(100_000)]
+        //[InlineData(1_000_000)] <- takes too long
         public void TailRecModuloConsSumTest(int count)
         {
             var p = Pattern
@@ -212,6 +213,27 @@ namespace Nordril.Functional.Tests
                 .MatchTailRecModuloCons(zs => zs.Count > 0, zs => zs[0], zs => zs.GetRange(1, zs.Count - 1), x => x, (x, y) => x + y, (x, y) => x + y);
 
             var xs = Enumerable.Repeat(1, count).ToList();
+
+            var actual = p.Run(xs);
+
+            Assert.Equal(count, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        [InlineData(1_000)]
+        [InlineData(10_000)]
+        [InlineData(100_000)]
+        [InlineData(1_000_000)]
+        public void TailRecModuloConsSumFastTest(int count)
+        {
+            var p = Pattern
+                .Match((Lst<int> zs) => zs.Count == 0, zs => 0)
+                .MatchTailRecModuloCons(zs => zs.Count > 0, x => x, xs => xs, x => x, (x, y) => x + y, (x, y) => x + y);
+
+            var xs = Enumerable.Repeat(1, count).MakeLst();
 
             var actual = p.Run(xs);
 

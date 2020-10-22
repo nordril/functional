@@ -110,6 +110,29 @@ namespace Nordril.Functional
             => Pattern<TIn, TOut>.MatchTailRec(p, predicate, x => new FuncList<TOut> { x }, (x, xs) => { xs.Add(x); return xs; }, (xs, ys) => { xs.AddRange(ys); return xs; }, head, tail);
 
         /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="List{T}.GetRange(int, int)"/>, since it doesn't create shallow copies of the whole list each iteration.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input object.</typeparam>
+        /// <typeparam name="TOut">The type of the output object.</typeparam>
+        /// <typeparam name="TOutSemi">The type of the result of the <paramref name="head"/>-function.</typeparam>
+        /// <param name="p">The pattern to which to append.</param>
+        /// <param name="predicate">The predicate which returns true if the case applies.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        /// <param name="tail">The function which should be applied to the tail of the output.</param>
+        /// <param name="addResult">The function to append a single result to the previously generated ones.</param>
+        /// <param name="mkResult">The function to create a single result.</param>
+        /// <param name="combineResults">The function to append new results to the previously generated ones.</param>
+        public static Pattern<Lst<TIn>, TOutSemi> MatchTailRecModuloCons<TIn, TOut, TOutSemi>(
+            this Pattern<Lst<TIn>, TOutSemi> p,
+            Func<Lst<TIn>, bool> predicate,
+            Func<TIn, TOut> head,
+            Func<Lst<TIn>, Lst<TIn>> tail,
+            Func<TOut, TOutSemi> mkResult,
+            Func<TOut, TOutSemi, TOutSemi> addResult,
+            Func<TOutSemi, TOutSemi, TOutSemi> combineResults)
+            => Pattern<Lst<TIn>, TOut>.MatchTailRec(p, predicate, mkResult, addResult, combineResults, xs => head(xs.HeadUnsafe), xs => tail(xs.TailUnsafe));
+
+        /// <summary>
         /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
         /// The returned structure <typeparamref name="TOutSemi"/> must form a semigroup under <paramref name="combineResults"/>.
         /// </summary>
@@ -239,7 +262,7 @@ namespace Nordril.Functional
 
                         //Go through all cases with the current input.
                         while (!caseMatched && predEnum.MoveNext() && actionEnum.MoveNext() && tailRecEnum.MoveNext())
-                            if (predEnum.Current(input))
+                            while (predEnum.Current(input))
                             {
                                 //We matched a tail-recursive case -> call the tail recursive action and continue.
                                 if (tailRecEnum.Current != null)
@@ -307,7 +330,7 @@ namespace Nordril.Functional
 
                         //Go through all cases with the current input.
                         while (!caseMatched && predEnum.MoveNext() && actionEnum.MoveNext() && tailRecEnum.MoveNext())
-                            if (predEnum.Current(input))
+                            while (predEnum.Current(input))
                             {
                                 //We matched a tail-recursive case -> call the tail recursive action and continue.
                                 if (tailRecEnum.Current != null)

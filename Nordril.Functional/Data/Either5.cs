@@ -157,6 +157,9 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public bool Equals(Either<T1, T2, T3, T4, T5> other) => Equals((object)other);
 
+        /// <inheritdoc />
+        public override int GetHashCode() => this.DefaultHash(discriminator, Value);
+
         /// <summary>
         /// Extends this coproduct with an additional component, returning the a copy of the original coproduct if <paramref name="value"/> is <see cref="Maybe.Nothing{T}"/> and a coproduct containing <paramref name="value"/> if it is <see cref="Maybe.Just{T}(T)"/>.
         /// </summary>
@@ -232,5 +235,17 @@ namespace Nordril.Functional.Data
         public IFunctor<TResult> Map<TResult>(Func<T5, TResult> f)
             => !IsFifth ? CopyError<TResult>()
             : new Either<T1, T2, T3, T4, TResult>(new Either5<TResult>(f((T5)Value)));
+
+        /// <inheritdoc />
+        public static bool operator ==(Either<T1, T2, T3, T4, T5> left, Either<T1, T2, T3, T4, T5> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public static bool operator !=(Either<T1, T2, T3, T4, T5> left, Either<T1, T2, T3, T4, T5> right)
+        {
+            return !(left == right);
+        }
     }
 }
