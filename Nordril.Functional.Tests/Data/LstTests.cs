@@ -177,7 +177,7 @@ namespace Nordril.Functional.Tests.Data
 
         [Theory]
         [MemberData(nameof(Ap2Data))]
-        public static void FuncListAp2(Lst<Func<int, Func<int, int>>> funcs, Lst<int> args1, Lst<int> args2, IEnumerable<int> expected)
+        public static void LstAp2(Lst<Func<int, Func<int, int>>> funcs, Lst<int> args1, Lst<int> args2, IEnumerable<int> expected)
         {
             var res = args2.Ap(args1.Ap(funcs));
 
@@ -186,7 +186,7 @@ namespace Nordril.Functional.Tests.Data
 
         [Theory]
         [MemberData(nameof(EqualsData))]
-        public static void FuncListEquals(Lst<int> xs, IEnumerable<int> ys, bool expected)
+        public static void LstEquals(Lst<int> xs, IEnumerable<int> ys, bool expected)
         {
             Assert.Equal(expected, xs.Equals(ys));
         }
@@ -197,7 +197,7 @@ namespace Nordril.Functional.Tests.Data
         [InlineData(new int[] { 2 }, 3)]
         [InlineData(new int[] { 1, 2, 3 }, 3)]
         [InlineData(new int[] { 5, 4, 6, 7, 8 }, 47)]
-        public static void FuncListAppend(int[] xs, int elem)
+        public static void LstAppend(int[] xs, int elem)
         {
             var fl = new Lst<int>(xs);
             var origLength = fl.Count;
@@ -213,13 +213,79 @@ namespace Nordril.Functional.Tests.Data
             Assert.Equal(origLength + 1, fl2.Count);
         }
 
+        [Fact]
+        public static void LstAppendCompact()
+        {
+            var fl = Lst.Make(5, 6, 2, 8);
+            var fl2 = fl.Append(9);
+            var flSlice = fl.Slice(1, 2);
+            var fl3 = flSlice.Append(11);
+            var fl4 = flSlice.AppendRange(new int[] { 22, 33, 44 });
+
+            Assert.Equal(new int[] { 5, 6, 2, 8 }, fl);
+            Assert.Equal(new int[] { 5, 6, 2, 8, 9 }, fl2);
+            Assert.Equal(new int[] { 6, 2 }, flSlice);
+            Assert.Equal(new int[] { 6, 2, 11 }, fl3);
+            Assert.Equal(new int[] { 6, 2, 22, 33, 44 }, fl4);
+        }
+
+        [Fact]
+        public static void LstCompactTest()
+        {
+            var fl = Lst.Make(0, 1, 2, 3, 4);
+            var flBig = fl.AppendRange(Enumerable.Repeat(0, 3000).ZipWithStream(5, i => i + 1).Select(xy => xy.Item2));
+
+            Assert.Equal(3005, fl.UnderlyingListCount);
+            Assert.Equal(3005, flBig.UnderlyingListCount);
+
+            Assert.Equal(new int[] { 0, 1, 2, 3, 4 }, fl);
+
+            flBig.Dispose();
+
+            Assert.Equal(5, fl.UnderlyingListCount);
+            Assert.Equal(new int[] { 0, 1, 2, 3, 4 }, fl);
+
+            flBig = fl.AppendRange(Enumerable.Repeat(0, 2000).ZipWithStream(5, i => i + 1).Select(xy => xy.Item2));
+
+            Assert.Equal(new int[] { 0, 1, 2, 3, 4 }, fl);
+            Assert.Equal(2005, fl.UnderlyingListCount);
+            Assert.Equal(2005, flBig.UnderlyingListCount);
+
+            var flSlice = flBig.Slice(10, 300);
+            var flSlice2 = flBig.Slice(11, 300);
+            var flSlice3 = flBig.Slice(5, 300);
+            var flSlice4 = flBig.Slice(20, 5);
+            var flSlice5 = flBig.Slice(5, 400);
+
+            Assert.Equal(300, flSlice.Count);
+            Assert.Equal(Enumerable.Range(10, 300), flSlice);
+            Assert.Equal(300, flSlice2.Count);
+            Assert.Equal(Enumerable.Range(11, 300), flSlice2);
+            Assert.Equal(300, flSlice3.Count);
+            Assert.Equal(Enumerable.Range(5, 300), flSlice3);
+            Assert.Equal(5, flSlice4.Count);
+            Assert.Equal(Enumerable.Range(20, 5), flSlice4);
+            Assert.Equal(400, flSlice5.Count);
+            Assert.Equal(Enumerable.Range(5, 400), flSlice5);
+
+            Assert.Equal(2005, flBig.UnderlyingListCount);
+
+            flBig.Dispose();
+
+            Assert.Equal(405, flSlice.UnderlyingListCount);
+            Assert.Equal(405, flSlice2.UnderlyingListCount);
+            Assert.Equal(405, flSlice3.UnderlyingListCount);
+            Assert.Equal(405, flSlice4.UnderlyingListCount);
+            Assert.Equal(405, flSlice5.UnderlyingListCount);
+        }
+
         [Theory]
         [InlineData(null, 3)]
         [InlineData(new int[0], 3)]
         [InlineData(new int[] { 2 }, 3)]
         [InlineData(new int[] { 1, 2, 3 }, 3)]
         [InlineData(new int[] { 5, 4, 6, 7, 8 }, 47)]
-        public static void FuncListPrepend(int[] xs, int elem)
+        public static void LstPrepend(int[] xs, int elem)
         {
             var fl = new Lst<int>(xs);
             var origLength = fl.Count;
@@ -239,7 +305,7 @@ namespace Nordril.Functional.Tests.Data
         [InlineData(new int[] { 2 }, new int[] { 3, 7, 8 })]
         [InlineData(new int[] { 1, 2, 3 }, new int[] { 3, 7, 8 })]
         [InlineData(new int[] { 5, 4, 6, 7, 8 }, new int[] { 3, 7, 8 })]
-        public static void FuncListAppendRange(int[] xs, IEnumerable<int> elem)
+        public static void LstAppendRange(int[] xs, IEnumerable<int> elem)
         {
             var fl = new Lst<int>(xs);
             var origLength = fl.Count;
@@ -259,7 +325,7 @@ namespace Nordril.Functional.Tests.Data
         [InlineData(new int[] { 2 }, new int[] { 3, 7, 8 })]
         [InlineData(new int[] { 1, 2, 3 }, new int[] { 3, 7, 8 })]
         [InlineData(new int[] { 5, 4, 6, 7, 8 }, new int[] { 3, 7, 8 })]
-        public static void FuncListPrependRange(int[] xs, IEnumerable<int> elem)
+        public static void LstPrependRange(int[] xs, IEnumerable<int> elem)
         {
             var fl = new Lst<int>(xs);
             var origLength = fl.Count;

@@ -8324,12 +8324,29 @@
             </summary>
             <typeparam name="T">The type of the contents.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Data.Lst`1.LstDisposeHandler">
+            <summary>
+            The handler for when this list is disposed, with the slice that the list had of the underlying list.
+            </summary>
+            <param name="startIncl">The start-index of this list's slice.</param>
+            <param name="endExcl">The exclusive end-index of this list's slice.</param>
+        </member>
+        <member name="E:Nordril.Functional.Data.Lst`1.OnDisposing">
+            <summary>
+            Gets called when this list is disposed.
+            </summary>
+        </member>
         <member name="M:Nordril.Functional.Data.Lst`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEqualityComparer{`0})">
             <summary>
             Creates a new, immutable list from a shallow copy of <paramref name="xs"/>, using the comparer <paramref name="comparer"/>.
             </summary>
             <param name="xs">The items to shallowly copy.</param>
             <param name="comparer">The comparer. If null, <see cref="M:System.Object.Equals(System.Object,System.Object)"/> will be used for element-comparison.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Lst`1.Dispose">
+            <summary>
+            Disposes the list and, perhaps, compacts the underlying list.
+            </summary>
         </member>
         <member name="P:Nordril.Functional.Data.Lst`1.Head">
             <summary>
@@ -8373,14 +8390,14 @@
         <member name="M:Nordril.Functional.Data.Lst`1.Append(`0)">
             <summary>
             Appends an element at the end of the list.
-            O(1).
+            O(n). Ω(1) if this list is not a slice/tail of a larger list.
             </summary>
             <param name="item">The item to append.</param>
         </member>
         <member name="M:Nordril.Functional.Data.Lst`1.AppendRange(System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Appends a sequence of elements at the end of the list.
-            O(m) where m is the number of elements to append.
+            O(n+m). Ω(m) where m is the number of elements to append if this list is not a slice/tail of a larger list.
             </summary>
             <param name="item">The elements to append.</param>
         </member>

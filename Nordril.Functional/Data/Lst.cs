@@ -2,8 +2,11 @@
 using Nordril.Functional.Category;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +16,7 @@ namespace Nordril.Functional.Data
     /// A thread-safe, immutable list supporting cheap deconstruction/slicing/appending.
     /// </summary>
     /// <typeparam name="T">The type of the contents.</typeparam>
-    public class Lst<T>
+    public sealed class Lst<T>
         : IEnumerable<T>
         , IMonadPlus<T>
         , IAsyncMonad<T>
@@ -22,11 +25,24 @@ namespace Nordril.Functional.Data
         , IAlternative<T>
         , IEquatable<IEnumerable<T>>
         , ISliceable<Lst<T>>
+        , IDisposable
     {
         private readonly ConcurrentList<T> list;
         private readonly int startIncl = 0;
         private readonly int endExcl = 0;
         private readonly IEqualityComparer<IEnumerable<T>> comparer;
+
+        /// <summary>
+        /// The handler for when this list is disposed, with the slice that the list had of the underlying list.
+        /// </summary>
+        /// <param name="startIncl">The start-index of this list's slice.</param>
+        /// <param name="endExcl">The exclusive end-index of this list's slice.</param>
+        internal delegate void LstDisposeHandler(int startIncl, int endExcl);
+
+        /// <summary>
+        /// Gets called when this list is disposed.
+        /// </summary>
+        internal event LstDisposeHandler OnDisposing;
 
         /// <summary>
         /// Creates a new, immutable list from a shallow copy of <paramref name="xs"/>, using the comparer <paramref name="comparer"/>.
@@ -36,16 +52,26 @@ namespace Nordril.Functional.Data
         public Lst(IEnumerable<T> xs, IEqualityComparer<T> comparer = null)
         {
             list = new ConcurrentList<T>(xs == null ? new List<T>() : xs.ToList());
+            list.AddUser(this, 0, list.Count);
             endExcl = list.Count;
             this.comparer = comparer != null ? new ListEqualityComparer<T>((x, y) => comparer.Equals(x, y)) : new ListEqualityComparer<T>((x, y) => x.Equals(y));
         }
 
-        private Lst(ConcurrentList<T> xs, int start, int end, IEqualityComparer<IEnumerable<T>> comparer)
+        private Lst(ConcurrentList<T> xs, int startIncl, int endExcl, IEqualityComparer<IEnumerable<T>> comparer)
         {
             list = xs;
-            startIncl = start;
-            endExcl = end;
+            list.AddUser(this, startIncl, endExcl);
+            this.startIncl = startIncl;
+            this.endExcl = endExcl;
             this.comparer = comparer ?? new ListEqualityComparer<T>((x, y) => x.Equals(y));
+        }
+
+        /// <summary>
+        /// Disposes the list and, perhaps, compacts the underlying list.
+        /// </summary>
+        public void Dispose()
+        {
+            OnDisposing?.Invoke(startIncl, endExcl);
         }
 
         /// <summary>
@@ -86,6 +112,8 @@ namespace Nordril.Functional.Data
         /// </summary>
         public int Count => endExcl - startIncl;
 
+        internal int UnderlyingListCount => list.Count;
+
         /// <summary>
         /// Gets the element at the index <paramref name="index"/>, if it exists.
         /// O(1).
@@ -95,28 +123,49 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Appends an element at the end of the list.
-        /// O(1).
+        /// O(n). Ω(1) if this list is not a slice/tail of a larger list.
         /// </summary>
         /// <param name="item">The item to append.</param>
         public Lst<T> Append(T item)
         {
-            list.Add(item);
-
-            return new Lst<T>(list, startIncl, endExcl + 1, comparer);
+            //We go to the end of the underlying list -> it's safe to append, since no other Lst sees any value past us.
+            if (endExcl >= list.Count)
+            {
+                list.Add(item);
+                return new Lst<T>(list, startIncl, endExcl + 1, comparer);
+            }
+            //We don't -> we have to copy our elements.
+            else
+            {
+                var list = new List<T>(Count + 1);
+                list.AddRange(LocalView());
+                list.Add(item);
+                return new Lst<T>(new ConcurrentList<T>(list), 0, list.Count, comparer);
+            }
         }
 
         /// <summary>
         /// Appends a sequence of elements at the end of the list.
-        /// O(m) where m is the number of elements to append.
+        /// O(n+m). Ω(m) where m is the number of elements to append if this list is not a slice/tail of a larger list.
         /// </summary>
         /// <param name="item">The elements to append.</param>
         public Lst<T> AppendRange(IEnumerable<T> item)
         {
-            var count = item.Count();
-
-            list.AddRange(item);
-
-            return new Lst<T>(list, startIncl, endExcl + count, comparer);
+            var itemList = item.ToList();
+            //We go to the end of the underlying list -> it's safe to append, since no other Lst sees any value past us.
+            if (endExcl >= list.Count)
+            {
+                list.AddRange(item);
+                return new Lst<T>(list, startIncl, endExcl + itemList.Count, comparer);
+            }
+            //We don't -> we have to copy our elements.
+            else
+            {
+                var list = new List<T>(Count + itemList.Count);
+                list.AddRange(LocalView());
+                list.AddRange(itemList);
+                return new Lst<T>(new ConcurrentList<T>(list), 0, list.Count, comparer);
+            }
         }
 
         /// <summary>
@@ -165,13 +214,13 @@ namespace Nordril.Functional.Data
         /// <exception cref="IndexOutOfRangeException">If <paramref name="index"/> lies outside of the list or if the list does not have <paramref name="count"/> elements started from <paramref name="index"/>.</exception>
         public Lst<T> Slice(int index, int count)
         {
-            if (index < startIncl || startIncl + index + count > endExcl)
+            if (0 > startIncl || index + count > Count)
                 throw new IndexOutOfRangeException();
 
             return new Lst<T>(list, startIncl + index, startIncl + index + count, comparer);
         }
 
-        private Lst<T> LocalView() => Slice(startIncl, endExcl - startIncl);
+        private Lst<T> LocalView() => Slice(0, Count);
 
         /// <inheritdoc />
         public IMonadZero<T> Mzero() => new Lst<T>(new ConcurrentList<T>(new List<T>()), 0, 0, comparer);
@@ -263,12 +312,12 @@ namespace Nordril.Functional.Data
                 throw new InvalidCastException();
 
             var ys = LocalView();
-            return new FuncList<TResult>(await Task.WhenAll(functions.SelectMany(fx => ys.Select(y => fx(y)))));
+            return new Lst<TResult>(await Task.WhenAll(functions.SelectMany(fx => ys.Select(y => fx(y)))));
         }
 
         /// <inheritdoc />
         public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
-            => new FuncList<TResult>(await Task.WhenAll(LocalView().Select(x => f(x))));
+            => new Lst<TResult>(await Task.WhenAll(LocalView().Select(x => f(x))));
 
         /// <inheritdoc />
         public bool Equals(IEnumerable<T> that)
@@ -346,6 +395,10 @@ namespace Nordril.Functional.Data
     internal class ConcurrentList<T> : IEnumerable<T>
     {
         private readonly ReaderWriterLock @lock = new ReaderWriterLock();
+        private readonly object usersLock = new object();
+        private readonly SortedDictionary<int, int> startIncls = new SortedDictionary<int, int>();
+        private readonly SortedDictionary<int, int> endExcls = new SortedDictionary<int, int>();
+
         private readonly List<T> list;
 
         public ConcurrentList(List<T> list)
@@ -363,6 +416,64 @@ namespace Nordril.Functional.Data
             @lock.ReleaseReaderLock();
         }
 
+        public void AddUser(Lst<T> user, int startIncl, int endExcl)
+        {
+            user.OnDisposing += RemoveUserSlice;
+
+            lock (usersLock)
+            {
+                AddOrUpdate(startIncls, startIncl, 1, i => i + 1);
+                AddOrUpdate(endExcls, endExcl, 1, i => i + 1);
+            }
+        }
+
+        private void RemoveUserSlice(int startIncl, int endExcl)
+        {
+            lock (usersLock)
+            {
+                if (startIncls.Count > 0 && endExcls.Count > 0)
+                {
+                    var curStartIncl = startIncls.Keys.First();
+                    var curEndExcl = endExcls.Keys.Last();
+
+                    RemoveOrUpdate(startIncls, startIncl, i => i <= 0, i => i - 1);
+                    RemoveOrUpdate(endExcls, endExcl, i => i <= 0, i => i - 1);
+
+                    //The counts should either bother be 0 or non-0, respectively.
+                    //If we have count=0, we have no more users and GC will clean up this list.
+                    if (startIncls.Count > 0 && endExcls.Count > 0)
+                    {
+                        var newStartIncl = startIncls.Keys.First();
+                        var newEndExcl = endExcls.Keys.Last();
+
+                        if (newStartIncl != curStartIncl || newEndExcl != curEndExcl)
+                            SetRangeFromTo(newStartIncl, newEndExcl);
+                    }
+                }
+            }
+        }
+
+        private static void AddOrUpdate<K, V>(SortedDictionary<K, V> dict, K key, V value, Func<V, V> update)
+        {
+            if (dict.TryGetValue(key, out var curValue))
+                dict[key] = update(curValue);
+            else
+                dict[key] = value;
+        }
+
+        private static void RemoveOrUpdate<K, V>(SortedDictionary<K, V> dict, K key, Func<V, bool> removeAfterIf, Func<V, V> update)
+        {
+            if (dict.TryGetValue(key, out var value))
+            {
+                var newValue = update(value);
+
+                if (removeAfterIf(newValue))
+                    dict.Remove(key);
+                else
+                    dict[key] = newValue;
+            }
+        }
+
         public int Count
         {
             get
@@ -377,6 +488,30 @@ namespace Nordril.Functional.Data
                 {
                     @lock.ReleaseReaderLock();
                 }
+            }
+        }
+
+        public void SetRangeFromTo(int index, int endExcl)
+        {
+            @lock.AcquireWriterLock(int.MaxValue);
+
+            try
+            {
+                //0 1 [2 3 4] 5 6 7 8
+                //index: 2
+                //endExcl: 5
+                //endIndex: 5 -> ok
+                //endCount: 9 - 5 = 4 -> ok
+                //0 1 [2 3 4]
+                //begIndex: 0 -> ok
+                //begCount: 2 -> ok
+                //[2 3 4]
+                list.RemoveRange(endExcl, list.Count - endExcl);
+                list.RemoveRange(0, index);
+            }
+            finally
+            {
+                @lock.ReleaseWriterLock();
             }
         }
 
