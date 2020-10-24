@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Xunit;
 
@@ -145,6 +146,258 @@ namespace Nordril.Functional.Tests
             var expected = xs.Average();
 
             Assert.Equal(expected, actual, 5);
+        }
+
+        [Theory]
+        [InlineData(new int[0], new string[0], new string[0])]
+        [InlineData(new int[] { 1 }, new string[0], new string[0])]
+        [InlineData(new int[] { 1 }, new string[] { "a" }, new string[] { "1a" })]
+        [InlineData(new int[] { 1, 2, 3 }, new string[] { "a", "b", "c" }, new string[] { "1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "3c" })]
+        public static void Cartesian2Test(IEnumerable<int> xs, IEnumerable<string> ys, IEnumerable<string> expected)
+        {
+            var actual = xs.Cartesian(ys, (x, y) => x + y);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(
+            new int[0],
+            new string[0],
+            new float[0],
+            new string[0])]
+        [InlineData(
+            new int[] { 1 },
+            new string[0],
+            new float[0],
+            new string[0])]
+        [InlineData(
+            new int[] { 1 },
+            new string[] { "a" },
+            new float[] { 4f },
+            new string[] { "1a4" })]
+        [InlineData(
+            new int[] { 1, 2 },
+            new string[] { "a", "b" },
+            new float[] { 4f, 9f },
+            new string[] { "1a4", "1a9", "1b4", "1b9", "2a4", "2a9", "2b4", "2b9" })]
+        [InlineData(
+            new int[] { 1, 2, 3 },
+            new string[] { "a", "b", "c" },
+            new float[] { 4f },
+            new string[] { "1a4", "1b4", "1c4", "2a4", "2b4", "2c4", "3a4", "3b4", "3c4" })]
+        public static void Cartesian3Test(
+            IEnumerable<int> xs,
+            IEnumerable<string> ys,
+            IEnumerable<float> zs,
+            IEnumerable<string> expected)
+        {
+            var actual = xs.Cartesian(ys, zs, (x, y, z) => x + y + z);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(
+            new int[0],
+            new string[0],
+            new float[0],
+            new bool[0],
+            new string[0])]
+        [InlineData(
+            new int[] { 1 },
+            new string[0],
+            new float[0],
+            new bool[0],
+            new string[0])]
+        [InlineData(
+            new int[] { 1 },
+            new string[] { "a" },
+            new float[] { 4f },
+            new bool[] { true},
+            new string[] { "1a4True" })]
+        [InlineData(
+            new int[] { 1, 2 },
+            new string[] { "a", "b" },
+            new float[] { 4f, 9f },
+            new bool[] {false, true},
+            new string[] {
+                "1a4False",
+                "1a4True",
+                "1a9False",
+                "1a9True",
+                "1b4False",
+                "1b4True",
+                "1b9False",
+                "1b9True",
+                "2a4False",
+                "2a4True",
+                "2a9False",
+                "2a9True",
+                "2b4False",
+                "2b4True",
+                "2b9False",
+                "2b9True" })]
+        public static void Cartesian4Test(
+            IEnumerable<int> xs,
+            IEnumerable<string> ys,
+            IEnumerable<float> zs,
+            IEnumerable<bool> us,
+            IEnumerable<string> expected)
+        {
+            var actual = xs.Cartesian(ys, zs, us, (x, y, z, u) => x + y + z + u);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(
+            new int[0],
+            new string[0],
+            new float[0],
+            new bool[0],
+            new double[0],
+            new string[0])]
+                [InlineData(
+            new int[] { 1 },
+            new string[0],
+            new float[0],
+            new bool[0],
+            new double[0],
+            new string[0])]
+                [InlineData(
+            new int[] { 1 },
+            new string[] { "a" },
+            new float[] { 4f },
+            new bool[] { true },
+            new double[] { 2.5d },
+            new string[] { "1a4True2.5" })]
+                [InlineData(
+            new int[] { 1, 2 },
+            new string[] { "a", "b" },
+            new float[] { 4f, 9f },
+            new bool[] { false, true },
+            new double[] { 2d, 3d },
+            new string[] {
+                        "1a4False2",
+                        "1a4False3",
+                        "1a4True2",
+                        "1a4True3",
+                        "1a9False2",
+                        "1a9False3",
+                        "1a9True2",
+                        "1a9True3",
+                        "1b4False2",
+                        "1b4False3",
+                        "1b4True2",
+                        "1b4True3",
+                        "1b9False2",
+                        "1b9False3",
+                        "1b9True2",
+                        "1b9True3",
+                        "2a4False2",
+                        "2a4False3",
+                        "2a4True2",
+                        "2a4True3",
+                        "2a9False2",
+                        "2a9False3",
+                        "2a9True2",
+                        "2a9True3",
+                        "2b4False2",
+                        "2b4False3",
+                        "2b4True2",
+                        "2b4True3",
+                        "2b9False2",
+                        "2b9False3",
+                        "2b9True2",
+                        "2b9True3" })]
+                public static void Cartesian5Test(
+            IEnumerable<int> xs,
+            IEnumerable<string> ys,
+            IEnumerable<float> zs,
+            IEnumerable<bool> us,
+            IEnumerable<double> vs,
+            IEnumerable<string> expected)
+        {
+            var actual = xs.Cartesian(ys, zs, us, vs, (x, y, z, u, v) => x + y + z + u + v.ToString(CultureInfo.InvariantCulture));
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public static void CartesianTest()
+        {
+            static int fromBits(bool[] arr)
+            {
+                int res = 0;
+                for (int i = 0; i < arr.Length; i++)
+                    res += (arr[i] ? 1 : 0) << (arr.Length - i - 1);
+
+                return res;
+            }
+
+            var set = FuncList.Make(false, true);
+            var actual6 = set.Cartesian(set, set, set, set, set,
+                (x, y, z, u, v, w) => fromBits(new bool[] { x, y, z, u, v, w }));
+            var actual7 = set.Cartesian(set, set, set, set, set, set,
+                (x, y, z, u, v, w, s) => fromBits(new bool[] { x, y, z, u, v, w, s }));
+            var actual8 = set.Cartesian(set, set, set, set, set, set, set,
+                (x, y, z, u, v, w, s, t) => fromBits(new bool[] { x, y, z, u, v, w, s, t }));
+
+            Assert.Equal(Enumerable.Range(0, 64), actual6);
+            Assert.Equal(Enumerable.Range(0, 128), actual7);
+            Assert.Equal(Enumerable.Range(0, 256), actual8);
+        }
+
+        [Fact]
+        public static void CartesianManyTest()
+        {
+            static int fromBits(bool[] arr)
+            {
+                int res = 0;
+                for (int i = 0; i < arr.Length; i++)
+                    res += (arr[i] ? 1 : 0) << (arr.Length - i - 1);
+
+                return res;
+            }
+
+            var empty = new IEnumerable<bool>[] { };
+            Assert.Empty(empty.Cartesian(xs => fromBits(xs.ToArray())));
+
+            var emptySet = new bool[] { };
+            var set = (IEnumerable<bool>)FuncList.Make(false, true);
+
+            Assert.Empty(new[] { emptySet, set, set, set }.Cartesian(xs => fromBits(xs.ToArray())));
+            Assert.Empty(new[] { set, emptySet, set, set }.Cartesian(xs => fromBits(xs.ToArray())));
+            Assert.Empty(new[] { set, set, emptySet, set }.Cartesian(xs => fromBits(xs.ToArray())));
+            Assert.Empty(new[] { set, set, set, emptySet }.Cartesian(xs => fromBits(xs.ToArray())));
+            Assert.Empty(new[] { emptySet, set, emptySet, set }.Cartesian(xs => fromBits(xs.ToArray())));
+
+            var actual = Enumerable.Repeat(set, 4).Cartesian(xs => fromBits(xs.ToArray())).ToList();
+
+            Assert.Equal(Enumerable.Range(0, 16), actual);
+
+            actual = new int[][]
+            {
+                new int[]{1,2,3},
+                new int[]{10,40,80},
+                new int[]{200,300},
+                new int[]{5000},
+            }.Cartesian(xs => xs.Sum()).ToList();
+
+            Assert.Equal(new int[] {
+                5211, 5311,
+                5241, 5341, 
+                5281, 5381,
+
+                5212, 5312,
+                5242, 5342,
+                5282, 5382,
+
+                5213, 5313,
+                5243, 5343,
+                5283, 5383,
+            }, actual);
         }
 
         [Theory]

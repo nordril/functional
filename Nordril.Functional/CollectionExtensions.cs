@@ -295,6 +295,301 @@ namespace Nordril.Functional
         }
 
         /// <summary>
+        /// Returns all combinations of the elements of two sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            Func<T1, T2, TResult> f)
+        {
+            var ysList = ys.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    yield return f(x, y);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            Func<T1, T2, T3, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        yield return f(x, y, z);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="us">The fourth sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, T4, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            IEnumerable<T4> us,
+            Func<T1, T2, T3, T4, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+            var usList = us.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        foreach (var u in usList)
+                        yield return f(x, y, z, u);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+        /// <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="us">The fourth sequence.</param>
+        /// <param name="vs">The fifth sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, T4, T5, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            IEnumerable<T4> us,
+            IEnumerable<T5> vs,
+            Func<T1, T2, T3, T4, T5, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+            var usList = us.ToList();
+            var vsList = vs.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        foreach (var u in usList)
+                            foreach (var v in vsList)
+                                yield return f(x, y, z, u, v);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+        /// <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+        /// <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="us">The fourth sequence.</param>
+        /// <param name="vs">The fifth sequence.</param>
+        /// <param name="ws">The sixth sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, T4, T5, T6, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            IEnumerable<T4> us,
+            IEnumerable<T5> vs,
+            IEnumerable<T6> ws,
+            Func<T1, T2, T3, T4, T5, T6, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+            var usList = us.ToList();
+            var vsList = vs.ToList();
+            var wsList = ws.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        foreach (var u in usList)
+                            foreach (var v in vsList)
+                                foreach (var w in wsList)
+                                    yield return f(x, y, z, u, v, w);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+        /// <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+        /// <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+        /// <typeparam name="T7">The type of elements in the seventh sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="us">The fourth sequence.</param>
+        /// <param name="vs">The fifth sequence.</param>
+        /// <param name="ws">The sixth sequence.</param>
+        /// <param name="ss">The seventh sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, T4, T5, T6, T7, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            IEnumerable<T4> us,
+            IEnumerable<T5> vs,
+            IEnumerable<T6> ws,
+            IEnumerable<T7> ss,
+            Func<T1, T2, T3, T4, T5, T6, T7, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+            var usList = us.ToList();
+            var vsList = vs.ToList();
+            var wsList = ws.ToList();
+            var ssList = ss.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        foreach (var u in usList)
+                            foreach (var v in vsList)
+                                foreach (var w in wsList)
+                                    foreach (var s in ssList)
+                                        yield return f(x, y, z, u, v, w, s);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+        /// <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+        /// <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+        /// <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+        /// <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+        /// <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+        /// <typeparam name="T7">The type of elements in the seventh sequence.</typeparam>
+        /// <typeparam name="T8">The type of elements in the eigth sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="xs">The first sequence.</param>
+        /// <param name="ys">The second sequence.</param>
+        /// <param name="zs">The third sequence.</param>
+        /// <param name="us">The fourth sequence.</param>
+        /// <param name="vs">The fifth sequence.</param>
+        /// <param name="ws">The sixth sequence.</param>
+        /// <param name="ss">The seventh sequence.</param>
+        /// <param name="ts">The eigth sequence.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(
+            this IEnumerable<T1> xs,
+            IEnumerable<T2> ys,
+            IEnumerable<T3> zs,
+            IEnumerable<T4> us,
+            IEnumerable<T5> vs,
+            IEnumerable<T6> ws,
+            IEnumerable<T7> ss,
+            IEnumerable<T8> ts,
+            Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> f)
+        {
+            var ysList = ys.ToList();
+            var zsList = zs.ToList();
+            var usList = us.ToList();
+            var vsList = vs.ToList();
+            var wsList = ws.ToList();
+            var ssList = ss.ToList();
+            var tsList = ts.ToList();
+
+            foreach (var x in xs)
+                foreach (var y in ysList)
+                    foreach (var z in zsList)
+                        foreach (var u in usList)
+                            foreach (var v in vsList)
+                                foreach (var w in wsList)
+                                    foreach (var s in ssList)
+                                        foreach (var t in tsList)
+                                            yield return f(x, y, z, u, v, w, s, t);
+        }
+
+        /// <summary>
+        /// Returns all combinations of the elements of three sequences (the Cartesian product).
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the equences.</typeparam>
+        /// <typeparam name="TResult">The type of the results.</typeparam>
+        /// <param name="sequences">The sequences.</param>
+        /// <param name="f">The result selector function.</param>
+        public static IEnumerable<TResult> Cartesian<T, TResult>(
+            this IEnumerable<IEnumerable<T>> sequences,
+            Func<IEnumerable<T>, TResult> f)
+        {
+            var lists = sequences.Select(s => s.ToList()).ToList().ToList();
+            var vector = new int[lists.Count];
+
+            bool increment(int[] arr)
+            {
+                for (int i = arr.Length - 1; i >= 0; i--)
+                {
+                    if (arr[i] < lists[i].Count - 1)
+                    {
+                        arr[i]++;
+                        return true;
+                    }
+                    arr[i] = 0;
+                }
+
+                //We we didn't get to increment any "bit" until now -> we overflowed and are back to Vec[0...0].
+                return false;
+            }
+
+            IEnumerable<T> getAtVector(int[] arr)
+                => lists.Zip(arr, (xs, i) => xs[i]);
+
+            //We we have a 0-vector or any zero in a vector, the Cartesian product will be empty and we quit right away.
+            if (lists.Count > 0 && lists.Select(e => e.Count > 0).All())
+            {
+                do
+                {
+                    yield return f(getAtVector(vector));
+                } while (increment(vector));
+            }
+        }
+
+        /// <summary>
         /// Concatenates a sequence of sequences.
         /// </summary>
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>

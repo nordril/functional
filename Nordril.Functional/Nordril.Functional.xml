@@ -4019,6 +4019,134 @@
             </summary>
             <param name="xs">The sequence to traverse.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})">
+            <summary>
+            Returns all combinations of the elements of two sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Func{``0,``1,``2,``3})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``5(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Func{``0,``1,``2,``3,``4})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="us">The fourth sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``6(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Collections.Generic.IEnumerable{``4},System.Func{``0,``1,``2,``3,``4,``5})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+            <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="us">The fourth sequence.</param>
+            <param name="vs">The fifth sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``7(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Collections.Generic.IEnumerable{``4},System.Collections.Generic.IEnumerable{``5},System.Func{``0,``1,``2,``3,``4,``5,``6})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+            <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+            <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="us">The fourth sequence.</param>
+            <param name="vs">The fifth sequence.</param>
+            <param name="ws">The sixth sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``8(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Collections.Generic.IEnumerable{``4},System.Collections.Generic.IEnumerable{``5},System.Collections.Generic.IEnumerable{``6},System.Func{``0,``1,``2,``3,``4,``5,``6,``7})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+            <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+            <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+            <typeparam name="T7">The type of elements in the seventh sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="us">The fourth sequence.</param>
+            <param name="vs">The fifth sequence.</param>
+            <param name="ws">The sixth sequence.</param>
+            <param name="ss">The seventh sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``9(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Collections.Generic.IEnumerable{``4},System.Collections.Generic.IEnumerable{``5},System.Collections.Generic.IEnumerable{``6},System.Collections.Generic.IEnumerable{``7},System.Func{``0,``1,``2,``3,``4,``5,``6,``7,``8})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T1">The type of elements in the first sequence.</typeparam>
+            <typeparam name="T2">The type of elements in the second sequence.</typeparam>
+            <typeparam name="T3">The type of elements in the third sequence.</typeparam>
+            <typeparam name="T4">The type of elements in the fourth sequence.</typeparam>
+            <typeparam name="T5">The type of elements in the fifth sequence.</typeparam>
+            <typeparam name="T6">The type of elements in the sixth sequence.</typeparam>
+            <typeparam name="T7">The type of elements in the seventh sequence.</typeparam>
+            <typeparam name="T8">The type of elements in the eigth sequence.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="xs">The first sequence.</param>
+            <param name="ys">The second sequence.</param>
+            <param name="zs">The third sequence.</param>
+            <param name="us">The fourth sequence.</param>
+            <param name="vs">The fifth sequence.</param>
+            <param name="ws">The sixth sequence.</param>
+            <param name="ss">The seventh sequence.</param>
+            <param name="ts">The eigth sequence.</param>
+            <param name="f">The result selector function.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.Cartesian``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}},System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Returns all combinations of the elements of three sequences (the Cartesian product).
+            </summary>
+            <typeparam name="T">The type of elements in the equences.</typeparam>
+            <typeparam name="TResult">The type of the results.</typeparam>
+            <param name="sequences">The sequences.</param>
+            <param name="f">The result selector function.</param>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Concat``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
             <summary>
             Concatenates a sequence of sequences.
