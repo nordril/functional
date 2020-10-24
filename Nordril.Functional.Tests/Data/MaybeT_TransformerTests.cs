@@ -11,7 +11,7 @@ namespace Nordril.Functional.Tests.Data
 {
     public static class MaybeT_TransformerTests
     {
-        [Fact]
+        /*[Fact]
         public static void LinqFuncConstTest()
         {
             //We just check whether it runs through, as Const has no value.
@@ -24,7 +24,7 @@ namespace Nordril.Functional.Tests.Data
                 select z;
 
             var value = computation.Run;
-        }
+        }*/
 
         [Fact]
         public static void LinqFuncEitherTest()

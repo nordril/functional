@@ -10,12 +10,12 @@ namespace Nordril.Functional.Data
     public static partial class MaybeT
     {
         //Const{T}
-        public static MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>
+        /*public static MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>
             Lift<TValue>(Const<TValue> value)
         {
             var m = new MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>();
             return (MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>)m.Lift(value);
-        }
+        }*/
 
         //Either
         public static MaybeT<Either<TLeft, TValue>, Either<TLeft, Maybe<TValue>>, Maybe<TValue>, TValue>

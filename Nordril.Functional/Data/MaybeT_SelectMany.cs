@@ -13,14 +13,14 @@ namespace Nordril.Functional.Data
 
         //Const{T}
 
-        public static MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult> SelectMany<TSource, TMiddle, TResult>
+        /*public static MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult> SelectMany<TSource, TMiddle, TResult>
             (this MaybeT<Const<TSource>, Const<Maybe<TSource>>, Maybe<TSource>, TSource> source,
              Func<TSource, MaybeT<Const<TMiddle>, Const<Maybe<TMiddle>>, Maybe<TMiddle>, TMiddle>> f,
              Func<TSource, TMiddle, TResult> resultSelector)
         {
             return (MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>)
                 source.BindT(x => f(x).MapT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>(y => resultSelector(x, y)));
-        }
+        }*/
 
         //Either
         public static MaybeT<Either<TLeft, TResult>, Either<TLeft, Maybe<TResult>>, Maybe<TResult>, TResult> SelectMany<TLeft, TSource, TMiddle, TResult>

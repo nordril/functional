@@ -643,5 +643,12 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="xs">The elements of the sequence.</param>
         public static Lst<T> Make<T>(params T[] xs) => new Lst<T>(xs);
+
+        /// <summary>
+        /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="Lst{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the input parameter.</typeparam>
+        /// <param name="x">The object to cast.</param>
+        public static Lst<T> ToLst<T>(this IFunctor<T> x) => (Lst<T>)x;
     }
 }

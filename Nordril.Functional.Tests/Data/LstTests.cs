@@ -184,6 +184,44 @@ namespace Nordril.Functional.Tests.Data
             Assert.Equal(expected, res as IEnumerable<int>);
         }
 
+        [Fact]
+        public static void LstBindTest()
+        {
+            var res = Lst.Make<int>().Bind(x => Lst.Make("a", "b")).ToLst();
+
+            Assert.Empty(res);
+
+            res = Lst.Make<int>(1, 2, 3).Bind(x => Lst.Make<string>()).ToLst();
+
+            Assert.Empty(res);
+
+            res = Lst.Make<int>(1, 2, 3).Bind(x => Lst.Make(x + "a", x + "b")).ToLst();
+
+            Assert.Equal(new string[] { "1a", "1b", "2a", "2b", "3a", "3b" }, res);
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, new int[] { }, new int[] { })]
+        [InlineData(new int[] { 1, 2}, new int[] { }, new int[] { 1, 2})]
+        [InlineData(new int[] { }, new int[] { 3, 4}, new int[] { 3, 4})]
+        [InlineData(new int[] {1, 2 }, new int[] { 3,4,5}, new int[] {1,2,3,4,5 })]
+        public static void LstMonadZeroTest(int[] xs, int[] ys, int[] expected)
+        {
+            Assert.Empty(Lst.Make<int>().Mzero().ToLst());
+
+            Assert.Equal(expected, xs.MakeLst().Mplus(ys.MakeLst()).ToLst());
+        }
+
+        [Theory]
+        [InlineData(new int[] { }, new int[] { })]
+        [InlineData(new int[] { 2 }, new int[] { 2 })]
+        [InlineData(new int[] { 1 }, new int[] { })]
+        [InlineData(new int[] { 1,2,3,4,5,6}, new int[] { 2,4, 6})]
+        public static void FilterTest(int[] xs, int[] expected)
+        {
+            Assert.Equal(expected, xs.MakeLst().Filter(x => x % 2 == 0));
+        }
+
         [Theory]
         [MemberData(nameof(EqualsData))]
         public static void LstEquals(Lst<int> xs, IEnumerable<int> ys, bool expected)

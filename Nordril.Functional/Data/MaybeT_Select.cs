@@ -10,9 +10,9 @@ namespace Nordril.Functional.Data
     {
         #region Monad transformer Select/SelectMany-methods
         //Const{T}
-        public static MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult> Select<TSource, TResult>(
+        /*public static MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult> Select<TSource, TResult>(
             this MaybeT<Const<TSource>, Const<Maybe<TSource>>, Maybe<TSource>, TSource> source, Func<TSource, TResult> f)
-            => (MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>)source.MapT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>(f);
+            => (MaybeT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>)source.MapT<Const<TResult>, Const<Maybe<TResult>>, Maybe<TResult>, TResult>(f);*/
 
         //Either
         public static MaybeT<Either<TLeft, TResult>, Either<TLeft, Maybe<TResult>>, Maybe<TResult>, TResult> Select<TLeft, TSource, TResult>(

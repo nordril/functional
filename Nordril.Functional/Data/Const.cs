@@ -8,7 +8,7 @@ namespace Nordril.Functional.Data
     /// A const-functor that does not actually contain any values.
     /// </summary>
     /// <typeparam name="T">The type of value by which to tag the functor. No values are actually present.</typeparam>
-    public struct Const<T> : IPhantomFunctor<T>, IEquatable<Const<T>>, IMonad<T>
+    public struct Const<T> : IPhantomFunctor<T>, IEquatable<Const<T>>
     {
         /// <inheritdoc />
         public IContravariant<TResult> ContraMap<TResult>(Func<TResult, T> f) => new Const<TResult>();
@@ -30,18 +30,6 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Const<T> other) => Equals((object)other);
-
-        /// <inheritdoc />
-        public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f)
-            => new Const<TResult>();
-
-        /// <inheritdoc />
-        public IApplicative<TResult> Pure<TResult>(TResult x)
-           => new Const<TResult>();
-
-        /// <inheritdoc />
-        public IApplicative<TResult> Ap<TResult>(IApplicative<Func<T, TResult>> f)
-            => new Const<TResult>();
     }
 
     /// <summary>
@@ -139,20 +127,16 @@ namespace Nordril.Functional.Data
             => (Const<TReal, TResult>)source.Map(f);
 
         /// <summary>
-        /// Equivalent to <see cref="IMonad{TSource}"/>, but restricted to <see cref="Const{TReal, TPhantom}"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+        /// Equivalent to <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>, but restricted to asynchronous <see cref="Const{TReal, TPhantom}"/>. Offers LINQ query support with one <c>from</c>-clause.
         /// </summary>
         /// <typeparam name="TReal">The real value in the source.</typeparam>
         /// <typeparam name="TSource">The type of the source's value.</typeparam>
-        /// <typeparam name="TMiddle">The type of the selector's result.</typeparam>
         /// <typeparam name="TResult">The type of the result's value.</typeparam>
         /// <param name="source">The source.</param>
         /// <param name="f">The function to apply.</param>
-        /// <param name="resultSelector">The result-selector.</param>
-        public static Const<TReal, TResult> SelectMany<TReal, TSource, TMiddle, TResult>
-            (this Const<TReal, TSource> source,
-             Func<TSource, Const<TReal, TMiddle>> f,
-             Func<TSource, TMiddle, TResult> resultSelector) =>
-            new Const<TReal, TResult>();
+        public static async Task<Const<TReal, TResult>> Select<TReal, TSource, TResult>(
+            this Task<Const<TReal, TSource>> source, Func<TSource, TResult> f)
+            => Select(await source, f);
 
         /// <summary>
         /// Unsafely casts an <see cref="IFunctor{TSource}"/> to a <see cref="Const{T}"/>.

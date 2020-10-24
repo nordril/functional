@@ -39,6 +39,15 @@ namespace Nordril.Functional
         /// Creates a <see cref="FuncComparer{T}"/> for a type implementing <see cref="IComparable{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of objects to compare.</typeparam>
-        public static IComparer<T> Make<T>() where T : IComparable<T> => new FuncComparer<T>((x, y) => x.CompareTo(y), x => x.GetHashCode());
+        public static FuncComparer<T> Make<T>() where T : IComparable<T> => new FuncComparer<T>((x, y) => x.CompareTo(y), x => x.GetHashCode());
+
+        /// <summary>
+        /// Create a <see cref="FuncComparer{T}"/> out of a comparison-function and a hash-function.
+        /// </summary>
+        /// <typeparam name="T">The type of object to compare.</typeparam>
+        /// <param name="f">The comparison function.</param>
+        /// <param name="getHashCode">The hash-function.</param>
+        public static FuncComparer<T> Make<T>(Func<T, T, int> f, Func<T, int> getHashCode)
+            => new FuncComparer<T>(f, getHashCode);
     }
 }

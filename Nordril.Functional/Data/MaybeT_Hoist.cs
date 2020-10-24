@@ -10,13 +10,13 @@ namespace Nordril.Functional.Data
     public static partial class MaybeT
     {
         //Const{T}
-        public static MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>
+        /*public static MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>
             HoistConst<TValue>(
             Maybe<TValue> value)
         {
             var m = new MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>();
             return (MaybeT<Const<TValue>, Const<Maybe<TValue>>, Maybe<TValue>, TValue>)m.Hoist(value);
-        }
+        }*/
 
         //Either
         [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]

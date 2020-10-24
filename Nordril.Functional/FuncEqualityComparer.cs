@@ -59,7 +59,15 @@ namespace Nordril.Functional
         /// </summary>
         /// <typeparam name="T">The type of objects to compare.</typeparam>
         /// <param name="f">The comparison function.</param>
-        public static IEqualityComparer<T> Make<T>(this Func<T, T, bool> f) => new FuncEqualityComparer<T>(f);
+        public static IEqualityComparer<T> Make<T>(Func<T, T, bool> f) => new FuncEqualityComparer<T>(f);
+
+        /// <summary>
+        /// Turns a binary predicate into a <see cref="IEqualityComparer{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of objects to compare.</typeparam>
+        /// <param name="f">The comparison function.</param>
+        /// <param name="getHashCode">The hash-function.</param>
+        public static IEqualityComparer<T> Make<T>(Func<T, T, bool> f, Func<T, int> getHashCode) => new FuncEqualityComparer<T>(f, getHashCode);
 
         /// <summary>
         /// Creates a <see cref="FuncEqualityComparer{T}"/> for a type implementing <see cref="IEquatable{T}"/>.
