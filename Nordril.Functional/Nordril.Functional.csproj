@@ -2,22 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>21.16.1.0</AssemblyVersion>
+    <AssemblyVersion>21.17.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies d.o.o.</Authors>
     <Company>Nordril Technologies d.o.o.</Company>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <Version>21.16.1</Version>
-    <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, and more.</Description>
-    <FileVersion>21.16.1.0</FileVersion>
+    <Version>21.17.0</Version>
+    <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, Lenses, and more.</Description>
+    <FileVersion>21.17.0.0</FileVersion>
     <PackageIconUrl></PackageIconUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/nordril/functional.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/nordril/functional/</PackageProjectUrl>
-    <PackageTags>functional langexts maybe functor monad lens algebra</PackageTags>
+    <PackageTags>functional langexts maybe functor monad lens algebra transformers</PackageTags>
     <Copyright>Nordril Technologies d.o.o.</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>cebd969f4bc14d5597856f700bbd5bf5.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

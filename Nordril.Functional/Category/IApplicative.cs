@@ -86,8 +86,11 @@ namespace Nordril.Functional.Category
         /// <exception cref="NullReferenceException">If <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
         public static TResult PureUnsafe<TSource, TResult>(this TSource x)
             where TResult : IApplicative<TSource>
+            => (TResult)PureUnsafe(x, typeof(TResult));
+
+        internal static IApplicative<TSource> PureUnsafe<TSource>(this TSource x, Type tApplicative)
         {
-            var instancePure = typeof(TResult).GetMember(
+            var instancePure = tApplicative.GetMember(
                 nameof(IApplicative<object>.Pure),
                 MemberTypes.Method,
                 BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public);
@@ -104,16 +107,16 @@ namespace Nordril.Functional.Category
             var pure = new DynamicMethod("pure", typeof(IApplicative<TSource>), new Type[] { typeof(TSource) });
             var generator = pure.GetILGenerator();
 
-            var applicativeThis = generator.DeclareLocal(typeof(TResult));
+            var applicativeThis = generator.DeclareLocal(tApplicative);
             generator.Emit(OpCodes.Ldloca_S, 0); //push applicativeThis (index 0) onto the stack: [] -> [at]
-            generator.Emit(OpCodes.Initobj, typeof(TResult)); //initialize at to null: at -> []
+            generator.Emit(OpCodes.Initobj, tApplicative); //initialize at to null: at -> []
             generator.Emit(OpCodes.Ldloc_0); //put local variable 0 to the stack again: [] -> at
-            generator.Emit(OpCodes.Box, typeof(TResult)); //box the value: [at:stack] -> [at:heap]
+            generator.Emit(OpCodes.Box, tApplicative); //box the value: [at:stack] -> [at:heap]
             generator.Emit(OpCodes.Ldarg_0); //load the first argument (x) onto the stack: [at:heap] -> [at:heap, x]
             generator.EmitCall(OpCodes.Call, pureMi, null); //call pureMi without null-checking: [at:heap, x] -> [ret]
             generator.Emit(OpCodes.Ret); //return: []
 
-            var res = (TResult)pure.Invoke(null, new object[] { x });
+            var res = (IApplicative<TSource>)pure.Invoke(null, new object[] { x });
 
             return res;
         }

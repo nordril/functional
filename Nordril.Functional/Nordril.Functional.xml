@@ -473,10 +473,16 @@
         </member>
         <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefault``1(``0)">
             <summary>
-            The semigroup whose operation always returns the last element.
+            The monoid whose operation always returns the last element.
             </summary>
             <param name="default">The neutral element of the monoid.</param>
             <typeparam name="T">The type of the element in the structure.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.First``1">
+            <summary>
+            The monoid whose neutral element is <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> and which always returns the first non-<see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> operand.
+            </summary>
+            <typeparam name="T">The type of the elements.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Algebra.Monoid.ListAppendMonoid`1">
             <summary>
@@ -580,6 +586,18 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.Monoid.LastOrDefaultMonoid`1.Op(`0,`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.FirstMonoid`1">
+            <summary>
+            The (Nothing, Alt)-monoid.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.FirstMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.FirstMonoid`1.Op(Nordril.Functional.Data.Maybe{`0},Nordril.Functional.Data.Maybe{`0})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Group`1">
@@ -3066,6 +3084,31 @@
             <param name="this">The bifunctor to apply over.</param>
             <param name="f">The function to apply.</param>
         </member>
+        <member name="T:Nordril.Functional.Category.IChoice`2">
+            <summary>
+            A <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> which can be turned into a "left"- and "right"-choice, with the typical example
+            being lifting a function <c>a -&gt; b</c> into a function <c>Either&lt;a, c&gt; -&gt; Either&lt;b, c&gt;</c> which runs the original function
+            if the input-argument is a left-value and just passes a right-value along unchanged. The right-choice is analogous.
+            Implementors must fulfill the following laws:
+            <code>
+            todo
+            </code>
+            </summary>
+            <typeparam name="TNeed">The type of the input.</typeparam>
+            <typeparam name="THave">The type of the output.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IChoice`2.ChooseLeft``1">
+            <summary>
+            Lift the <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> into <see cref="T:Nordril.Functional.Data.Either`2"/> by mapping it over its left-value.
+            </summary>
+            <typeparam name="TRight">The unchanged right-value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IChoice`2.ChooseRight``1">
+            <summary>
+            Lift the <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> into <see cref="T:Nordril.Functional.Data.Either`2"/> by mapping it over its right-value.
+            </summary>
+            <typeparam name="TLeft">The unchanged left-value.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Category.IComonad`1">
             <summary>
             A comonad, which is the categorical dual of a <see cref="T:Nordril.Functional.Category.IMonad`1"/>.
@@ -3893,6 +3936,90 @@
             <typeparam name="THaveResult">The type of the new values the profunctor will contain.</typeparam>
             <param name="in">The function to apply to the contravariant values.</param>
             <param name="out">The function to apply to the covariant values.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.Profunctor">
+            <summary>
+            Extension methods for profunctors.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.Profunctor.FuncToProfunctor``2(System.Func{``0,``1})">
+            <summary>
+            Wrap a <see cref="T:System.Func`2"/> into a profunctor-instance.
+            </summary>
+            <typeparam name="TNeed">The type of the input.</typeparam>
+            <typeparam name="THave">The type of the output.</typeparam>
+            <param name="f">The function to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Profunctor.ToFunc``2(Nordril.Functional.Category.IProfunctor{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> to a <see cref="T:Nordril.Functional.Category.ProfunctorFunc`2"/> and returns its underlying function.
+            </summary>
+            <typeparam name="TIn">The type of the input.</typeparam>
+            <typeparam name="TOut">The type of the output.</typeparam>
+            <param name="pf">The profunctor to cast.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.Linq.PolyLinqExtensions">
+            <summary>
+            LINQ methods for generic <see cref="T:Nordril.Functional.Category.IFunctor`1"/>s/<see cref="T:Nordril.Functional.Category.IMonad`1"/>s, enabling the writing of LINQ-queries.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.Select``2(Nordril.Functional.Category.IFunctor{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>. The functor-type is preserved, but checking for a concrete type is the responsibility of the caller.
+            Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.SelectMany``3(Nordril.Functional.Category.IMonad{``0},System.Func{``0,Nordril.Functional.Category.IMonad{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>. The monad-type is preserved, but checking that every computation in the query is in the same monad, and checking for a concrete type are the responsibility of the caller.
+            Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.ProfunctorFunc`2">
+            <summary>
+            A profunctor-wrapper for <see cref="T:System.Func`2"/>, needed for prisms.
+            <see cref="T:Nordril.Functional.Category.ProfunctorFunc`2"/> is ismorphic to <see cref="T:System.Func`2"/>, but since it's a struct, it can implement
+            interfaces, esp. <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> (allowing a function to be prepended to its input and another to be appended to its output)
+            and <see cref="T:Nordril.Functional.Category.IChoice`2"/> (allowing it to be lifted into <see cref="T:Nordril.Functional.Data.Either`2"/>).
+            </summary>
+            <typeparam name="TIn">The type of the input.</typeparam>
+            <typeparam name="TOut">The type of the output.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Category.ProfunctorFunc`2.Func">
+            <summary>
+            The underlying function.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.#ctor(System.Func{`0,`1})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="func">The function to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ContraMap``1(System.Func{``0,`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.Map``1(System.Func{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.Promap``2(System.Func{``0,`0},System.Func{`1,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ChooseLeft``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ChooseRight``1">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.CollectionExtensions">
             <summary>
@@ -4753,6 +4880,63 @@
         </member>
         <member name="M:Nordril.Functional.Data.Const`2.Equals(Nordril.Functional.Data.Const{`0,`1})">
             <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.ConstMonoid`3">
+            <summary>
+            A const-functor that contains a "real" value, but which is a functor according to a
+            second value which is does not actually contain. <typeparamref name="TPhantom"/> also forms a monoid with the help of <typeparamref name="TMonoid"/>.
+            This is analogous to <see cref="T:Nordril.Functional.Data.Const`1"/>, with the difference that we have a "hidden" value
+            that does not influence the functor-instance.
+            </summary>
+            <typeparam name="TMonoid">The monoid over <typeparamref name="TReal"/>.</typeparam>
+            <typeparam name="TReal">The actual value contained in the functor.</typeparam>
+            <typeparam name="TPhantom">The value which is only present as a phantom.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.ConstMonoid`3.RealValue">
+            <summary>
+            The value contained in the functor.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.#ctor(`1)">
+            <summary>
+            Creates a new const-instance with a value.
+            </summary>
+            <param name="realValue">The value to store in the functor.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.ContraMap``1(System.Func{``0,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Map``1(System.Func{`2,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Equals(System.Object)">
+            <summary>
+            Determines equality based on <see cref="P:Nordril.Functional.Data.ConstMonoid`3.RealValue"/>.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.op_Equality(Nordril.Functional.Data.ConstMonoid{`0,`1,`2},Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.op_Inequality(Nordril.Functional.Data.ConstMonoid{`0,`1,`2},Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Equals(Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`2,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Forget">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Const`2"/> which does not have the monoid-information.
+            </summary>
         </member>
         <member name="T:Nordril.Functional.Data.Const">
             <summary>
@@ -10309,6 +10493,42 @@
             <param name="s">The computation to run.</param>
             <param name="f">The functor-valued function to apply to the initial store.</param>
         </member>
+        <member name="T:Nordril.Functional.Data.Tagged`2">
+            <summary>
+            Tagged is like <see cref="T:Nordril.Functional.Data.Const`2"/>, but the first type-argument is the phantom one.
+            You can think of Tagged as a "fake constant function", what takes a <typeparamref name="TPhantom"/> (on which it doesn't and can't depend) and returns
+            an <typeparamref name="TReal"/>. <c>Tagged&lt;A,B&gt;</c> is thus the same as the function<c>(A _) =&gt; B</c>.
+            It's basically only used for prisms, as a faked replacement for <see cref="T:System.Func`2"/>.
+            </summary>
+            <typeparam name="TPhantom">The phantom-type</typeparam>
+            <typeparam name="TReal">The real-type.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Tagged`2.RealValue">
+            <summary>
+            Gets the real value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.#ctor(`1)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="realValue">The real value to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.ChooseLeft``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.ChooseRight``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.ContraMap``1(System.Func{``0,`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.Map``1(System.Func{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Tagged`2.Promap``2(System.Func{``0,`0},System.Func{`1,``1})">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Tree`1">
             <summary>
             A rose tree, wherein each node has a single key and a list of children.
@@ -11253,6 +11473,976 @@
             <summary>
             Creates a deep copy of the object that can be modified independently of the original.
             </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.Getter`2">
+            <summary>
+            A concrete getter.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the object to get in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.Getter`2.GetFunc">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.IGetter`2">
+            <summary>
+            A getter which does not modify its input and returns some part of it.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the object to get in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.IGetter`2.GetFunc">
+            <summary>
+            Returns the getter in CPS-form.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.IMonoLens`2">
+            <summary>
+            A lens, which is a combined <see cref="T:Nordril.Functional.Lens.IGetter`2"/> and <see cref="T:Nordril.Functional.Lens.ISetter`4"/>.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the object to get/modify in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IMonoLens`2.LensFunc``2">
+            <summary>
+            Returns the lens-function, which must work with any <see cref="T:Nordril.Functional.Category.IFunctor`1"/> for <typeparamref name="A"/> and <typeparamref name="S"/>.
+            </summary>
+            <typeparam name="FA">The concrete functor for <typeparamref name="A"/>.</typeparam>
+            <typeparam name="FS">The concrete functor for <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IMonoLens`2.LensFunc">
+            <summary>
+            Returns the lens-function, which must work with any <see cref="T:Nordril.Functional.Category.IFunctor`1"/> for <typeparamref name="A"/> and <typeparamref name="S"/>.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.IMonoPrism`2">
+            <summary>
+            A getter that "may work" for some types of input (e.g. on the left-case of <see cref="T:Nordril.Functional.Data.Either`2"/> only), and which can always be turned around (e.g. one can always turn a left-value into an see cref="Either{TLeft, TRight}"/>).
+            This is a special case of <see cref="T:Nordril.Functional.Lens.IPrism`4"/> that does not change the types of its inputs.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Lens.IPrism`4">
+            <summary>
+            A getter that "may work" for some types of input (e.g. on the left-case of <see cref="T:Nordril.Functional.Data.Either`2"/> only), and which can always be turned around (e.g. one can always turn a left-value into an see cref="Either{TLeft, TRight}"/>).
+            N.B. Failure means "it returns Maybe.Nothing", not "throws an exception".
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="T">The type of the output data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+            <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IPrism`4.PrismFunc``4">
+            <summary>
+            Returns the prism-function, which must work with any <see cref="T:Nordril.Functional.Category.IApplicative`1"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="FB">The concrete functor for <typeparamref name="B"/>.</typeparam>
+            <typeparam name="FT">The concrete functor for <typeparamref name="T"/>.</typeparam>
+            <typeparam name="PAFB">The concrete profunctor from <typeparamref name="A"/> to <typeparamref name="FB"/>.</typeparam>
+            <typeparam name="PSFT">The concrete profunctor from <typeparamref name="S"/> to <typeparamref name="FT"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IPrism`4.PrismFunc(System.Type)">
+            <summary>
+            Returns the prism-function, which must work with any <see cref="T:Nordril.Functional.Category.IApplicative`1"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.ISetter`4">
+            <summary>
+            A setter which applies a function to some part of its input.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="T">The type of the output data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+            <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.ISetter`4.SetFunc">
+            <summary>
+            Returns the setter in CPS-form.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.L">
+            <summary>
+            Lenses; first-class getters, settings, and updaters.
+            See the <see cref="M:Nordril.Functional.Lens.L.Make.Getter``2(System.Func{``0,``1})"/>-family of functions in creating lenses and <see cref="M:Nordril.Functional.Lens.L.Get``2(Nordril.Functional.Lens.IGetter{``0,``1},``0)"/>, <see cref="M:Nordril.Functional.Lens.L.Set``4(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},``0,``3)"/>, and <see cref="M:Nordril.Functional.Lens.L.Update``4(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},``0,System.Func{``2,``3})"/> on how to execute them.
+            See the remarks and examples.
+            </summary>
+            <remarks>
+            A lens is basically a function of the type <c>(a -> f&lt;b&gt;) -> s -> f&lt;t&gt;</c>, where the arrow denotes a function. <c>s</c> is an input data structure, like a list, <c>a</c> is the part of <c>s</c> to modify, say, a string inside the list, <c>b</c> is the result of the modification, like an integer that is the length of the string, and <c>t</c> is the resulting structure, in this example a list of integers. <c>f</c>, lastly, is an <see cref="T:Nordril.Functional.Category.IFunctor`1"/> which defined what the "lens" does, exactly, and <c>f</c> defines whether a lens can work as a getter, setter, both, a traversal, etc. - it is the "added feature" or the lens.
+            
+            If we only want to create a setter, which can update a value but nothing else, we set <c>f</c> to <see cref="T:Nordril.Functional.Data.Identity`1"/>. <see cref="T:Nordril.Functional.Data.Identity`1"/> is just a featureless wrapper, meaning that we can use it to update the value <c>a</c>, but nothing else.
+            If we want to create a getter, which can retrieve values, we set <c>f</c> to <see cref="T:Nordril.Functional.Data.Const`2"/>. Let's look at the function <c>a -> f&lt;b&gt;</c> which "updates" <c>a</c> and replace <c>f</c> with <see cref="T:Nordril.Functional.Data.Const`2"/>: <c>a -> Const&lt;a,a&gt;</c>. Here, we store the value of <c>a</c> in the real-part, and set the phantom-part (which is not present) to <c>a</c> as well. However, note that the whole lens becomes this: <c>(a -> Const&lt;a, b&gt;) -> s -> Const&lt;a, T&gt;</c>. The final <see cref="T:Nordril.Functional.Data.Const`2"/> contains <c>t</c> as the phantom-part, meaning it doesn't actually have a value of type <c>t</c>, but <c>a</c> as its real-part. We thus use <see cref="T:Nordril.Functional.Data.Const`2"/> to "smuggle out" the inner <c>a</c>.
+            We can also create a lens which can work as both a getter and a setter via <see cref="T:Nordril.Functional.Lens.IMonoLens`2"/>, where <c>f</c> is any <see cref="T:Nordril.Functional.Category.IFunctor`1"/>. Here, <c>f</c> must be <em>universally quantified</em>, meaning it must be able to use and produce any functor that the caller desires.
+            <h1>Using this class</h1>
+            <para>
+            All methods in this class are static and thread-safe, the class has no internal state. You can create lenses, getters, setters, etc. via the methods of the <see cref="T:Nordril.Functional.Lens.L.Make"/>-class and transform them using the methods of the <see cref="T:Nordril.Functional.Lens.L.Do"/>-class. Methods to consume lenses are in this class directly.
+            </para>
+            <h1>Lens laws</h1>
+            A lens must obey the following laws:
+            <code>
+                //1. You get what you put in<br />
+                Lens.Get(L, Lens.Set(L, X, V)) == X<br />
+                //2. Putting back what you got doesn't change anything<br />
+                Lens.Set(L, X, Lens.Get(L, X)) == X<br />
+                //3. Setting twice is the same thing as setting once<br />
+                Lens.Set(L, Lens.Set(L, X, V2), V1) == Lens.Set(L, X, V2)<br />
+            </code>
+            <h1>Hierarchy of lenses</h1>
+            <para>
+            One basic type of lenslike is a <em>Getter</em>, which takes a structure <c>s</c> and retrieves some value <c>a</c> from it. Getters are consume via the <see cref="M:Nordril.Functional.Lens.L.Get``2(Nordril.Functional.Lens.IGetter{``0,``1},``0)"/>-function.
+            The counterpart is a <em>Setter</em>, which takes a structure <c>s</c>, replaces some part <c>a</c> in it with a part <c>b</c>, and returns the structure <c>t</c> (an example being a setter which replaces the strings in a string-list with integers, resulting in an integer-list).
+            A combined getter and setter is called a <em>Lens</em>, which supports both getting and changing a specific part of a structure.
+            A specialized setter is a <em>Prism</em>, which "may work": if the part <c>a</c> is present in the input <c>s</c>, it gets replaced with <c>b</c>, but if not, then the input remains unchanged. An example is a prism which sets the left-value of an <see cref="T:Nordril.Functional.Data.Either`2"/> but which does nothing if the <see cref="T:Nordril.Functional.Data.Either`2"/> contains a right-value.
+            </para>
+            
+            todo: fold, traversal
+            
+            <h1>Creating lenses</h1>
+            <para>todo</para>
+            <h1>Composing lenses</h1>
+            <para>Two lenses <c>L1</c> and <c>L2</c> can actually be composed using function composition, meaning <c>L1(L2(x))</c>. However, since the "raw" functions are not exposed for technical reasons, one can use the "Then"-methods of this class instead, which just perform function-composition in the background. To compose two getters into a single getter, where <c>L1</c> gets, for instance, a string from a list of strings, and where <c>L2</c> retrieves a substring from a string, one would write <c>var subStringFromStringList = L1.Then(L2)</c>.
+            <h1>Mutating and well-behaved lenses</h1>
+            Technically, lenses should not mutate their arguments but only return results that reflect changes, but as a matter of practicality, some lenses do. These are noted in this class as <em>mutating</em>, an example being <see cref="M:Nordril.Functional.Lens.L.Make.IndexSetter``3"/>, which mutates a dictionary in-place. We call lenses which obey the lens-laws and do not mutate their inputs <em>well-behaved</em>, and lenses which aren't explicitly said to be mutating in this class are well-behaved.
+            </para>
+            
+            <h1>Executing lenses</h1>
+            <para>todo</para>
+            <h1>History</h1>
+            <para>Lenses developed over time and the result of the work of Jeremy Gibbons, Luke Palmer, Twan van Laarhoven, Rossel O'Connor, and Edward Kmett, as detailed in https://github.com/ekmett/lens/wiki/History-of-Lenses .<br />
+            The structure of the library is taken (with simplifications) from Edward Kmett's lens-library: https://github.com/ekmett/lens.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Nordril.Functional.Lens.L.Make">
+            <summary>
+            Contains methods for creating getters, setters, lenses, prisms, etc.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Just``2">
+            <summary>
+            Makes a prism that returns the value of a <see cref="T:Nordril.Functional.Data.Maybe`1"/>, if it exists.
+            </summary>
+            <typeparam name="A">The type of the contained value.</typeparam>
+            <typeparam name="B">The type of the output value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.First``3">
+            <summary>
+            Makes a prism which returns the first value of an Either, if it exists.
+            </summary>
+            <typeparam name="A">The type of the input value</typeparam>
+            <typeparam name="B">The type of the output value</typeparam>
+            <typeparam name="T2">The type of the second value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Second``3">
+            <summary>
+            Makes a prism which returns the second value of an Either, if it exists.
+            </summary>
+            <typeparam name="A">The type of the input value</typeparam>
+            <typeparam name="B">The type of the output value</typeparam>
+            <typeparam name="T1">The type of the first value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Getter``2(System.Func{``0,``1})">
+            <summary>
+            Creates a getter out of an accessing-function.
+            </summary>
+            <typeparam name="S">The type of the container.</typeparam>
+            <typeparam name="A">The type of the retrieved value.</typeparam>
+            <param name="get">The accessing-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Lens``2(System.Func{``0,``1},System.Func{``0,``1,``0})">
+            <summary>
+            Creates a lens (a combined getter/setter) out of a pair of accessing- and setting-functions.
+            </summary>
+            <typeparam name="S">The type of the container.</typeparam>
+            <typeparam name="A">The type of the result.</typeparam>
+            <param name="get">The accessing-function.</param>
+            <param name="set">The setting-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.AtSetter``2(System.Int32)">
+            <summary>
+            Create a mutating lens for a given index <paramref name="index"/> which updates, removes, or adds an element in a list.
+            </summary>
+            <typeparam name="S">The type of the list-container.</typeparam>
+            <typeparam name="A">The type of the value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.AtSetter``3(``2)">
+            <summary>
+            Create a mutating lens for a given key <paramref name="key"/> which updates, removes, or adds an element in a dictionary.
+            </summary>
+            <typeparam name="S">The type of the dictionary-container.</typeparam>
+            <typeparam name="A">The type of the value.</typeparam>
+            <typeparam name="TKey">The type of the key.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Id``1">
+            <summary>
+            The identity lens.
+            </summary>
+            <typeparam name="S">The type of the data.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Func``2(System.Func{``0,``1},System.Func{``1,``0})">
+            <summary>
+            Turns a function into a lens.
+            </summary>
+            <typeparam name="S">The type of the input.</typeparam>
+            <typeparam name="T">The type of the output.</typeparam>
+            <param name="f">The function to get the output.</param>
+            <param name="g">The function to get the input from the output.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Prism``4(System.Func{``3,``1},System.Func{``0,Nordril.Functional.Data.Either{``1,``2}})">
+            <summary>
+            Makes a prism from a <paramref name="get"/>-function which tries to get the value <typeparamref name="A"/> from <typeparamref name="S"/>,
+            and a <paramref name="compose"/>-function, which puts the result <typeparamref name="B"/> back into a <typeparamref name="T"/> if <paramref name="get"/> succeeded.
+            </summary>
+            <typeparam name="S">The type of the input container.</typeparam>
+            <typeparam name="T">The type of the output container.</typeparam>
+            <typeparam name="A">The type of the value to get.</typeparam>
+            <typeparam name="B">The type of the result inside <typeparamref name="T"/>.</typeparam>
+            <param name="compose">The function which puts the result back into a structure and returns the result if <paramref name="get"/> was successful.</param>
+            <param name="get">The function which tries to get part of the structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Prism``3(System.Func{``2,``0},System.Func{``0,Nordril.Functional.Data.Maybe{``1}})">
+            <summary>
+            Makes a prism from a <paramref name="get"/>-function which tries to get the value <typeparamref name="A"/> from <typeparamref name="S"/>,
+            and a <paramref name="compose"/>-function, which puts the result <typeparamref name="B"/> back into a <typeparamref name="S"/> if <paramref name="get"/> succeeded.
+            </summary>
+            <typeparam name="S">The type of the container.</typeparam>
+            <typeparam name="A">The type of the value to get.</typeparam>
+            <typeparam name="B">The type of the result inside <typeparamref name="S"/>.</typeparam>
+            <param name="compose">The function which puts the result back into a structure and returns the result if <paramref name="get"/> was successful.</param>
+            <param name="get">The function which tries to get part of the structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Setter``4(System.Func{System.Func{``2,``3},System.Func{``0,``1}})">
+            <summary>
+            Creates a setter out of a setting-function.
+            If you do not need to change the type of the value and the container, see <see cref="M:Nordril.Functional.Lens.L.Make.Setter``2(System.Func{System.Func{``1,``1},System.Func{``0,``0}})"/>.
+            </summary>
+            <typeparam name="S">The type of the input container.</typeparam>
+            <typeparam name="T">The type of the output container.</typeparam>
+            <typeparam name="A">The type of the value to set.</typeparam>
+            <typeparam name="B">The type of the result of the setting.</typeparam>
+            <param name="set">The function which takes a function that modifies a value of type <typeparamref name="A"/>, an input-container of type <typeparamref name="S"/>, and which returns an output-container of type <typeparamref name="T"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Setter``2(System.Func{System.Func{``1,``1},System.Func{``0,``0}})">
+            <summary>
+            Creates a setter out of a setting-function which does not change the type of the value or its container.
+            </summary>
+            <typeparam name="S">The type of the input container.</typeparam>
+            <typeparam name="A">The type of the value to set.</typeparam>
+            <param name="set">The function which takes a function that modifies a value of type <typeparamref name="A"/>, an input-container of type <typeparamref name="S"/>, and which returns an output-container of type <typeparamref name="S"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.MappedSetter``4">
+            <summary>
+            Creates a setter which applies a function to each element of an <see cref="T:Nordril.Functional.Category.IFunctor`1"/>.
+            </summary>
+            <typeparam name="S">The type of the input container.</typeparam>
+            <typeparam name="T">The type of the output container.</typeparam>
+            <typeparam name="A">The type of the value to set.</typeparam>
+            <typeparam name="B">The type of the result of the setting.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.KeyedMappedSetter``5">
+            <summary>
+            Creates a setter which applies a function to each element of an <see cref="T:Nordril.Functional.Category.IKeyedFunctor`2"/>, also accessing the element's index.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.IndexSetter``2">
+            <summary>
+            Creates a mutating setter which sets an element in a collection with a given index.
+            If the index does not fall into the list, nothing is done.
+            </summary>
+            <typeparam name="A">The type of the value.</typeparam>
+            <typeparam name="S">The type of the list.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.IndexSetter``3">
+            <summary>
+            Creates a mutating setter which sets an element in a collection with a given index.
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="A">The type of the value.</typeparam>
+            <typeparam name="S">The type of the dictionary.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``2">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``3">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``4">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``5">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``6">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``7">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item1``8">
+            <summary>
+            Makes a lens for the first element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``2">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``3">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``4">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``5">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``6">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``7">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item2``8">
+            <summary>
+            Makes a lens for the second element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``3">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``4">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``5">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``6">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``7">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item3``8">
+            <summary>
+            Makes a lens for the third element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item4``4">
+            <summary>
+            Makes a lens for the fourth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item4``5">
+            <summary>
+            Makes a lens for the fourth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item4``6">
+            <summary>
+            Makes a lens for the fourth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item4``7">
+            <summary>
+            Makes a lens for the fourth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item4``8">
+            <summary>
+            Makes a lens for the fourth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item5``5">
+            <summary>
+            Makes a lens for the fifth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item5``6">
+            <summary>
+            Makes a lens for the fifth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item5``7">
+            <summary>
+            Makes a lens for the fifth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item5``8">
+            <summary>
+            Makes a lens for the fifth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item6``6">
+            <summary>
+            Makes a lens for the sixth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item6``7">
+            <summary>
+            Makes a lens for the sixth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item6``8">
+            <summary>
+            Makes a lens for the sixth element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item7``7">
+            <summary>
+            Makes a lens for the seventh element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Item7``8">
+            <summary>
+            Makes a lens for theseventh element of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Rest``8">
+            <summary>
+            Makes a lens for the rest of a tuple.
+            </summary>
+            <typeparam name="T1">The type of the first element.</typeparam>
+            <typeparam name="T2">The type of the second element.</typeparam>
+            <typeparam name="T3">The type of the third element.</typeparam>
+            <typeparam name="T4">The type of the fourth element.</typeparam>
+            <typeparam name="T5">The type of the fifth element.</typeparam>
+            <typeparam name="T6">The type of the sixth element.</typeparam>
+            <typeparam name="T7">The type of the seventh element.</typeparam>
+            <typeparam name="TRest">The type of the rest.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Lens.L.Do">
+            <summary>
+            Contains methods for transforming lenses.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``4(Nordril.Functional.Lens.IMonoLens{``0,``2},Nordril.Functional.Lens.IMonoLens{``1,``3})">
+            <summary>
+            Combines 2 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``6(Nordril.Functional.Lens.IMonoLens{``0,``3},Nordril.Functional.Lens.IMonoLens{``1,``4},Nordril.Functional.Lens.IMonoLens{``2,``5})">
+            <summary>
+            Combines 3 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``8(Nordril.Functional.Lens.IMonoLens{``0,``4},Nordril.Functional.Lens.IMonoLens{``1,``5},Nordril.Functional.Lens.IMonoLens{``2,``6},Nordril.Functional.Lens.IMonoLens{``3,``7})">
+            <summary>
+            Combines 4 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TA4">The type of the fourth input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <typeparam name="TB4">The type of the fourth output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+            <param name="l4">The fourth lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``10(Nordril.Functional.Lens.IMonoLens{``0,``5},Nordril.Functional.Lens.IMonoLens{``1,``6},Nordril.Functional.Lens.IMonoLens{``2,``7},Nordril.Functional.Lens.IMonoLens{``3,``8},Nordril.Functional.Lens.IMonoLens{``4,``9})">
+            <summary>
+            Combines 5 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TA4">The type of the fourth input.</typeparam>
+            <typeparam name="TA5">The type of the fifth input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <typeparam name="TB4">The type of the fourth output.</typeparam>
+            <typeparam name="TB5">The type of the fifth output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+            <param name="l4">The fourth lens.</param>
+            <param name="l5">The fifth lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``12(Nordril.Functional.Lens.IMonoLens{``0,``6},Nordril.Functional.Lens.IMonoLens{``1,``7},Nordril.Functional.Lens.IMonoLens{``2,``8},Nordril.Functional.Lens.IMonoLens{``3,``9},Nordril.Functional.Lens.IMonoLens{``4,``10},Nordril.Functional.Lens.IMonoLens{``5,``11})">
+            <summary>
+            Combines 6 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TA4">The type of the fourth input.</typeparam>
+            <typeparam name="TA5">The type of the fifth input.</typeparam>
+            <typeparam name="TA6">The type of the sixth input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <typeparam name="TB4">The type of the fourth output.</typeparam>
+            <typeparam name="TB5">The type of the fifth output.</typeparam>
+            <typeparam name="TB6">The type of the sixth output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+            <param name="l4">The fourth lens.</param>
+            <param name="l5">The fifth lens.</param>
+            <param name="l6">The sixth lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``14(Nordril.Functional.Lens.IMonoLens{``0,``7},Nordril.Functional.Lens.IMonoLens{``1,``8},Nordril.Functional.Lens.IMonoLens{``2,``9},Nordril.Functional.Lens.IMonoLens{``3,``10},Nordril.Functional.Lens.IMonoLens{``4,``11},Nordril.Functional.Lens.IMonoLens{``5,``12},Nordril.Functional.Lens.IMonoLens{``6,``13})">
+            <summary>
+            Combines 7 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TA4">The type of the fourth input.</typeparam>
+            <typeparam name="TA5">The type of the fifth input.</typeparam>
+            <typeparam name="TA6">The type of the sixth input.</typeparam>
+            <typeparam name="TA7">The type of the seventh input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <typeparam name="TB4">The type of the fourth output.</typeparam>
+            <typeparam name="TB5">The type of the fifth output.</typeparam>
+            <typeparam name="TB6">The type of the sixth output.</typeparam>
+            <typeparam name="TB7">The type of the seventh output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+            <param name="l4">The fourth lens.</param>
+            <param name="l5">The fifth lens.</param>
+            <param name="l6">The sixth lens.</param>
+            <param name="l7">The seventh lens.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Do.Zip``16(Nordril.Functional.Lens.IMonoLens{``0,``8},Nordril.Functional.Lens.IMonoLens{``1,``9},Nordril.Functional.Lens.IMonoLens{``2,``10},Nordril.Functional.Lens.IMonoLens{``3,``11},Nordril.Functional.Lens.IMonoLens{``4,``12},Nordril.Functional.Lens.IMonoLens{``5,``13},Nordril.Functional.Lens.IMonoLens{``6,``14},Nordril.Functional.Lens.IMonoLens{``7,``15})">
+            <summary>
+            Combines 8 lenses and into one tuple-lens.
+            </summary>
+            <typeparam name="TA1">The type of the first input.</typeparam>
+            <typeparam name="TA2">The type of the second input.</typeparam>
+            <typeparam name="TA3">The type of the third input.</typeparam>
+            <typeparam name="TA4">The type of the fourth input.</typeparam>
+            <typeparam name="TA5">The type of the fifth input.</typeparam>
+            <typeparam name="TA6">The type of the sixth input.</typeparam>
+            <typeparam name="TA7">The type of the seventh input.</typeparam>
+            <typeparam name="TARest">The type of the rest of the input.</typeparam>
+            <typeparam name="TB1">The type of the first output.</typeparam>
+            <typeparam name="TB2">The type of the second output.</typeparam>
+            <typeparam name="TB3">The type of the third output.</typeparam>
+            <typeparam name="TB4">The type of the fourth output.</typeparam>
+            <typeparam name="TB5">The type of the fifth output.</typeparam>
+            <typeparam name="TB6">The type of the sixth output.</typeparam>
+            <typeparam name="TB7">The type of the seventh output.</typeparam>
+            <typeparam name="TBRest">The type of the rest of the output.</typeparam>
+            <param name="l1">The first lens.</param>
+            <param name="l2">The second lens.</param>
+            <param name="l3">The third lens.</param>
+            <param name="l4">The fourth lens.</param>
+            <param name="l5">The fifth lens.</param>
+            <param name="l6">The sixth lens.</param>
+            <param name="l7">The seventh lens.</param>
+            <param name="lRest">The lens for thr rest.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``3(Nordril.Functional.Lens.IGetter{``0,``1},Nordril.Functional.Lens.IGetter{``1,``2})">
+            <summary>
+            Composes two getters. The second getter drills further into the result of the first.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="A">The type of the outer result/inner container.</typeparam>
+            <typeparam name="AInner">The type of the inner result.</typeparam>
+            <param name="lens">The outer getter.</param>
+            <param name="then">The inner getter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``6(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},Nordril.Functional.Lens.ISetter{``2,``3,``4,``5})">
+            <summary>
+            Composes two setters. The second setter drills further into the result of the first.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="T">The type of the resulting outer container.</typeparam>
+            <typeparam name="A">The type of the outer value.</typeparam>
+            <typeparam name="AInner">The type of the inner outer value/inner container.</typeparam>
+            <typeparam name="B">The type outer result value.</typeparam>
+            <typeparam name="BInner">The type of the inner result value.</typeparam>
+            <param name="lens">The outer setter.</param>
+            <param name="then">The inner setter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``3(Nordril.Functional.Lens.IMonoLens{``0,``1},Nordril.Functional.Lens.IMonoLens{``1,``2})">
+            <summary>
+            Composes two lenses. The second lens drills further into the result of the first.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="A1">The type of the outer result/inner container.</typeparam>
+            <typeparam name="A2">The type of the inner result.</typeparam>
+            <param name="lens">The outer getter.</param>
+            <param name="then">The inner getter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``6(Nordril.Functional.Lens.IPrism{``0,``1,``2,``3},Nordril.Functional.Lens.IPrism{``2,``3,``4,``5})">
+            <summary>
+            Composes two prisms. The second prism drills further into the result of the first, if it exists.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="T">The type of the resulting outer container.</typeparam>
+            <typeparam name="A">The type of the outer value.</typeparam>
+            <typeparam name="AInner">The type of the inner outer value/inner container.</typeparam>
+            <typeparam name="B">The type outer result value.</typeparam>
+            <typeparam name="BInner">The type of the inner result value.</typeparam>
+            <param name="lens">The outer setter.</param>
+            <param name="then">The inner setter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Set``4(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},``0,``3)">
+            <summary>
+            Runs a setter on an input and returns the modified input.
+            Also known as <em>set</em>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Update``4(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},``0,System.Func{``2,``3})">
+            <summary>
+            Runs a setter with an update-function on an input, returns the modified input.
+            Also known as <em>over</em>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Get``2(Nordril.Functional.Lens.IGetter{``0,``1},``0)">
+            <summary>
+            Runs a getter on an input and returns the result.
+            Also known as <em>view</em>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.TryGet``2(Nordril.Functional.Lens.IPrism{``0,``0,``1,``1},``0)">
+            <summary>
+            Tries to get the result of a prism from an input.
+            Also known an <em>preview</em>.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="A">The type of the part to get.</typeparam>
+            <param name="lens">The lens to run.</param>
+            <param name="input">The input.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Review``2(Nordril.Functional.Lens.IPrism{``1,``1,``0,``0},``0)">
+            <summary>
+            The opposite of <see cref="M:Nordril.Functional.Lens.L.TryGet``2(Nordril.Functional.Lens.IPrism{``0,``0,``1,``1},``0)"/> (if it succeeds); this function composes a part <typeparamref name="B"/> into a whole <typeparamref name="T"/>. With this function, one can use a <see cref="T:Nordril.Functional.Lens.IPrism`4"/> as a constructor for, say, <see cref="T:Nordril.Functional.Data.Either`2"/>. In fact:
+            <code>
+            if (Lens.TryGet(L, T).HasValue) then Lens.Review(L, Lens.TryGet(L, T).Value()) == T
+            </code>
+            </summary>
+            <typeparam name="B">The type of the value to pipe backwards.</typeparam>
+            <typeparam name="T">The type of the resulting object, from which the prism normally tries to extract <typeparamref name="B"/> via <see cref="M:Nordril.Functional.Lens.L.TryGet``2(Nordril.Functional.Lens.IPrism{``0,``0,``1,``1},``0)"/>.</typeparam>
+            <param name="lens">The prism.</param>
+            <param name="input">The object which should be assembled into <typeparamref name="T"/>.</param>
+        </member>
+        <member name="T:Nordril.Functional.Lens.MonoLens`2">
+            <summary>
+            A lens, which is a combined <see cref="T:Nordril.Functional.Lens.IGetter`2"/> and <see cref="T:Nordril.Functional.Lens.ISetter`4"/>.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the object to get/modify in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.MonoLens`2.GetFunc">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Lens.MonoLens`2.SetFunc">
+            <inheritdoc />
+        </member>
+        <member name="P:Nordril.Functional.Lens.MonoLens`2.Func">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoLens`2.#ctor(System.Func{System.Func{`1,Nordril.Functional.Category.IFunctor{`1}},System.Func{`0,Nordril.Functional.Category.IFunctor{`0}}})">
+            <summary>
+            Creates a new lens.
+            </summary>
+            <param name="f">The lens-function. This uses the functor returned by its first input-function, though the compiler can't check this.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoLens`2.LensFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoLens`2.LensFunc">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.MonoPrism`2">
+            <summary>
+            A prism, which is a setter that "may work" depending on its input.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoPrism`2.#ctor(System.Func{System.Type,System.Func{Nordril.Functional.Category.IChoice{`1,Nordril.Functional.Category.IApplicative{`1}},Nordril.Functional.Category.IChoice{`0,Nordril.Functional.Category.IApplicative{`0}}}})">
+            <summary>
+            Creates a new prism.
+            </summary>
+            <param name="f">The prism-function. This uses the applicative returned by its first input-function, though the compiler can't check this.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoPrism`2.PrismFunc``4">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.MonoPrism`2.PrismFunc(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.Prism`4">
+            <summary>
+            A prism, which is a setter that "may work" depending on its input.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.Prism`4.#ctor(System.Func{System.Type,System.Func{Nordril.Functional.Category.IChoice{`2,Nordril.Functional.Category.IApplicative{`3}},Nordril.Functional.Category.IChoice{`0,Nordril.Functional.Category.IApplicative{`1}}}})">
+            <summary>
+            Creates a new prism.
+            </summary>
+            <param name="f">The prism-function. This uses the applicative returned by its first input-function, though the compiler can't check this.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.Prism`4.PrismFunc``4">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Prism`4.PrismFunc(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.Setter`4">
+            <summary>
+            A setter which applies a function to some part of its input.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="T">The type of the output data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+            <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.Setter`4.SetFunc">
+            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Mapping.IIsomorphism`2">
             <summary>

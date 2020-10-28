@@ -281,23 +281,6 @@ namespace Nordril.Functional.Algebra
             op.Return();
 
             return op.CreateDelegate();
-
-            /*var op = new DynamicMethod("op", typeof(T), new Type[] { typeof(T), typeof(T) });
-            var generator = op.GetILGenerator();
-
-            var monoidThis = generator.DeclareLocal(typeof(TMagma));
-            generator.Emit(OpCodes.Ldloca_S, 0); //push monoidThis (index 0) onto the stack: [] -> [mt]
-            generator.Emit(OpCodes.Initobj, typeof(TMagma)); //initialize mt to null: mt -> []
-            generator.Emit(OpCodes.Ldloc_0); //put local variable 0 to the stack again: [] -> mt
-            generator.Emit(OpCodes.Box, typeof(TMagma)); //box the value: [mt:stack] -> [mt:heap]
-            generator.Emit(OpCodes.Ldarg_0); //[mt:heap, x]
-            generator.Emit(OpCodes.Ldarg_1); //[mt:heap, x, y]
-            generator.EmitCall(OpCodes.Call, instanceOp, null); //call op without null-checking: [mt:heap, x, y] -> [ret]
-            generator.Emit(OpCodes.Ret); //return: []
-
-            var res = (Func<T, T, T>)op.CreateDelegate(typeof(Func<T, T, T>));*/
-
-            //return res;
         }
 
         /// <summary>
@@ -372,14 +355,20 @@ namespace Nordril.Functional.Algebra
         /// </summary>
         /// <param name="default">The neutral element of the monoid.</param>
         /// <typeparam name="T">The type of the element in the structure.</typeparam>
-        public static IMonoid<T> FirstOrDefault<T>(T @default) => new FirstOrDefaultMonoid<T>(@default);
+        public static FirstOrDefaultMonoid<T> FirstOrDefault<T>(T @default) => new FirstOrDefaultMonoid<T>(@default);
 
         /// <summary>
-        /// The semigroup whose operation always returns the last element.
+        /// The monoid whose operation always returns the last element.
         /// </summary>
         /// <param name="default">The neutral element of the monoid.</param>
         /// <typeparam name="T">The type of the element in the structure.</typeparam>
-        public static IMonoid<T> LastOrDefault<T>(T @default) => new LastOrDefaultMonoid<T>(@default);
+        public static LastOrDefaultMonoid<T> LastOrDefault<T>(T @default) => new LastOrDefaultMonoid<T>(@default);
+
+        /// <summary>
+        /// The monoid whose neutral element is <see cref="Maybe.Nothing{T}"/> and which always returns the first non-<see cref="Maybe.Nothing{T}"/> operand.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements.</typeparam>
+        public static FirstMonoid<T> First<T>() => new FirstMonoid<T>();
 
         /// <summary>
         /// The mutating ([],++) monoid for lists. The binary operation mutates the first list.
@@ -506,6 +495,19 @@ namespace Nordril.Functional.Algebra
 
             /// <inheritdoc />
             public T Op(T x, T y) => y;
+        }
+
+        /// <summary>
+        /// The (Nothing, Alt)-monoid.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public class FirstMonoid<T> : IMonoid<Maybe<T>>
+        {
+            /// <inheritdoc />
+            public Maybe<T> Neutral => Maybe.Nothing<T>();
+
+            /// <inheritdoc />
+            public Maybe<T> Op(Maybe<T> x, Maybe<T> y) => x.ValueOr(_ => x, y);
         }
     }
     #endregion
