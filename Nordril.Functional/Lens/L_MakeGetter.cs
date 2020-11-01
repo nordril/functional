@@ -16,7 +16,7 @@ namespace Nordril.Functional.Lens
             /// <typeparam name="A">The type of the retrieved value.</typeparam>
             /// <param name="get">The accessing-function.</param>
             public static IGetter<S, A> Getter<S, A>(Func<S, A> get)
-            => new Getter<S, A>(g => s => new Const<object, S>(g(get(s)).RealValue));
+            => new Getter<S, A>(t => g => s => new Const<object, S>(((Const<object, A>)g(get(s))).RealValue));
         }
     }
 }

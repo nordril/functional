@@ -20,8 +20,9 @@ namespace Nordril.Functional.Category
         /// Bind corresponds to chaining functions, with the addition of the monadic context.
         /// Implementors must fulfill the following laws:
         /// <code>
-        ///     Pure(a).Bind(f) == f(a) (left identity of pure)
-        ///     f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity)
+        ///     Pure(a).Bind(f) == f(a) (left identity of pure)<br />
+        ///     X.Bind(a =&gt; Pure(a)) = X (right identity of pure)<br />
+        ///     f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity) <br />
         /// </code>
         /// These laws are identical to the laws of <see cref="Algebra.IHasMonoid{TSource}"/>, except for the
         /// type variable in <see cref="IMonad{TSource}"/>.

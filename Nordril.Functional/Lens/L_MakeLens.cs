@@ -17,7 +17,7 @@ namespace Nordril.Functional.Lens
             /// <param name="get">The accessing-function.</param>
             /// <param name="set">The setting-function.</param>
             public static IMonoLens<S, A> Lens<S, A>(Func<S, A> get, Func<S, A, S> set)
-                => new MonoLens<S, A>(g => s => g(get(s)).Map(x => set(s, x)));
+                => new MonoLens<S, A>(t => g => s => g(get(s)).Map(x => set(s, x)));
 
 
 
@@ -28,7 +28,7 @@ namespace Nordril.Functional.Lens
             /// <typeparam name="A">The type of the value.</typeparam>
             public static IMonoLens<S, Maybe<A>> AtSetter<S, A>(int index)
                 where S : IList<A>
-                => new MonoLens<S, Maybe<A>>(g => s =>
+                => new MonoLens<S, Maybe<A>>(t => g => s =>
                 {
                     var x = Maybe.JustIf(s.Count > index, () => s[index]);
 
@@ -53,7 +53,7 @@ namespace Nordril.Functional.Lens
             /// <typeparam name="TKey">The type of the key.</typeparam>
             public static IMonoLens<S, Maybe<A>> AtSetter<S, A, TKey>(TKey key)
                 where S : IDictionary<TKey, A>
-                => new MonoLens<S, Maybe<A>>(g => s =>
+                => new MonoLens<S, Maybe<A>>(t => g => s =>
                 {
                     var x = Maybe.JustIf(s.TryGetValue(key, out var v), () => v);
 

@@ -79,7 +79,7 @@ namespace Nordril.Functional.Tests.Data
         [Fact]
         public static void PureTest()
         {
-            var either = ApplicativeExtensions.PureUnsafe<float, Either<Unit, float>>(3.5f);
+            var either = Applicative.PureUnsafe<float, Either<Unit, float>>(3.5f);
 
             Assert.True(either.IsRight);
             Assert.Equal(3.5f, either.Right());

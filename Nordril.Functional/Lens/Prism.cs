@@ -37,15 +37,26 @@ namespace Nordril.Functional.Lens
             //this is a can-construct universal type, because you can call Pure from nothing. Therefore, we pass in the type of FT and Make.Prism does its dark magic.
             //It also uses universally quantified profunctors.
             return g => (PSFT)Func(typeof(FT))((IChoice<A, IApplicative<B>>)g.Map(r => (IApplicative<B>)r)).Map(r => (FT)r);
-                
-                //g => s => (FT)Func(typeof(FT))(x => g(x))(s);
         }
 
         /// <inheritdoc />
         public Func<IChoice<A, IApplicative<B>>, IChoice<S, IApplicative<T>>> PrismFunc(Type t)
         {
             return g => Func(t)(g);
-            //return g => s => Func(t)(x => g(x))(s);
+        }
+
+        /// <inheritdoc />
+        public Func<Func<A, FB>, Func<S, FT>> TraversalFunc<FB, FT>()
+            where FB : IApplicative<B>
+            where FT : IApplicative<T>
+        {
+            return g => s => PrismFunc<FB, FT, ProfunctorFunc<A, FB>, ProfunctorFunc<S, FT>>()(g.FuncToProfunctor()).ToFunc()(s);
+        }
+
+        /// <inheritdoc />
+        public Func<Func<A, IApplicative<B>>, Func<S, IApplicative<T>>> TraversalFunc(Type t)
+        {
+            return g => s => Func(t)(g.FuncToProfunctor()).ToFunc()(s);
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Nordril.Functional.Category;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Nordril.Functional.Lens
 {
-    /*
+    
     /// <summary>
     /// A setter which can read/update multiple fields.
     /// </summary>
@@ -26,6 +27,6 @@ namespace Nordril.Functional.Lens
         /// <summary>
         /// Returns the traversal-function, which must work with any <see cref="IApplicative{TSource}"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.
         /// </summary>
-        Func<Func<A, IApplicative<B>>, Func<S, IApplicative<T>>> TraversalFunc();
-    }*/
+        Func<Func<A, IApplicative<B>>, Func<S, IApplicative<T>>> TraversalFunc(Type t);
+    }
 }

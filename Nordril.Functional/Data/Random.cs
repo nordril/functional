@@ -196,7 +196,7 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Gets a list of random integers, all in the specified range.
-        /// When a large list of integers is required, this function is preferable to <see cref="ApplicativeExtensions.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
+        /// When a large list of integers is required, this function is preferable to <see cref="Applicative.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
         /// </summary>
         /// <typeparam name="TRng">The type of the RNG.</typeparam>
         /// <param name="min">The minimum value (inclusive).</param>
@@ -219,7 +219,7 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Gets a list of random integers, all in the specified range.
-        /// When a large list of integers is required, this function is preferable to <see cref="ApplicativeExtensions.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
+        /// When a large list of integers is required, this function is preferable to <see cref="Applicative.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
         /// This is a convenience-method which does not require explicitly specifying the type arguments.
         /// </summary>
         /// <typeparam name="TRng">The type of the RNG.</typeparam>
@@ -270,7 +270,7 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Gets a list of random doubles, all in the specified range.
-        /// When a large list of doubles is required, this function is preferable to <see cref="ApplicativeExtensions.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
+        /// When a large list of doubles is required, this function is preferable to <see cref="Applicative.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
         /// </summary>
         /// <typeparam name="TRng">The type of the RNG.</typeparam>
         /// <param name="min">The minimum value (inclusive).</param>
@@ -293,7 +293,7 @@ namespace Nordril.Functional.Data
 
         /// <summary>
         /// Gets a list of random doubles, all in the specified range.
-        /// When a large list of doubles is required, this function is preferable to <see cref="ApplicativeExtensions.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
+        /// When a large list of doubles is required, this function is preferable to <see cref="Applicative.SelectAp{T, TResult, TResultList}(IEnumerable{T}, Func{T, IApplicative{TResult}})"/>, which might overflow.
         /// This is a convenience-method which does not require explicitly specifying the type arguments.
         /// </summary>
         /// <typeparam name="TRng">The type of the RNG.</typeparam>

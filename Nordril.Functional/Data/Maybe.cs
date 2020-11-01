@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Category;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Category;
 using Nordril.Functional.Mapping;
 using System;
 using System.Collections;
@@ -17,6 +18,7 @@ namespace Nordril.Functional.Data
         , IEquatable<Maybe<T>>
         , IEnumerable<T>
         , IAsyncMonad<T>
+        , ITraversable<T>
     {
         private T value;
 
@@ -269,6 +271,27 @@ namespace Nordril.Functional.Data
             if (HasValue)
                 yield return value;
         }
+
+        /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TApplicative, TResult>(Func<T, TApplicative> f)
+            where TApplicative : IApplicative<TResult>
+            => IsNothing
+            ? (IApplicative<ITraversable<TResult>>)Applicative.PureUnsafe<TResult, TApplicative>(default).Map(_ => (ITraversable<TResult>)Maybe.Nothing<TResult>())
+            : (IApplicative<ITraversable<TResult>>)f(value).Map(x => (ITraversable<TResult>)Maybe.Just(x));
+
+        /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TResult>(Type applicative, Func<T, IApplicative<TResult>> f)
+            => IsNothing
+            ? (IApplicative<ITraversable<TResult>>)Applicative.PureUnsafe<TResult>(default, applicative).Map(_ => (ITraversable<TResult>)Maybe.Nothing<TResult>())
+            : (IApplicative<ITraversable<TResult>>)f(value).Map(x => (ITraversable<TResult>)Maybe.Just(x));
+
+        /// <inheritdoc />
+        public T1 FoldMap<T1>(IMonoid<T1> monoid, Func<T, T1> f)
+            => IsNothing ? monoid.Neutral : f(value);
+
+        /// <inheritdoc />
+        public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator)
+            => IsNothing ? accumulator : f(value, accumulator);
     }
 
     /// <summary>

@@ -14,8 +14,8 @@ namespace Nordril.Functional.Category
         /// Applies a function to the functor and returns a new functor without changing the original functor.
         /// Implementors must fulfill the following for all X and functions f and g:
         /// <code>
-        ///     X.BiMap(a => a, b => b) == X (identity)
-        ///     X.BiMap(x => f(g(x)), x => h(i(x))) == X.BiMap(g, i).BiMap(f, h) (homomorphism)
+        ///     X.BiMap(a => a, b => b) == X (identity)<br />
+        ///     X.BiMap(x => f(g(x)), x => h(i(x))) == X.BiMap(g, i).BiMap(f, h)(homomorphism) <br />
         /// </code>
         /// </summary>
         /// <typeparam name="TLeftResult">The type of the left result.</typeparam>

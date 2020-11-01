@@ -24,6 +24,6 @@ namespace Nordril.Functional.Lens
         /// <summary>
         /// Returns the lens-function, which must work with any <see cref="IFunctor{TSource}"/> for <typeparamref name="A"/> and <typeparamref name="S"/>.
         /// </summary>
-        Func<Func<A, IFunctor<A>>, Func<S, IFunctor<S>>> LensFunc();
+        Func<Func<A, IFunctor<A>>, Func<S, IFunctor<S>>> LensFunc(Type t);
     }
 }

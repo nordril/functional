@@ -1,6 +1,7 @@
 ﻿using Nordril.Functional.Algebra;
 using Nordril.Functional.Category;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Nordril.Functional.Data
@@ -24,9 +25,11 @@ namespace Nordril.Functional.Data
         public override int GetHashCode() => this.DefaultHash();
 
         /// <inheritdoc />
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "const has no content")]
         public static bool operator ==(Const<T> left, Const<T> right) => true;
 
         /// <inheritdoc />
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "const has no content")]
         public static bool operator !=(Const<T> left, Const<T> right) => false;
 
         /// <inheritdoc />
@@ -88,6 +91,23 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public bool Equals(Const<TReal, TPhantom> other) => Equals((object)other);
+
+        /// <summary>
+        /// Creates a new <see cref="Const{TMonoid, TReal, TPhantom}"/> by adding monoid-information.
+        /// </summary>
+        public Const<TMonoid, TReal, TPhantom> Remember<TMonoid>()
+            where TMonoid : IMonoid<TReal>
+            => new Const<TMonoid, TReal, TPhantom>(RealValue);
+
+        /// <summary>
+        /// Creates a new <see cref="Const{TMonoid, TReal, TPhantom}"/> by adding monoid-information and also changing the type of the real value.
+        /// </summary>
+        /// <typeparam name="TMonoid">The type of the monoid to add.</typeparam>
+        /// <typeparam name="TRealResult">The type of the resultant real value.</typeparam>
+        /// <param name="f">The function to map the real value.</param>
+        public Const<TMonoid, TRealResult, TPhantom> Remember<TMonoid, TRealResult>(Func<TReal, TRealResult> f)
+            where TMonoid : IMonoid<TRealResult>
+            => new Const<TMonoid, TRealResult, TPhantom>(f(RealValue));
     }
 
     /// <summary>
@@ -99,7 +119,10 @@ namespace Nordril.Functional.Data
     /// <typeparam name="TMonoid">The monoid over <typeparamref name="TReal"/>.</typeparam>
     /// <typeparam name="TReal">The actual value contained in the functor.</typeparam>
     /// <typeparam name="TPhantom">The value which is only present as a phantom.</typeparam>
-    public struct ConstMonoid<TMonoid, TReal, TPhantom> : IPhantomFunctor<TPhantom>, IApplicative<TPhantom>, IEquatable<ConstMonoid<TMonoid, TReal, TPhantom>>
+    public struct Const<TMonoid, TReal, TPhantom>
+        : IPhantomFunctor<TPhantom>
+        , IContravariantApplicative<TPhantom>
+        , IEquatable<Const<TMonoid, TReal, TPhantom>>
         where TMonoid : INeutralElement<TReal>
     {
         /// <summary>
@@ -111,16 +134,16 @@ namespace Nordril.Functional.Data
         /// Creates a new const-instance with a value.
         /// </summary>
         /// <param name="realValue">The value to store in the functor.</param>
-        public ConstMonoid(TReal realValue)
+        public Const(TReal realValue)
         {
             RealValue = realValue;
         }
 
         /// <inheritdoc />
-        public IContravariant<TResult> ContraMap<TResult>(Func<TResult, TPhantom> f) => new ConstMonoid<TMonoid, TReal, TResult>(RealValue);
+        public IContravariant<TResult> ContraMap<TResult>(Func<TResult, TPhantom> f) => new Const<TMonoid, TReal, TResult>(RealValue);
 
         /// <inheritdoc />
-        public IFunctor<TResult> Map<TResult>(Func<TPhantom, TResult> f) => new ConstMonoid<TMonoid, TReal, TResult>(RealValue);
+        public IFunctor<TResult> Map<TResult>(Func<TPhantom, TResult> f) => new Const<TMonoid, TReal, TResult>(RealValue);
 
         /// <summary>
         /// Determines equality based on <see cref="RealValue"/>.
@@ -128,10 +151,10 @@ namespace Nordril.Functional.Data
         /// <param name="obj">The other object.</param>
         public override bool Equals(object obj)
         {
-            if (obj is null || !(obj is ConstMonoid<TMonoid, TReal, TPhantom>))
+            if (obj is null || !(obj is Const<TMonoid, TReal, TPhantom>))
                 return false;
 
-            var thatConst = (ConstMonoid<TMonoid, TReal, TPhantom>)obj;
+            var thatConst = (Const<TMonoid, TReal, TPhantom>)obj;
 
             return RealValue.Equals(thatConst.RealValue);
         }
@@ -140,31 +163,37 @@ namespace Nordril.Functional.Data
         public override int GetHashCode() => this.DefaultHash(RealValue);
 
         /// <inheritdoc />
-        public static bool operator ==(ConstMonoid<TMonoid, TReal, TPhantom> left, ConstMonoid<TMonoid, TReal, TPhantom> right) => left.Equals(right);
+        public static bool operator ==(Const<TMonoid, TReal, TPhantom> left, Const<TMonoid, TReal, TPhantom> right) => left.Equals(right);
 
         /// <inheritdoc />
-        public static bool operator !=(ConstMonoid<TMonoid, TReal, TPhantom> left, ConstMonoid<TMonoid, TReal, TPhantom> right) => !(left == right);
+        public static bool operator !=(Const<TMonoid, TReal, TPhantom> left, Const<TMonoid, TReal, TPhantom> right) => !(left == right);
 
         /// <inheritdoc />
-        public bool Equals(ConstMonoid<TMonoid, TReal, TPhantom> other) => Equals((object)other);
+        public bool Equals(Const<TMonoid, TReal, TPhantom> other) => Equals((object)other);
 
         /// <inheritdoc />
         public IApplicative<TResult> Pure<TResult>(TResult x)
-            => new ConstMonoid<TMonoid, TReal, TResult>(Monoid.NeutralUnsafe<TReal, TMonoid>());
+            => new Const<TMonoid, TReal, TResult>(Monoid.NeutralUnsafe<TReal, TMonoid>());
 
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TPhantom, TResult>> f)
         {
-            if (f is null || !(f is ConstMonoid<TMonoid, TReal, TPhantom> that))
+            if (f is null || !(f is Const<TMonoid, TReal, Func<TPhantom, TPhantom>> that))
                 throw new InvalidCastException();
 
-            return new ConstMonoid<TMonoid, TReal, TResult>(Monoid.OpUnsafe<TReal, TMonoid>()(that.RealValue, RealValue));
+            return new Const<TMonoid, TReal, TResult>(Monoid.OpUnsafe<TReal, TMonoid>()(that.RealValue, RealValue));
         }
 
         /// <summary>
         /// Creates a new <see cref="Const{TReal, TPhantom}"/> which does not have the monoid-information.
         /// </summary>
         public Const<TReal, TPhantom> Forget() => new Const<TReal, TPhantom>(RealValue);
+
+        /// <summary>
+        /// Creates a new <see cref="Const{TReal, TPhantom}"/> which does not have the monoid-information.
+        /// </summary>
+        /// <typeparam name="TRealResult">The type of the resultant real value.</typeparam>
+        public Const<TRealResult, TPhantom> Forget<TRealResult>(Func<TReal, TRealResult> f) => new Const<TRealResult, TPhantom>(f(RealValue));
     }
 
     /// <summary>

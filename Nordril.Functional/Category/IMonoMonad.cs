@@ -148,7 +148,7 @@ namespace Nordril.Functional.Category
         }
 
         /// <summary>
-        /// Lifts a binary function to take two <see cref="IMonoMonad{T, TSource}"/> arguments. See <see cref="ApplicativeExtensions.LiftA{T1, T2, TResult}(Func{T1, T2, TResult})"/>.
+        /// Lifts a binary function to take two <see cref="IMonoMonad{T, TSource}"/> arguments. See <see cref="Applicative.LiftA{T1, T2, TResult}(Func{T1, T2, TResult})"/>.
         /// </summary>
         /// <typeparam name="T">The type of the <see cref="IMonoMonad{T, TSource}"/>.</typeparam>
         /// <typeparam name="TValue">The type of the arguments.</typeparam>

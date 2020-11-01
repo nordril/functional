@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Category;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Category;
 using Nordril.Functional.Mapping;
 using System;
 using System.Collections;
@@ -16,6 +17,7 @@ namespace Nordril.Functional.Data
     public struct Identity<T>
         : IMonad<T>
         , IAsyncMonad<T>
+        , ITraversable<T>
         , IEquatable<Identity<T>>
         , ICoproductFirst<T>
         , IEnumerable<T>
@@ -130,6 +132,22 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
             => new Identity<TResult>(await f(Value));
+
+        /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TApplicative, TResult>(Func<T, TApplicative> f) where TApplicative : IApplicative<TResult>
+        => (IApplicative<ITraversable<TResult>>)f(Value).Map(x => (ITraversable<TResult>)new Identity<TResult>(x));
+
+        /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TResult>(Type applicative, Func<T, IApplicative<TResult>> f)
+            => (IApplicative<ITraversable<TResult>>)f(Value).Map(x => (ITraversable<TResult>)new Identity<TResult>(x));
+
+        /// <inheritdoc />
+        public T1 FoldMap<T1>(IMonoid<T1> monoid, Func<T, T1> f)
+            => f(Value);
+
+        /// <inheritdoc />
+        public TResult Foldr<TResult>(Func<T, TResult, TResult> f, TResult accumulator)
+            => f(Value, accumulator);
     }
 
     /// <summary>
@@ -214,7 +232,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <typeparam name="T">The type of the input parameter.</typeparam>
         /// <param name="x">The object to cast.</param>
-        public static Identity<T> ToIdentity<T>(IFunctor<T> x) => (Identity<T>)x;
+        public static Identity<T> ToIdentity<T>(this IFunctor<T> x) => (Identity<T>)x;
 
         /// <summary>
         /// Returns an isomorphism between <see cref="Func{TResult}"/> and <see cref="Io{T}"/>.

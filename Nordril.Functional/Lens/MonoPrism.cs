@@ -47,5 +47,19 @@ namespace Nordril.Functional.Lens
             return g => Func(t)(g);
             //return g => s => Func(t)(x => g(x))(s);
         }
+
+        public Func<Func<A, FB>, Func<S, FT>> TraversalFunc<FB, FT>()
+            where FB : IApplicative<A>
+            where FT : IApplicative<S>
+        {
+            var tf = PrismFunc<FB, FT, ProfunctorFunc<A, FB>, ProfunctorFunc<S, FT>>();
+            return g => s => tf(g.FuncToProfunctor()).ToFunc()(s);
+        }
+
+        public Func<Func<A, IApplicative<A>>, Func<S, IApplicative<S>>> TraversalFunc(Type t)
+        {
+            var tf = PrismFunc(t);
+            return g => s => tf(g.FuncToProfunctor()).ToFunc()(s);
+        }
     }
 }

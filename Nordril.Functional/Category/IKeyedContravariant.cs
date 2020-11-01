@@ -18,8 +18,8 @@ namespace Nordril.Functional.Category
         /// The first argument of the function is the key associated with the value.
         /// Implementors must fulfill the following for all X and functions f and g:
         /// <code>
-        ///     X.ContraMap((k, a) => a) == X (identity)
-        ///     X.ContraMap((k, a) => g(k, f(k, a))) == X.Map(g).Map(f) (contravariant homomorphism)
+        ///     X.ContraMap((k, a) => a) == X (identity)<br />
+        ///     X.ContraMap((k, a) => g(k, f(k, a))) == X.Map(g).Map(f) (contravariant homomorphism)<br />
         /// </code>
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

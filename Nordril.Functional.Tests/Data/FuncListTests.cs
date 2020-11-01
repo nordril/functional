@@ -322,5 +322,46 @@ namespace Nordril.Functional.Tests.Data
 
             Assert.Equal(new int[] { 14, 22, 26, 21, 33, 39, 35, 55, 65 }, await res);
         }
+
+        [Theory]
+        [InlineData(new int[] { }, 0)]
+        [InlineData(new int[] { 1 }, 1)]
+        [InlineData(new int[] { 1,2,3 }, 321)]
+        public static void FoldrTest(int [] arr, int expected)
+        {
+            var actual = arr.MakeFuncList().Foldr((x, acc) => x + (acc * 10), 0);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(new string[] { }, 0)]
+        [InlineData(new string[] { "a" }, 1)]
+        [InlineData(new string[] { "a", "bb", "ccc" }, 321)]
+        public static void FoldMap2Test(string[] arr, int expected)
+        {
+            var actual = arr.MakeFuncList().FoldMap(Group.IntAdd, x => x.Length * (int)Math.Pow(10, x.Length-1));
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public static void TraverseTest()
+        {
+            var arr = FuncList.Make<int>();
+            var actual = arr.Traverse<Maybe<string>, string>(x => Maybe.JustIf(x % 2 == 0, () => x + "_" + x)).ToMaybe();
+
+            Assert.True(actual.HasValue);
+            Assert.Empty(actual.Value());
+
+            arr = FuncList.Make<int>(0, 2, 4, 10, 8);
+            actual = arr.Traverse<Maybe<string>, string>(x => Maybe.JustIf(x % 2 == 0, () => x + "_" + x)).ToMaybe();
+
+            Assert.True(actual.HasValue);
+            Assert.Equal(new string[] { "0_0", "2_2", "4_4", "10_10", "8_8" }, actual.Value());
+
+            arr = FuncList.Make<int>(0, 2, 5, 4, 10, 8);
+            actual = arr.Traverse<Maybe<string>, string>(x => Maybe.JustIf(x % 2 == 0, () => x + "_" + x)).ToMaybe();
+
+            Assert.False(actual.HasValue);
+        }
     }
 }

@@ -11,4 +11,18 @@
     public interface IPhantomFunctor<T> : IFunctor<T>, IContravariant<T>
     {
     }
+
+    /// <summary>
+    /// Extension methods for <see cref="IPhantomFunctor{T}"/>.
+    /// </summary>
+    public static class PhantomFunctor
+    {
+        /// <summary>
+        /// Maps the phantom type of an <see cref="IPhantomFunctor{T}"/> to a new type.
+        /// </summary>
+        /// <typeparam name="TSource">The source phantom type.</typeparam>
+        /// <typeparam name="TResult">The result phantom type.</typeparam>
+        /// <param name="f">The functor whose phantom type to map.</param>
+        public static IPhantomFunctor<TResult> MapPhantom<TSource, TResult>(this IPhantomFunctor<TSource> f) => f.Map(_ => default(TResult)) as IPhantomFunctor<TResult>;
+    }
 }

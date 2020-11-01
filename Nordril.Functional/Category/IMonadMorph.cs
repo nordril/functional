@@ -11,12 +11,12 @@ namespace Nordril.Functional.Category
     /// <remarks>
     /// <see cref="IMonadTransformer{TUnlifted, TLifted, TInner, TSource}.Lift(TUnlifted)"/> and <see cref="Hoist(TInner)"/> are two ways of arriving at the same destination. If we have a value of type <c>A</c>, a monad <c>M&lt;A&gt;</c>, and a monad-transformer <c>T&lt;I, M,A&gt;</c>, we can go from <c>A</c> to <c>T&lt;I, M,A&gt;</c> over two "paths", as illustrated by this ASCII-diagram:
     /// <code>
-    ///    A -----[M.Pure]----&gt; M&lt;A&gt;
-    ///    |                     |
-    /// [I.Pure]             [T.Lift]
-    ///    |                     |
-    ///    v                     v
-    ///   I&lt;A&gt; --[T.Hoist]--&gt; T&lt;M,A&gt;
+    ///    A -----[M.Pure]----&gt; M&lt;A&gt;<br />
+    ///    |                     |<br />
+    /// [I.Pure]             [T.Lift]<br />
+    ///    |                     |<br />
+    ///    v                     v<br />
+    ///   I&lt;A&gt; --[T.Hoist]--&gt; T&lt;M,A&gt;<br />
     /// </code>
     /// That is, if we have, say, a value of type <see cref="int"/>, a monad <see cref="Io{T}"/>, and a transformer <see cref="MaybeT{TUnlifted, TLifted, TInner, TSource}"/> (which is the transformer-version of <see cref="Maybe{T}"/>), then we can either
     /// <list type="number">

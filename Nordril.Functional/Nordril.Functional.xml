@@ -484,6 +484,13 @@
             </summary>
             <typeparam name="T">The type of the elements.</typeparam>
         </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.Endo``1">
+            <summary>
+            The monoid of function composition, for <c>Func&lt;T,T&gt;</c>
+            </summary>
+            <typeparam name="T">The type of the input/output elements.</typeparam>
+            <returns></returns>
+        </member>
         <member name="T:Nordril.Functional.Algebra.Monoid.ListAppendMonoid`1">
             <summary>
             The mutating ([],++) monoid for lists. The binary operation mutates the first list.
@@ -598,6 +605,18 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Algebra.Monoid.FirstMonoid`1.Op(Nordril.Functional.Data.Maybe{`0},Nordril.Functional.Data.Maybe{`0})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Algebra.Monoid.EndoMonoid`1">
+            <summary>
+            The (id, (.))-monoid.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Algebra.Monoid.EndoMonoid`1.Neutral">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Algebra.Monoid.EndoMonoid`1.Op(System.Func{`0,`0},System.Func{`0,`0})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Algebra.Group`1">
@@ -2787,12 +2806,12 @@
             <typeparam name="TResult">The result type</typeparam>
             <param name="f">The wrapped function to apply.</param>
         </member>
-        <member name="T:Nordril.Functional.Category.ApplicativeExtensions">
+        <member name="T:Nordril.Functional.Category.Applicative">
             <summary>
             Extensions for <see cref="T:Nordril.Functional.Category.IApplicative`1"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.ApF``2(Nordril.Functional.Category.IApplicative{System.Func{``0,``1}},Nordril.Functional.Category.IApplicative{``0})">
+        <member name="M:Nordril.Functional.Category.Applicative.ApF``2(Nordril.Functional.Category.IApplicative{System.Func{``0,``1}},Nordril.Functional.Category.IApplicative{``0})">
             <summary>
             <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/> with the arguments reversed,
             meaning that the function is applied to the argument, which reads more natural.
@@ -2802,7 +2821,25 @@
             <param name="f">The applicative containing the function mapping the source type to the result type.</param>
             <param name="x">The applicative containing the source type.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)">
+        <member name="M:Nordril.Functional.Category.Applicative.ApRight``2(Nordril.Functional.Category.IApplicative{``0},Nordril.Functional.Category.IApplicative{``1})">
+            <summary>
+            Performs the action <paramref name="x"/>, followed by the <paramref name="y"/> action, returning the result of the second action.
+            </summary>
+            <typeparam name="TSource">The return-type of the first action.</typeparam>
+            <typeparam name="TResult">The return-type of the second action.</typeparam>
+            <param name="x">The first action.</param>
+            <param name="y">The second action.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Applicative.ApLeft``2(Nordril.Functional.Category.IApplicative{``0},Nordril.Functional.Category.IApplicative{``1})">
+            <summary>
+            Performs the action <paramref name="x"/>, followed by the <paramref name="y"/> action, returning the result of the first action.
+            </summary>
+            <typeparam name="TSource">The return-type of the first action.</typeparam>
+            <typeparam name="TResult">The return-type of the second action.</typeparam>
+            <param name="x">The first action.</param>
+            <param name="y">The second action.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Applicative.Pure``2(``0)">
             <summary>
             Wraps an object in an applicative via <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
             </summary>
@@ -2810,7 +2847,7 @@
             <typeparam name="TResult">The type of the applicative to return.</typeparam>
             <param name="x">The value to wrap.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.PureUnsafe``2(``0)">
+        <member name="M:Nordril.Functional.Category.Applicative.PureUnsafe``2(``0)">
             <summary>
             Wraps an object in an applicative via <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
             The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> with the this-pointer being null is forced.
@@ -2821,7 +2858,7 @@
             <param name="x">The value to wrap.</param>
             <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})">
+        <member name="M:Nordril.Functional.Category.Applicative.LiftA``3(System.Func{``0,``1,``2})">
             <summary>
             Lifts a binary function to take two applicative arguments.
             </summary>
@@ -2841,9 +2878,9 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to lift.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``4(System.Func{``0,``1,``2,``3})">
+        <member name="M:Nordril.Functional.Category.Applicative.LiftA``4(System.Func{``0,``1,``2,``3})">
             <summary>
-            Lifts a ternary function to take three applicative arguments. See <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})"/>
+            Lifts a ternary function to take three applicative arguments. See <see cref="M:Nordril.Functional.Category.Applicative.LiftA``3(System.Func{``0,``1,``2})"/>
             </summary>
             <typeparam name="T1">The type of the first argument.</typeparam>
             <typeparam name="T2">The type of the second argument.</typeparam>
@@ -2851,9 +2888,9 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to lift.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``5(System.Func{``0,``1,``2,``3,``4})">
+        <member name="M:Nordril.Functional.Category.Applicative.LiftA``5(System.Func{``0,``1,``2,``3,``4})">
             <summary>
-            Lifts a quaternary function to take three applicative arguments. See <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})"/>
+            Lifts a quaternary function to take three applicative arguments. See <see cref="M:Nordril.Functional.Category.Applicative.LiftA``3(System.Func{``0,``1,``2})"/>
             </summary>
             <typeparam name="T1">The type of the first argument.</typeparam>
             <typeparam name="T2">The type of the second argument.</typeparam>
@@ -2862,7 +2899,7 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to lift.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.WhereAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+        <member name="M:Nordril.Functional.Category.Applicative.WhereAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
             <summary>
             An applicative/monadic filter operation which is a generalization of <see cref="M:System.Linq.Enumerable.Where``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>. If the applicative is <see cref="T:Nordril.Functional.Data.Identity`1"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
             </summary>
@@ -2879,12 +2916,12 @@
             <param name="xs">The sequence to filter.</param>
             <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
             <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
-            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.WhereApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
+        <member name="M:Nordril.Functional.Category.Applicative.WhereApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{``1}})">
             <summary>
-            The async-version of <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.WhereAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/>.
+            The async-version of <see cref="M:Nordril.Functional.Category.Applicative.WhereAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/>.
             </summary>
             <typeparam name="T">The type of elements in the sequence.</typeparam>
             <typeparam name="TPredicate">The applicate-type of the predicate.</typeparam>
@@ -2892,10 +2929,10 @@
             <param name="xs">The sequence to filter.</param>
             <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
             <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
-            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TPredicate"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})">
+        <member name="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})">
             <summary>
             An applicative/monadic <see cref="M:System.Linq.Enumerable.Select``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/> operation. If the applicative is <see cref="T:Nordril.Functional.Data.Identity`1"/>, this function behaves identically to that in LINQ. The sequence is traversed via <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
             </summary>
@@ -2914,12 +2951,12 @@
             <param name="xs">The sequence to filter.</param>
             <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
             <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
-            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
-        <member name="M:Nordril.Functional.Category.ApplicativeExtensions.SelectApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Category.IApplicative{``1}}})">
+        <member name="M:Nordril.Functional.Category.Applicative.SelectApAsync``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Category.IApplicative{``1}}})">
             <summary>
-            The async-version of <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>
+            The async-version of <see cref="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>
             </summary>
             <typeparam name="T">The type of elements in the sequence.</typeparam>
             <typeparam name="TResult">The type of the result-elements.</typeparam>
@@ -2927,7 +2964,7 @@
             <param name="xs">The sequence to filter.</param>
             <param name="f">The filtering predicate. Elements for which it returns true are included, otherwise they're excluded.</param>
             <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
-            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
+            <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
         <member name="T:Nordril.Functional.Category.IAsyncApplicative`1">
@@ -3032,8 +3069,8 @@
             Applies a function to the functor and returns a new functor without changing the original functor.
             Implementors must fulfill the following for all X and functions f and g:
             <code>
-                X.BiMap(a => a, b => b) == X (identity)
-                X.BiMap(x => f(g(x)), x => h(i(x))) == X.BiMap(g, i).BiMap(f, h) (homomorphism)
+                X.BiMap(a => a, b => b) == X (identity)<br />
+                X.BiMap(x => f(g(x)), x => h(i(x))) == X.BiMap(g, i).BiMap(f, h)(homomorphism) <br />
             </code>
             </summary>
             <typeparam name="TLeftResult">The type of the left result.</typeparam>
@@ -3181,6 +3218,13 @@
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to apply to the functor.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.IContravariantApplicative`1">
+            <summary>
+            An <see cref="T:Nordril.Functional.Category.IPhantomFunctor`1"/> that is also an <see cref="T:Nordril.Functional.Category.IApplicative`1"/>.
+            The stereotypical example is <see cref="T:Nordril.Functional.Data.Const`3"/>, which can use the <see cref="T:Nordril.Functional.Algebra.IMonoid`1"/>-instance of the real value to put in a neutral element for <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
+            </summary>
+            <typeparam name="TSource">The phantom type.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Category.ICoproductFirst`1">
             <summary>
@@ -3358,6 +3402,7 @@
         <member name="T:Nordril.Functional.Category.IFoldable`1">
             <summary>
             Data structures that suppoort folding, i.e. aggregation over their members.
+            <see cref="T:Nordril.Functional.Category.IFoldable`1"/> is basically just <see cref="T:System.Collections.Generic.IEnumerable`1"/>, with extra functions.
             </summary>
             <typeparam name="TSource">The type of the values contained in the data structure.</typeparam>
         </member>
@@ -3378,12 +3423,12 @@
             and returns the new accumulator value.</param>
             <param name="accumulator">The initial accumulator value.</param>
         </member>
-        <member name="T:Nordril.Functional.Category.FoldableExtensions">
+        <member name="T:Nordril.Functional.Category.Foldable">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Category.IFoldable`1"/>.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Category.FoldableExtensions.FoldMap``2(Nordril.Functional.Category.IFoldable{``0},System.Func{``1},System.Func{``0,``1})">
+        <member name="M:Nordril.Functional.Category.Foldable.FoldMap``2(Nordril.Functional.Category.IFoldable{``0},System.Func{``1},System.Func{``0,``1})">
             <summary>
             Maps each element of the structure to a monoid and then combines the elements
             using the monoid's <see cref="M:Nordril.Functional.Algebra.IMagma`1.Op(`0,`0)"/> operation.
@@ -3394,9 +3439,29 @@
             <param name="empty">The neutral element of the monoid.</param>
             <param name="f">The function that maps an element to a monoid.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.Foldable.TraverseDiscard``3(Nordril.Functional.Category.IFoldable{``1},System.Func{``1,Nordril.Functional.Category.IApplicative{``2}})">
+            <summary>
+            A limited form of traversal which traverses a <see cref="T:Nordril.Functional.Category.IFoldable`1"/> structure and discards the results.
+            </summary>
+            <typeparam name="TApplicative">The type of the applicative.</typeparam>
+            <typeparam name="TSource">The type of the element in the input structure.</typeparam>
+            <typeparam name="TResult">The type of the result of the action.</typeparam>
+            <param name="foldable">The object to fold.</param>
+            <param name="f">The function to apply to each contained element.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Foldable.TraverseDiscard``2(Nordril.Functional.Category.IFoldable{``0},System.Type,System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})">
+            <summary>
+            A limited form of traversal which traverses a <see cref="T:Nordril.Functional.Category.IFoldable`1"/> structure and discards the results.
+            </summary>
+            <typeparam name="TSource">The type of the element in the input structure.</typeparam>
+            <typeparam name="TResult">The type of the result of the action.</typeparam>
+            <param name="applicative">The type of the applicative.</param>
+            <param name="foldable">The object to fold.</param>
+            <param name="f">The function to apply to each contained element.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IFunctor`1">
             <summary>
-            A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/>.
+            A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/> and the only thing it supports is applying a function to each of those elements.
             One can apply functions to functors to change their contained type.
             </summary>
             <typeparam name="TSource">The type of values contained in the functor.</typeparam>
@@ -3406,8 +3471,8 @@
             Applies a function to the functor and returns a new functor without changing the original functor.
             Implementors must fulfill the following for all X and functions f and g:
             <code>
-                X.Map(a => a) == X (identity)
-                X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)
+                X.Map(a => a) == X (identity)<br />
+                X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism) <br />
             </code>
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
@@ -3447,8 +3512,8 @@
             The first argument of the function is the key associated with the value.
             Implementors must fulfill the following for all X and functions f and g:
             <code>
-                X.ContraMap((k, a) => a) == X (identity)
-                X.ContraMap((k, a) => g(k, f(k, a))) == X.Map(g).Map(f) (contravariant homomorphism)
+                X.ContraMap((k, a) => a) == X (identity)<br />
+                X.ContraMap((k, a) => g(k, f(k, a))) == X.Map(g).Map(f) (contravariant homomorphism)<br />
             </code>
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
@@ -3467,8 +3532,8 @@
             The first argument of the function is the key associated with the value.
             Implementors must fulfill the following for all X and functions f and g:
             <code>
-                X.Map((k,a) => a) == X (identity)
-                X.Map((k,a) => g(k, f(k, a))) == X.Map(f).Map(g) (homomorphism)
+                X.Map((k,a) => a) == X (identity)<br />
+                X.Map((k,a) => g(k, f(k, a))) == X.Map(f).Map(g) (homomorphism)<br />
             </code>
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
@@ -3491,8 +3556,9 @@
             Bind corresponds to chaining functions, with the addition of the monadic context.
             Implementors must fulfill the following laws:
             <code>
-                Pure(a).Bind(f) == f(a) (left identity of pure)
-                f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity)
+                Pure(a).Bind(f) == f(a) (left identity of pure)<br />
+                X.Bind(a =&gt; Pure(a)) = X (right identity of pure)<br />
+                f.Bind(x => g(x).Bind(h)) == f.Bind(g).Bind(h) (associativity) <br />
             </code>
             These laws are identical to the laws of <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/>, except for the
             type variable in <see cref="T:Nordril.Functional.Category.IMonad`1"/>.
@@ -3590,12 +3656,12 @@
             <remarks>
             <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)"/> and <see cref="M:Nordril.Functional.Category.IMonadMorph`4.Hoist(`2)"/> are two ways of arriving at the same destination. If we have a value of type <c>A</c>, a monad <c>M&lt;A&gt;</c>, and a monad-transformer <c>T&lt;I, M,A&gt;</c>, we can go from <c>A</c> to <c>T&lt;I, M,A&gt;</c> over two "paths", as illustrated by this ASCII-diagram:
             <code>
-               A -----[M.Pure]----&gt; M&lt;A&gt;
-               |                     |
-            [I.Pure]             [T.Lift]
-               |                     |
-               v                     v
-              I&lt;A&gt; --[T.Hoist]--&gt; T&lt;M,A&gt;
+               A -----[M.Pure]----&gt; M&lt;A&gt;<br />
+               |                     |<br />
+            [I.Pure]             [T.Lift]<br />
+               |                     |<br />
+               v                     v<br />
+              I&lt;A&gt; --[T.Hoist]--&gt; T&lt;M,A&gt;<br />
             </code>
             That is, if we have, say, a value of type <see cref="T:System.Int32"/>, a monad <see cref="T:Nordril.Functional.Data.Io`1"/>, and a transformer <see cref="T:Nordril.Functional.Data.MaybeT`4"/> (which is the transformer-version of <see cref="T:Nordril.Functional.Data.Maybe`1"/>), then we can either
             <list type="number">
@@ -3621,16 +3687,16 @@
             <summary>
             Monads that support choice (see <see cref="M:Nordril.Functional.Category.IMonadPlus`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})"/>) in addition to failure (see <see cref="M:Nordril.Functional.Category.IMonadZero`1.Mzero"/>).
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of the contained elements.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Category.IMonadPlus`1.Mplus(Nordril.Functional.Category.IMonadPlus{`0})">
             <summary>
             Adds two monad values. Implementors must fulfill the following for all X and a, b, c, and k:
             <code>
-                X.Mzero.Mplus(a) = a (left identity)
-                a.Mplus(X.mzero) = a (right identity)
-                a.Mplus(b).Mplus(c) = a.Mplus(b.Mplus(c)) (associativity)
-                a.Mplus(b).Bind(k) = a.Bind(k).Mplus(b.Bind(k)) (left-distribution)
+                X.Mzero.Mplus(a) = a (left identity)<br />
+                a.Mplus(X.mzero) = a (right identity)<br />
+                a.Mplus(b).Mplus(c) = a.Mplus(b.Mplus(c)) (associativity)<br />
+                a.Mplus(b).Bind(k) = a.Bind(k).Mplus(b.Bind(k)) (left-distribution)<br />
             </code>
             </summary>
             <param name="that">The second argument.</param>
@@ -3757,7 +3823,8 @@
             <summary>
             The zero of the monad. The zero must fulfill the following for any X:
             <code>
-                X.Bind(X.MZero) == X.MZero (left zero)
+                X.Bind(X.MZero) == X.MZero (left zero)<br />
+                X.MZero.Bind(f) == X.MZero (right zero)<br />
             </code>
             </summary>
         </member>
@@ -3768,8 +3835,8 @@
             over char.
             Implementations have to obey the same laws as those of <see cref="T:Nordril.Functional.Category.IFunctor`1"/> (for all X and f,g):
             <code>
-                X.Map(a => a) == X (identity)
-                X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)
+                X.Map(a => a) == X (identity)<br />
+                X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)<br />
             </code>
             </summary>
             <typeparam name="T">The type of the implementor.</typeparam>
@@ -3881,7 +3948,7 @@
         </member>
         <member name="M:Nordril.Functional.Category.MonoMonadExtensions.LiftMonoM``2(System.Func{``1,``1,``1})">
             <summary>
-            Lifts a binary function to take two <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/> arguments. See <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.LiftA``3(System.Func{``0,``1,``2})"/>.
+            Lifts a binary function to take two <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/> arguments. See <see cref="M:Nordril.Functional.Category.Applicative.LiftA``3(System.Func{``0,``1,``2})"/>.
             </summary>
             <typeparam name="T">The type of the <see cref="T:Nordril.Functional.Category.IMonoMonad`2"/>.</typeparam>
             <typeparam name="TValue">The type of the arguments.</typeparam>
@@ -3913,14 +3980,27 @@
             </summary>
             <typeparam name="T">The type of the values in the functor.</typeparam>
         </member>
+        <member name="T:Nordril.Functional.Category.PhantomFunctor">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IPhantomFunctor`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.PhantomFunctor.MapPhantom``2(Nordril.Functional.Category.IPhantomFunctor{``0})">
+            <summary>
+            Maps the phantom type of an <see cref="T:Nordril.Functional.Category.IPhantomFunctor`1"/> to a new type.
+            </summary>
+            <typeparam name="TSource">The source phantom type.</typeparam>
+            <typeparam name="TResult">The result phantom type.</typeparam>
+            <param name="f">The functor whose phantom type to map.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IProfunctor`2">
             <summary>
             A functor that is contravariant in one type argument (meaning it needs values of that type)
             and covariant in its second type argument (meaning it contains values of that type).
             Implementors must fulfill the following for all X and f,g:
             <code>
-                X.Promap(f, x => x) = X.Contramap(f)
-                X.Promap(x => x, f) = X.Map(f)
+                X.Promap(f, x => x) = X.Contramap(f)<br />
+                X.Promap(x => x, f) = X.Map(f)<br />
             </code>
             </summary>
             <typeparam name="TNeed">The type of values the functor needs.</typeparam>
@@ -3957,6 +4037,53 @@
             <typeparam name="TIn">The type of the input.</typeparam>
             <typeparam name="TOut">The type of the output.</typeparam>
             <param name="pf">The profunctor to cast.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.ITraversable`1">
+            <summary>
+            Data structures which can be traversed left to right.
+            </summary>
+            <typeparam name="TSource">The type of the elements in the container.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.ITraversable`1.Traverse``2(System.Func{`0,``0})">
+            <summary>
+            Maps each element of to an <see cref="T:Nordril.Functional.Category.IApplicative`1"/> and collects the results.
+            The following must hold for implementations:
+            <code>
+            X.Traverse(F).Then(T) == X.Traverse(F.Then(T)) (naturality)<br />
+            X.Traverse(x => new Identity&lt;T&gt;) == new Identity&lt;T&lt;Source&gt;&gt;(X) where X is T&lt;Source&gt; (identity)<br />
+            X.Traverse(y => new Compose(f(x).Map(g))) == new Compose(X.Traverse(f).Map(y => y.Traverse(g)) (composition)<br />
+            </code>
+            </summary>
+            <typeparam name="TApplicative">The type of the resulting applicative.</typeparam>
+            <typeparam name="TResult">The type of the resulting elements.</typeparam>
+            <param name="f">The mapping-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.ITraversable`1.Traverse``1(System.Type,System.Func{`0,Nordril.Functional.Category.IApplicative{``0}})">
+            <summary>
+            Maps each element of to an <see cref="T:Nordril.Functional.Category.IApplicative`1"/> and collects the results.
+            The following must hold for implementations:
+            <code>
+            X.Traverse(F).Then(T) == X.Traverse(F.Then(T)) (naturality)<br />
+            X.Traverse(x => new Identity&lt;T&gt;) == new Identity&lt;T&lt;Source&gt;&gt;(X) where X is T&lt;Source&gt; (identity)<br />
+            X.Traverse(y => new Compose(f(x).Map(g))) == new Compose(X.Traverse(f).Map(y => y.Traverse(g)) (composition)<br />
+            </code>
+            </summary>
+            <param name="applicative">The type of the resulting applicative. Must be of type <c>IApplicative&lt;TResult&gt;</c></param>
+            <typeparam name="TResult">The type of the resulting elements.</typeparam>
+            <param name="f">The mapping-function.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.Traversable">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.Traversable.Traverse``2(Nordril.Functional.Category.ITraversable{``0})">
+            <summary>
+            Iterates through an <see cref="T:Nordril.Functional.Category.ITraversable`1"/> containing <see cref="T:Nordril.Functional.Category.IApplicative`1"/>-elements and collects the results.
+            </summary>
+            <typeparam name="TSource">The type of the elements.</typeparam>
+            <typeparam name="TApplicative">The type of the applicative to which to map the contained elements.</typeparam>
+            <param name="x">The <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.</param>
         </member>
         <member name="T:Nordril.Functional.Category.Linq.PolyLinqExtensions">
             <summary>
@@ -4809,6 +4936,28 @@
             Gets the object's name.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Data.Compose`3">
+            <summary>
+            The composition of two functors, e.g. <c>Maybe(List(int))</c>.
+            </summary>
+            <typeparam name="TFOuter">The type of the outer functor.</typeparam>
+            <typeparam name="TFInner">The type of the inner functor.</typeparam>
+            <typeparam name="TSource">The type of the contained elements.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Compose`3.Value">
+            <summary>
+            The contained value.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Compose`3.#ctor(`0)">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="value">The value to store.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Compose`3.Map``1(System.Func{`2,``0})">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Const`1">
             <summary>
             A const-functor that does not actually contain any values.
@@ -4881,7 +5030,20 @@
         <member name="M:Nordril.Functional.Data.Const`2.Equals(Nordril.Functional.Data.Const{`0,`1})">
             <inheritdoc />
         </member>
-        <member name="T:Nordril.Functional.Data.ConstMonoid`3">
+        <member name="M:Nordril.Functional.Data.Const`2.Remember``1">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Const`3"/> by adding monoid-information.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`2.Remember``2(System.Func{`0,``1})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Const`3"/> by adding monoid-information and also changing the type of the real value.
+            </summary>
+            <typeparam name="TMonoid">The type of the monoid to add.</typeparam>
+            <typeparam name="TRealResult">The type of the resultant real value.</typeparam>
+            <param name="f">The function to map the real value.</param>
+        </member>
+        <member name="T:Nordril.Functional.Data.Const`3">
             <summary>
             A const-functor that contains a "real" value, but which is a functor according to a
             second value which is does not actually contain. <typeparamref name="TPhantom"/> also forms a monoid with the help of <typeparamref name="TMonoid"/>.
@@ -4892,51 +5054,57 @@
             <typeparam name="TReal">The actual value contained in the functor.</typeparam>
             <typeparam name="TPhantom">The value which is only present as a phantom.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Data.ConstMonoid`3.RealValue">
+        <member name="P:Nordril.Functional.Data.Const`3.RealValue">
             <summary>
             The value contained in the functor.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.#ctor(`1)">
+        <member name="M:Nordril.Functional.Data.Const`3.#ctor(`1)">
             <summary>
             Creates a new const-instance with a value.
             </summary>
             <param name="realValue">The value to store in the functor.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.ContraMap``1(System.Func{``0,`2})">
+        <member name="M:Nordril.Functional.Data.Const`3.ContraMap``1(System.Func{``0,`2})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Map``1(System.Func{`2,``0})">
+        <member name="M:Nordril.Functional.Data.Const`3.Map``1(System.Func{`2,``0})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Equals(System.Object)">
+        <member name="M:Nordril.Functional.Data.Const`3.Equals(System.Object)">
             <summary>
-            Determines equality based on <see cref="P:Nordril.Functional.Data.ConstMonoid`3.RealValue"/>.
+            Determines equality based on <see cref="P:Nordril.Functional.Data.Const`3.RealValue"/>.
             </summary>
             <param name="obj">The other object.</param>
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.GetHashCode">
+        <member name="M:Nordril.Functional.Data.Const`3.GetHashCode">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.op_Equality(Nordril.Functional.Data.ConstMonoid{`0,`1,`2},Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+        <member name="M:Nordril.Functional.Data.Const`3.op_Equality(Nordril.Functional.Data.Const{`0,`1,`2},Nordril.Functional.Data.Const{`0,`1,`2})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.op_Inequality(Nordril.Functional.Data.ConstMonoid{`0,`1,`2},Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+        <member name="M:Nordril.Functional.Data.Const`3.op_Inequality(Nordril.Functional.Data.Const{`0,`1,`2},Nordril.Functional.Data.Const{`0,`1,`2})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Equals(Nordril.Functional.Data.ConstMonoid{`0,`1,`2})">
+        <member name="M:Nordril.Functional.Data.Const`3.Equals(Nordril.Functional.Data.Const{`0,`1,`2})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Pure``1(``0)">
+        <member name="M:Nordril.Functional.Data.Const`3.Pure``1(``0)">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`2,``0}})">
+        <member name="M:Nordril.Functional.Data.Const`3.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`2,``0}})">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Data.ConstMonoid`3.Forget">
+        <member name="M:Nordril.Functional.Data.Const`3.Forget">
             <summary>
             Creates a new <see cref="T:Nordril.Functional.Data.Const`2"/> which does not have the monoid-information.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Const`3.Forget``1(System.Func{`1,``0})">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Data.Const`2"/> which does not have the monoid-information.
+            </summary>
+            <typeparam name="TRealResult">The type of the resultant real value.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Data.Const">
             <summary>
@@ -7626,6 +7794,12 @@
         <member name="M:Nordril.Functional.Data.FuncList`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Traverse``2(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncList`1.Traverse``1(System.Type,System.Func{`0,Nordril.Functional.Category.IApplicative{``0}})">
+            <inheritdoc />
+        </member>
         <member name="M:Nordril.Functional.Data.FuncList`1.op_Equality(Nordril.Functional.Data.FuncList{`0},Nordril.Functional.Data.FuncList{`0})">
             <inheritdoc />
         </member>
@@ -7996,6 +8170,18 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Identity`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.Traverse``2(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.Traverse``1(System.Type,System.Func{`0,Nordril.Functional.Category.IApplicative{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Identity`1.Foldr``1(System.Func{`0,``0,``0},``0)">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.Identity">
@@ -9033,6 +9219,18 @@
         <member name="M:Nordril.Functional.Data.Maybe`1.System#Collections#IEnumerable#GetEnumerator">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.Traverse``2(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.Traverse``1(System.Type,System.Func{`0,Nordril.Functional.Category.IApplicative{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.FoldMap``1(Nordril.Functional.Algebra.IMonoid{``0},System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Maybe`1.Foldr``1(System.Func{`0,``0,``0},``0)">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Data.Maybe">
             <summary>
             Static methods and extension for <see cref="T:Nordril.Functional.Data.Maybe`1"/>.
@@ -9528,7 +9726,7 @@
         <member name="M:Nordril.Functional.Data.Rnd.RandomInts``1(System.Int32,System.Int32,System.Int32)">
             <summary>
             Gets a list of random integers, all in the specified range.
-            When a large list of integers is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            When a large list of integers is required, this function is preferable to <see cref="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
             </summary>
             <typeparam name="TRng">The type of the RNG.</typeparam>
             <param name="min">The minimum value (inclusive).</param>
@@ -9538,7 +9736,7 @@
         <member name="M:Nordril.Functional.Data.Rnd.RandomInts``1(Nordril.Functional.Data.RandomCxt{``0},System.Int32,System.Int32,System.Int32)">
             <summary>
             Gets a list of random integers, all in the specified range.
-            When a large list of integers is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            When a large list of integers is required, this function is preferable to <see cref="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
             This is a convenience-method which does not require explicitly specifying the type arguments.
             </summary>
             <typeparam name="TRng">The type of the RNG.</typeparam>
@@ -9584,7 +9782,7 @@
         <member name="M:Nordril.Functional.Data.Rnd.RandomDoubles``1(System.Double,System.Double,System.Int32)">
             <summary>
             Gets a list of random doubles, all in the specified range.
-            When a large list of doubles is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            When a large list of doubles is required, this function is preferable to <see cref="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
             </summary>
             <typeparam name="TRng">The type of the RNG.</typeparam>
             <param name="min">The minimum value (inclusive).</param>
@@ -9594,7 +9792,7 @@
         <member name="M:Nordril.Functional.Data.Rnd.RandomDoubles``1(Nordril.Functional.Data.RandomCxt{``0},System.Double,System.Double,System.Int32)">
             <summary>
             Gets a list of random doubles, all in the specified range.
-            When a large list of doubles is required, this function is preferable to <see cref="M:Nordril.Functional.Category.ApplicativeExtensions.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
+            When a large list of doubles is required, this function is preferable to <see cref="M:Nordril.Functional.Category.Applicative.SelectAp``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,Nordril.Functional.Category.IApplicative{``1}})"/>, which might overflow.
             This is a convenience-method which does not require explicitly specifying the type arguments.
             </summary>
             <typeparam name="TRng">The type of the RNG.</typeparam>
@@ -11474,6 +11672,28 @@
             Creates a deep copy of the object that can be modified independently of the original.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Lens.Fold`2">
+            <summary>
+            A fold.
+            </summary>
+            <typeparam name="S"></typeparam>
+            <typeparam name="A"></typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.Fold`2.#ctor(System.Func{System.Type,System.Func{System.Func{`1,Nordril.Functional.Category.IContravariantApplicative{`1}},System.Func{`0,Nordril.Functional.Category.IContravariantApplicative{`0}}}})">
+            <summary>
+            Creates a new fold.
+            </summary>
+            <param name="f">The fold-function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.Fold`2.FoldFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Fold`2.FoldFunc(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Fold`2.FoldFuncConst``2">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Lens.Getter`2">
             <summary>
             A concrete getter.
@@ -11481,8 +11701,42 @@
             <typeparam name="S">The type of the input data structure.</typeparam>
             <typeparam name="A">The type of the object to get in <typeparamref name="S"/>.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Lens.Getter`2.GetFunc">
+        <member name="M:Nordril.Functional.Lens.Getter`2.FoldFuncConst``2">
             <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Getter`2.FoldFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Getter`2.GetFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Getter`2.GetFunc(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Getter`2.FoldFunc(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.IFold`2">
+            <summary>
+            A folding-operation which allows us to get multiple results (or 0) from a data structure.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="A">The type of the objects to get in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IFold`2.FoldFuncConst``2">
+            <summary>
+            Returns the fold in CPS-form, strongly tyed to <see cref="T:Nordril.Functional.Data.Const`3"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IFold`2.FoldFunc``2">
+            <summary>
+            Returns the fold in CPS-form, strongly typed.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IFold`2.FoldFunc(System.Type)">
+            <summary>
+            Returns the fold in CPS-form.
+            </summary>
         </member>
         <member name="T:Nordril.Functional.Lens.IGetter`2">
             <summary>
@@ -11491,7 +11745,12 @@
             <typeparam name="S">The type of the input data structure.</typeparam>
             <typeparam name="A">The type of the object to get in <typeparamref name="S"/>.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Lens.IGetter`2.GetFunc">
+        <member name="M:Nordril.Functional.Lens.IGetter`2.GetFunc``2">
+            <summary>
+            Returns the getter in CPS-form.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Lens.IGetter`2.GetFunc(System.Type)">
             <summary>
             Returns the getter in CPS-form.
             </summary>
@@ -11510,7 +11769,7 @@
             <typeparam name="FA">The concrete functor for <typeparamref name="A"/>.</typeparam>
             <typeparam name="FS">The concrete functor for <typeparamref name="S"/>.</typeparam>
         </member>
-        <member name="M:Nordril.Functional.Lens.IMonoLens`2.LensFunc">
+        <member name="M:Nordril.Functional.Lens.IMonoLens`2.LensFunc(System.Type)">
             <summary>
             Returns the lens-function, which must work with any <see cref="T:Nordril.Functional.Category.IFunctor`1"/> for <typeparamref name="A"/> and <typeparamref name="S"/>.
             </summary>
@@ -11522,6 +11781,13 @@
             </summary>
             <typeparam name="S">The type of the input data structure.</typeparam>
             <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+        </member>
+        <member name="T:Nordril.Functional.Lens.IMonoTraversal`2">
+            <summary>
+            A monomorphic traversal.
+            </summary>
+            <typeparam name="S">The type of the structure.</typeparam>
+            <typeparam name="A">The type of the elements in the structure.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Lens.IPrism`4">
             <summary>
@@ -11561,6 +11827,27 @@
             Returns the setter in CPS-form.
             </summary>
         </member>
+        <member name="T:Nordril.Functional.Lens.ITraversal`4">
+            <summary>
+            A setter which can read/update multiple fields.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="T">The type of the output data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+            <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.ITraversal`4.TraversalFunc``2">
+            <summary>
+            Returns the traversal-function, which must work with any <see cref="T:Nordril.Functional.Category.IApplicative`1"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="FB">The concrete functor for <typeparamref name="B"/>.</typeparam>
+            <typeparam name="FT">The concrete functor for <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.ITraversal`4.TraversalFunc(System.Type)">
+            <summary>
+            Returns the traversal-function, which must work with any <see cref="T:Nordril.Functional.Category.IApplicative`1"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.
+            </summary>
+        </member>
         <member name="T:Nordril.Functional.Lens.L">
             <summary>
             Lenses; first-class getters, settings, and updaters.
@@ -11589,16 +11876,34 @@
             </code>
             <h1>Hierarchy of lenses</h1>
             <para>
-            One basic type of lenslike is a <em>Getter</em>, which takes a structure <c>s</c> and retrieves some value <c>a</c> from it. Getters are consume via the <see cref="M:Nordril.Functional.Lens.L.Get``2(Nordril.Functional.Lens.IGetter{``0,``1},``0)"/>-function.
-            The counterpart is a <em>Setter</em>, which takes a structure <c>s</c>, replaces some part <c>a</c> in it with a part <c>b</c>, and returns the structure <c>t</c> (an example being a setter which replaces the strings in a string-list with integers, resulting in an integer-list).
-            A combined getter and setter is called a <em>Lens</em>, which supports both getting and changing a specific part of a structure.
-            A specialized setter is a <em>Prism</em>, which "may work": if the part <c>a</c> is present in the input <c>s</c>, it gets replaced with <c>b</c>, but if not, then the input remains unchanged. An example is a prism which sets the left-value of an <see cref="T:Nordril.Functional.Data.Either`2"/> but which does nothing if the <see cref="T:Nordril.Functional.Data.Either`2"/> contains a right-value.
+            The hierarchy of lenses is this:
+            Fold &lt;- Getter, MonoTraversal<br />
+            Setter &lt;- Traversal<br />
+            Getter &lt;- MonoLens<br />
+            Traversal &lt;- Lens, Prism<br />
+            Lens &lt;- MonoLens<br />
+            There are also Reviews, Isos and Equalities, but they are currently not implemented.
             </para>
-            
-            todo: fold, traversal
-            
+            <para>
+            <see cref="T:Nordril.Functional.Lens.IFold`2"/> can retrieve 0 to more values from a container. <see cref="T:Nordril.Functional.Lens.IFold`2"/>s mainly consume their inputs via TODO.
+            A special case of <see cref="T:Nordril.Functional.Lens.IFold`2"/> is <see cref="T:Nordril.Functional.Lens.IGetter`2"/>, which retrieves exactly one value from a container.
+            The opposite is an <see cref="T:Nordril.Functional.Lens.ISetter`4"/>, which replaces some part of its container with an updated value.
+            The special case of an <see cref="T:Nordril.Functional.Lens.ISetter`4"/> is an <see cref="T:Nordril.Functional.Lens.ITraversal`4"/>, which can change multiple elements in its container, elementwise.
+            An <see cref="T:Nordril.Functional.Lens.ILens`4"/> can serve as both an <see cref="T:Nordril.Functional.Lens.ITraversal`4"/> (and therefore an <see cref="T:Nordril.Functional.Lens.ISetter`4"/>) and, if it's an <see cref="T:Nordril.Functional.Lens.IMonoLens`2"/>, also an <see cref="T:Nordril.Functional.Lens.IGetter`2"/>. Thus, an <see cref="T:Nordril.Functional.Lens.IMonoLens`2"/> is a combined <see cref="T:Nordril.Functional.Lens.IGetter`2"/> and <see cref="T:Nordril.Functional.Lens.ISetter`4"/> which can, say, get and update a field in a class.
+            We also have <see cref="T:Nordril.Functional.Lens.IPrism`4"/>, which is the "opposite" of an <see cref="T:Nordril.Functional.Lens.ILens`4"/>: whereas an <see cref="T:Nordril.Functional.Lens.ILens`4"/> can get a part from a whole, an <see cref="T:Nordril.Functional.Lens.IPrism`4"/> can assemble a part into a whole or, equivalently, try to get a part from the whole if it's the right type. An <see cref="T:Nordril.Functional.Lens.IPrism`4"/> is thus an <see cref="T:Nordril.Functional.Lens.ILens`4"/> which "may fail" in trying to get the part. To illustrate this, consider tuples and <see cref="T:Nordril.Functional.Data.Either`2"/>: we can write an <see cref="T:Nordril.Functional.Lens.ILens`4"/> for a tuple which gets and can change, say, the first element, but we can't write one for the left-case of <see cref="T:Nordril.Functional.Data.Either`2"/>, since the <see cref="T:Nordril.Functional.Data.Either`2"/> may contain a right-case. However, we can write an <see cref="T:Nordril.Functional.Lens.IPrism`4"/>, which tries to get the left-case (failing with <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> if it's a right-case) and, in the opposite direction, can turn a value into an <see cref="T:Nordril.Functional.Data.Either`2"/> but creating a left-case.
+            </para>
             <h1>Creating lenses</h1>
-            <para>todo</para>
+            <para>
+            All lenses can be created via the methods of <see cref="T:Nordril.Functional.Lens.L.Make"/>, with the most common cases being:
+            <list type="bullet">
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Getter``2(System.Func{``0,``1})"/> to create a getter from a function which gets a part <c>A</c> from a hole <c>S</c>, </item>
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Setter``2(System.Func{System.Func{``1,``1},System.Func{``0,``0}})"/> to create a setter from a function which takes an updater (<c>A to A</c>) and uses it to update the whole <c>S</c>, </item>
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Lens``2(System.Func{``0,``1},System.Func{``0,``1,``0})"/> to create a lens from a getting-function and an updating-function which takes a whole <c>S</c>, the new value <c>A</c>, and returns a new <c>S</c>, </item>
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Prism``3(System.Func{``2,``0},System.Func{``0,Nordril.Functional.Data.Maybe{``1}})"/> to create a prism from an compose-function which can turn a <c>B</c> into a whole <c>S</c>, and an extraction-function which tries to get a part <c>A</c> from a whole <c>S</c>, </item>
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Traversal``2"/>, which create a traversal for a type which implements <see cref="T:Nordril.Functional.Category.ITraversable`1"/> with contents <c>A</c>, </item>
+                <item><see cref="M:Nordril.Functional.Lens.L.Make.Folding``3(System.Func{``1,``0})"/> which creates a fold from a function which maps a whole <c>S</c> into an instance of <see cref="T:Nordril.Functional.Category.IFoldable`1"/> (<see cref="T:Nordril.Functional.Category.IFoldable`1"/> is basically the same as <see cref="T:System.Collections.Generic.IEnumerable`1"/>).</item>
+            </list>
+            </para>
             <h1>Composing lenses</h1>
             <para>Two lenses <c>L1</c> and <c>L2</c> can actually be composed using function composition, meaning <c>L1(L2(x))</c>. However, since the "raw" functions are not exposed for technical reasons, one can use the "Then"-methods of this class instead, which just perform function-composition in the background. To compose two getters into a single getter, where <c>L1</c> gets, for instance, a string from a list of strings, and where <c>L2</c> retrieves a substring from a string, one would write <c>var subStringFromStringList = L1.Then(L2)</c>.
             <h1>Mutating and well-behaved lenses</h1>
@@ -11611,7 +11916,78 @@
             <para>Lenses developed over time and the result of the work of Jeremy Gibbons, Luke Palmer, Twan van Laarhoven, Rossel O'Connor, and Edward Kmett, as detailed in https://github.com/ekmett/lens/wiki/History-of-Lenses .<br />
             The structure of the library is taken (with simplifications) from Edward Kmett's lens-library: https://github.com/ekmett/lens.
             </para>
+            <h1>Technical background and additional information</h1>
+            <para>
+            Formally, a lenslike object (including folds, traversals, getters, lenses, etc.) is just a function of the following type:
+            <code>
+            type Lenslike&lt;p,f,s,t,a,b&gt; = Func&lt;p&lt;a,f&lt;b&gt;&gt;,p&lt;s,f&lt;t&gt;&gt;
+            </code>
+            Depending on the choice of <c>p</c> and <c>f</c>, we get a fold, traversal, getter, etc. Of course, this looks quite opaque, so let's insert concrete types: for <c>p</c>, which has to be a profunctor (<see cref="T:System.Func`2"/> is a profunctor, meaning you can prepend a function and append another to it), we insert <see cref="T:System.Func`2"/>, and for <c>f</c>, we insert <see cref="T:Nordril.Functional.Data.Identity`1"/>. This then becomes:
+            <code>
+            type Lenslike&lt;s,t,a,b&gt; = Func&lt;Func&lt;a, Identity&lt;b&gt;&gt;, Func&lt;s,Identity&lt;t&gt;&gt;&gt;
+            </code>
+            <see cref="T:Nordril.Functional.Data.Identity`1"/> does nothing and just stores a value, so conceptually, we can omit it and we have:
+            <code>
+            type Lenslike = Func&lt;Func&lt;a, b&gt;, Func&lt;s,t&gt;&gt;
+            </code>
+            So now we have a function which takes an "updater" (a function which takes an <c>a</c> and returns a <c>b</c>) and then gives us a function which takes an <c>s</c> and returns a <c>t</c>. Let's further say that <c>s = t = Person</c> and <c>a = b = string</c> (the person's name):
+            <code>
+            type Lenslike = Func&lt;Func&lt;string, string&lt;, Func&lt;Person, Person&gt;&gt;
+            </code>
+            This is a concrete setter which updates a person's name: we take an updating-function (which can do any update on the name and is chosen by <see cref="M:Nordril.Functional.Lens.L.Set``4(Nordril.Functional.Lens.ISetter{``0,``1,``2,``3},``0,``3)"/>), a <c>Person</c>, and returns a new <c>Person</c>.
+            If we had chosen <see cref="T:Nordril.Functional.Data.Const`2"/> for <c>f</c> instead, we would have an <see cref="T:Nordril.Functional.Lens.IGetter`2"/>: with <c>Const&lt;A,B&gt;</c> and <c>Const&lt;A, T&gt;</c>we don't actually store a <c>b</c> or a <c>t</c>, but only have the <c>a</c> (the first type-variable) as a real value, which we "smuggle out" via the <see cref="T:Nordril.Functional.Data.Const`2"/>-functor. In general, different choices for <c>p</c> and <c>f</c> give us different types of lenslike objects, and often, we don't even have concrete <c>p</c> and <c>f</c>, but only generic type variables with constraints on them like <c>f : IFunctor</c> but we obviously cannot write a delegate like <c>Lenslike</c> in C#, since it's a <em>universally quantified rank-2 type</em>, meaning that, in the case of <see cref="T:Nordril.Functional.Lens.IMonoLens`2"/>, say, the lens must be able to return any functor that the called requests, not just some <see cref="T:Nordril.Functional.Category.IFunctor`1"/> of its choosing. Furthermore, the concrete <see cref="T:Nordril.Functional.Category.IFunctor`1"/>-type is not part of the type-signature of <see cref="T:Nordril.Functional.Lens.IMonoLens`2"/> (hence "rank-2").
+            </para>
+            <para>
+            Lenses come from Haskell and the main source of information is the https://github.com/ekmett/lens repo, which also includes addition information. There is also a tutorial-package at https://hackage.haskell.org/package/lens-tutorial-1.0.4/docs/Control-Lens-Tutorial.html by Gabriel Gonzalez.
+            </para>
             </remarks>
+            <example>
+            Suppose we have a class <c>Person</c> which contains a name and a list of names of friends.
+            <code>
+            public class Person
+            {
+               public string Name { get; set; }
+               public FuncList&lt;string&gt; Friends { get; set; }
+            }
+            </code>
+            <para>
+            We now create a lens for the person's name and a fold and traversal for the person's list of friends. We create a well-behaved lens which does not update the original person when run.
+            <code>
+            var bill = new Person { Name = "bill", Friends = FuncList.Make("adam", "tiffany", "zack") };
+            
+            var nameLens = L.Make.Lens&lt;Person, string&gt;(p =&gt; p.Name, (p, n) =&gt; new Person { Name = n; Friends = Friends.MakeFunctList();
+            var friendsFold = L.Make.Folding(p =&gt; p.Friends);
+            var friendsTraversal = L.Make.Traversal&lt;FuncList&lt;string&gt;, int&gt;();
+            //Usage:
+            //We get the name of bill.
+            Console.WriteLine(L.Get(nameLens, bill));
+            
+            //We change  bill's name to sophie and get it (the original bill remains unchanged).
+            var sophie = L.Set(nameLens, bill, "sophie");
+            Console.WriteLine(L.Get(nameLens, sophie));
+            
+            //We go through sophie's friends and fail if "big tom" is included, and we change each friend's name from "x" to "big x".
+            var bigSophie = L.Traverse(friendsTraversal), f =&gt; Maybe.JustIf(f != "big tom", () =&gt; "big " + f), sophie).ToMaybe().Value();
+            bigSophie.Friends.ForEach(f =&gt; Console.WriteLine(f));
+            
+            //We now add "big tom" to bigSophie's friends (FuncList.Add is not a pure operation, but for example's sake).
+            L.Update(friendsTraversal, bigSophie, fs =&gt; fs.Add("big tom"));
+            
+            //We run the traversal again, but this time, we get no new person back, since it included "big tom":
+            bigSophieFailed = L.Traverse(friendsTraversal), f =&gt; Maybe.JustIf(f != "big tom", () =&gt; "big " + f), sophie).ToMaybe();
+            Console.WriteLine(bigSophieFailed.HasValue);
+            
+            //Output:
+            bill
+            sophie
+            big adam
+            big tiffany
+            big zack
+            false
+            
+            </code>
+            </para>
+            </example>
         </member>
         <member name="T:Nordril.Functional.Lens.L.Make">
             <summary>
@@ -11640,6 +12016,22 @@
             <typeparam name="A">The type of the input value</typeparam>
             <typeparam name="B">The type of the output value</typeparam>
             <typeparam name="T1">The type of the first value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Folding``3(System.Func{``1,``0})">
+            <summary>
+            Create an <see cref="T:Nordril.Functional.Lens.IFold`2"/> for a type which implements <see cref="T:Nordril.Functional.Category.IFoldable`1"/>
+            </summary>
+            <typeparam name="TFoldable">The result of the inner function, which is foldable.</typeparam>
+            <typeparam name="S">The type of the data structure to fold.</typeparam>
+            <typeparam name="A">The type of the resulting elements.</typeparam>
+            <param name="toFoldable">The getter which returns an <see cref="T:Nordril.Functional.Category.IFoldable`1"/> from <typeparamref name="S"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Folding``2">
+            <summary>
+            Create an <see cref="T:Nordril.Functional.Lens.IFold`2"/> for a type which implements <see cref="T:Nordril.Functional.Category.IFoldable`1"/>
+            </summary>
+            <typeparam name="S">The type of the foldable data structure to fold.</typeparam>
+            <typeparam name="A">The type of the resulting elements.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Lens.L.Make.Getter``2(System.Func{``0,``1})">
             <summary>
@@ -11760,6 +12152,22 @@
             <typeparam name="TKey">The type of the key.</typeparam>
             <typeparam name="A">The type of the value.</typeparam>
             <typeparam name="S">The type of the dictionary.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Traversal``4">
+            <summary>
+            Creates an <see cref="T:Nordril.Functional.Lens.ITraversal`4"/> for a type <typeparamref name="S"/> which is <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.
+            </summary>
+            <typeparam name="S">The type of the <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.</typeparam>
+            <typeparam name="T">The type of the resulting <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.</typeparam>
+            <typeparam name="B">The type of the result of the inner function.</typeparam>
+            <typeparam name="A">The type of the contained elements.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Make.Traversal``2">
+            <summary>
+            Creates an <see cref="T:Nordril.Functional.Lens.IMonoTraversal`2"/> for a type <typeparamref name="S"/> which is <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.
+            </summary>
+            <typeparam name="S">The type of the <see cref="T:Nordril.Functional.Category.ITraversable`1"/>.</typeparam>
+            <typeparam name="A">The type of the contained elements.</typeparam>
         </member>
         <member name="M:Nordril.Functional.Lens.L.Make.Item1``2">
             <summary>
@@ -12312,14 +12720,37 @@
             Composes two lenses. The second lens drills further into the result of the first.
             </summary>
             <typeparam name="S">The type of the outer container.</typeparam>
-            <typeparam name="A1">The type of the outer result/inner container.</typeparam>
-            <typeparam name="A2">The type of the inner result.</typeparam>
+            <typeparam name="AOuter">The type of the outer result/inner container.</typeparam>
+            <typeparam name="AInner">The type of the inner result.</typeparam>
             <param name="lens">The outer getter.</param>
             <param name="then">The inner getter.</param>
         </member>
         <member name="M:Nordril.Functional.Lens.L.Then``6(Nordril.Functional.Lens.IPrism{``0,``1,``2,``3},Nordril.Functional.Lens.IPrism{``2,``3,``4,``5})">
             <summary>
             Composes two prisms. The second prism drills further into the result of the first, if it exists.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="T">The type of the resulting outer container.</typeparam>
+            <typeparam name="A">The type of the outer value.</typeparam>
+            <typeparam name="AInner">The type of the inner outer value/inner container.</typeparam>
+            <typeparam name="B">The type outer result value.</typeparam>
+            <typeparam name="BInner">The type of the inner result value.</typeparam>
+            <param name="lens">The outer setter.</param>
+            <param name="then">The inner setter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``3(Nordril.Functional.Lens.IFold{``0,``1},Nordril.Functional.Lens.IFold{``1,``2})">
+            <summary>
+            Composes two folds. The second folds drills further into the result of the first.
+            </summary>
+            <typeparam name="S">The type of the outer container.</typeparam>
+            <typeparam name="AOuter">The type of the outer value.</typeparam>
+            <typeparam name="AInner">The type of the inner outer value/inner container.</typeparam>
+            <param name="lens">The outer setter.</param>
+            <param name="then">The inner setter.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Then``6(Nordril.Functional.Lens.ITraversal{``0,``1,``2,``3},Nordril.Functional.Lens.ITraversal{``2,``3,``4,``5})">
+            <summary>
+            Composes two traversals. The second traversal drills further into the result of the first.
             </summary>
             <typeparam name="S">The type of the outer container.</typeparam>
             <typeparam name="T">The type of the resulting outer container.</typeparam>
@@ -12370,6 +12801,79 @@
             <param name="lens">The prism.</param>
             <param name="input">The object which should be assembled into <typeparamref name="T"/>.</param>
         </member>
+        <member name="M:Nordril.Functional.Lens.L.Traverse``5(Nordril.Functional.Lens.ITraversal{``1,``2,``3,``4},System.Func{``3,``0},``1)">
+            <summary>
+            Runs an <see cref="T:Nordril.Functional.Lens.ITraversal`4"/> on <paramref name="input"/>.
+            </summary>
+            <typeparam name="TApplicative">The type of the applicative result of the inner function.</typeparam>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="T">The type of the resultant structure.</typeparam>
+            <typeparam name="A">The type of the part to get.</typeparam>
+            <typeparam name="B">The type of the result of the inner function.</typeparam>
+            <param name="lens">The traversal to run.</param>
+            <param name="f">The function to apply to each element.</param>
+            <param name="input">The input.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Traverse``4(Nordril.Functional.Lens.ITraversal{``0,``1,``2,``3},System.Type,System.Func{``2,Nordril.Functional.Category.IApplicative{``3}},``0)">
+            <summary>
+            Runs an <see cref="T:Nordril.Functional.Lens.ITraversal`4"/> on <paramref name="input"/>.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="T">The type of the resultant structure.</typeparam>
+            <typeparam name="A">The type of the part to get.</typeparam>
+            <typeparam name="B">The type of the result of the inner function.</typeparam>
+            <param name="applicative">The type of the applicative result of the inner function.</param>
+            <param name="lens">The traversal to run.</param>
+            <param name="f">The function to apply to each element.</param>
+            <param name="input">The input.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.ToList``2(Nordril.Functional.Lens.IFold{``0,``1},``0)">
+            <summary>
+            Turns the element(s) retrieved by an <see cref="T:Nordril.Functional.Lens.IGetter`2"/> into a list.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="A">The type of the part to get.</typeparam>
+            <param name="lens">The getter.</param>
+            <param name="input">The input structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Fold``3(Nordril.Functional.Lens.IFold{``0,``1},System.Func{``1,``2,``2},``2,``0)">
+            <summary>
+            Folds the elements of a container using <paramref name="f"/> as the combining-function and <paramref name="acc"/> as the initial accumulator.
+            Also known as <em>foldrOf</em>.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="A">The type of the elements.</typeparam>
+            <typeparam name="TResult">The type of the monoidal result.</typeparam>
+            <param name="lens">The fold to run.</param>
+            <param name="f">The function to combine two elements.</param>
+            <param name="acc">The initial accumulator value.</param>
+            <param name="input">The input structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Fold``3(Nordril.Functional.Lens.IFold{``0,``1},System.Func{``1,``2},``0)">
+            <summary>
+            Maps the elements in a container <typeparamref name="S"/> to an <see cref="T:Nordril.Functional.Algebra.IHasMonoid`1"/> and uses the monoid-logic to combine the results.
+            Also known as <em>foldMapOf</em>.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="A">The type of the elements.</typeparam>
+            <typeparam name="TResult">The type of the monoidal result.</typeparam>
+            <param name="lens">The fold to run.</param>
+            <param name="f">The function to map each element to a monoid.</param>
+            <param name="input">The input structure.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.L.Fold``4(Nordril.Functional.Lens.IFold{``0,``1},System.Func{``1,``2},``0)">
+            <summary>
+            Maps the elements in a container <typeparamref name="S"/> to an value which has an associated monoid <typeparamref name="TMonoid"/> and uses the monoid-logic to combine the results.
+            Also known as <em>foldMapOf</em>.
+            </summary>
+            <typeparam name="S">The type of the input structure.</typeparam>
+            <typeparam name="A">The type of the elements.</typeparam>
+            <typeparam name="TResult">The type of the monoidal result.</typeparam>
+            <typeparam name="TMonoid">The type of the monoid.</typeparam>
+            <param name="lens">The fold to run.</param>
+            <param name="f">The function to map each element to a monoid.</param>
+            <param name="input">The input structure.</param>
+        </member>
         <member name="T:Nordril.Functional.Lens.MonoLens`2">
             <summary>
             A lens, which is a combined <see cref="T:Nordril.Functional.Lens.IGetter`2"/> and <see cref="T:Nordril.Functional.Lens.ISetter`4"/>.
@@ -12377,16 +12881,13 @@
             <typeparam name="S">The type of the input data structure.</typeparam>
             <typeparam name="A">The type of the object to get/modify in <typeparamref name="S"/>.</typeparam>
         </member>
-        <member name="P:Nordril.Functional.Lens.MonoLens`2.GetFunc">
-            <inheritdoc />
-        </member>
         <member name="P:Nordril.Functional.Lens.MonoLens`2.SetFunc">
             <inheritdoc />
         </member>
         <member name="P:Nordril.Functional.Lens.MonoLens`2.Func">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Lens.MonoLens`2.#ctor(System.Func{System.Func{`1,Nordril.Functional.Category.IFunctor{`1}},System.Func{`0,Nordril.Functional.Category.IFunctor{`0}}})">
+        <member name="M:Nordril.Functional.Lens.MonoLens`2.#ctor(System.Func{System.Type,System.Func{System.Func{`1,Nordril.Functional.Category.IFunctor{`1}},System.Func{`0,Nordril.Functional.Category.IFunctor{`0}}}})">
             <summary>
             Creates a new lens.
             </summary>
@@ -12395,7 +12896,7 @@
         <member name="M:Nordril.Functional.Lens.MonoLens`2.LensFunc``2">
             <inheritdoc />
         </member>
-        <member name="M:Nordril.Functional.Lens.MonoLens`2.LensFunc">
+        <member name="M:Nordril.Functional.Lens.MonoLens`2.LensFunc(System.Type)">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Lens.MonoPrism`2">
@@ -12432,6 +12933,12 @@
         <member name="M:Nordril.Functional.Lens.Prism`4.PrismFunc(System.Type)">
             <inheritdoc />
         </member>
+        <member name="M:Nordril.Functional.Lens.Prism`4.TraversalFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Prism`4.TraversalFunc(System.Type)">
+            <inheritdoc />
+        </member>
         <member name="T:Nordril.Functional.Lens.Setter`4">
             <summary>
             A setter which applies a function to some part of its input.
@@ -12442,6 +12949,30 @@
             <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
         </member>
         <member name="P:Nordril.Functional.Lens.Setter`4.SetFunc">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Lens.Traversal`4">
+            <summary>
+            A setter which can read/update multiple fields.
+            </summary>
+            <typeparam name="S">The type of the input data structure.</typeparam>
+            <typeparam name="T">The type of the output data structure.</typeparam>
+            <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
+            <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Lens.Traversal`4.SetFunc">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Traversal`4.#ctor(System.Func{System.Type,System.Func{System.Func{`2,Nordril.Functional.Category.IApplicative{`3}},System.Func{`0,Nordril.Functional.Category.IApplicative{`1}}}})">
+            <summary>
+            Creates a traversal.
+            </summary>
+            <param name="f">The traversal-function. This uses the applicative returned by its first input-function, though the compiler can't check this.</param>
+        </member>
+        <member name="M:Nordril.Functional.Lens.Traversal`4.TraversalFunc``2">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Lens.Traversal`4.TraversalFunc(System.Type)">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Mapping.IIsomorphism`2">

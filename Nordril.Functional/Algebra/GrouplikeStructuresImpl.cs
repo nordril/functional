@@ -371,6 +371,13 @@ namespace Nordril.Functional.Algebra
         public static FirstMonoid<T> First<T>() => new FirstMonoid<T>();
 
         /// <summary>
+        /// The monoid of function composition, for <c>Func&lt;T,T&gt;</c>
+        /// </summary>
+        /// <typeparam name="T">The type of the input/output elements.</typeparam>
+        /// <returns></returns>
+        public static EndoMonoid<T> Endo<T>() => new EndoMonoid<T>();
+
+        /// <summary>
         /// The mutating ([],++) monoid for lists. The binary operation mutates the first list.
         /// </summary>
         /// <typeparam name="T">The type of element in the list.</typeparam>
@@ -508,6 +515,19 @@ namespace Nordril.Functional.Algebra
 
             /// <inheritdoc />
             public Maybe<T> Op(Maybe<T> x, Maybe<T> y) => x.ValueOr(_ => x, y);
+        }
+
+        /// <summary>
+        /// The (id, (.))-monoid.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public class EndoMonoid<T> : IMonoid<Func<T,T>>
+        {
+            /// <inheritdoc />
+            public Func<T, T> Neutral => F.Id<T>();
+
+            /// <inheritdoc />
+            public Func<T, T> Op(Func<T, T> x, Func<T, T> y) => x.After(y);
         }
     }
     #endregion

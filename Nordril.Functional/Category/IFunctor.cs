@@ -4,7 +4,7 @@ using System;
 namespace Nordril.Functional.Category
 {
     /// <summary>
-    /// A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/>.
+    /// A functor. A functor is a container that contains 0 or more instances of <typeparamref name="TSource"/> and the only thing it supports is applying a function to each of those elements.
     /// One can apply functions to functors to change their contained type.
     /// </summary>
     /// <typeparam name="TSource">The type of values contained in the functor.</typeparam>
@@ -14,8 +14,8 @@ namespace Nordril.Functional.Category
         /// Applies a function to the functor and returns a new functor without changing the original functor.
         /// Implementors must fulfill the following for all X and functions f and g:
         /// <code>
-        ///     X.Map(a => a) == X (identity)
-        ///     X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)
+        ///     X.Map(a => a) == X (identity)<br />
+        ///     X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism) <br />
         /// </code>
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

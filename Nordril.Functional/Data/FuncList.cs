@@ -283,6 +283,31 @@ namespace Nordril.Functional.Data
             => new FuncList<TResult>(await Task.WhenAll(ListCoalesce().Select(x => f(x))));
 
         /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TApplicative, TResult>(Func<T, TApplicative> f)
+            where TApplicative : IApplicative<TResult>
+            => Traverse(typeof(TApplicative), f.Then(x => (IApplicative<TResult>)x));
+
+        /// <inheritdoc />
+        public IApplicative<ITraversable<TResult>> Traverse<TResult>(Type applicative, Func<T, IApplicative<TResult>> f)
+        {
+            var mapped = Map(f).ToFuncList();
+
+            static Stack<TResult> cons(TResult x, Stack<TResult> xs)
+            {
+                xs.Push(x);
+                return xs;
+            }
+
+            var consA = Applicative.LiftA<TResult, Stack<TResult>, Stack<TResult>>(cons);
+
+            var r = ListCoalesce().AggregateRight(
+                (x, xs) => consA(f(x), xs),
+                Applicative.PureUnsafe<TResult>(default, applicative).Map(_ => new Stack<TResult>()) as IApplicative<Stack<TResult>>);
+
+            return r.Map(x => (ITraversable<TResult>)x.MakeFuncList()) as IApplicative<ITraversable<TResult>>;
+        }
+
+        /// <inheritdoc />
         public static bool operator ==(FuncList<T> left, FuncList<T> right)
         {
             return left.Equals(right);

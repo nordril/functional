@@ -18,8 +18,8 @@ namespace Nordril.Functional.Category
         /// The first argument of the function is the key associated with the value.
         /// Implementors must fulfill the following for all X and functions f and g:
         /// <code>
-        ///     X.Map((k,a) => a) == X (identity)
-        ///     X.Map((k,a) => g(k, f(k, a))) == X.Map(f).Map(g) (homomorphism)
+        ///     X.Map((k,a) => a) == X (identity)<br />
+        ///     X.Map((k,a) => g(k, f(k, a))) == X.Map(f).Map(g) (homomorphism)<br />
         /// </code>
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>

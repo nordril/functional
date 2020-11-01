@@ -8,8 +8,8 @@ namespace Nordril.Functional.Category
     /// over char.
     /// Implementations have to obey the same laws as those of <see cref="IFunctor{TSource}"/> (for all X and f,g):
     /// <code>
-    ///     X.Map(a => a) == X (identity)
-    ///     X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)
+    ///     X.Map(a => a) == X (identity)<br />
+    ///     X.Map(a => g(f(a))) == X.Map(f).Map(g) (homomorphism)<br />
     /// </code>
     /// </summary>
     /// <typeparam name="T">The type of the implementor.</typeparam>

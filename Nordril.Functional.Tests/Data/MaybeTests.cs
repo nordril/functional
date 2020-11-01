@@ -1,7 +1,9 @@
-﻿using Nordril.Functional.Category;
+﻿using Nordril.Functional.Algebra;
+using Nordril.Functional.Category;
 using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -309,6 +311,42 @@ namespace Nordril.Functional.Tests.Data
         {
             Assert.False(Maybe.Nothing<int>().Equals(5));
             Assert.False(Maybe.Nothing<int>().Equals(Maybe.Nothing<string>()));
+        }
+
+        [Fact]
+        public static void FoldrTest()
+        {
+            Assert.Equal(0, Maybe.Nothing<int>().Foldr((i, acc) => i + acc, 0));
+            Assert.Equal(3, Maybe.Just<int>(3).Foldr((i, acc) => i + acc, 0));
+        }
+
+        [Fact]
+        public static void FoldMapTest()
+        {
+            Assert.Equal(1, Maybe.Nothing<int>().FoldMap(Monoid.IntMult, i => i * 3));
+            Assert.Equal(9, Maybe.Just<int>(3).FoldMap(Monoid.IntMult, i => i * 3));
+        }
+
+        [Fact]
+        public static void TraverseTest()
+        {
+            var m = Maybe.Nothing<int>();
+            var actual1 = m.Traverse<FuncList<int>, int>(i => FuncList.Make(i+1)).Map(x => x.ToMaybe()).ToFuncList();
+            var actual2 = m.Map(x => (x + 1).PureUnsafe<int, FuncList<int>>()).ToMaybe().Traverse<FuncList<int>, int>().Map(x => x.ToMaybe()).ToFuncList();
+
+            Assert.Single(actual1);
+            Assert.False(actual1[0].HasValue);
+            Assert.Single(actual2);
+            Assert.False(actual2[0].HasValue);
+
+            m = Maybe.Just(7);
+            actual1 = m.Traverse<FuncList<int>, int>(i => FuncList.Make(i+1)).Map(x => x.ToMaybe()).ToFuncList();
+            actual2 = m.Map(x => (x + 1).PureUnsafe<int, FuncList<int>>()).ToMaybe().Traverse<FuncList<int>, int>().Map(x => x.ToMaybe()).ToFuncList();
+
+            Assert.Single(actual1);
+            Assert.Equal(8, actual1[0].Value());
+            Assert.Single(actual2);
+            Assert.Equal(8, actual2[0].Value());
         }
     }
 }

@@ -10,7 +10,8 @@
         /// <summary>
         /// The zero of the monad. The zero must fulfill the following for any X:
         /// <code>
-        ///     X.Bind(X.MZero) == X.MZero (left zero)
+        ///     X.Bind(X.MZero) == X.MZero (left zero)<br />
+        ///     X.MZero.Bind(f) == X.MZero (right zero)<br />
         /// </code>
         /// </summary>
         IMonadZero<T> Mzero();

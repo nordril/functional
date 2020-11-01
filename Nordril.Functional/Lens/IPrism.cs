@@ -14,7 +14,7 @@ namespace Nordril.Functional.Lens
     /// <typeparam name="T">The type of the output data structure.</typeparam>
     /// <typeparam name="A">The type of the input-object in <typeparamref name="S"/>.</typeparam>
     /// <typeparam name="B">The type of the result-object in <typeparamref name="T"/>.</typeparam>
-    public interface IPrism<S, T, A, B> : ISetter<S, T, A, B>
+    public interface IPrism<S, T, A, B> : ITraversal<S, T, A, B>
     {
         /// <summary>
         /// Returns the prism-function, which must work with any <see cref="IApplicative{TSource}"/> for <typeparamref name="B"/> and <typeparamref name="T"/>.

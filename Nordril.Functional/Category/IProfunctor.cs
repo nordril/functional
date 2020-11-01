@@ -8,8 +8,8 @@ namespace Nordril.Functional.Category
     /// and covariant in its second type argument (meaning it contains values of that type).
     /// Implementors must fulfill the following for all X and f,g:
     /// <code>
-    ///     X.Promap(f, x => x) = X.Contramap(f)
-    ///     X.Promap(x => x, f) = X.Map(f)
+    ///     X.Promap(f, x => x) = X.Contramap(f)<br />
+    ///     X.Promap(x => x, f) = X.Map(f)<br />
     /// </code>
     /// </summary>
     /// <typeparam name="TNeed">The type of values the functor needs.</typeparam>

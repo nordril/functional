@@ -43,7 +43,7 @@ namespace Nordril.Functional.Category
     /// <summary>
     /// Extensions for <see cref="IApplicative{TSource}"/>.
     /// </summary>
-    public static class ApplicativeExtensions
+    public static class Applicative
     {
 #if NETFULL
         private static IEnumerable<T> Prepend<T>(this IEnumerable<T> xs, T x)
@@ -65,6 +65,29 @@ namespace Nordril.Functional.Category
             this IApplicative<Func<TSource, TResult>> f,
             IApplicative<TSource> x)
             => x.Ap(f);
+
+        /// <summary>
+        /// Performs the action <paramref name="x"/>, followed by the <paramref name="y"/> action, returning the result of the second action.
+        /// </summary>
+        /// <typeparam name="TSource">The return-type of the first action.</typeparam>
+        /// <typeparam name="TResult">The return-type of the second action.</typeparam>
+        /// <param name="x">The first action.</param>
+        /// <param name="y">The second action.</param>
+        public static IApplicative<TResult> ApRight<TSource, TResult>(this IApplicative<TSource> x, IApplicative<TResult> y)
+            => (x.Map(_ => F.Id<TResult>()) as IApplicative<Func<TResult, TResult>>).ApF(y);
+
+        /// <summary>
+        /// Performs the action <paramref name="x"/>, followed by the <paramref name="y"/> action, returning the result of the first action.
+        /// </summary>
+        /// <typeparam name="TSource">The return-type of the first action.</typeparam>
+        /// <typeparam name="TResult">The return-type of the second action.</typeparam>
+        /// <param name="x">The first action.</param>
+        /// <param name="y">The second action.</param>
+        public static IApplicative<TSource> ApLeft<TSource, TResult>(this IApplicative<TSource> x, IApplicative<TResult> y)
+        {
+            Func<TResult, TSource> @const(TSource x) => y => x;
+            return (x.Map(@const) as IApplicative<Func<TResult, TSource>>).ApF(y);
+        }
 
         /// <summary>
         /// Wraps an object in an applicative via <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/>.
