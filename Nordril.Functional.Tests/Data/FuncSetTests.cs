@@ -165,6 +165,16 @@ namespace Nordril.Functional.Tests.Data
             };
         }
 
+        public static IEnumerable<object[]> SetOperatorsData()
+        {
+            yield return new object[]
+            {
+                FuncList.Make<Person>(),
+                FuncList.Make<Person>(),
+                Maybe.Just(0)
+            };
+        }
+
         [Theory]
         [MemberData(nameof(Ap1Data))]
         public static void FuncSetAp1(FuncSet<Func<int, int>> funcs, FuncSet<int> args, IEnumerable<int> expected)
@@ -259,6 +269,73 @@ namespace Nordril.Functional.Tests.Data
         }
 
         [Theory]
+        [MemberData(nameof(SetOperatorsData))]
+        public static void SetOperatorsTest(IEnumerable<Person> xs, IEnumerable<Person> ys, Maybe<int> comparison)
+        {
+            var pc1 = new FuncEqualityComparer<Person>((p, q) => p.Name == q.Name, p => p.Name.GetHashCode());
+            var pc2 = new FuncEqualityComparer<Person>((p, q) => p.Name == q.Name, p => p.Name.GetHashCode());
+
+            var s1 = xs.MakeFuncSet(pc1);
+            var s2 = ys.MakeFuncSet(pc2);
+
+            Assert.True(s1.IsSubsetOf(s1));
+            Assert.True(s1.IsSupersetOf(s1));
+            Assert.False(s1.IsProperSubsetOf(s1));
+            Assert.False(s1.IsProperSupersetOf(s1));
+
+            if (comparison.TryGetValue(default, out var c))
+            {
+                if (c < 0)
+                {
+                    Assert.True(s1.IsSubsetOf(s2));
+                    Assert.False(s2.IsSubsetOf(s1));
+                    Assert.False(s1.IsSupersetOf(s2));
+                    Assert.True(s2.IsSupersetOf(s1));
+
+                    Assert.True(s1.IsProperSubsetOf(s2));
+                    Assert.False(s2.IsProperSubsetOf(s1));
+                    Assert.False(s1.IsProperSupersetOf(s2));
+                    Assert.True(s2.IsProperSupersetOf(s1));
+                }
+                else if (c == 0)
+                {
+                    Assert.True(s1.IsSubsetOf(s2));
+                    Assert.True(s2.IsSubsetOf(s1));
+                    Assert.True(s1.IsSupersetOf(s2));
+                    Assert.True(s2.IsSupersetOf(s1));
+
+                    Assert.False(s1.IsProperSubsetOf(s2));
+                    Assert.False(s2.IsProperSubsetOf(s1));
+                    Assert.False(s1.IsProperSupersetOf(s2));
+                    Assert.False(s2.IsProperSupersetOf(s1));
+                }
+                else
+                {
+                    Assert.False(s1.IsSubsetOf(s2));
+                    Assert.True(s2.IsSubsetOf(s1));
+                    Assert.True(s1.IsSupersetOf(s2));
+                    Assert.False(s2.IsSupersetOf(s1));
+
+                    Assert.False(s1.IsProperSubsetOf(s2));
+                    Assert.True(s2.IsProperSubsetOf(s1));
+                    Assert.True(s1.IsProperSupersetOf(s2));
+                    Assert.False(s2.IsProperSupersetOf(s1));
+                }
+            }
+            else
+            {
+                Assert.False(s1.IsSubsetOf(s2));
+                Assert.False(s2.IsSubsetOf(s1));
+                Assert.False(s1.IsSupersetOf(s2));
+                Assert.False(s2.IsSupersetOf(s1));
+                Assert.False(s1.IsProperSubsetOf(s2));
+                Assert.False(s2.IsProperSubsetOf(s1));
+                Assert.False(s1.IsProperSupersetOf(s2));
+                Assert.False(s2.IsProperSupersetOf(s1));
+            }
+        }
+
+        [Theory]
         [InlineData(new int[0], new int[0], true)]
         [InlineData(new int[] { 3 }, new int[0], false)]
         [InlineData(new int[] { 3, 13 }, new int[0], false)]
@@ -278,8 +355,16 @@ namespace Nordril.Functional.Tests.Data
                 return x == y;
             }, x => (x/10).GetHashCode());
 
+            var comparer2 = new FuncEqualityComparer<int>((x, y) =>
+            {
+                x = x / 10;
+                y = y / 10;
+
+                return x == y;
+            }, x => (x / 10).GetHashCode());
+
             var xfs = new FuncSet<int>(comparer, xs);
-            var yfs = new HashSet<int>(ys, comparer);
+            var yfs = new HashSet<int>(ys, comparer2);
 
             Assert.Equal(expected, xfs.SetEquals(yfs));
         }

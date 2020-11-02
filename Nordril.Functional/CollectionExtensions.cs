@@ -1166,6 +1166,22 @@ namespace Nordril.Functional
         public static IFuncSet<T> MakeFuncSet<T>(this IEnumerable<T> xs) => new FuncSet<T>(xs);
 
         /// <summary>
+        /// Creates an <see cref="IFuncList{T}"/> out of a sequence of elements with a custom comparer. Analogous to <see cref="Enumerable.ToList{TSource}(IEnumerable{TSource})"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence to turn into a list.</param>
+        /// <param name="comparer">The equality comparer.</param>
+        public static IFuncList<T> MakeFuncList<T>(this IEnumerable<T> xs, IEqualityComparer<T> comparer) => new FuncList<T>(comparer, xs);
+
+        /// <summary>
+        /// Creates an <see cref="IFuncSet{T}"/> out of a sequence of elements with a custom comparer.
+        /// </summary>
+        /// <typeparam name="T">The type of elements in the sequence.</typeparam>
+        /// <param name="xs">The sequence to turn into a set.</param>
+        /// <param name="comparer">The equality comparer.</param>
+        public static IFuncSet<T> MakeFuncSet<T>(this IEnumerable<T> xs, IEqualityComparer<T> comparer) => new FuncSet<T>(comparer, xs);
+
+        /// <summary>
         /// Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.
         /// </summary>
         /// <typeparam name="TSeed">The type of the seed value.</typeparam>

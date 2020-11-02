@@ -295,6 +295,18 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<T, Task<TResult>> f)
             => new FuncSet<TResult>(await Task.WhenAll(SetCoalesce().Select(f)));
+
+        /// <inheritdoc />
+        public static bool operator ==(FuncSet<T> left, FuncSet<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <inheritdoc />
+        public static bool operator !=(FuncSet<T> left, FuncSet<T> right)
+        {
+            return !(left == right);
+        }
     }
 
     /// <summary>

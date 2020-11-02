@@ -4754,6 +4754,22 @@
             <typeparam name="T">The type of elements in the sequence.</typeparam>
             <param name="xs">The sequence to turn into a set.</param>
         </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MakeFuncList``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Creates an <see cref="T:Nordril.Functional.Data.IFuncList`1"/> out of a sequence of elements with a custom comparer. Analogous to <see cref="M:System.Linq.Enumerable.ToList``1(System.Collections.Generic.IEnumerable{``0})"/>.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="xs">The sequence to turn into a list.</param>
+            <param name="comparer">The equality comparer.</param>
+        </member>
+        <member name="M:Nordril.Functional.CollectionExtensions.MakeFuncSet``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Creates an <see cref="T:Nordril.Functional.Data.IFuncSet`1"/> out of a sequence of elements with a custom comparer.
+            </summary>
+            <typeparam name="T">The type of elements in the sequence.</typeparam>
+            <param name="xs">The sequence to turn into a set.</param>
+            <param name="comparer">The equality comparer.</param>
+        </member>
         <member name="M:Nordril.Functional.CollectionExtensions.Unfold``2(``0,System.Func{``0,Nordril.Functional.Data.Maybe{System.ValueTuple{``0,``1}}})">
             <summary>
             Generates a (potentially infinite) sequence from a seed value <paramref name="seed"/> and a function to generate the next seed and element <paramref name="next"/>.
@@ -8031,6 +8047,12 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.FuncSet`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.op_Equality(Nordril.Functional.Data.FuncSet{`0},Nordril.Functional.Data.FuncSet{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.FuncSet`1.op_Inequality(Nordril.Functional.Data.FuncSet{`0},Nordril.Functional.Data.FuncSet{`0})">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.FuncSet">
@@ -11753,6 +11775,11 @@
         <member name="M:Nordril.Functional.Lens.IGetter`2.GetFunc(System.Type)">
             <summary>
             Returns the getter in CPS-form.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Lens.ILens`4">
+            <summary>
+            A setter which can also be used as a traversal.
             </summary>
         </member>
         <member name="T:Nordril.Functional.Lens.IMonoLens`2">
