@@ -45,12 +45,12 @@ namespace Nordril.Functional.Lens
             var f = lens.PrismFunc<
                     Const<Monoid.FirstMonoid<object>, Maybe<object>, A>,
                     Const<Monoid.FirstMonoid<object>, Maybe<object>, S>,
-                    ProfunctorFunc<A, Const<Monoid.FirstMonoid<object>, Maybe<object>, A>>,
-                    ProfunctorFunc<S, Const<Monoid.FirstMonoid<object>, Maybe<object>, S>>>();
+                    Fun<A, Const<Monoid.FirstMonoid<object>, Maybe<object>, A>>,
+                    Fun<S, Const<Monoid.FirstMonoid<object>, Maybe<object>, S>>>();
 
             Func<A, Const<Monoid.FirstMonoid<object>, Maybe<object>, A>> innerF = a => new Const<Monoid.FirstMonoid<object>, Maybe<object>, A>(Maybe.Just<object>(a));
 
-            var st = f(innerF.FuncToProfunctor()).ToFunc();
+            var st = f(innerF.MakeFun()).ToFunc();
 
             return st(input).RealValue.Map(o => (A)o).ToMaybe();
         }

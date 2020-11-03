@@ -1,4 +1,5 @@
-﻿using Nordril.Functional.Lens;
+﻿using Nordril.Functional.Data;
+using Nordril.Functional.Lens;
 using System;
 
 namespace Nordril.Functional.Category
@@ -34,20 +35,28 @@ namespace Nordril.Functional.Category
     public static class Profunctor
     {
         /// <summary>
-        /// Wrap a <see cref="Func{T, TResult}"/> into a profunctor-instance.
+        /// Wrap a <see cref="Func{T, TResult}"/> into <see cref="Fun{TIn, TOut}"/>.
         /// </summary>
         /// <typeparam name="TNeed">The type of the input.</typeparam>
         /// <typeparam name="THave">The type of the output.</typeparam>
         /// <param name="f">The function to wrap.</param>
-        public static ProfunctorFunc<TNeed, THave> FuncToProfunctor<TNeed, THave>(this Func<TNeed, THave> f)
-            => new ProfunctorFunc<TNeed, THave>(f);
+        public static Fun<TNeed, THave> MakeFun<TNeed, THave>(this Func<TNeed, THave> f)
+            => new Fun<TNeed, THave>(f);
 
         /// <summary>
-        /// Unsafely casts an <see cref="IProfunctor{TNeed, THave}"/> to a <see cref="ProfunctorFunc{TIn, TOut}"/> and returns its underlying function.
+        /// Unsafely casts an <see cref="IProfunctor{TNeed, THave}"/> to a <see cref="Fun{TIn, TOut}"/>.
         /// </summary>
         /// <typeparam name="TIn">The type of the input.</typeparam>
         /// <typeparam name="TOut">The type of the output.</typeparam>
         /// <param name="pf">The profunctor to cast.</param>
-        public static Func<TIn, TOut> ToFunc<TIn, TOut>(this IProfunctor<TIn, TOut> pf) => ((ProfunctorFunc<TIn, TOut>)pf).Func;
+        public static Fun<TIn, TOut> ToFun<TIn, TOut>(this IProfunctor<TIn, TOut> pf) => ((Fun<TIn, TOut>)pf);
+
+        /// <summary>
+        /// Unsafely casts an <see cref="IProfunctor{TNeed, THave}"/> to a <see cref="Fun{TIn, TOut}"/> and returns its underlying function.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input.</typeparam>
+        /// <typeparam name="TOut">The type of the output.</typeparam>
+        /// <param name="pf">The profunctor to cast.</param>
+        public static Func<TIn, TOut> ToFunc<TIn, TOut>(this IProfunctor<TIn, TOut> pf) => ((Fun<TIn, TOut>)pf).Func;
     }
 }

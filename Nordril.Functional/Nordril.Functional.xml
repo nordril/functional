@@ -2967,6 +2967,117 @@
             <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
         </member>
+        <member name="T:Nordril.Functional.Category.IArrow`2">
+            <summary>
+            A monoid in the category of strong profunctor whose morphisms are strong natural transformations, meaning the following:
+            <code>
+            X.LiftFirst().Then(f) == f.Then(X.LiftFirst()) (commutativity)<br />
+            </code>
+            The stereotypical example of an instance is <see cref="T:System.Func`2"/> (wrapped in <see cref="T:Nordril.Functional.Data.Fun`2"/>), with the methods having the "obvious" implementations.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IArrow`2.Make``2(System.Func{``0,``1})">
+            <summary>
+            Turns a function into an arrow. Implementors MUST NOT access the this-pointer and must obey the following:
+            <code>
+            X.Make(f) == X.Id().Promap(x => x, f)<br />
+            </code>
+            </summary>
+            <typeparam name="TNeedResult">The type of the input of <paramref name="f"/>.</typeparam>
+            <typeparam name="THaveResult">The type of the output of <paramref name="f"/>.</typeparam>
+            <param name="f">The function to turn into an arrow.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IArrow`2.TogetherWith``2(Nordril.Functional.Category.IArrow{``0,``1})">
+            <summary>
+            Combines two arrows into an arrow which runs its first tuple-component through <c>this</c> and the second through <paramref name="that"/>. Also known as <c>(***)</c>. Implementors must obey the following:
+            <code>
+            X.TogetherWith(Y) == X.LiftFirst().Then(X.Make((x,y) => (y,x))).Then(Y.LiftFirst()).Then(X.Make((x,y) => (y,x)))
+            </code>
+            </summary>
+            <typeparam name="TNeedRight">The type of values the second arrow needs.</typeparam>
+            <typeparam name="THaveRight">The type of values the second arrow has.</typeparam>
+            <param name="that"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Nordril.Functional.Category.Arrow">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Category.IArrow`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.Fanout``3(Nordril.Functional.Category.IArrow{``0,``1},Nordril.Functional.Category.IArrow{``0,``2})">
+            <summary>
+            Sends the same input to two arrows and returns the outputs of both as a tuple.
+            Also known as <em>(&amp;&amp;&amp;)</em>
+            </summary>
+            <typeparam name="TNeed">The type of the input of the arrows.</typeparam>
+            <typeparam name="THaveLeft">The type of the output of the first arrow.</typeparam>
+            <typeparam name="THaveRight">The type of the output of the second arrow.</typeparam>
+            <param name="arrow">The first arrow.</param>
+            <param name="that">The second arrow.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.EitherOr``4(Nordril.Functional.Category.IArrowChoice{``0,``1},Nordril.Functional.Category.IArrowChoice{``2,``3})">
+            <summary>
+            Combines two arrows into one which can take the input of either one. Also known as <em>(+++)</em>
+            </summary>
+            <typeparam name="TNeedLeft">The type of the input of the first arrow.</typeparam>
+            <typeparam name="THaveLeft">The type of the output of the first arrow.</typeparam>
+            <typeparam name="TNeedRight">The type of the input of the second arrow.</typeparam>
+            <typeparam name="THaveRight">The type of the output of the second arrow.</typeparam>
+            <param name="arrow">The first arrow.</param>
+            <param name="that">The second arrow.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.ToArrowChoice``2(Nordril.Functional.Category.ICategory{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.ICategory`2"/> to an <see cref="T:Nordril.Functional.Category.IArrowChoice`2"/>.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+            <param name="arrow">The object to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.ToArrowChoice``2(Nordril.Functional.Category.IChoice{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IChoice`2"/> to an <see cref="T:Nordril.Functional.Category.IArrowChoice`2"/>.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+            <param name="arrow">The object to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.ToArrow``2(Nordril.Functional.Category.ICategory{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.ICategory`2"/> to an <see cref="T:Nordril.Functional.Category.IArrow`2"/>.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+            <param name="arrow">The object to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.ToArrow``2(Nordril.Functional.Category.IProfunctor{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> to an <see cref="T:Nordril.Functional.Category.IArrow`2"/>.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+            <param name="arrow">The object to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Arrow.Fanin``3(Nordril.Functional.Category.IArrowChoice{``0,``2},Nordril.Functional.Category.IArrowChoice{``1,``2})">
+            <summary>
+            Creates an arrow that accepts the input of either of two arrows and returns the output (with both arrows having the same output type).
+            Also known as <em>(|||)</em>.
+            </summary>
+            <typeparam name="TNeedLeft">The type of the result of the first arrow.</typeparam>
+            <typeparam name="TNeedRight">The type of the result of the second arrow.</typeparam>
+            <typeparam name="THave">The type of the result.</typeparam>
+            <param name="arrow">The first arrow.</param>
+            <param name="that">The second arrow.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.IArrowChoice`2">
+            <summary>
+            An <see cref="T:Nordril.Functional.Category.IArrow`2"/> which also supports choosing a left or a right value.
+            </summary>
+            <typeparam name="TNeed">The type of values the arrow needs.</typeparam>
+            <typeparam name="THave">The type of values the arrow contains.</typeparam>
+        </member>
         <member name="T:Nordril.Functional.Category.IAsyncApplicative`1">
             <summary>
             An <see cref="T:Nordril.Functional.Category.IApplicative`1"/> which supports asynchronous operations.
@@ -3120,6 +3231,36 @@
             <typeparam name="TRight">The type of the right values.</typeparam>
             <param name="this">The bifunctor to apply over.</param>
             <param name="f">The function to apply.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.ICategory`2">
+            <summary>
+            A (morphism in a) category in the category-theoretical sense
+            which goes from <typeparamref name="TNeed"/> to <typeparamref name="THave"/>.
+            A category is a collection of objects (here: types) and morphisms between two objects (going from <typeparamref name="TNeed"/> to <typeparamref name="THave"/>).
+            The stereotypical example of an instance is <see cref="T:System.Func`2"/> (wrapped in <see cref="T:Nordril.Functional.Data.Fun`2"/>), with the methods having the "obvious" implementations.
+            </summary>
+            <typeparam name="TNeed">The type of the source of the morphism.</typeparam>
+            <typeparam name="THave">The type of the result of the morphism.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.ICategory`2.Id``1">
+            <summary>
+            Creates the identity-morphism. Implementors MUST NOT access the this-pointer and must obey the following:
+            <code>
+            X.Id().Then(Y) == X (left-identity of Id)<br />
+            X.Then(Y.Id()) == X (right-identity of Id)<br />
+            </code>
+            </summary>
+            <typeparam name="THaveResult">The type of the source/target of the identity-morphism.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.ICategory`2.Then``1(Nordril.Functional.Category.ICategory{`1,``0})">
+            <summary>
+            Concatenates a second morphism to this first and returns the resultant, combined morphism. Implementors must obey the following:
+            <code>
+            X.Then(Y).Then(Z) == X.Then(Y.Then(Z)) (associativity)<br />
+            </code>
+            </summary>
+            <typeparam name="THaveResult">The type of the result of the second morphism.</typeparam>
+            <param name="that">The second morphism.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IChoice`2">
             <summary>
@@ -4022,21 +4163,58 @@
             Extension methods for profunctors.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Category.Profunctor.FuncToProfunctor``2(System.Func{``0,``1})">
+        <member name="M:Nordril.Functional.Category.Profunctor.MakeFun``2(System.Func{``0,``1})">
             <summary>
-            Wrap a <see cref="T:System.Func`2"/> into a profunctor-instance.
+            Wrap a <see cref="T:System.Func`2"/> into <see cref="T:Nordril.Functional.Data.Fun`2"/>.
             </summary>
             <typeparam name="TNeed">The type of the input.</typeparam>
             <typeparam name="THave">The type of the output.</typeparam>
             <param name="f">The function to wrap.</param>
         </member>
-        <member name="M:Nordril.Functional.Category.Profunctor.ToFunc``2(Nordril.Functional.Category.IProfunctor{``0,``1})">
+        <member name="M:Nordril.Functional.Category.Profunctor.ToFun``2(Nordril.Functional.Category.IProfunctor{``0,``1})">
             <summary>
-            Unsafely casts an <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> to a <see cref="T:Nordril.Functional.Category.ProfunctorFunc`2"/> and returns its underlying function.
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> to a <see cref="T:Nordril.Functional.Data.Fun`2"/>.
             </summary>
             <typeparam name="TIn">The type of the input.</typeparam>
             <typeparam name="TOut">The type of the output.</typeparam>
             <param name="pf">The profunctor to cast.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Profunctor.ToFunc``2(Nordril.Functional.Category.IProfunctor{``0,``1})">
+            <summary>
+            Unsafely casts an <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> to a <see cref="T:Nordril.Functional.Data.Fun`2"/> and returns its underlying function.
+            </summary>
+            <typeparam name="TIn">The type of the input.</typeparam>
+            <typeparam name="TOut">The type of the output.</typeparam>
+            <param name="pf">The profunctor to cast.</param>
+        </member>
+        <member name="T:Nordril.Functional.Category.IStrong`2">
+            <summary>
+            A strong profunctor which supports lifting its input/output to a tuple-type.
+            The stereotypical example of an instance is <see cref="T:System.Func`2"/> (wrapped in <see cref="T:Nordril.Functional.Data.Fun`2"/>), with the methods having the "obvious" implementations.
+            </summary>
+            <typeparam name="TNeed">The type of values the functor needs.</typeparam>
+            <typeparam name="THave">The type of values the functor contains.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IStrong`2.LiftFirst``1">
+            <summary>
+            Lifts the profunctor into one which takes and produces a tuple, passing through <typeparamref name="TRight"/> unchanged. Implementors must obey the following:
+            <code>
+            X.LiftFirst() == X.LiftSecond().Promap((x,y) => (y,x), (x,y) => (y,x))<br />
+            X.LiftFirst().LiftFirst() == X.LiftFirst().X.Promap(assoc, unassoc) where <br />
+            assoc ((a, b), c) = (a, (b, c))<br />
+            unassoc (a, (b, c)) == ((a, b), c)<br />
+            </code>
+            </summary>
+            <typeparam name="TRight">The type of the second tuple-component.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Category.IStrong`2.LiftSecond``1">
+            <summary>
+            Lifts the profunctor into one which takes and produces a tuple, passing through <typeparamref name="TLeft"/> unchanged. Implementors must obey the following:
+            <code>
+            X.LiftSecond() == X.LiftFirst().Promap((x,y) => (y,x), (x,y) => (y,x))<br />
+            </code>
+            </summary>
+            <typeparam name="TLeft">The type of the first tuple-component.</typeparam>
         </member>
         <member name="T:Nordril.Functional.Category.ITraversable`1">
             <summary>
@@ -4111,42 +4289,6 @@
             <param name="source">The source.</param>
             <param name="f">The function to apply.</param>
             <param name="resultSelector">The result-selector.</param>
-        </member>
-        <member name="T:Nordril.Functional.Category.ProfunctorFunc`2">
-            <summary>
-            A profunctor-wrapper for <see cref="T:System.Func`2"/>, needed for prisms.
-            <see cref="T:Nordril.Functional.Category.ProfunctorFunc`2"/> is ismorphic to <see cref="T:System.Func`2"/>, but since it's a struct, it can implement
-            interfaces, esp. <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> (allowing a function to be prepended to its input and another to be appended to its output)
-            and <see cref="T:Nordril.Functional.Category.IChoice`2"/> (allowing it to be lifted into <see cref="T:Nordril.Functional.Data.Either`2"/>).
-            </summary>
-            <typeparam name="TIn">The type of the input.</typeparam>
-            <typeparam name="TOut">The type of the output.</typeparam>
-        </member>
-        <member name="P:Nordril.Functional.Category.ProfunctorFunc`2.Func">
-            <summary>
-            The underlying function.
-            </summary>
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.#ctor(System.Func{`0,`1})">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="func">The function to wrap.</param>
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ContraMap``1(System.Func{``0,`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.Map``1(System.Func{`1,``0})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.Promap``2(System.Func{``0,`0},System.Func{`1,``1})">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ChooseLeft``1">
-            <inheritdoc />
-        </member>
-        <member name="M:Nordril.Functional.Category.ProfunctorFunc`2.ChooseRight``1">
-            <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.CollectionExtensions">
             <summary>
@@ -7445,6 +7587,60 @@
             <inheritdoc />
         </member>
         <member name="M:Nordril.Functional.Data.Eq`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Data.Fun`2">
+            <summary>
+            A profunctor-wrapper for <see cref="T:System.Func`2"/>, needed for prisms.
+            <see cref="T:Nordril.Functional.Data.Fun`2"/> is ismorphic to <see cref="T:System.Func`2"/>, but since it's a struct, it can implement
+            interfaces, esp. <see cref="T:Nordril.Functional.Category.IProfunctor`2"/> (allowing a function to be prepended to its input and another to be appended to its output)
+            and <see cref="T:Nordril.Functional.Category.IChoice`2"/> (allowing it to be lifted into <see cref="T:Nordril.Functional.Data.Either`2"/>).
+            </summary>
+            <typeparam name="TIn">The type of the input.</typeparam>
+            <typeparam name="TOut">The type of the output.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Data.Fun`2.Func">
+            <summary>
+            The underlying function.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.#ctor(System.Func{`0,`1})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="func">The function to wrap.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.ContraMap``1(System.Func{``0,`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.Map``1(System.Func{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.Promap``2(System.Func{``0,`0},System.Func{`1,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.ChooseLeft``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.ChooseRight``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.Make``2(System.Func{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.TogetherWith``2(Nordril.Functional.Category.IArrow{``0,``1})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.Id``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.Then``1(Nordril.Functional.Category.ICategory{`1,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.LiftFirst``1">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Data.Fun`2.LiftSecond``1">
             <inheritdoc />
         </member>
         <member name="T:Nordril.Functional.Data.FuncDictionary`2">

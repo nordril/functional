@@ -22,8 +22,8 @@ namespace Nordril.Functional.Lens
         public MonoPrism(Func<Type, Func<IChoice<A, IApplicative<A>>, IChoice<S, IApplicative<S>>>> f)
         {
             Func = f;
-            var sf = PrismFunc<Identity<A>, Identity<S>, ProfunctorFunc<A, Identity<A>>, ProfunctorFunc<S, Identity<S>>>();
-            SetFunc = g => s => sf(g.FuncToProfunctor()).ToFunc()(s);
+            var sf = PrismFunc<Identity<A>, Identity<S>, Fun<A, Identity<A>>, Fun<S, Identity<S>>>();
+            SetFunc = g => s => sf(g.MakeFun()).ToFunc()(s);
         }
 
         /// <inheritdoc />
@@ -52,14 +52,14 @@ namespace Nordril.Functional.Lens
             where FB : IApplicative<A>
             where FT : IApplicative<S>
         {
-            var tf = PrismFunc<FB, FT, ProfunctorFunc<A, FB>, ProfunctorFunc<S, FT>>();
-            return g => s => tf(g.FuncToProfunctor()).ToFunc()(s);
+            var tf = PrismFunc<FB, FT, Fun<A, FB>, Fun<S, FT>>();
+            return g => s => tf(g.MakeFun()).ToFunc()(s);
         }
 
         public Func<Func<A, IApplicative<A>>, Func<S, IApplicative<S>>> TraversalFunc(Type t)
         {
             var tf = PrismFunc(t);
-            return g => s => tf(g.FuncToProfunctor()).ToFunc()(s);
+            return g => s => tf(g.MakeFun()).ToFunc()(s);
         }
     }
 }
