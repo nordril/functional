@@ -82,9 +82,10 @@ namespace Nordril.Functional.Lens
         /// <param name="lens">The traversal to run.</param>
         /// <param name="f">The function to apply to each element.</param>
         /// <param name="input">The input.</param>
-        public static IApplicative<T> Traverse<TApplicative, S, T, A, B>(this ITraversal<S, T, A, B> lens, Func<A, TApplicative> f, S input)
+        public static IApplicative<T> Traverse<TApplicative, S, T, A, B>(this ITraversal<S, T, A, B> lens, Func<A, TApplicative> f,
+            S input)
             where TApplicative : IApplicative<B>
-            => lens.TraversalFunc(typeof(TApplicative))(f.Then(x => (IApplicative<B>)x))(input);
+            => lens.TraversalFunc(typeof(TApplicative))(x => f(x))(input);
 
         /// <summary>
         /// Runs an <see cref="ITraversal{S, T, A, B}"/> on <paramref name="input"/>.
@@ -100,8 +101,44 @@ namespace Nordril.Functional.Lens
         public static IApplicative<T> Traverse<S, T, A, B>(
             this ITraversal<S, T, A, B> lens,
             Type applicative,
-            Func<A, IApplicative<B>> f, S input)
+            Func<A, IApplicative<B>> f,
+            S input)
             => lens.TraversalFunc(applicative)(f)(input);
+
+        /// <summary>
+        /// Runs an <see cref="IWithering{S, T, A, B}"/> on <paramref name="input"/>.
+        /// </summary>
+        /// <typeparam name="S">The type of the input structure.</typeparam>
+        /// <typeparam name="T">The type of the resultant structure.</typeparam>
+        /// <typeparam name="A">The type of the part to get.</typeparam>
+        /// <typeparam name="B">The type of the result of the inner function.</typeparam>
+        /// <typeparam name="TAlternative">The type of the alternative result of the inner function.</typeparam>
+        /// <param name="lens">The traversal to run.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        /// <param name="input">The input.</param>
+        public static IApplicative<T> TraverseMaybe<TAlternative, S, T, A, B>(
+            this IWithering<S, T, A, B> lens,
+            Func<A, IAlternative<B>> f,
+            S input)
+            => lens.WitherFunc(typeof(TAlternative))(x => f(x))(input);
+
+        /// <summary>
+        /// Runs an <see cref="IWithering{S, T, A, B}"/> on <paramref name="input"/>.
+        /// </summary>
+        /// <typeparam name="S">The type of the input structure.</typeparam>
+        /// <typeparam name="T">The type of the resultant structure.</typeparam>
+        /// <typeparam name="A">The type of the part to get.</typeparam>
+        /// <typeparam name="B">The type of the result of the inner function.</typeparam>
+        /// <param name="alternative">The type of the alternative result of the inner function.</param>
+        /// <param name="lens">The traversal to run.</param>
+        /// <param name="f">The function to apply to each element.</param>
+        /// <param name="input">The input.</param>
+        public static IApplicative<T> TraverseMaybe<S, T, A, B>(
+            this IWithering<S, T, A, B> lens,
+            Type alternative,
+            Func<A, IAlternative<B>> f,
+            S input)
+            => lens.WitherFunc(alternative)(x => f(x))(input);
 
         /// <summary>
         /// Turns the element(s) retrieved by an <see cref="IGetter{S, A}"/> into a list.

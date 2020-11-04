@@ -3,6 +3,7 @@ using Nordril.Functional.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Nordril.Functional.Category
 {
@@ -43,7 +44,7 @@ namespace Nordril.Functional.Category
     /// <summary>
     /// Extension methods for <see cref="IAlternative{TSource}"/>.
     /// </summary>
-    public static class AlternativeExtensions
+    public static class Alternative
     {
         /// <summary>
         /// A guard-function with respect to <see cref="IApplicative{TSource}.Ap{TResult}(IApplicative{Func{TSource, TResult}})"/> and <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/>. If the condition is not fulfilled, the computation does not proceed.
@@ -64,5 +65,17 @@ namespace Nordril.Functional.Category
         public static TAlt AltSum<TResult, TAlt>(this IEnumerable<TAlt> xs)
             where TAlt : IAlternative<TResult>, new()
         => (TAlt)xs.Aggregate(new TAlt().Empty(), (acc, x) => acc.Alt(x));
+
+        /// <summary>
+        /// Returns an <see cref="IAlternative{TSource}"/> containing <see cref="Maybe.Just{T}(T)"/> its value, if present, or <see cref="Maybe.Nothing{T}"/> otherwise.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the value in <paramref name="alt"/>.</typeparam>
+        /// <param name="alt">The <see cref="IAlternative{TSource}"/> to check.</param>
+        public static IAlternative<Maybe<TResult>> Optional<TResult>(this IAlternative<TResult> alt)
+        {
+            var altM = (IAlternative<Maybe<TResult>>)alt.Map(x => Maybe.Just(x));
+            var nothingM = (IAlternative<Maybe<TResult>>)Applicative.PureUnsafe(Maybe.Nothing<TResult>(), altM.GetType());
+            return altM.Alt(nothingM);
+        }
     }
 }

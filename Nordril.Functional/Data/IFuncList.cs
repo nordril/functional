@@ -13,6 +13,7 @@ namespace Nordril.Functional.Data
         , IMonadPlus<T>
         , IAsyncMonad<T>
         , IFilterable<IFuncList<T>, T>
+        , IWitherable<T>
         , ITraversable<T>
         , IKeyedFunctor<int, T>
         , IAlternative<T>

@@ -285,7 +285,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IApplicative<ITraversable<TResult>> Traverse<TApplicative, TResult>(Func<T, TApplicative> f)
             where TApplicative : IApplicative<TResult>
-            => Traverse(typeof(TApplicative), f.Then(x => (IApplicative<TResult>)x));
+            => Traverse(typeof(TApplicative), x => f(x));
 
         /// <inheritdoc />
         public IApplicative<ITraversable<TResult>> Traverse<TResult>(Type applicative, Func<T, IApplicative<TResult>> f)
@@ -306,6 +306,35 @@ namespace Nordril.Functional.Data
 
             return r.Map(x => (ITraversable<TResult>)x.MakeFuncList()) as IApplicative<ITraversable<TResult>>;
         }
+
+        /// <inheritdoc />
+        public IApplicative<IWitherable<TResult>> TraverseMaybe<TApplicative, TResult>(Func<T, TApplicative> f) where TApplicative : IApplicative<Maybe<TResult>>
+            => TraverseMaybe(typeof(TApplicative), x => f(x));
+
+        /// <inheritdoc />
+        public IApplicative<IWitherable<TResult>> TraverseMaybe<TResult>(Type applicative, Func<T, IApplicative<Maybe<TResult>>> f)
+        {
+            var mapped = Map(f).ToFuncList();
+
+            static Stack<TResult> cons(Maybe<TResult> x, Stack<TResult> xs)
+            {
+                if (x.TryGetValue(default, out var xValue))
+                    xs.Push(xValue);
+                return xs;
+            }
+
+            var consA = Applicative.LiftA<Maybe<TResult>, Stack<TResult>, Stack<TResult>>(cons);
+
+            var r = ListCoalesce().AggregateRight(
+                (x, xs) => consA(f(x), xs),
+                Applicative.PureUnsafe<TResult>(default, applicative).Map(_ => new Stack<TResult>()) as IApplicative<Stack<TResult>>);
+
+            return r.Map(x => (IWitherable<TResult>)x.MakeFuncList()) as IApplicative<IWitherable<TResult>>;
+        }
+
+        /// <inheritdoc />
+        public IFilterable<TResult> MapMaybe<TResult>(Func<T, Maybe<TResult>> f)
+            =>new FuncList<TResult>(ListCoalesce().Select(x => f(x)).Where(x => x.HasValue).Select(x => x.Value()));
 
         /// <inheritdoc />
         public static bool operator ==(FuncList<T> left, FuncList<T> right)

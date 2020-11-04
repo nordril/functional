@@ -40,4 +40,23 @@ namespace Nordril.Functional.Category
         /// <param name="f">The predicate.</param>
         Maybe<T> Semifilter(Func<TSource, bool> f);
     }
+
+    /// <summary>
+    /// Filterable data structures where elements can be both changed, as with <see cref="IFunctor{TSource}"/>, but also removed.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the elements in the container.</typeparam>
+    public interface IFilterable<out TSource> : IFunctor<TSource>
+    {
+        /// <summary>
+        /// Applies a function to the functor and returns a new functor without changing the original functor.
+        /// Implementors must fulfill the following for all X and functions f and g:
+        /// <code>
+        ///     X.MapMaybe(x => Maybe.Just(f(x)) == X.Map(f) (conservation)<br />
+        ///     X.MapMaybe(f).MapMaybe(g) == X.MapMaybe(f.Bind(g).ToMaybe()) (composition) <br />
+        /// </code>
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="f">The function to apply to the functor.</param>
+        IFilterable<TResult> MapMaybe<TResult>(Func<TSource, Maybe<TResult>> f);
+    }
 }

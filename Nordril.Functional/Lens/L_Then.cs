@@ -93,5 +93,20 @@ namespace Nordril.Functional.Lens
             return new Traversal<S, T, AInner, BInner>(t => lens.TraversalFunc(t).After(then.TraversalFunc(t)));
         }
 
+        /// <summary>
+        /// Composes two witherings. The second withering drills further into the result of the first.
+        /// </summary>
+        /// <typeparam name="S">The type of the outer container.</typeparam>
+        /// <typeparam name="T">The type of the resulting outer container.</typeparam>
+        /// <typeparam name="A">The type of the outer value.</typeparam>
+        /// <typeparam name="AInner">The type of the inner outer value/inner container.</typeparam>
+        /// <typeparam name="B">The type outer result value.</typeparam>
+        /// <typeparam name="BInner">The type of the inner result value.</typeparam>
+        /// <param name="lens">The outer setter.</param>
+        /// <param name="then">The inner setter.</param>
+        public static IWithering<S, T, AInner, BInner> Then<S, T, A, B, AInner, BInner>(this IWithering<S, T, A, B> lens, IWithering<A, B, AInner, BInner> then)
+        {
+            return new Withering<S, T, AInner, BInner>(t => lens.WitherFunc(t).After(then.WitherFunc(t)));
+        }
     }
 }

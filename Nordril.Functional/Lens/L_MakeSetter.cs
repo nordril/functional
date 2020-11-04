@@ -8,7 +8,7 @@ namespace Nordril.Functional.Lens
 {
     public static partial class L
     {
-        public static partial class Make
+        public partial class Make
         {
             /// <summary>
             /// Creates a setter out of a setting-function.
