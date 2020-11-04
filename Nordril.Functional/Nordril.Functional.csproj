@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>23.0.0.0</AssemblyVersion>
+    <AssemblyVersion>24.0.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies d.o.o.</Authors>
     <Company>Nordril Technologies d.o.o.</Company>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <Version>23.0.0</Version>
+    <Version>24.0.0</Version>
     <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, Lenses, and more.</Description>
-    <FileVersion>23.0.0.0</FileVersion>
+    <FileVersion>24.0.0.0</FileVersion>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/nordril/functional.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/nordril/functional/</PackageProjectUrl>
