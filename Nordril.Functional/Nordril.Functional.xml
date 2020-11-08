@@ -5142,6 +5142,48 @@
             <typeparam name="T">The type of elements in the collection.</typeparam>
             <param name="collection">The collection to hash.</param>
         </member>
+        <member name="T:Nordril.Functional.Composite.ConflictResolution">
+            <summary>
+            A conflict resolution strategy when two pieces of data clash.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Composite.ConflictResolution.UseNew">
+            <summary>
+            Overwrite the old data with the new.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Composite.ConflictResolution.UseExisting">
+            <summary>
+            Leave the old data in place.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Composite.ConflictResolution.Fail">
+            <summary>
+            Leave the old data in place and fail the process (usually by throwing an exception).
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Composite.IComposite`2">
+            <summary>
+            A component which can be composed of sub-components of type <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the sub-components.</typeparam>
+            <typeparam name="TName">The type of the (sub-)component's name.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Composite.IComposite`2.Parts">
+            <summary>
+            The set of sub-components. If this component is atomic, this method must return an empty set.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Composite.IComposite`2.ReplaceParts(System.Collections.Generic.IEnumerable{`0},Nordril.Functional.Composite.ConflictResolution,System.Int32@)">
+            <summary>
+            Replaces the given elements of <see cref="P:Nordril.Functional.Composite.IComposite`2.Parts"/> with the given <see cref="P:Nordril.Functional.Composite.INamed`1.Name"/> names, modulo the <see cref="T:Nordril.Functional.Composite.ConflictResolution"/> <paramref name="resolution"/>.
+            </summary>
+            <param name="parts">The list of parts to replace, with their names.</param>
+            <param name="resolution">The resolution strategy to use in case of conflict.</param>
+            <param name="numReplaced">The number of replacements which occurred. &lt;= the count of <paramref name="parts"/>.</param>
+            <returns>A copy of the callee, which might be different or identical (if not replacement occurred). The caller should not rely on the return value (not) being reference-equal to the callee.</returns>
+            <exception cref="T:Nordril.Functional.Algebra.KeyAlreadyPresentException">If <see cref="F:Nordril.Functional.Composite.ConflictResolution.Fail"/> was specified and the old component already existed.</exception>
+        </member>
         <member name="T:Nordril.Functional.Composite.INamed`1">
             <summary>
             Objects which possess a unique name of type <typeparamref name="T"/>.
@@ -13729,55 +13771,396 @@
             <param name="message">The error message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
-        <member name="T:Nordril.Functional.IRead`2">
+        <member name="T:Nordril.Functional.Error">
             <summary>
-            Types which can be parsed from a character-sequence, e.g. a string
-            </summary>
-            <typeparam name="T">The type to parse.</typeparam>
-            <typeparam name="TOptions">The type of the options.</typeparam>
-        </member>
-        <member name="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)">
-            <summary>
-            Tries to parse a value of type <typeparamref name="T"/> from a character-sequence, using options of type <typeparamref name="TOptions"/>.
-            Implementors MUST NOT use the <c>this</c>-pointer during this operation.
-            </summary>
-            <param name="source">The character-sequence to parse.</param>
-            <param name="options">The options to use for the parsing.</param>
-            <returns><see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/> if the parsing was successful, and <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> otherwise.</returns>
-        </member>
-        <member name="T:Nordril.Functional.Read">
-            <summary>
-            Extensions methods for <see cref="T:Nordril.Functional.IRead`2"/>.
+            Represents an error in the application, with a message and a target, plus an optional system-exception.
             </summary>
         </member>
-        <member name="M:Nordril.Functional.Read.TryParse``1(Nordril.Functional.IRead{``0,Nordril.Functional.Data.Unit},System.Collections.Generic.IEnumerable{System.Char})">
+        <member name="P:Nordril.Functional.Error.Code">
             <summary>
-            Like <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>, but without options.
+            The unique code of the error.
             </summary>
-            <typeparam name="T">The type to parse.</typeparam>
-            <param name="instance">The instance on which to call <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>.</param>
-            <param name="source">The character-sequences to parse.</param>
         </member>
-        <member name="M:Nordril.Functional.Read.TryParseUnsafe``1(System.Collections.Generic.IEnumerable{System.Char})">
+        <member name="P:Nordril.Functional.Error.InnerException">
             <summary>
-            Calls <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            The underlying system exception, if applicable.
             </summary>
-            <typeparam name="T">The type to parse.</typeparam>
-            <param name="source">The character-sequences to parse.</param>
         </member>
-        <member name="M:Nordril.Functional.Read.TryParseUnsafe``2(System.Collections.Generic.IEnumerable{System.Char},``1)">
+        <member name="P:Nordril.Functional.Error.Message">
             <summary>
-            Calls <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            The human-readable error message.
             </summary>
-            <typeparam name="T">The type to parse.</typeparam>
-            <typeparam name="TOptions">The type of the options to use.</typeparam>
-            <param name="source">The character-sequences to parse.</param>
-            <param name="options">The options to use for the parsing.</param>
         </member>
-        <member name="T:Nordril.Functional.Read.ReadProxy">
+        <member name="P:Nordril.Functional.Error.Target">
             <summary>
-            A proxy for <c>nameof</c>.
+            The target of the error; i.e. the thing that was faulty (like a property or the name of an API method).
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Error.#ctor(System.String,System.Enum,System.String,System.Exception)">
+            <summary>
+            Creates a new error out of a message and an optional code, target and exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="code">The unique error code; null if not present.</param>
+            <param name="target">The target; null if not present.</param>
+            <param name="exception">The exception; null if not present.</param>
+        </member>
+        <member name="M:Nordril.Functional.Error.#ctor(System.String,System.Int32,System.String,System.Exception)">
+            <summary>
+            Creates a new error out of a message and an optional code, target and exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="code">The unique error code.</param>
+            <param name="target">The target; null if not present.</param>
+            <param name="exception">The exception; null if not present.</param>
+        </member>
+        <member name="M:Nordril.Functional.Error.#ctor(System.String,System.String,System.String,System.Exception)">
+            <summary>
+            Creates a new error out of a message and an optional code, target and exception.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="code">The unique error code; null if not present.</param>
+            <param name="target">The target; null if not present.</param>
+            <param name="exception">The exception; null if not present.</param>
+        </member>
+        <member name="M:Nordril.Functional.Error.#ctor(System.ValueTuple{System.String,System.Enum},System.String,System.Exception)">
+            <summary>
+            Creates a new error out of a message and an optional code, target and exception.
+            </summary>
+            <param name="msg">The tuple of error message and code.</param>
+            <param name="target">The target; null if not present.</param>
+            <param name="exception">The exception; null if not present.</param>
+        </member>
+        <member name="M:Nordril.Functional.Error.Equals(System.Object)">
+            <summary>
+            Determines equality based on <see cref="P:Nordril.Functional.Error.Code"/>, <see cref="P:Nordril.Functional.Error.Message"/>, <see cref="P:Nordril.Functional.Error.InnerException"/>, and <see cref="P:Nordril.Functional.Error.Target"/>.
+            </summary>
+            <param name="obj">The other object.</param>
+        </member>
+        <member name="M:Nordril.Functional.Error.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Error.op_Equality(Nordril.Functional.Error,Nordril.Functional.Error)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Error.op_Inequality(Nordril.Functional.Error,Nordril.Functional.Error)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Error.Equals(Nordril.Functional.Error)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Error.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Results.Result`1">
+            <summary>
+            The result of a service call; a container for <see cref="T:Nordril.Functional.Data.Either`2"/>, containing either a list of errors or a result <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the result, if the call was successful.</typeparam>
+        </member>
+        <member name="P:Nordril.Functional.Results.Result`1.InnerResult">
+            <summary>
+            The underlying either.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Results.Result`1.ResultClass">
+            <summary>
+            Gets or sets the general class of result, which allows a rough categorization.
+            </summary>
+        </member>
+        <member name="P:Nordril.Functional.Results.Result`1.IsOk">
+            <summary>
+            Returns true iff there is a result, i.e. if the underlying <see cref="P:Nordril.Functional.Data.Either`2.IsRight"/> is true.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Value">
+            <summary>
+            Returns the value of the result, if present. If there's no result, a <see cref="T:Nordril.Functional.PatternMatchException"/> is thrown.
+            </summary>
+            <exception cref="T:Nordril.Functional.PatternMatchException">If there's no result and only errors.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Errors">
+            <summary>
+            Returns the errors, if present. If there are no errors, a <see cref="T:Nordril.Functional.PatternMatchException"/> is thrown.
+            </summary>
+            <exception cref="T:Nordril.Functional.PatternMatchException">If there are no errors.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.HasError``1(Nordril.Functional.Error@)">
+            <summary>
+            Returns true if <see cref="P:Nordril.Functional.Results.Result`1.IsOk"/> is false and if <see cref="M:Nordril.Functional.Results.Result`1.Errors"/> contains an error with an inner exception of type <typeparamref name="TError"/>. This is a useful analogue for <c>catch</c>.
+            </summary>
+            <typeparam name="TError">The type of the exception to search for.</typeparam>
+            <param name="error">The first occurrence of an <see cref="T:Nordril.Functional.Error"/> which has an inner exception of type <typeparamref name="TError"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.HasErrorCode``1(``0,Nordril.Functional.Error@)">
+            <summary>
+            Returns true if <see cref="P:Nordril.Functional.Results.Result`1.IsOk"/> is false and if <see cref="M:Nordril.Functional.Results.Result`1.Errors"/> contains an error with error code <paramref name="code"/>. This is a useful analogue for <c>catch</c>.
+            </summary>
+            <typeparam name="TCode">The type of the error code enumeration.</typeparam>
+            <param name="code">The error code to search for.</param>
+            <param name="error">The first occurrence of an <see cref="T:Nordril.Functional.Error"/> which has an error code <paramref name="code"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.HasErrorCode(System.String,Nordril.Functional.Error@)">
+            <summary>
+            Returns true if <see cref="P:Nordril.Functional.Results.Result`1.IsOk"/> is false and if <see cref="M:Nordril.Functional.Results.Result`1.Errors"/> contains an error with error code <paramref name="code"/>. This is a useful analogue for <c>catch</c>.
+            </summary>
+            <param name="code">The error code to search for.</param>
+            <param name="error">The first occurrence of an <see cref="T:Nordril.Functional.Error"/> which has an error code <paramref name="code"/>.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.#ctor(Nordril.Functional.Data.Either{System.Collections.Generic.IList{Nordril.Functional.Error},`0},Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates a new <see cref="T:Nordril.Functional.Results.Result`1"/> from an <see cref="T:Nordril.Functional.Data.Either`2"/>.
+            If <paramref name="resultClass"/> is <see cref="F:Nordril.Functional.Results.ResultClass.Ok"/>, <paramref name="innerResult"/> MUST contain a right-value, otherwise, an exception is thrown.
+            </summary>
+            <param name="innerResult">The underlying data.</param>
+            <param name="resultClass">The result class.</param>
+            <exception cref="T:System.ArgumentException">If <paramref name="resultClass"/> is <see cref="F:Nordril.Functional.Results.ResultClass.Ok"/>, but <paramref name="innerResult"/> contains no value.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Ok(`0)">
+            <summary>
+            Creates an OK-result from a value.
+            </summary>
+            <param name="result">The value.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.WithErrors(System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates an error-result from a list of errors.
+            </summary>
+            <param name="errors">The list of errors.</param>
+            <param name="resultClass">The class of the result.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.WithError(Nordril.Functional.Error,Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates an error-result from an error.
+            </summary>
+            <param name="error">The error.</param>
+            <param name="resultClass">The class of the result.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.OkIf(System.Boolean,System.Func{`0},System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates a <see cref="M:Nordril.Functional.Results.Result.Ok``1(``0)"/> if <paramref name="isOk"/> is true, using <paramref name="factory"/>,
+            and <see cref="M:Nordril.Functional.Results.Result.WithErrors``1(System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)"/> otherwise.
+            </summary>
+            <param name="isOk">Whether the result is OK.</param>
+            <param name="factory">The value-factory for the return-value if <paramref name="isOk"/> is true.</param>
+            <param name="errors">The list of errors if <paramref name="isOk"/> is false.</param>
+            <param name="resultClassIfError">The <see cref="P:Nordril.Functional.Results.Result`1.ResultClass"/> if <paramref name="isOk"/> is false.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.op_Equality(Nordril.Functional.Results.Result{`0},Nordril.Functional.Results.Result{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.op_Inequality(Nordril.Functional.Results.Result{`0},Nordril.Functional.Results.Result{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Equals(Nordril.Functional.Results.Result{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Map``1(System.Func{`0,``0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.MonoMap(System.Func{`0,`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Pure``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.BindAsync``1(System.Func{`0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.PureAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`0,System.Threading.Tasks.Task{``0}}})">
+            <inheritdoc />
+        </member>
+        <member name="M:Nordril.Functional.Results.Result`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <inheritdoc />
+        </member>
+        <member name="T:Nordril.Functional.Results.Result">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Results.Result`1"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.Select``2(Nordril.Functional.Results.Result{``0},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to <see cref="T:Nordril.Functional.Results.Result`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.SelectMany``3(Nordril.Functional.Results.Result{``0},System.Func{``0,Nordril.Functional.Results.Result{``1}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to <see cref="T:Nordril.Functional.Results.Result`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.Select``2(System.Threading.Tasks.Task{Nordril.Functional.Results.Result{``0}},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Results.Result`1"/>. Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.SelectMany``3(System.Threading.Tasks.Task{Nordril.Functional.Results.Result{``0}},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Results.Result{``1}}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>, but restricted to asynchronous <see cref="T:Nordril.Functional.Results.Result`1"/>. Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.Ok``1(``0)">
+            <summary>
+            Creates an OK-result from a value.
+            </summary>
+            <typeparam name="T">The type of the value.</typeparam>
+            <param name="result">The result.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.Ok``1">
+            <summary>
+            Creates an OK-result, invoking the parameterless constructor of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the value.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.WithErrors``1(System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates an error-result from a list of errors.
+            </summary>
+            <typeparam name="T">The type of the value.</typeparam>
+            <param name="errors">The list of errors.</param>
+            <param name="resultClass">The result class.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.WithError``1(Nordril.Functional.Error,Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates an error-result from an error.
+            </summary>
+            <typeparam name="T">The type of the value.</typeparam>
+            <param name="error">The error.</param>
+            <param name="resultClass">The class of the result.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.OkIf``1(System.Boolean,System.Func{``0},System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Creates a <see cref="M:Nordril.Functional.Results.Result.Ok``1(``0)"/> if <paramref name="isOk"/> is true, using <paramref name="factory"/>,
+            and <see cref="M:Nordril.Functional.Results.Result.WithErrors``1(System.Collections.Generic.IEnumerable{Nordril.Functional.Error},Nordril.Functional.Results.ResultClass)"/> otherwise.
+            </summary>
+            <typeparam name="T">The type of the value.</typeparam>
+            <param name="isOk">Whether the result is OK.</param>
+            <param name="factory">The value-factory for the return-value if <paramref name="isOk"/> is true.</param>
+            <param name="errors">The list of errors if <paramref name="isOk"/> is false.</param>
+            <param name="resultClassIfError">The <see cref="T:Nordril.Functional.Results.ResultClass"/> if <paramref name="isOk"/> is false.</param>
+        </member>
+        <member name="M:Nordril.Functional.Results.Result.ToResult``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Results.Result`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to a maybe.</param>
+        </member>
+        <member name="T:Nordril.Functional.Results.ResultClass">
+            <summary>
+            Indicates the general class of the result. Roughly equivalent to HTTP status codes.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.AlreadyPresent">
+            <summary>
+            The resource was already present and couldn't be inserted. Roughly equivalent to HTTP 409 (Conflict).
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.BadRequest">
+            <summary>
+            The request cannot be fulfilled because it is syntactically invalid.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.DataConflict">
+            <summary>
+            There was a conflict in the requested data, such as when multiple results were found but only one was expected. Equivalent to HTTP 409 (Conflict).
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.EditConflict">
+            <summary>
+            There was a conflict with another request when trying to update the resource. Equivalent to HTTP 409 (Conflict).
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.Forbidden">
+            <summary>
+            The request was not allowed because the user wasn't authorized to perform it. Equivalent to HTTP 403.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.InternalException">
+            <summary>
+            There was an internal exception. Equivalent to HTTP 500.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.Ok">
+            <summary>
+            The request was successful and there were no errors.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.NotFound">
+            <summary>
+            The requested resource was not found. Equivalent to HTTP 404.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.NotImplemented">
+            <summary>
+            The method has not been implemented. Equivalent to HTTP 501 (Not implemented).
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.ResourceGone">
+            <summary>
+            The resource is gone. Equivalent to HTTP 410 (Gone) and similar to HTTP 404.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.UnprocessableEntity">
+            <summary>
+            The request couldn't be processed because it was semantically invalid in a way not described by other <see cref="T:Nordril.Functional.Results.ResultClass"/>-members. This is the default <see cref="T:Nordril.Functional.Results.ResultClass"/> for input error.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.Cancelled">
+            <summary>
+            The request was cancelled.
+            </summary>
+        </member>
+        <member name="F:Nordril.Functional.Results.ResultClass.Unspecified">
+            <summary>
+            Unspecified error result, indicating that there was an error, but that we were not able to specify which kind. Should be avoided.
+            </summary>
+        </member>
+        <member name="T:Nordril.Functional.Results.ResultClassExtensions">
+            <summary>
+            Extension methods for <see cref="T:Nordril.Functional.Results.ResultClass"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.Results.ResultClassExtensions.ToHttpStatusCode(Nordril.Functional.Results.ResultClass)">
+            <summary>
+            Converts a <see cref="T:Nordril.Functional.Results.ResultClass"/> to the nearest approximate HTTP status code.
+            </summary>
+            <param name="r">The result class to convert.</param>
         </member>
         <member name="T:Nordril.Functional.TupleExtensions">
             <summary>
@@ -14611,6 +14994,56 @@
             <typeparam name="T7">The type of the seventh element.</typeparam>
             <typeparam name="T8">The type of the eigth element.</typeparam>
             <param name="tuple">The tuple to contract.</param>
+        </member>
+        <member name="T:Nordril.Functional.TypeClasses.IRead`2">
+            <summary>
+            Types which can be parsed from a character-sequence, e.g. a string
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <typeparam name="TOptions">The type of the options.</typeparam>
+        </member>
+        <member name="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)">
+            <summary>
+            Tries to parse a value of type <typeparamref name="T"/> from a character-sequence, using options of type <typeparamref name="TOptions"/>.
+            Implementors MUST NOT use the <c>this</c>-pointer during this operation.
+            </summary>
+            <param name="source">The character-sequence to parse.</param>
+            <param name="options">The options to use for the parsing.</param>
+            <returns><see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/> if the parsing was successful, and <see cref="M:Nordril.Functional.Data.Maybe.Nothing``1"/> otherwise.</returns>
+        </member>
+        <member name="T:Nordril.Functional.TypeClasses.Read">
+            <summary>
+            Extensions methods for <see cref="T:Nordril.Functional.TypeClasses.IRead`2"/>.
+            </summary>
+        </member>
+        <member name="M:Nordril.Functional.TypeClasses.Read.TryParse``1(Nordril.Functional.TypeClasses.IRead{``0,Nordril.Functional.Data.Unit},System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Like <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>, but without options.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <param name="instance">The instance on which to call <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>.</param>
+            <param name="source">The character-sequences to parse.</param>
+        </member>
+        <member name="M:Nordril.Functional.TypeClasses.Read.TryParseUnsafe``1(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Calls <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <param name="source">The character-sequences to parse.</param>
+        </member>
+        <member name="M:Nordril.Functional.TypeClasses.Read.TryParseUnsafe``2(System.Collections.Generic.IEnumerable{System.Char},``1)">
+            <summary>
+            Calls <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/> without an instance. This is safe to do if the implementor's <see cref="M:Nordril.Functional.TypeClasses.IRead`2.TryParse(System.Collections.Generic.IEnumerable{System.Char},`1)"/>-method does not use the this-pointer.
+            </summary>
+            <typeparam name="T">The type to parse.</typeparam>
+            <typeparam name="TOptions">The type of the options to use.</typeparam>
+            <param name="source">The character-sequences to parse.</param>
+            <param name="options">The options to use for the parsing.</param>
+        </member>
+        <member name="T:Nordril.Functional.TypeClasses.Read.ReadProxy">
+            <summary>
+            A proxy for <c>nameof</c>.
+            </summary>
         </member>
     </members>
 </doc>

@@ -1,11 +1,12 @@
 ﻿using Nordril.Functional.Data;
+using Nordril.Functional.TypeClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace Nordril.Functional.Tests
+namespace Nordril.Functional.Tests.TypeClasses
 {
     public class ReadTests
     {
@@ -103,7 +104,7 @@ namespace Nordril.Functional.Tests
 
                 var xs = source.ToList();
 
-                if (xs.Count < 2 || xs[0] != '{' || xs[xs.Count-1] != '}')
+                if (xs.Count < 2 || xs[0] != '{' || xs[^1] != '}')
                     return Maybe.Nothing<StringSet>();
 
                 xs = xs.GetRange(1, xs.Count - 2);

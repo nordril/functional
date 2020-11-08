@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace Nordril.Functional
+namespace Nordril.Functional.TypeClasses
 {
     /// <summary>
     /// Types which can be parsed from a character-sequence, e.g. a string
