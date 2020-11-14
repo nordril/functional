@@ -58,7 +58,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<T, TResult>> f)
         {
-            if (f == null || !(f is IEnumerable<Func<T, TResult>> functions))
+            if (f == null || f is not IEnumerable<Func<T, TResult>> functions)
                 throw new InvalidCastException();
 
             var ys = SetCoalesce();
@@ -206,7 +206,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (!(obj is ISet<T> that))
+            if (obj is not ISet<T> that)
                 return false;
 
             var sThis = SetCoalesce();
@@ -285,7 +285,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
         {
-            if (f == null || !(f is IEnumerable<Func<T, Task<TResult>>> functions))
+            if (f == null || f is not IEnumerable<Func<T, Task<TResult>>> functions)
                 throw new InvalidCastException();
 
             var ys = SetCoalesce();

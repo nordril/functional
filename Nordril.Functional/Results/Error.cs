@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nordril.Functional
+namespace Nordril.Functional.Results
 {
     /// <summary>
     /// Represents an error in the application, with a message and a target, plus an optional system-exception.

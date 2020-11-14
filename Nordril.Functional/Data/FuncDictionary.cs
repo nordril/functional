@@ -47,16 +47,10 @@ namespace Nordril.Functional.Data
         /// <param name="pairs">The pairs to put into the dictionary.</param>
         public FuncDictionary(IComparer<TKey> keyComparer, IEnumerable<KeyValuePair<TKey, TValue>> pairs)
         {
-            pairs = pairs ?? new KeyValuePair<TKey, TValue>[0];
+            pairs ??= Array.Empty<KeyValuePair<TKey, TValue>>();
 
-#if NETCORE
             dict = new Dictionary<TKey, TValue>(pairs);
-#elif NETFULL
-            dict = new Dictionary<TKey, TValue>();
 
-            foreach (var pair in pairs)
-                dict.Add(pair);
-#endif
             comparer = DictionaryEqualityComparer.Make(
                 keyComparer,
                 new FuncEqualityComparer<TValue>((x,y) => x.Equals(y)));
@@ -70,17 +64,11 @@ namespace Nordril.Functional.Data
         /// <param name="valueComparer">The equality comparer for the values.</param>
         public FuncDictionary(IEnumerable<KeyValuePair<TKey, TValue>> pairs, IComparer<TKey> keyComparer, IEqualityComparer<TValue> valueComparer)
         {
-            pairs = pairs ?? new KeyValuePair<TKey, TValue>[0];
+            pairs ??= Array.Empty<KeyValuePair<TKey, TValue>>();
 
-#if NETCORE
             dict = new Dictionary<TKey, TValue>(pairs);
-#elif NETFULL
-            dict = new Dictionary<TKey, TValue>();
 
-            foreach (var pair in pairs)
-                dict.Add(pair);
-#endif
-            valueComparer = valueComparer ?? new FuncEqualityComparer<TValue>((x, y) => x.Equals(y));
+            valueComparer ??= new FuncEqualityComparer<TValue>((x, y) => x.Equals(y));
 
             comparer = DictionaryEqualityComparer.Make(keyComparer, valueComparer);
         }
@@ -141,7 +129,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <param name="obj">The other oject.</param>
         public override bool Equals(object obj)
-            => obj is FuncDictionary<TKey, TValue> && Equals((FuncDictionary<TKey, TValue>)obj);
+            => obj is FuncDictionary<TKey, TValue> dictionary && Equals(dictionary);
 
         /// <summary>
         /// See <see cref="Equals(IDictionary{TKey, TValue})"/>.

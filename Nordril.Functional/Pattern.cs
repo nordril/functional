@@ -94,7 +94,7 @@ namespace Nordril.Functional
             => Pattern<TIn, TOut>.StartMatch(cases);
 
         /// <summary>
-        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. <em>This function has poor performance for large lists.</em>
         /// </summary>
         /// <typeparam name="TIn">The type of the input object.</typeparam>
         /// <typeparam name="TOut">The type of the output object.</typeparam>
@@ -107,10 +107,17 @@ namespace Nordril.Functional
             Func<TIn, bool> predicate,
             Func<TIn, TOut> head,
             Func<TIn, TIn> tail)
-            => Pattern<TIn, TOut>.MatchTailRec(p, predicate, x => new FuncList<TOut> { x }, (x, xs) => { xs.Add(x); return xs; }, (xs, ys) => { xs.AddRange(ys); return xs; }, head, tail);
+            => Pattern<TIn, TOut>.MatchTailRec(
+                p,
+                predicate,
+                x => new FuncList<TOut> { x },
+                (x, xs) => { xs.Add(x); return xs; },
+                (xs, ys) => { xs.AddRange(ys); return xs; },
+                head,
+                tail);
 
         /// <summary>
-        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="List{T}.GetRange(int, int)"/>, since it doesn't create shallow copies of the whole list each iteration.
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="List{T}.GetRange(int, int)"/>, since it doesn't create shallow copies of the whole list each iteration. If you want to build consume <em>and</em> build up a list during the iteration, use <see cref="MatchTailRecModuloCons{TIn, TOut}(Pattern{Lst{TIn}, Queue{TOut}}, Func{TIn, TOut})"/> or <see cref="MatchTailRecModuloCons{TIn, TOut}(Pattern{Lst{TIn}, Queue{TOut}}, Func{Lst{TIn}, bool}, Func{TIn, TOut})"/>.
         /// </summary>
         /// <typeparam name="TIn">The type of the input object.</typeparam>
         /// <typeparam name="TOut">The type of the output object.</typeparam>
@@ -130,7 +137,55 @@ namespace Nordril.Functional
             Func<TOut, TOutSemi> mkResult,
             Func<TOut, TOutSemi, TOutSemi> addResult,
             Func<TOutSemi, TOutSemi, TOutSemi> combineResults)
-            => Pattern<Lst<TIn>, TOut>.MatchTailRec(p, predicate, mkResult, addResult, combineResults, xs => head(xs.HeadUnsafe), xs => tail(xs.TailUnsafe));
+            => Pattern<Lst<TIn>, TOut>.MatchTailRec(
+                p,
+                predicate,
+                mkResult,
+                addResult,
+                combineResults,
+                xs => head(xs.HeadUnsafe),
+                xs => tail(xs.TailUnsafe));
+
+        /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="List{T}.GetRange(int, int)"/>, since it doesn't create shallow copies of the whole list each iteration.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input object.</typeparam>
+        /// <typeparam name="TOut">The type of the output object.</typeparam>
+        /// <param name="p">The pattern to which to append.</param>
+        /// <param name="predicate">The predicate which returns true if the case applies.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        public static Pattern<Lst<TIn>, Queue<TOut>> MatchTailRecModuloCons<TIn, TOut>(
+            this Pattern<Lst<TIn>, Queue<TOut>> p,
+            Func<Lst<TIn>, bool> predicate,
+            Func<TIn, TOut> head)
+            => Pattern<Lst<TIn>, TOut>.MatchTailRec(
+                p,
+                predicate,
+                x => new Queue<TOut>(new TOut[] { x }),
+                (x,xs) => { xs.Enqueue(x); return xs; },
+                (xs, ys) => { ys.ForEach(y => xs.Enqueue(y)); return xs; },
+                xs => head(xs.HeadUnsafe),
+                xs => xs.TailUnsafe);
+
+        /// <summary>
+        /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned. The case has the predicate <c>xs.Count &gt; 0</c>. If iterating through a list elementwise, this function performs much faster than getting the tail of a list via <see cref="List{T}.GetRange(int, int)"/>, since it doesn't create shallow copies of the whole list each iteration.
+        /// A case like this generally means that the overall pattern is a generalization of <see cref="Enumerable.Select{TSource, TResult}(IEnumerable{TSource}, Func{TSource, TResult})"/>.
+        /// </summary>
+        /// <typeparam name="TIn">The type of the input object.</typeparam>
+        /// <typeparam name="TOut">The type of the output object.</typeparam>
+        /// <param name="p">The pattern to which to append.</param>
+        /// <param name="head">The function which is applied to each element created by this pattern.</param>
+        public static Pattern<Lst<TIn>, Queue<TOut>> MatchTailRecModuloCons<TIn, TOut>(
+            this Pattern<Lst<TIn>, Queue<TOut>> p,
+            Func<TIn, TOut> head)
+            => Pattern<Lst<TIn>, TOut>.MatchTailRec(
+                p,
+                xs => xs.Count > 0,
+                x => new Queue<TOut>(new TOut[] { x }),
+                (x, xs) => { xs.Enqueue(x); return xs; },
+                (xs, ys) => { ys.ForEach(y => xs.Enqueue(y)); return xs; },
+                xs => head(xs.HeadUnsafe),
+                xs => xs.TailUnsafe);
 
         /// <summary>
         /// Appends a new, tail-recursive case modulo cons to the end of a <see cref="Pattern{TIn, TOut}"/>. The calling object will be modified and <c>this</c> will be returned.
@@ -321,17 +376,22 @@ namespace Nordril.Functional
 
                 while (true)
                 {
+                    //Console.WriteLine("inside loop");
+                    caseMatched = false;
 
                     using (var predEnum = pattern.predicates.GetEnumerator())
                     using (var actionEnum = pattern.actions.GetEnumerator())
                     using (var tailRecEnum = pattern.tailRecActions.GetEnumerator())
                     {
-                        caseMatched = false;
+                        //Console.WriteLine("inside using");
 
                         //Go through all cases with the current input.
                         while (!caseMatched && predEnum.MoveNext() && actionEnum.MoveNext() && tailRecEnum.MoveNext())
+                        {
+                            //Console.WriteLine("in case");
                             while (predEnum.Current(input))
                             {
+                                //Console.WriteLine("predenum current");
                                 //We matched a tail-recursive case -> call the tail recursive action and continue.
                                 if (tailRecEnum.Current != null)
                                 {
@@ -348,11 +408,13 @@ namespace Nordril.Functional
                                     return results;
                                 }
                             }
+                        }
                     }
 
                     //If we haven't matched any case, we return with the default pattern.
                     if (!caseMatched)
                     {
+                        Console.WriteLine("no case matched");
                         results = combineResults(results, pattern.defaultPattern(input));
                         return results;
                     }

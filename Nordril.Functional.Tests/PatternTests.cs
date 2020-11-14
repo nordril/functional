@@ -239,5 +239,71 @@ namespace Nordril.Functional.Tests
 
             Assert.Equal(count, actual);
         }
+
+        [Theory]
+        [InlineData(new int[0])]
+        [InlineData(new int[] { 3 })]
+        [InlineData(new int[] { 3, 4, 2, 1 })]
+        public void TailRecModuloConsMap2Test(int[] xs)
+        {
+            var p = Pattern
+                .Match<Lst<int>, Queue<int>>(xs => xs.Count == 0, _ => new Queue<int>())
+                .MatchTailRecModuloCons(x => x * 2);
+
+            var actual = p.Run(xs.MakeLst());
+
+            Assert.Equal(xs.Select(x => x * 2), actual);
+        }
+
+        [Theory]
+        [InlineData(new int[0])]
+        [InlineData(new int[] { 3 })]
+        [InlineData(new int[] { 3, 4, 2, 1 })]
+        public void TailRecModuloConsMap3Test(int[] xs)
+        {
+            var p = Pattern
+                .Match<Lst<int>, Queue<int>>(xs => xs.Count == 0, _ => new Queue<int>(new int[] { 9, 10, 11}))
+                .MatchTailRecModuloCons(x => x * 2);
+
+            var actual = p.Run(xs.MakeLst());
+
+            Assert.Equal(xs.Select(x => x * 2).Concat(new int[] { 9, 10, 11 }), actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        [InlineData(1_000)]
+        [InlineData(10_000)]
+        [InlineData(100_000)]
+        [InlineData(1_000_000)]
+        public void TailRecModuloConsMapPerformanceTest(int count)
+        {
+            var p = Pattern
+                .Match<Lst<int>, Queue<int>>(xs => xs.Count == 0, _ => new Queue<int>())
+                .MatchTailRecModuloCons(x => x * 2);
+
+            var xs = Enumerable.Repeat(1, count).MakeLst();
+
+            var actual = p.Run(xs);
+
+            Assert.Equal(xs.Select(x => x * 2), actual);
+        }
+
+        [Theory]
+        [InlineData(new int[0])]
+        [InlineData(new int[] { 3 })]
+        [InlineData(new int[] { 3, 4, 2, 1 })]
+        public void TailRecModuloConsMap4Test(int[] xs)
+        {
+            var p = Pattern
+                .Match<Lst<int>, Queue<int>>(xs => xs.Count == 0, _ => new Queue<int>(new int[] { 9, 10, 11 }))
+                .MatchTailRecModuloCons(x => x.Count > 0, x => x * 2);
+
+            var actual = p.Run(xs.MakeLst());
+
+            Assert.Equal(xs.Select(x => x * 2).Concat(new int[] { 9, 10, 11 }), actual);
+        }
     }
 }
