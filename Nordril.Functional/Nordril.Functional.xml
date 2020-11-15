@@ -13899,6 +13899,13 @@
             </summary>
             <exception cref="T:Nordril.Functional.PatternMatchException">If there's no result and only errors.</exception>
         </member>
+        <member name="M:Nordril.Functional.Results.Result`1.TryGetValue(`0@)">
+            <summary>
+            Tries to get the value of this <see cref="T:Nordril.Functional.Results.Result`1"/>, if it exists. The result is true iff the <see cref="T:Nordril.Functional.Results.Result`1"/> contains a value.
+            </summary>
+            <param name="value">The value of the result if present, <c>default</c> otherwise.</param>
+            <returns></returns>
+        </member>
         <member name="M:Nordril.Functional.Results.Result`1.Errors">
             <summary>
             Returns the errors, if present. If there are no errors, a <see cref="T:Nordril.Functional.PatternMatchException"/> is thrown.

@@ -38,6 +38,16 @@ namespace Nordril.Functional.Results
         public T Value() => InnerResult.Right();
 
         /// <summary>
+        /// Tries to get the value of this <see cref="Result{T}"/>, if it exists. The result is true iff the <see cref="Result{T}"/> contains a value.
+        /// </summary>
+        /// <param name="value">The value of the result if present, <c>default</c> otherwise.</param>
+        /// <returns></returns>
+        public bool TryGetValue(out T value)
+        {
+            return InnerResult.TryGetValue(out _, out value) == EitherTag.Left;
+        }
+
+        /// <summary>
         /// Returns the errors, if present. If there are no errors, a <see cref="PatternMatchException"/> is thrown.
         /// </summary>
         /// <exception cref="PatternMatchException">If there are no errors.</exception>
