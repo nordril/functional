@@ -44,7 +44,7 @@ namespace Nordril.Functional.Results
         /// <returns></returns>
         public bool TryGetValue(out T value)
         {
-            return InnerResult.TryGetValue(out _, out value) == EitherTag.Left;
+            return InnerResult.TryGetValue(out _, out value) == EitherTag.Right;
         }
 
         /// <summary>
