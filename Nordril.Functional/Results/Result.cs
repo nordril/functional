@@ -122,7 +122,7 @@ namespace Nordril.Functional.Results
         /// </summary>
         /// <param name="result">The value.</param>
         public static Result<T> Ok(T result)
-            => new Result<T>(Either<IList<Error>, T>.FromRight(result), ResultClass.Ok);
+            => new (Either<IList<Error>, T>.FromRight(result), ResultClass.Ok);
 
         /// <summary>
         /// Creates an error-result from a list of errors.
@@ -130,7 +130,7 @@ namespace Nordril.Functional.Results
         /// <param name="errors">The list of errors.</param>
         /// <param name="resultClass">The class of the result.</param>
         public static Result<T> WithErrors(IEnumerable<Error> errors, ResultClass resultClass)
-            => new Result<T>(Either<IList<Error>, T>.FromLeft(new List<Error>(errors)), resultClass);
+            => new (Either<IList<Error>, T>.FromLeft(new List<Error>(errors)), resultClass);
 
         /// <summary>
         /// Creates an error-result from an error.
@@ -138,7 +138,7 @@ namespace Nordril.Functional.Results
         /// <param name="error">The error.</param>
         /// <param name="resultClass">The class of the result.</param>
         public static Result<T> WithError(Error error, ResultClass resultClass)
-            => new Result<T>(Either<IList<Error>, T>.FromLeft(new List<Error> { error }), resultClass);
+            => new (Either<IList<Error>, T>.FromLeft(new List<Error> { error }), resultClass);
 
         /// <summary>
         /// Creates a <see cref="Result.Ok{T}(T)"/> if <paramref name="isOk"/> is true, using <paramref name="factory"/>,
@@ -181,7 +181,7 @@ namespace Nordril.Functional.Results
 
         /// <inheritdoc />
         public Result<T> MonoMap(Func<T, T> f)
-            => new Result<T>((Either<IList<Error>, T>)InnerResult.Map(f), ResultClass);
+            => new ((Either<IList<Error>, T>)InnerResult.Map(f), ResultClass);
 
         /// <inheritdoc />
         public IMonad<TResult> Bind<TResult>(Func<T, IMonad<TResult>> f)
@@ -313,7 +313,7 @@ namespace Nordril.Functional.Results
         /// <typeparam name="T">The type of the value.</typeparam>
         public static Result<T> Ok<T>()
             where T : new()
-            => new Result<T>(new Either<IList<Error>, T>(new T(), TagRight.Value));
+            => new (new Either<IList<Error>, T>(new T(), TagRight.Value));
 
         /// <summary>
         /// Creates an error-result from a list of errors.
@@ -330,11 +330,11 @@ namespace Nordril.Functional.Results
         /// <param name="error">The error.</param>
         /// <param name="resultClass">The class of the result.</param>
         public static Result<T> WithError<T>(Error error, ResultClass resultClass)
-            => new Result<T>(Either<IList<Error>, T>.FromLeft(new List<Error> { error }), resultClass);
+            => new (Either<IList<Error>, T>.FromLeft(new List<Error> { error }), resultClass);
 
         /// <summary>
-        /// Creates a <see cref="Result.Ok{T}(T)"/> if <paramref name="isOk"/> is true, using <paramref name="factory"/>,
-        /// and <see cref="Result.WithErrors{T}(IEnumerable{Error}, ResultClass)"/> otherwise.
+        /// Creates a <see cref="Ok{T}(T)"/> if <paramref name="isOk"/> is true, using <paramref name="factory"/>,
+        /// and <see cref="WithErrors{T}(IEnumerable{Error}, ResultClass)"/> otherwise.
         /// </summary>
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="isOk">Whether the result is OK.</param>

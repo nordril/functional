@@ -89,7 +89,7 @@ namespace Nordril.Functional.Data
         public IApplicative<TResult> Ap<TResult>(IApplicative<Func<TValue, TResult>> f)
             => new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e, s) =>
             {
-                if (f == null || !(f is Rws<TEnvironment, TOutput, TMonoid, TState, Func<TValue, TResult>> fThat))
+                if (f == null || f is not Rws<TEnvironment, TOutput, TMonoid, TState, Func<TValue, TResult>> fThat)
                     throw new InvalidCastException();
 
                 var (a1, s1, w1) = runRws(e, s);
@@ -145,7 +145,7 @@ namespace Nordril.Functional.Data
              Func<TSource, TMiddle, TResult> resultSelector)
             where TMonoid : IMonoid<TOutput>
             =>
-            new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e,s) =>
+            new ((e,s) =>
             {
                 var (a1, s1, w1) = source.Run(e, s);
                 var (a2, s2, w2) = f(a1).Run(e, s1);
@@ -161,7 +161,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TState> Get<TEnvironment, TOutput, TMonoid, TState>()
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TState>((e,s) => (s,s,Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e,s) => (s,s,Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Returns the current state.
@@ -176,7 +176,7 @@ namespace Nordril.Functional.Data
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TState> Get<TEnvironment, TOutput, TMonoid, TState>(
             this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TState>((e, s) => (s, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (s, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Replaces the current state with a new one.
@@ -188,7 +188,7 @@ namespace Nordril.Functional.Data
         /// <param name="value">The new state.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Put<TEnvironment, TOutput, TMonoid, TState>(TState value)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Replaces the current state with a new one.
@@ -204,7 +204,7 @@ namespace Nordril.Functional.Data
         public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Put<TEnvironment, TOutput, TMonoid, TState>(
             this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt, TState value)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (new Unit(), value, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Modifies the current state by running a function on it.
@@ -216,7 +216,7 @@ namespace Nordril.Functional.Data
         /// <param name="f">The function to apply to the state.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Modify<TEnvironment, TOutput, TMonoid, TState>(Func<TState, TState> f)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Modifies the current state by running a function on it.
@@ -233,7 +233,7 @@ namespace Nordril.Functional.Data
             this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt,
             Func<TState, TState> f)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (new Unit(), f(s), Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Returns the current environment.
@@ -244,7 +244,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment> GetEnvironment<TEnvironment, TOutput, TMonoid, TState>()
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment>((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Returns the current environment.
@@ -259,7 +259,7 @@ namespace Nordril.Functional.Data
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment> GetEnvironment<TEnvironment, TOutput, TMonoid, TState>(
             this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TEnvironment>((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e, s) => (e, s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Returns the result to of a function which takes the state as an input. Also known as <em>reader</em>.
@@ -272,7 +272,7 @@ namespace Nordril.Functional.Data
         /// <param name="f">The function to run.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TResult> With<TEnvironment, TOutput, TMonoid, TState, TResult>(Func<TEnvironment, TResult> f)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e,s) => (f(e), s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
+            => new ((e,s) => (f(e), s, Monoid.NeutralUnsafe<TOutput, TMonoid>()));
 
         /// <summary>
         /// Returns a <see cref="Reader{TEnvironment, TValue}"/> which runs <paramref name="r"/>, but first applies <paramref name="f"/> to the environment, effectively running a <see cref="Reader"/> in a modified environment.
@@ -286,7 +286,7 @@ namespace Nordril.Functional.Data
         /// <param name="r">The <see cref="Reader"/> to run in the modified environment.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, TResult> Local<TEnvironment, TOutput, TMonoid, TState, TResult>(Func<TEnvironment, TEnvironment> f, Rws<TEnvironment, TOutput, TMonoid, TState, TResult> r)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, TResult>((e,s) => r.Run(f(e), s));
+            => new ((e,s) => r.Run(f(e), s));
 
         /// <summary>
         /// Stores a new output.
@@ -298,7 +298,7 @@ namespace Nordril.Functional.Data
         /// <param name = "output" > The output to store and return.</param>
         public static Rws<TEnvironment, TOutput, TMonoid, TState, Unit> Tell<TEnvironment, TOutput, TMonoid, TState>(TOutput output)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e,s) => (new Unit(), s, output));
+            => new ((e,s) => (new Unit(), s, output));
 
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace Nordril.Functional.Data
             this RwsCxt<TEnvironment, TOutput, TMonoid, TState> _cxt,
             TOutput output)
             where TMonoid : IMonoid<TOutput>
-            => new Rws<TEnvironment, TOutput, TMonoid, TState, Unit>((e, s) => (new Unit(), s, output));
+            => new ((e, s) => (new Unit(), s, output));
 
         /// <summary>
         /// Returns the result of the computation as well as the write-output.

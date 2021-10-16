@@ -250,7 +250,7 @@ namespace Nordril.Functional
         /// <param name="predicate">The predicate which returns true if the case applies.</param>
         /// <param name="action">The function that should be applied to the input object if the case applies.</param>
         public static Pattern<TIn, TOut> StartMatch(Func<TIn, bool> predicate, Func<TIn, TOut> action)
-            => new Pattern<TIn, TOut>(new[] { predicate }, new[] { action }, new Func<TIn, TIn>[] { null }, null);
+            => new (new[] { predicate }, new[] { action }, new Func<TIn, TIn>[] { null }, null);
 
         /// <summary>
         /// Creates a <see cref="Pattern{TIn, TOut}"/> out of a sequence of cases.
@@ -459,6 +459,6 @@ namespace Nordril.Functional
 
         /// <inheritdoc />
         public Pattern<TIn, TOut> Copy()
-            => new Pattern<TIn, TOut>(predicates, actions, tailRecActions, defaultPattern);
+            => new (predicates, actions, tailRecActions, defaultPattern);
     }
 }

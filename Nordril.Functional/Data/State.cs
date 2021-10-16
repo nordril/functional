@@ -106,7 +106,7 @@ namespace Nordril.Functional.Data
             (this State<TState, TSource> source,
              Func<TSource, State<TState, TMiddle>> f,
              Func<TSource, TMiddle, TResult> resultSelector) =>
-            new State<TState, TResult>(s =>
+            new (s =>
             {
                 var (v1, s1) = source.Run(s);
                 var (v2, s2) = f(v1).Run(s1);
@@ -117,7 +117,7 @@ namespace Nordril.Functional.Data
         /// Returns the current state.
         /// </summary>
         /// <typeparam name="TState">The type of the state.</typeparam>
-        public static State<TState, TState> Get<TState>() => new State<TState, TState>(s => (s, s));
+        public static State<TState, TState> Get<TState>() => new (s => (s, s));
 
 
         /// <summary>
@@ -127,14 +127,14 @@ namespace Nordril.Functional.Data
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="_cxt">The context to fix the type variables.</param>
         [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
-        public static State<TState, TState> Get<TState>(this StateCxt<TState> _cxt) => new State<TState, TState>(s => (s, s));
+        public static State<TState, TState> Get<TState>(this StateCxt<TState> _cxt) => new(s => (s, s));
 
         /// <summary>
         /// Replaces the current state with a new one.
         /// </summary>
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="value">The new state.</param>
-        public static State<TState, Unit> Put<TState>(TState value) => new State<TState, Unit>(_ => (new Unit(), value));
+        public static State<TState, Unit> Put<TState>(TState value) => new(_ => (new Unit(), value));
 
         /// <summary>
         /// Replaces the current state with a new one.
@@ -144,14 +144,14 @@ namespace Nordril.Functional.Data
         /// <param name="_cxt">The context to fix the type variables.</param>
         /// <param name="value">The new state.</param>
         [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
-        public static State<TState, Unit> Put<TState>(this StateCxt<TState> _cxt, TState value) => new State<TState, Unit>(_ => (new Unit(), value));
+        public static State<TState, Unit> Put<TState>(this StateCxt<TState> _cxt, TState value) => new(_ => (new Unit(), value));
 
         /// <summary>
         /// Modifies the current state by running a function on it.
         /// </summary>
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="f">The function to apply to the state.</param>
-        public static State<TState, Unit> Modify<TState>(Func<TState, TState> f) => new State<TState, Unit>(s => (new Unit(), f(s)));
+        public static State<TState, Unit> Modify<TState>(Func<TState, TState> f) => new(s => (new Unit(), f(s)));
 
         /// <summary>
         /// Modifies the current state by running a function on it.
@@ -161,7 +161,7 @@ namespace Nordril.Functional.Data
         /// <param name="_cxt">The context to fix the type variables.</param>
         /// <param name="f">The function to apply to the state.</param>
         [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "type tag")]
-        public static State<TState, Unit> Modify<TState>(this StateCxt<TState> _cxt, Func<TState, TState> f) => new State<TState, Unit>(s => (new Unit(), f(s)));
+        public static State<TState, Unit> Modify<TState>(this StateCxt<TState> _cxt, Func<TState, TState> f) => new (s => (new Unit(), f(s)));
 
         /// <summary>
         /// Runs the state function with an initial state and returns the result, discarding the final state.
@@ -190,5 +190,14 @@ namespace Nordril.Functional.Data
         /// <param name="s">The state to run.</param>
         public static string RunStringBuilder<TResult>(this State<StringBuilder, TResult> s)
             => s.Run(new StringBuilder()).finalState.ToString();
+
+        /// <summary>
+        /// Tries to cast a <see cref="IFunctor{TSource}"/> to a <see cref="State{TState, TResult}"/> via an explicit cast.
+        /// Convenience method.
+        /// </summary>
+        /// <typeparam name="T">The type of the value contained in the functor.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="f">The functor to cast to a maybe.</param>
+        public static State<TState, T> ToState<T, TState>(this IFunctor<T> f) => (State<TState, T>)f;
     }
 }

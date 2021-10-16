@@ -3815,6 +3815,31 @@
             <param name="acc">The initial accumulator.</param>
             <param name="f">The folding function taking the aggregator and a sequence-element, and returning a monadic accumulator-value.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.MonadExtensions.UnfoldM``1(Nordril.Functional.Category.IMonad{Nordril.Functional.Data.Maybe{``0}})">
+            <summary>
+            A monadic <see cref="M:Nordril.Functional.CollectionExtensions.Unfold``2(``0,System.Func{``0,Nordril.Functional.Data.Maybe{System.ValueTuple{``0,``1}}})"/> which generates a sequence each time the <paramref name="seed"/>-value evaluates to <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.<br />
+            Equivalent to:
+            <code>
+            while (seed().TryGetValue(_, y)) { yield return y; }
+            </code>
+            </summary>
+            <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+            <param name="seed">The monadic seed-value.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.MonadExtensions.WhileM``1(Nordril.Functional.Category.IMonad{System.Boolean},Nordril.Functional.Category.IMonad{``0})">
+            <summary>
+            Runs <paramref name="condition"/> repeatedly as long as it returns <c>true</c>, and runs <paramref name="body"/> each time, collecting the results.<br />
+            Equivalent to:
+            <code>
+            while (condition()) {
+                yield return body();
+            }
+            </code>
+            </summary>
+            <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+            <param name="condition">The monadic condition.</param>
+            <param name="body">The monadic body.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IMonadMorph`4">
             <summary>
             A functor in the category of monads which offers the counterpart to <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)"/>.
@@ -10898,6 +10923,15 @@
             </summary>
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="s">The state to run.</param>
+        </member>
+        <member name="M:Nordril.Functional.Data.State.ToState``2(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Data.State`2"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <typeparam name="TState">The type of the state.</typeparam>
+            <param name="f">The functor to cast to a maybe.</param>
         </member>
         <member name="T:Nordril.Functional.Data.StateCxt`1">
             <summary>

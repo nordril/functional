@@ -17,7 +17,7 @@ namespace Nordril.Functional
         /// <param name="to">The last element to return.</param>
         public static IEnumerable<T> To<T>(this T from, T to) where T : Enum
         {
-            var cur = from;
+            //var cur = from;
             var fromInt = (int)(object)from;
             var toInt = (int)(object)to;
 

@@ -266,7 +266,7 @@ namespace Nordril.Functional.Data
 
         /// <inheritdoc />
         public Lst<T> Filter(Func<T, bool> f)
-            => new Lst<T>(LocalView().Where(f));
+            => new(LocalView().Where(f));
 
         /// <inheritdoc />
         public Maybe<Lst<T>> Semifilter(Func<T, bool> f)
@@ -282,7 +282,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public IAlternative<T> Alt(IAlternative<T> x)
         {
-            if (x == null || !(x is IEnumerable<T> xList))
+            if (x == null || x is not IEnumerable<T> xList)
                 throw new InvalidCastException();
 
             return AppendRange(xList);
@@ -308,7 +308,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
         {
-            if (f == null || !(f is IEnumerable<Func<T, Task<TResult>>> functions))
+            if (f == null || f is not IEnumerable<Func<T, Task<TResult>>> functions)
                 throw new InvalidCastException();
 
             var ys = LocalView();
@@ -341,7 +341,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (!(obj is IList<T> that))
+            if (obj is not IList<T> that)
                 return false;
 
             return Equals(that);
@@ -394,10 +394,10 @@ namespace Nordril.Functional.Data
 
     internal class ConcurrentList<T> : IEnumerable<T>
     {
-        private readonly ReaderWriterLock @lock = new ReaderWriterLock();
-        private readonly object usersLock = new object();
-        private readonly SortedDictionary<int, int> startIncls = new SortedDictionary<int, int>();
-        private readonly SortedDictionary<int, int> endExcls = new SortedDictionary<int, int>();
+        private readonly ReaderWriterLock @lock = new();
+        private readonly object usersLock = new();
+        private readonly SortedDictionary<int, int> startIncls = new();
+        private readonly SortedDictionary<int, int> endExcls = new();
 
         private readonly List<T> list;
 
@@ -627,7 +627,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="xs">The elements of the sequence.</param>
-        public static Lst<T> MakeLst<T>(this IEnumerable<T> xs) => new Lst<T>(xs);
+        public static Lst<T> MakeLst<T>(this IEnumerable<T> xs) => new(xs);
 
         /// <summary>
         /// Creates a new <see cref="Lst{T}"/> out of a sequence, with a custom <see cref="IEqualityComparer{T}"/> for equality-checking.
@@ -635,14 +635,14 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="xs">The elements of the sequence.</param>
         /// <param name="comparer">The comparer to use.</param>
-        public static Lst<T> MakeLst<T>(this IEnumerable<T> xs, IEqualityComparer<T> comparer) => new Lst<T>(xs, comparer);
+        public static Lst<T> MakeLst<T>(this IEnumerable<T> xs, IEqualityComparer<T> comparer) => new(xs, comparer);
 
         /// <summary>
         /// Creates a new <see cref="Lst{T}"/> out of a sequence.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="xs">The elements of the sequence.</param>
-        public static Lst<T> Make<T>(params T[] xs) => new Lst<T>(xs);
+        public static Lst<T> Make<T>(params T[] xs) => new(xs);
 
         /// <summary>
         /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="Lst{T}"/>.

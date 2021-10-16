@@ -145,13 +145,13 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Returns a new maybe containing new value.
         /// </summary>
-        public static Maybe<T> Nothing() => new Maybe<T>(false, default);
+        public static Maybe<T> Nothing() => new(false, default);
 
         /// <summary>
         /// Returns a new maybe containing a value.
         /// </summary>
         /// <param name="value">The value to store in the maybe.</param>
-        public static Maybe<T> Just(T value) => new Maybe<T>(true, value);
+        public static Maybe<T> Just(T value) => new(true, value);
 
         /// <inheritdoc />
         public IMonadZero<T> Mzero() => Nothing();

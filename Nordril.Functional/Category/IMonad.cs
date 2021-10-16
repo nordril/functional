@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Nordril.Functional.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nordril.Functional.Category.Linq;
 
 namespace Nordril.Functional.Category
 {
@@ -124,6 +126,65 @@ namespace Nordril.Functional.Category
             {
                 return (TMonadAcc)acc.Bind(acc2 => f(x, acc2));
             });
+        }
+
+        /// <summary>
+        /// A monadic <see cref="CollectionExtensions.Unfold{TSeed, TResult}(TSeed, Func{TSeed, Maybe{ValueTuple{TSeed, TResult}}})"/> which generates a sequence each time the <paramref name="seed"/>-value evaluates to <see cref="Maybe.Just{T}(T)"/>.<br />
+        /// Equivalent to:
+        /// <code>
+        /// while (seed().TryGetValue(_, y)) { yield return y; }
+        /// </code>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+        /// <param name="seed">The monadic seed-value.</param>
+        public static IMonad<IEnumerable<TSource>> UnfoldM<TSource>(this IMonad<Maybe<TSource>> seed)
+        {
+            IMonad<IEnumerable<TSource>> go()
+            {
+                var q =
+                    from x in seed
+                    from result in x.TryGetValue(default, out var y)
+                        ? (IMonad<IEnumerable<TSource>>)go().Map(zs => zs.Prepend(y))
+                        : (IMonad<IEnumerable<TSource>>)
+                            Applicative.PureUnsafe((IEnumerable<TSource>)Array.Empty<TSource>(), seed.GetType())
+                    select result;
+
+                return q;
+            };
+
+            return go();
+        }
+
+        /// <summary>
+        /// Runs <paramref name="condition"/> repeatedly as long as it returns <c>true</c>, and runs <paramref name="body"/> each time, collecting the results.<br />
+        /// Equivalent to:
+        /// <code>
+        /// while (condition()) {
+        ///     yield return body();
+        /// }
+        /// </code>
+        /// </summary>
+        /// <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+        /// <param name="condition">The monadic condition.</param>
+        /// <param name="body">The monadic body.</param>
+        public static IMonad<IEnumerable<TSource>> WhileM<TSource>(this IMonad<bool> condition, IMonad<TSource> body)
+        {
+            IMonad<IEnumerable<TSource>> go()
+            {
+                var q =
+                    from conditionResult in condition
+                    from results in conditionResult
+                        ? from bodyResult in body
+                          from rest in go()
+                          select rest.Prepend(bodyResult)
+                        : (IMonad<IEnumerable<TSource>>)
+                            Applicative.PureUnsafe((IEnumerable<TSource>)Array.Empty<TSource>(), condition.GetType())
+                    select results;
+
+                return q;
+            }
+
+            return go();
         }
     }
 }

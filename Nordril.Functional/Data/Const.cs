@@ -97,7 +97,7 @@ namespace Nordril.Functional.Data
         /// </summary>
         public Const<TMonoid, TReal, TPhantom> Remember<TMonoid>()
             where TMonoid : IMonoid<TReal>
-            => new Const<TMonoid, TReal, TPhantom>(RealValue);
+            => new (RealValue);
 
         /// <summary>
         /// Creates a new <see cref="Const{TMonoid, TReal, TPhantom}"/> by adding monoid-information and also changing the type of the real value.
@@ -107,7 +107,7 @@ namespace Nordril.Functional.Data
         /// <param name="f">The function to map the real value.</param>
         public Const<TMonoid, TRealResult, TPhantom> Remember<TMonoid, TRealResult>(Func<TReal, TRealResult> f)
             where TMonoid : IMonoid<TRealResult>
-            => new Const<TMonoid, TRealResult, TPhantom>(f(RealValue));
+            => new (f(RealValue));
     }
 
     /// <summary>
@@ -187,13 +187,13 @@ namespace Nordril.Functional.Data
         /// <summary>
         /// Creates a new <see cref="Const{TReal, TPhantom}"/> which does not have the monoid-information.
         /// </summary>
-        public Const<TReal, TPhantom> Forget() => new Const<TReal, TPhantom>(RealValue);
+        public Const<TReal, TPhantom> Forget() => new (RealValue);
 
         /// <summary>
         /// Creates a new <see cref="Const{TReal, TPhantom}"/> which does not have the monoid-information.
         /// </summary>
         /// <typeparam name="TRealResult">The type of the resultant real value.</typeparam>
-        public Const<TRealResult, TPhantom> Forget<TRealResult>(Func<TReal, TRealResult> f) => new Const<TRealResult, TPhantom>(f(RealValue));
+        public Const<TRealResult, TPhantom> Forget<TRealResult>(Func<TReal, TRealResult> f) => new (f(RealValue));
     }
 
     /// <summary>

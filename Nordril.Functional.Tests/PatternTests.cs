@@ -44,7 +44,7 @@ namespace Nordril.Functional.Tests
         [Fact]
         public void EmptyPatternThrowsExceptionTest()
         {
-            var p = Pattern.MatchMany(new (Func<int, bool>, Func<int, int>)[0]);
+            var p = Pattern.MatchMany(Array.Empty<(Func<int, bool>, Func<int, int>)>());
 
             Assert.Throws<PatternMatchException>(() => p.Run(4));
         }

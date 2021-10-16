@@ -207,7 +207,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (!(obj is IList<T> that))
+            if (obj is not IList<T> that)
                 return false;
 
             return Equals(that);
@@ -271,7 +271,7 @@ namespace Nordril.Functional.Data
         /// <inheritdoc />
         public async Task<IAsyncApplicative<TResult>> ApAsync<TResult>(IApplicative<Func<T, Task<TResult>>> f)
         {
-            if (f == null || !(f is IEnumerable<Func<T, Task<TResult>>> functions))
+            if (f == null || f is not IEnumerable<Func<T, Task<TResult>>> functions)
                 throw new InvalidCastException();
 
             var ys = ListCoalesce();
@@ -411,7 +411,7 @@ namespace Nordril.Functional.Data
         /// <typeparam name="T">The type of elements in the list.</typeparam>
         /// <param name="elements">The list of elements.</param>
         public static FuncList<T> Make<T>(params T[] elements)
-            => new FuncList<T>(elements);
+            => new (elements);
 
         /// <summary>
         /// Unsafely casts an <see cref="IFunctor{TSource}"/> to an <see cref="IFuncList{T}"/>.
