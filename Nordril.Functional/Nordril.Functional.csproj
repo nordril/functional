@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>25.3.0.0</AssemblyVersion>
+    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
+    <AssemblyVersion>26.0.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nordril Technologies d.o.o.</Authors>
     <Company>Nordril Technologies d.o.o.</Company>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <Version>25.3</Version>
+    <Version>26.0</Version>
     <Description>Function programming goodness: algebraic structures, Maybe, Either, Unit, State, Writer, Functor, Monad, Monoid, Lenses, and more.</Description>
-    <FileVersion>25.3.0.0</FileVersion>
+    <FileVersion>26.0.0.0</FileVersion>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/nordril/functional.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/nordril/functional/</PackageProjectUrl>
@@ -22,13 +22,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\H\source\repos\functional\Nordril.Functional\Nordril.Functional.xml</DocumentationFile>
+    <DocumentationFile>Nordril.Functional\Nordril.Functional.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <LangVersion>latest</LangVersion>
-    <DocumentationFile>C:\Users\H\source\repos\functional\Nordril.Functional\Nordril.Functional.xml</DocumentationFile>
+    <DocumentationFile>Nordril.Functional\Nordril.Functional.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,7 +47,7 @@
     <DefineConstants>NETCORE</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0'">
     <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
 
