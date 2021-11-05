@@ -77,6 +77,7 @@ namespace Nordril.Functional.Category
         /// <typeparam name="TResult">The type of the result value.</typeparam>
         /// <param name="task">The task on whose result to run <see cref="IMonad{TSource}.Bind{TResult}(Func{TSource, IMonad{TResult}})"/></param>
         /// <param name="f">The function to apply to the monad.</param>
+        /// <param name="token">The cancellation token.</param>
         internal static async Task<IAsyncMonad<TResult>> BindAsync<TMonad, TSource, TResult>(this Task<TMonad> task, Func<Type, TSource, Task<IAsyncMonad<TResult>>> f, CancellationToken token)
             where TMonad : IAsyncMonad<TSource>
         {
