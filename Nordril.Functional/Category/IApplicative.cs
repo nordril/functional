@@ -111,7 +111,16 @@ namespace Nordril.Functional.Category
             where TResult : IApplicative<TSource>
             => (TResult)PureUnsafe(x, typeof(TResult));
 
-        internal static IApplicative<TSource> PureUnsafe<TSource>(this TSource x, Type tApplicative)
+        /// <summary>
+        /// Wraps an object in an applicative via <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/>.
+        /// The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> with the this-pointer being null is forced.
+        /// If the requested applicative uses the this-pointer in <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/>, this will result in a <see cref="NullReferenceException"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the object to wrap.</typeparam>
+        /// <param name="tApplicative">The type of the applicative to return.</param>
+        /// <param name="x">The value to wrap.</param>
+        /// <exception cref="NullReferenceException">If <see cref="IApplicative{TSource}.Pure{TResult}(TResult)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
+        public static IApplicative<TSource> PureUnsafe<TSource>(this TSource x, Type tApplicative)
         {
             var instancePure = tApplicative.GetMember(
                 nameof(IApplicative<object>.Pure),
@@ -328,5 +337,13 @@ namespace Nordril.Functional.Category
 
             return await go(xs);
         }
+
+        /// <summary>
+        /// Tries to cast a <see cref="IFunctor{TSource}"/> to a <see cref="IApplicative{TSource}"/> via an explicit cast.
+        /// Convenience method.
+        /// </summary>
+        /// <typeparam name="T">The type of the value contained in the functor.</typeparam>
+        /// <param name="f">The functor to cast to an <see cref="IApplicative{TSource}"/>.</param>
+        public static IApplicative<T> ToApplicative<T>(this IFunctor<T> f) => (IApplicative<T>)f;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Nordril.Functional.Category
@@ -17,6 +18,16 @@ namespace Nordril.Functional.Category
         /// <typeparam name="TResult">The type of the result</typeparam>
         /// <param name="f">The function to apply to the function.</param>
         Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<TSource, Task<TResult>> f);
+
+        /// <summary>
+        /// The asynchronous version of <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>.
+        /// The default implementation ignores the cancellation token.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result</typeparam>
+        /// <param name="f">The function to apply to the function.</param>
+        /// <param name="token">The cancellation token.</param>
+        Task<IAsyncFunctor<TResult>> MapAsync<TResult>(Func<TSource, Task<TResult>> f, CancellationToken token)
+            => MapAsync(f);
     }
 
     /// <summary>
@@ -35,6 +46,20 @@ namespace Nordril.Functional.Category
         {
             var m = await task;
             return await m.MapAsync(f);
+        }
+
+        /// <summary>
+        /// The asynchronous version of <see cref="IFunctor{TSource}.Map{TResult}(Func{TSource, TResult})"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source value.</typeparam>
+        /// <typeparam name="TResult">The type of the result value.</typeparam>
+        /// <param name="task">The source on whose result to run <see cref="IAsyncFunctor{TSource}.MapAsync{TResult}(Func{TSource, Task{TResult}})"/>.</param>
+        /// <param name="f">The function to apply.</param>
+        /// <param name="token">The cancellation token.</param>
+        public static async Task<IAsyncFunctor<TResult>> MapAsync<TSource, TResult>(this Task<IAsyncFunctor<TSource>> task, Func<TSource, Task<TResult>> f, CancellationToken token)
+        {
+            var m = await task;
+            return await m.MapAsync(f, token);
         }
     }
 }

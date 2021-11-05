@@ -121,11 +121,7 @@ namespace Nordril.Functional.Category
             where TMonadAcc : IMonad<TAcc>
         {
             var pureAcc = acc.PureUnsafe<TAcc, TMonadAcc>();
-
-            return xs.Aggregate(pureAcc, (acc, x) =>
-            {
-                return (TMonadAcc)acc.Bind(acc2 => f(x, acc2));
-            });
+            return xs.Aggregate(pureAcc, (acc, x) => (TMonadAcc)acc.Bind(acc2 => f(x, acc2)));
         }
 
         /// <summary>
@@ -186,5 +182,13 @@ namespace Nordril.Functional.Category
 
             return go();
         }
+
+        /// <summary>
+        /// Tries to cast a <see cref="IFunctor{TSource}"/> to a <see cref="IMonad{TSource}"/> via an explicit cast.
+        /// Convenience method.
+        /// </summary>
+        /// <typeparam name="T">The type of the value contained in the functor.</typeparam>
+        /// <param name="f">The functor to cast to an <see cref="IMonad{TSource}"/>.</param>
+        public static IMonad<T> ToMonad<T>(this IFunctor<T> f) => (IMonad<T>)f;
     }
 }

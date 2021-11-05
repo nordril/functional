@@ -2865,6 +2865,17 @@
             <param name="x">The value to wrap.</param>
             <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
         </member>
+        <member name="M:Nordril.Functional.Category.Applicative.PureUnsafe``1(``0,System.Type)">
+            <summary>
+            Wraps an object in an applicative via <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>.
+            The applicative in question does not have to posess a parameterless constuctor; instead, a call to <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> with the this-pointer being null is forced.
+            If the requested applicative uses the this-pointer in <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/>, this will result in a <see cref="T:System.NullReferenceException"/>.
+            </summary>
+            <typeparam name="TSource">The type of the object to wrap.</typeparam>
+            <param name="tApplicative">The type of the applicative to return.</param>
+            <param name="x">The value to wrap.</param>
+            <exception cref="T:System.NullReferenceException">If <see cref="M:Nordril.Functional.Category.IApplicative`1.Pure``1(``0)"/> of <typeparamref name="TResult"/> uses the this-pointer.</exception>
+        </member>
         <member name="M:Nordril.Functional.Category.Applicative.LiftA``3(System.Func{``0,``1,``2})">
             <summary>
             Lifts a binary function to take two applicative arguments.
@@ -2973,6 +2984,14 @@
             <returns>The sequence, traversed left to right, using the applicative combining operation at each step.</returns>
             <exception cref="T:System.NullReferenceException">If the applicative in question does not implement <see cref="M:Nordril.Functional.Category.Applicative.Pure``2(``0)"/> correctly and uses the this-pointer.</exception>
             <exception cref="T:System.InvalidCastException">If <typeparamref name="TResultList"/> and <typeparamref name="TResult"/> are incompatible.</exception>
+        </member>
+        <member name="M:Nordril.Functional.Category.Applicative.ToApplicative``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Category.IApplicative`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to an <see cref="T:Nordril.Functional.Category.IApplicative`1"/>.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IArrow`2">
             <summary>
@@ -3105,6 +3124,14 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to apply to the applicative.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.IAsyncApplicative`1.ApAsync``1(Nordril.Functional.Category.IApplicative{System.Func{`0,System.Threading.Tasks.Task{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>. The default implementation ignores the <see cref="T:System.Threading.CancellationToken"/>.
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to apply to the applicative.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.AsyncApplicative">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Category.IAsyncApplicative`1"/>.
@@ -3112,12 +3139,30 @@
         </member>
         <member name="M:Nordril.Functional.Category.AsyncApplicative.ApAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncApplicative{``0}},Nordril.Functional.Category.IApplicative{System.Func{``0,System.Threading.Tasks.Task{``1}}})">
             <summary>
-            The asynchronous version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
             </summary>
             <typeparam name="TSource">The type of the source.</typeparam>
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="x">The task which returns the source-applicative.</param>
             <param name="f">The function to apply to the applicative.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncApplicative.ApAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncApplicative{``0}},Nordril.Functional.Category.IApplicative{System.Func{``0,System.Threading.Tasks.Task{``1}}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IApplicative`1.Ap``1(Nordril.Functional.Category.IApplicative{System.Func{`0,``0}})"/>.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="x">The task which returns the source-applicative.</param>
+            <param name="f">The function to apply to the applicative.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncApplicative.ToAsyncApplicative``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Category.IAsyncApplicative`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to an <see cref="T:Nordril.Functional.Category.IAsyncApplicative`1"/>.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IAsyncFunctor`1">
             <summary>
@@ -3131,6 +3176,15 @@
             </summary>
             <typeparam name="TResult">The type of the result</typeparam>
             <param name="f">The function to apply to the function.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            The default implementation ignores the cancellation token.
+            </summary>
+            <typeparam name="TResult">The type of the result</typeparam>
+            <param name="f">The function to apply to the function.</param>
+            <param name="token">The cancellation token.</param>
         </member>
         <member name="T:Nordril.Functional.Category.AsyncFunctor">
             <summary>
@@ -3146,6 +3200,16 @@
             <param name="task">The source on whose result to run <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>.</param>
             <param name="f">The function to apply.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.AsyncFunctor.MapAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncFunctor{``0}},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            </summary>
+            <typeparam name="TSource">The type of the source value.</typeparam>
+            <typeparam name="TResult">The type of the result value.</typeparam>
+            <param name="task">The source on whose result to run <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>.</param>
+            <param name="f">The function to apply.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IAsyncMonad`1">
             <summary>
             An <see cref="T:Nordril.Functional.Category.IMonad`1"/> which supports asynchronous operations.
@@ -3159,10 +3223,30 @@
             <typeparam name="TResult">The type of the result.</typeparam>
             <param name="f">The function to apply to the monad.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.IAsyncMonad`1.BindAsync``1(System.Func{`0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>.
+            The default implementation ignores the cancellation token.
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="f">The function to apply to the monad.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.AsyncMonad">
             <summary>
             Extension methods for <see cref="T:Nordril.Functional.Category.IAsyncMonad`1"/>.
             </summary>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.MapAsync``3(System.Threading.Tasks.Task{``0},System.Func{``1,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IFunctor`1.Map``1(System.Func{`0,``0})"/>.
+            </summary>
+            <typeparam name="TMonad">The monad on which to bind.</typeparam>
+            <typeparam name="TSource">The type of the source value.</typeparam>
+            <typeparam name="TResult">The type of the result value.</typeparam>
+            <param name="task">The task on whose result to run <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/></param>
+            <param name="f">The function to apply to the monad.</param>
+            <param name="token">The cancellation token.</param>
         </member>
         <member name="M:Nordril.Functional.Category.AsyncMonad.BindAsync``3(System.Threading.Tasks.Task{``0},System.Func{``1,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``2}}})">
             <summary>
@@ -3173,6 +3257,97 @@
             <typeparam name="TResult">The type of the result value.</typeparam>
             <param name="task">The task on whose result to run <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/></param>
             <param name="f">The function to apply to the monad.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.BindAsync``3(System.Threading.Tasks.Task{``0},System.Func{System.Type,``1,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``2}}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>.
+            </summary>
+            <typeparam name="TMonad">The monad on which to bind.</typeparam>
+            <typeparam name="TSource">The type of the source value.</typeparam>
+            <typeparam name="TResult">The type of the result value.</typeparam>
+            <param name="task">The task on whose result to run <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/></param>
+            <param name="f">The function to apply to the monad.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.BindAsync``3(System.Threading.Tasks.Task{``0},System.Func{``1,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``2}}},System.Threading.CancellationToken)">
+            <summary>
+            The asynchronous version of <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/>.
+            </summary>
+            <typeparam name="TMonad">The monad on which to bind.</typeparam>
+            <typeparam name="TSource">The type of the source value.</typeparam>
+            <typeparam name="TResult">The type of the result value.</typeparam>
+            <param name="task">The task on whose result to run <see cref="M:Nordril.Functional.Category.IMonad`1.Bind``1(System.Func{`0,Nordril.Functional.Category.IMonad{``0}})"/></param>
+            <param name="f">The function to apply to the monad.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.WhileMAsync``1(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{System.Boolean}},System.Func{System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            Runs <paramref name="condition"/> repeatedly as long as it returns <c>true</c>, and runs <paramref name="body"/> each time, collecting the results.<br />
+            Equivalent to:
+            <code>
+            while (await condition())
+            {
+                yield return await body();
+            }
+            </code>
+            </summary>
+            <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+            <param name="condition">The asynchronous monadic function which computes the condition.</param>
+            <param name="body">The monadic body.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.WhileMAsync``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}},System.Func{``0,System.Boolean},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``1}}},System.Threading.CancellationToken)">
+            <summary>
+            Runs <paramref name="computeCondition"/> repeatedly as long as <c>enterBody(computeCondition())</c>returns <c>true</c>, and runs <paramref name="body"/> each time, collecting the results.<br />
+            Equivalent to:
+            <code>
+            do
+            {
+               var cond = await condition();
+               if (enterBody(cond))
+                  yield return await body(cond);
+               else
+                  break;
+            }
+            </code>
+            </summary>
+            <typeparam name="TCondition">The type of the condition</typeparam>
+            <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+            <param name="computeCondition">The asynchronous monadic function which computes the condition.</param>
+            <param name="enterBody"></param>
+            <param name="body">The monadic body.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.AggregateMAsync``3(System.Collections.Generic.IEnumerable{``0},``1,System.Func{``0,``1,System.Threading.Tasks.Task{``2}},System.Threading.CancellationToken)">
+            <summary>
+            A asynchronous, monadic version of <see cref="M:System.Linq.Enumerable.Aggregate``3(System.Collections.Generic.IEnumerable{``0},``1,System.Func{``1,``0,``1},System.Func{``1,``2})"/> which aggregates a sequence <paramref name="xs"/> with a monadic function <paramref name="f"/> and an accumulator <paramref name="acc"/>.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TAcc">The accumulator type.</typeparam>
+            <typeparam name="TMonadAcc"><typeparamref name="TAcc"/>, wrapped in an <see cref="T:Nordril.Functional.Category.IAsyncMonad`1"/>.</typeparam>
+            <param name="xs">The sequence to aggregate.</param>
+            <param name="acc">The initial accumulator.</param>
+            <param name="f">The folding function taking the aggregator and a sequence-element, and returning a monadic accumulator-value.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.UnfoldMAsync``1(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{Nordril.Functional.Data.Maybe{``0}}},System.Threading.CancellationToken)">
+            <summary>
+            An asynchronous monadic <see cref="M:Nordril.Functional.CollectionExtensions.Unfold``2(``0,System.Func{``0,Nordril.Functional.Data.Maybe{System.ValueTuple{``0,``1}}})"/> which generates a sequence each time the <paramref name="seed"/>-value evaluates to <see cref="M:Nordril.Functional.Data.Maybe.Just``1(``0)"/>.<br />
+            Equivalent to:
+            <code>
+            while ((await seed()).TryGetValue(_, y)) { yield return y; }
+            </code>
+            </summary>
+            <typeparam name="TSource">The type of the seed/generated elements.</typeparam>
+            <param name="seed">The monadic seed-value.</param>
+            <param name="token">The cancellation token.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.AsyncMonad.ToAsyncMonad``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Category.IAsyncMonad`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to an <see cref="T:Nordril.Functional.Category.IAsyncMonad`1"/>.</param>
         </member>
         <member name="T:Nordril.Functional.Category.IBifunctor`2">
             <summary>
@@ -3840,6 +4015,14 @@
             <param name="condition">The monadic condition.</param>
             <param name="body">The monadic body.</param>
         </member>
+        <member name="M:Nordril.Functional.Category.MonadExtensions.ToMonad``1(Nordril.Functional.Category.IFunctor{``0})">
+            <summary>
+            Tries to cast a <see cref="T:Nordril.Functional.Category.IFunctor`1"/> to a <see cref="T:Nordril.Functional.Category.IMonad`1"/> via an explicit cast.
+            Convenience method.
+            </summary>
+            <typeparam name="T">The type of the value contained in the functor.</typeparam>
+            <param name="f">The functor to cast to an <see cref="T:Nordril.Functional.Category.IMonad`1"/>.</param>
+        </member>
         <member name="T:Nordril.Functional.Category.IMonadMorph`4">
             <summary>
             A functor in the category of monads which offers the counterpart to <see cref="M:Nordril.Functional.Category.IMonadTransformer`4.Lift(`0)"/>.
@@ -4365,6 +4548,48 @@
         <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.SelectMany``3(Nordril.Functional.Category.IMonad{``0},System.Func{``0,Nordril.Functional.Category.IMonad{``1}},System.Func{``0,``1,``2})">
             <summary>
             Equivalent to <see cref="T:Nordril.Functional.Category.IMonad`1"/>. The monad-type is preserved, but checking that every computation in the query is in the same monad, and checking for a concrete type are the responsibility of the caller.
+            Offers LINQ query support with multiple <c>from</c>-clauses.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TMiddle">The type of the selector's result.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+            <param name="resultSelector">The result-selector.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.Select``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncFunctor{``0}},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>. The functor-type is preserved, but checking for a concrete type is the responsibility of the caller.
+            Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.Select``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncApplicative{``0}},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>. The functor-type is preserved, but checking for a concrete type is the responsibility of the caller.
+            Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.Select``2(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}},System.Func{``0,``1})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IAsyncFunctor`1.MapAsync``1(System.Func{`0,System.Threading.Tasks.Task{``0}})"/>. The functor-type is preserved, but checking for a concrete type is the responsibility of the caller.
+            Offers LINQ query support with one <c>from</c>-clause.
+            </summary>
+            <typeparam name="TSource">The type of the source's value.</typeparam>
+            <typeparam name="TResult">The type of the result's value.</typeparam>
+            <param name="source">The source.</param>
+            <param name="f">The function to apply.</param>
+        </member>
+        <member name="M:Nordril.Functional.Category.Linq.PolyLinqExtensions.SelectMany``3(System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}},System.Func{``0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``1}}},System.Func{``0,``1,``2})">
+            <summary>
+            Equivalent to <see cref="M:Nordril.Functional.Category.IAsyncMonad`1.BindAsync``1(System.Func{`0,System.Threading.Tasks.Task{Nordril.Functional.Category.IAsyncMonad{``0}}})"/>. The monad-type is preserved, but checking that every computation in the query is in the same monad, and checking for a concrete type are the responsibility of the caller.
             Offers LINQ query support with multiple <c>from</c>-clauses.
             </summary>
             <typeparam name="TSource">The type of the source's value.</typeparam>
